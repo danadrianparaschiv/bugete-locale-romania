@@ -22,8 +22,8 @@
       <td class="num">{{ c.lines or '—' }}</td>
       <td class="num">{{ c.pct_clean if c.pct_clean is not none else '—' }}</td>
       <td>
-        {% if c.xlsx_rel %}<a href="{{ base }}/{{ c.xlsx_rel }}">xlsx</a>{% endif %}
-        {% if c.pdf_rel %}<a href="{{ base }}/{{ c.pdf_rel }}">pdf</a>
+        {% if c.xlsx_rel %}<a href="{{ raw }}/{{ c.xlsx_rel }}">xlsx</a>{% endif %}
+        {% if c.pdf_rel %}<a href="{{ raw }}/{{ c.pdf_rel }}">pdf</a>
         {% elif c.source_url %}<a href="{{ c.source_url }}">sursă</a>{% endif %}
       </td>
     </tr>

@@ -19,7 +19,11 @@ from .manifest import Manifest
 log = logging.getLogger("bgc.site")
 
 
-def build(manifest: Manifest, out: Path, base_url: str = "") -> dict:
+REPO_RAW = "https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main"
+GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
+
+
+def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REPO_RAW) -> dict:
     env = Environment(
         loader=PackageLoader("bgconvertor", "templates"),
         autoescape=select_autoescape(["html"]),
@@ -49,9 +53,10 @@ def build(manifest: Manifest, out: Path, base_url: str = "") -> dict:
             "pdf_rel": None,
             "xlsx_rel": None,
         }
-        # link committed artifacts relative to the site root
+        # committed artifacts are served from the git repo, not the Pages
+        # artifact; files over GitHub's size limit are not in git at all
         repo_root = manifest.root.parent.parent
-        if c.pdf.exists():
+        if c.pdf.exists() and c.pdf.stat().st_size <= GITHUB_FILE_LIMIT:
             row["pdf_rel"] = str(c.pdf.relative_to(repo_root))
         xlsx = c.pdf.with_suffix(".xlsx")
         if xlsx.exists():
@@ -60,12 +65,13 @@ def build(manifest: Manifest, out: Path, base_url: str = "") -> dict:
 
         if analysis:
             page = env.get_template("city.html").render(
-                city=row, a=analysis, year=manifest.year, base=base_url,
+                city=row, a=analysis, year=manifest.year, base=base_url, raw=raw_base,
             )
             (out / "city" / f"{c.siruta}.html").write_text(page)
 
     index = env.get_template("index.html").render(
-        cities=cities, year=manifest.year, n_converted=n_converted, base=base_url,
+        cities=cities, year=manifest.year, n_converted=n_converted,
+        base=base_url, raw=raw_base,
     )
     (out / "index.html").write_text(index)
 

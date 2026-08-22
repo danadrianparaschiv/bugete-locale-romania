@@ -40,7 +40,7 @@
 </table>
 
 <p style="margin-top:1.25rem">
-  {% if city.xlsx_rel %}<a href="{{ base }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
-  {% if city.pdf_rel %}<a href="{{ base }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
+  {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
+  {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
 </p>
 {% endblock %}
