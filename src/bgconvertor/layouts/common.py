@@ -18,6 +18,7 @@ from ..parsing import (
 
 HEADER_PATTERNS = [
     # order matters: specific labels must win over their generic substrings
+    (re.compile(r"cod indicator|indicator bugetar"), "code"),
     (re.compile(r"cod\s*rand"), "rowno"),
     (re.compile(r"\bcod\b"), "code"),
     (re.compile(r"denumirea|denumire"), "name"),

@@ -68,8 +68,42 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
         positional = _positional_columns(grid, n_cols)
         if positional:
             columns = positional
+    if "code" not in columns.values():
+        # a column of code-like cells whose header OCR lost (or that sits
+        # past the columns positional detection checks) is the code column
+        rows_ = [r for r in grid[first_data:] if any(c.strip() for c in r)]
+        for i in range(min(3, n_cols)):
+            if columns.get(i):
+                continue
+            hits = sum(1 for r in rows_ if len(r) > i and is_code_cell(r[i]))
+            if rows_ and hits >= len(rows_) / 3:
+                columns[i] = "code"
+                break
     if "name" not in columns.values():
         columns[widest_text_col(grid, first_data, n_cols, columns)] = "name"
+    # value-column rescue: unmapped majority-numeric columns get positional
+    # roles (garbled headers like 'Tatal' or headerless continuation pages)
+    value_roles = [r for r in columns.values() if r not in ("name", "code", "rowno")]
+    if not value_roles:
+        rows_ = [r for r in grid[first_data:] if any(c.strip() for c in r)]
+        numeric_cols = []
+        for i in range(n_cols):
+            if columns.get(i):
+                continue
+            hits = sum(
+                1 for r in rows_
+                if len(r) > i and r[i].strip()
+                and (any(ch.isdigit() for ch in r[i]) or fold(r[i]).strip() == "x")
+            )
+            if rows_ and hits >= len(rows_) / 3:
+                numeric_cols.append(i)
+        tail = (
+            ["total_2026", "trim1", "trim2", "trim3", "trim4"]
+            if len(numeric_cols) >= 5
+            else ["total_2026", "est2027", "est2028", "est2029"]
+        )
+        for i, role in zip(numeric_cols, tail):
+            columns[i] = role
     # the "din care credite..." subcolumn often loses its header to OCR:
     # an unmapped column immediately right of buget_2026 takes that role
     for i, role in list(columns.items()):
@@ -89,7 +123,8 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
             if role == "code":
                 raw_code = text
             elif role == "name":
-                name.append(text)
+                if not name or name[-1] != text:  # docling row-span dup
+                    name.append(text)
             elif role == "rowno":
                 row_no = int(text) if text.isdigit() else None
             elif role and role not in ("ignore",):

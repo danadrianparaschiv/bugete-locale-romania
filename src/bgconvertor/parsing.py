@@ -176,6 +176,9 @@ def normalize_indicator_code(raw: str | None) -> str | None:
         return None
     if "," in s and "." not in s:
         s = s.replace(",", ".")  # vendor/OCR comma-printed codes: 59,40
+    m3 = re.match(r"^00(\d)\.(\d{2})$", s)
+    if m3:
+        return f"00.0{m3.group(1)}.{m3.group(2)}"  # vendor rollup print '001.02'
     if _DOTTED_RE.match(s):
         # some vendors pad articles with a phantom '.00' alineat (20.02.00);
         # no real code has segment '00' beyond position one
