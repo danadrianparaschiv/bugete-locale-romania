@@ -102,7 +102,7 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
             if len(numeric_cols) >= 5
             else ["total_2026", "est2027", "est2028", "est2029"]
         )
-        for i, role in zip(numeric_cols, tail):
+        for i, role in zip(numeric_cols, tail, strict=False):
             columns[i] = role
     # the "din care credite..." subcolumn often loses its header to OCR:
     # an unmapped column immediately right of buget_2026 takes that role
