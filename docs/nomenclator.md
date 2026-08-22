@@ -1,45 +1,51 @@
-# The nomenclator (Ordinul MFP 1954/2005)
+# Nomenclatorul (Ordinul MFP 1954/2005)
 
-The validator checks every extracted code and sum against the official
-"Clasificația indicatorilor privind finanțele publice", published as XLSX
-annexes at <https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare>.
-Annex filenames embed the amendment date and change URL on every update —
-`bgconvertor nomenclator update` scrapes the page and rebuilds the local
-registry (`reference/nomenclator/registry.json`). The data.gov.ro mirror is
-frozen at 2018; do not use it.
+Validatorul verifică fiecare cod și fiecare sumă extrasă față de
+„Clasificația indicatorilor privind finanțele publice" oficială, publicată
+ca anexe XLSX la <https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare>.
+Numele fișierelor de anexă încorporează data modificării, iar URL-ul se
+schimbă la fiecare actualizare — `bgconvertor nomenclator update` extrage
+datele din pagină și reconstruiește registrul local
+(`reference/nomenclator/registry.json`). Oglinda de pe data.gov.ro este
+înghețată la 2018; nu o folosi.
 
-## Code grammar
+## Gramatica codurilor
 
-- **Revenues**: `cc.SS[.ss[.pp]]` — capitol, subcapitol, paragraf; the
-  second segment is the budget suffix.
-- **Functional expenses**: capitol/subcapitol/paragraf, e.g. `65.02.04.01`.
-- **Economic expenses**: titlu/articol/alineat, e.g. `10.01.01`; grupa
-  codes (`01`, `70`, `79`, `84`) are heading rows, not annex entries.
-- **Budget suffixes**: `.02` local budget, `.10` own-revenue institutions
-  (Anexa 10), `.06/.07/.08` credit/FEN budgets (no annex of their own —
-  validated against the `.02` structure).
-- Print variants handled: compact (`65020301`), dotted (`65.02.03.01`),
-  combined vendor codes (`5102.200130` = capitol 51.02 × economic
-  20.01.30, including PDF-truncated prefixes), comma decimals in codes,
-  phantom trailing `.00`.
+- **Venituri**: `cc.SS[.ss[.pp]]` — capitol, subcapitol, paragraf; al
+  doilea segment este sufixul de buget.
+- **Cheltuieli funcționale**: capitol/subcapitol/paragraf, de ex.
+  `65.02.04.01`.
+- **Cheltuieli economice**: titlu/articol/alineat, de ex. `10.01.01`;
+  codurile de grupă (`01`, `70`, `79`, `84`) sunt rânduri-titlu, nu
+  intrări în anexe.
+- **Sufixe de buget**: `.02` buget local, `.10` instituții finanțate din
+  venituri proprii (Anexa 10), `.06/.07/.08` bugete de credite/FEN (fără
+  anexă proprie — validate față de structura `.02`).
+- Variante de tipărire tratate: compact (`65020301`), cu puncte
+  (`65.02.03.01`), coduri combinate ale furnizorilor (`5102.200130` =
+  capitol 51.02 × economic 20.01.30, inclusiv prefixele trunchiate de
+  PDF), zecimale cu virgulă în coduri, sufixe-fantomă `.00` la final.
 
-## Rollups and identities
+## Agregări și identități
 
-Report-form pseudo-codes (`00.xx` revenue cascade, `49.90` venituri
-proprii, `98.02/99.02` excedent/deficit, `49.02/50.02` total-cheltuieli
-variants, economic grupe) are not in the annexes; they are seeded in
-`rules.py` together with the arithmetic identities the validator enforces:
+Pseudo-codurile din formularele de raportare (cascada de venituri `00.xx`,
+`49.90` venituri proprii, `98.02/99.02` excedent/deficit, variantele de
+total-cheltuieli `49.02/50.02`, grupele economice) nu se află în anexe; ele
+sunt predefinite în `rules.py` împreună cu identitățile aritmetice pe care
+validatorul le impune:
 
-- `00.01 = 00.02+00.15+00.16+00.17+45.02+46.02+48.02` and the full cascade
+- `00.01 = 00.02+00.15+00.16+00.17+45.02+46.02+48.02` și cascada completă
 - `49.90 = 00.02 − 11.02 − 37.02 + 00.15`
-- parts (`50.02 = 51.02+54.02+55.02+56.02`, …), grupa compositions
+- părți (`50.02 = 51.02+54.02+55.02+56.02`, …), compozițiile grupelor
   (`01 = Σ titluri`, `70 = 71+72+75`)
-- `SECTIUNEA TOTAL = FUNCTIONARE + DEZVOLTARE` per code;
+- `SECTIUNEA TOTAL = FUNCTIONARE + DEZVOLTARE` pentru fiecare cod;
   `37.02.03 = −37.02.04`
-- row checksums where the layout carries them (`TOTAL = Σ Trim I–IV`)
+- sume de control pe rânduri acolo unde macheta le conține
+  (`TOTAL = Σ Trim I–IV`)
 
-Exceptions encoded: "din care" memo lines never sum; title 85 is negative;
-`*)`-flagged codes appear only in execution; estimări (2027–2029) are often
-approved at aggregate level only, so all-zero children don't count as a
-breach. Identities not yet confirmed against primary sources carry
-`verified: false` and demote their findings to warnings.
+Excepții codificate: liniile-memorandum „din care" nu se însumează
+niciodată; titlul 85 este negativ; codurile marcate `*)` apar doar în
+execuție; estimările (2027–2029) sunt adesea aprobate doar la nivel
+agregat, așa că descendenți cu toate valorile zero nu contează drept
+încălcare. Identitățile neconfirmate încă din surse primare poartă
+`verified: false` și își retrogradează constatările la avertismente.

@@ -1,36 +1,39 @@
-# Adding support for a new layout
+# Adăugarea suportului pentru o machetă nouă
 
-Municipalities buy budget software from different vendors, and every vendor
-prints tables differently. This walkthrough is the intended path from "my
-city's PDF converts badly" to a merged, measured fix — using the real story
-of Bistrița's transposed layout as the example.
+Primăriile cumpără software bugetar de la furnizori diferiți, și fiecare
+furnizor tipărește tabelele altfel. Acest ghid pas cu pas este drumul
+recomandat de la „PDF-ul orașului meu se convertește prost" până la un fix
+integrat și măsurat — folosind ca exemplu povestea reală a machetei
+transpuse de la Bistrița.
 
-## 1. Triage first — never start with a full conversion
+## 1. Întâi triajul — nu începe niciodată cu o conversie completă
 
 ```bash
 uv run bgconvertor triage path/to/budget_file.pdf
 ```
 
-Triage profiles every page, pushes ~5 sampled pages through the real
-pipeline (the work is cached and reused later), and reports the layout
-families it found, OCR quality, and an honest cost estimate. A warning like
+Triajul profilează fiecare pagină, trece ~5 pagini eșantionate prin
+pipeline-ul real (munca este pusă în cache și refolosită mai târziu) și
+raportează familiile de machete găsite, calitatea OCR și o estimare
+onestă de cost. Un avertisment de forma
 
 ```
 ⚠ layout necunoscut in esantion: scan_table_other
 ```
 
-means pages exist that no mapper claims — that's your target.
+înseamnă că există pagini pe care niciun mapper nu le revendică — aceea
+este ținta ta.
 
-## 2. Look at the actual grids
+## 2. Uită-te la grilele propriu-zise
 
-The OCR stage stores every recognized table as a plain text grid. Inspect
-one problem page:
+Etapa de OCR stochează fiecare tabel recunoscut ca o grilă de text simplu.
+Inspectează o pagină cu probleme:
 
 ```bash
 uv run bgconvertor inspect path/to/budget_file.pdf 2
 ```
 
-or programmatically:
+sau programatic:
 
 ```python
 from bgconvertor.config import RunConfig
@@ -41,8 +44,8 @@ for row in grid[:12]:
     print(row)
 ```
 
-For Bistrița this showed something unusual: the *periods* were rows and the
-*indicators* were columns —
+Pentru Bistrița, asta a arătat ceva neobișnuit: *perioadele* erau rânduri,
+iar *indicatorii* erau coloane —
 
 ```
 ['2029',      '7470,00', '4000,00', ...]
@@ -52,23 +55,26 @@ For Bistrița this showed something unusual: the *periods* were rows and the
 ['Denumirea indicatorilor', '', 'Impozitul pe terenul...', ...]
 ```
 
-a transposed table: one column per indicator, with the code row and wrapped
-name rows at the bottom.
+un tabel transpus: câte o coloană pe indicator, cu rândul de coduri și
+rândurile de denumiri rupte pe mai multe linii jos de tot.
 
-## 3. Write the mapper
+## 3. Scrie mapperul
 
-Layout mappers live in `src/bgconvertor/layouts/`, one module per strategy.
-A mapper is a function `try_map(grid) -> list[dict] | None` — return `None`
-when the grid is not your shape (the registry then tries the next mapper;
-the generic header-driven table mapper is the guaranteed last resort).
+Mapperele de machete trăiesc în `src/bgconvertor/layouts/`, câte un modul
+per strategie. Un mapper este o funcție `try_map(grid) -> list[dict] | None`
+— returnează `None` când grila nu are forma ta (registrul încearcă atunci
+următorul mapper; mapperul generic de tabel condus de antet este ultima
+soluție garantată).
 
-Emit lines in the extraction contract (documented in `eval_harness.py`):
-`raw_code`, normalized `code`, `name`, `section`, `values` (canonical
-decimal strings keyed by column: `total`, `trim1..4`, `est2027..29`, …).
-Use the helpers in `layouts/common.py` — `mk_line`, `parse_cell` (locale-
-and OCR-noise-tolerant), the shared header vocabulary.
+Emite linii conform contractului de extracție (documentat în
+`eval_harness.py`): `raw_code`, `code` normalizat, `name`, `section`,
+`values` (șiruri zecimale canonice indexate pe coloană: `total`,
+`trim1..4`, `est2027..29`, …). Folosește funcțiile ajutătoare din
+`layouts/common.py` — `mk_line`, `parse_cell` (tolerantă la convenția
+locală de scriere a numerelor și la zgomotul de OCR), vocabularul comun de
+antete.
 
-Register it in `layouts/__init__.py`:
+Înregistrează-l în `layouts/__init__.py`:
 
 ```python
 MAPPERS = [
@@ -78,15 +84,15 @@ MAPPERS = [
 ]
 ```
 
-Detection must be conservative: a mapper that claims grids it doesn't
-understand degrades other municipalities. Anchor on a structural signature
-(for `transposed`: a `Cod` row plus ≥4 period-label rows), not on
-guesswork.
+Detecția trebuie să fie conservatoare: un mapper care revendică grile pe
+care nu le înțelege degradează alte municipalități. Ancorează-te pe o
+semnătură structurală (pentru `transposed`: un rând `Cod` plus ≥4 rânduri
+cu etichete de perioadă), nu pe ghicit.
 
-## 4. Commit a golden fixture
+## 4. Adaugă în repo un fixture de aur
 
-Pick one representative page and hand-verify a dozen cells against the
-rendered PDF page. Fixtures are JSON in `tests/fixtures/golden/`:
+Alege o pagină reprezentativă și verifică manual vreo duzină de celule față
+de pagina PDF randată. Fixture-urile sunt JSON în `tests/fixtures/golden/`:
 
 ```json
 {
@@ -99,28 +105,29 @@ rendered PDF page. Fixtures are JSON in `tests/fixtures/golden/`:
 }
 ```
 
-Wherever possible pick anchors the arithmetic confirms (TOTAL = Σ
-trimesters; capitol = Σ subcapitole) — then your ground truth is proven,
-not just eyeballed. Mark stamp-covered or degraded cells `"hard": true`.
+Ori de câte ori se poate, alege ancore pe care aritmetica le confirmă
+(TOTAL = Σ trimestre; capitol = Σ subcapitole) — atunci adevărul tău de
+referință este demonstrat, nu doar apreciat din ochi. Marchează celulele
+acoperite de ștampile sau degradate cu `"hard": true`.
 
-## 5. Gate with eval, then the suite
+## 5. Validează cu eval, apoi cu suita de teste
 
 ```bash
 uv run bgconvertor eval        # your fixture green, nothing else regressed
 uv run pytest                  # includes the ab-stays-100%-clean pin
 ```
 
-If your change altered mapping output for existing files, bump
-`extract_version` in `config.py` (this invalidates the cheap mapping cache,
-not the expensive OCR) and re-run `bgconvertor extract` on the corpus files
-before judging eval.
+Dacă schimbarea ta a modificat rezultatul mapării pentru fișierele
+existente, incrementează `extract_version` în `config.py` (asta invalidează
+cache-ul ieftin de mapare, nu OCR-ul cel scump) și rulează din nou
+`bgconvertor extract` pe fișierele din corpus înainte de a judeca eval-ul.
 
-## 6. What a PR should contain
+## 6. Ce trebuie să conțină un PR
 
-- the mapper module + registration line,
-- the golden fixture (+ any new classification hints),
-- before/after numbers: triage estimate and `% curat` for the target file,
-  plus the unchanged eval score for everything else.
+- modulul mapperului + linia de înregistrare,
+- fixture-ul de aur (+ eventualele indicii noi de clasificație),
+- cifre înainte/după: estimarea de la triaj și `% curat` pentru fișierul
+  țintă, plus scorul de eval neschimbat pentru tot restul.
 
-That's the whole loop. Bistrița went from 31 extracted lines to 163
-(79% verified) through exactly these steps.
+Asta e întreaga buclă. Bistrița a trecut de la 31 de linii extrase la 163
+(79% verificate) exact prin acești pași.

@@ -1,24 +1,29 @@
-# Changelog
+# Jurnal de modificări
 
-## v0.1.0 — unreleased
+## v0.1.0 — nepublicat
 
-Initial public version.
+Prima versiune publică.
 
-- Extraction: header-driven digital grid reader (multiple vendor variants,
-  per-page wrap-style detection); docling OCR + TableFormer pipeline with
-  0/90/180/270° orientation detection (adaptive upright prior); layout
-  registry (generic header tables, transposed tables, consolidated-budget
-  matrices, headerless continuation pages, combined capitol+economic codes,
-  Romanian and US number locales, OCR x-marker normalization).
-- Validation: Ordinul 1954/2005 registry (auto-refresh from mfinante.gov.ro),
-  code/name checks, row checksums, hierarchy sums, section identities;
-  per-institution document splitting.
-- LLM tiers (optional, Claude API): full-page fallback for unstructurable
-  layouts, sum-repair with arithmetic acceptance proofs, cell recovery;
-  hard dollar budget, response cache with free resume, parallel calls,
-  Batch API mode, crop-based reads.
-- Tooling: `triage` pre-flight with cost/time estimates, resumable per-page
-  run store, parallel OCR workers, quality/cost `report`, golden-fixture
-  `eval`, `corpus export`/`report` for cross-municipality datasets.
-- Corpus: `data/2026/` — 2026 budgets of the 41 county-seat municipalities
-  plus Bucharest, SIRUTA-coded with source manifest.
+- Extragere: cititor de grilă digitală ghidat de antete (mai multe variante
+  de furnizor, detecție per pagină a stilului de încadrare a denumirilor);
+  pipeline docling OCR + TableFormer cu detecția orientării 0/90/180/270°
+  (prior adaptiv de verticalitate); registru de formate (tabele generice cu
+  antet, tabele transpuse, matrice de buget centralizat, pagini de
+  continuare fără antet, coduri combinate capitol+economic, formate
+  numerice românești și americane, normalizarea marcajelor „x" din OCR).
+- Validare: registru Ordinul 1954/2005 (actualizare automată de pe
+  mfinante.gov.ro), verificări de cod/denumire, sume de control pe linie,
+  sume de ierarhie, identități între secțiuni; separarea documentelor pe
+  instituții.
+- Straturi LLM (opționale, Claude API): transcriere integrală de pagină
+  pentru formate nestructurabile, reparare de sume cu probe aritmetice de
+  acceptare, recuperare de celule; plafon ferm în dolari, cache de
+  răspunsuri cu reluare gratuită, apeluri paralele, mod Batch API, citiri
+  pe decupaje.
+- Unelte: `triage` — verificare prealabilă cu estimări de cost/timp,
+  magazie de rulări reluabilă per pagină, procese OCR paralele, `report`
+  de calitate/cost, `eval` pe fixture-uri etalon, `corpus export`/`report`
+  pentru seturi de date inter-municipale.
+- Corpus: `data/2026/` — bugetele pe 2026 ale celor 41 de municipii
+  reședință de județ plus București, codificate SIRUTA, cu manifest de
+  surse.

@@ -3,115 +3,121 @@
 Bugetele locale ale municipiilor reședință de județ, extrase din PDF-urile
 oficiale în format analizabil — cu verificare aritmetică a fiecărei linii.
 
-This repository holds an open corpus of Romanian local-government budgets
-(official PDFs + validated Excel/datasets, SIRUTA-coded) and **bgconvertor**,
-the tool that builds it: it converts budget PDFs into validated,
-analysis-ready data — even when the PDF is a rotated, stamped scan from a
-copier.
+Acest depozit conține un corpus deschis al bugetelor locale din România
+(PDF-uri oficiale + fișiere Excel/seturi de date validate, codificate
+SIRUTA) și **bgconvertor**, instrumentul care îl construiește: convertește
+PDF-urile bugetare în date validate, gata de analiză — chiar și atunci
+când PDF-ul este o scanare rotită și ștampilată, scoasă la copiator.
 
-Every extracted line is checked against the official classification of
-public-finance indicators (**Ordinul MFP 1954/2005**, the annexes in force
-for the budget year) and against the arithmetic the budget itself must
-satisfy (quarterly sums, chapter hierarchies, section identities). What
-can't be verified is *flagged, never guessed*.
+Fiecare linie extrasă este verificată față de clasificația oficială a
+indicatorilor privind finanțele publice (**Ordinul MFP 1954/2005**,
+anexele în vigoare pentru anul bugetar) și față de aritmetica pe care
+bugetul însuși trebuie să o respecte (sume trimestriale, ierarhii de
+capitole, identități între secțiuni). Ce nu poate fi verificat este
+*marcat, niciodată ghicit*.
 
-`data/<year>/` holds the official budget PDFs of Romania's county-seat
-municipalities (SIRUTA-coded, with per-file sources) alongside their
-converted workbooks; the generated site publishes a per-city analysis page
-for every converted budget.
+`data/<an>/` conține PDF-urile bugetare oficiale ale municipiilor
+reședință de județ (codificate SIRUTA, cu sursa fiecărui fișier) alături
+de fișierele Excel convertite; site-ul generat publică o pagină de analiză
+pentru fiecare buget convertit.
 
-## How it works — three layers
+## Cum funcționează — trei straturi
 
-1. **Deterministic extraction.** Born-digital PDFs are read from their ruled
-   grids by coordinates (multiple vendor layouts auto-detected). Scans go
-   through orientation detection (0/90/180/270°) and docling's OCR +
-   TableFormer, then a registry of layout mappers (transposed tables,
-   consolidated-budget matrices, headerless continuation pages, …).
-2. **Arithmetic verification.** The nomenclator's redundancy — row
-   checksums, capitol = Σ subcapitole, section identities, printed
-   composition formulas — turns almost any misread digit into a detectable
-   inconsistency, at zero cost.
-3. **Budget-capped LLM repair** *(optional)*. Cells that broke the
-   arithmetic are re-read from the page image by Claude; a repair is
-   accepted **only if it makes the sums hold**. Full-page transcription
-   covers layouts OCR cannot structure. A hard dollar budget and a response
-   cache govern every call; runs resume free.
+1. **Extragere deterministă.** PDF-urile digitale sunt citite din grila
+   liniată, pe coordonate (mai multe variante de format detectate
+   automat). Scanările trec prin detecția orientării (0/90/180/270°) și
+   prin OCR-ul docling + TableFormer, apoi printr-un registru de mapări de
+   format (tabele transpuse, matrice de buget centralizat, pagini de
+   continuare fără antet, …).
+2. **Verificare aritmetică.** Redundanța nomenclatorului — sume de control
+   pe linie, capitol = Σ subcapitole, identități între secțiuni, formule
+   de compoziție tipărite — transformă aproape orice cifră citită greșit
+   într-o inconsistență detectabilă, la cost zero.
+3. **Reparare LLM cu buget limitat** *(opțional)*. Celulele care au rupt
+   aritmetica sunt recitite din imaginea paginii de către Claude; o
+   reparare este acceptată **doar dacă face sumele să se închidă**.
+   Transcrierea integrală a paginii acoperă formatele pe care OCR-ul nu le
+   poate structura. Un plafon ferm în dolari și un cache de răspunsuri
+   guvernează fiecare apel; rulările se reiau gratuit.
 
-## Quickstart
+## Pornire rapidă
 
-Requires Python 3.12+, [uv](https://docs.astral.sh/uv/), and ~2GB for OCR
-models on first run.
+Necesită Python 3.12+, [uv](https://docs.astral.sh/uv/) și ~2GB pentru
+modelele OCR la prima rulare.
 
 ```bash
 uv sync
 
-# pre-flight: what is this file, what will it cost?
+# verificare prealabilă: ce este acest fișier, cât va costa?
 uv run bgconvertor triage data/2026/01-alba/1017-alba-iulia/budget_file.pdf
 
-# convert (fully offline — no API key needed)
+# conversie (complet offline — nu necesită cheie API)
 uv run bgconvertor convert data/2026/01-alba/1017-alba-iulia/budget_file.pdf
 
-# with parallel OCR and LLM repair (needs ANTHROPIC_API_KEY, see .env.example)
+# cu OCR paralel și reparare LLM (necesită ANTHROPIC_API_KEY, vezi .env.example)
 uv run bgconvertor convert <pdf> --workers 4 --llm repair --max-llm-cost 3.00
 
-# quality/cost report, per-page inspection, golden-fixture evaluation
+# raport de calitate/cost, inspecție per pagină, evaluare pe fixture-uri etalon
 uv run bgconvertor report <pdf>
-uv run bgconvertor inspect <pdf> <page>
+uv run bgconvertor inspect <pdf> <pagina>
 uv run bgconvertor eval
 
-# one normalized dataset across all converted files
+# un set de date normalizat pentru toate fișierele convertite
 uv run bgconvertor corpus export corpus.csv
 uv run bgconvertor corpus report
 ```
 
-The output workbook contains data sheets per budget document and section,
-a `Probleme` sheet locating every issue (page + code + column), and a
-`Sumar calitate` scorecard. CLI progress output is in Romanian (its users
-are Romanian); code and docs are in English.
+Fișierul Excel rezultat conține foi de date pentru fiecare document
+bugetar și secțiune, o foaie „Probleme" care localizează fiecare problemă
+(pagină + cod + coloană) și un scor de calitate în „Sumar calitate".
 
-## What to expect
+## La ce să vă așteptați
 
-| File type | Typical result | LLM cost |
+| Tip de fișier | Rezultat tipic | Cost LLM |
 |---|---|---|
-| Born-digital with ruled grid | 94–100% verified lines | $0 |
-| Good scan, known layouts | 60–80% verified | $1–4 |
-| Hard scan (stamps, rotations, copier OCR) | 55–70% verified | $3–8 |
+| Digital, cu grilă liniată | 94–100% linii verificate | 0 $ |
+| Scanare bună, formate cunoscute | 60–80% verificate | 1–4 $ |
+| Scanare dificilă (ștampile, rotiri, OCR de copiator) | 55–70% verificate | 3–8 $ |
 
-"Verified" means the line passed every nomenclator and arithmetic check —
-the stratum safe to analyze without opening the PDF. Everything else stays
-in the output too, flagged with its reason. See [DISCLAIMER.md](DISCLAIMER.md).
+„Verificat" înseamnă că linia a trecut toate verificările de nomenclator
+și aritmetice — stratul sigur de analizat fără a deschide PDF-ul. Restul
+rămâne și el în rezultat, marcat cu motivul. Vezi
+[DISCLAIMER.md](DISCLAIMER.md).
 
-## The corpus
+## Corpusul
 
-`data/2026/` — official budget PDFs of the 41 county-seat municipalities
-plus Bucharest, laid out as `<county>-<slug>/<siruta>-<city>/budget_file.pdf`
-with a manifest (sources, checksums, status). One file exceeds GitHub's
-100MB limit and is fetched by `data/2026/download.py`. Documents are public
-administrative records; per-file attribution in the manifest and
+`data/2026/` — PDF-urile bugetare oficiale ale celor 41 de municipii
+reședință de județ plus București, organizate ca
+`<județ>-<slug>/<siruta>-<oraș>/budget_file.pdf`, cu un manifest (surse,
+sume de control, status). Un fișier depășește limita de 100MB a GitHub și
+este descărcat de `data/2026/download.py`. Documentele sunt acte
+administrative publice; atribuirea fiecărui fișier este în manifest și în
 [NOTICE](NOTICE).
 
-## Extending to a new layout
+## Extinderea la un format nou
 
-Municipalities use different budget-software vendors, and new formats keep
-appearing. The pipeline is built for that: run `triage`, inspect the
-mis-mapped grids, add a mapper module to `src/bgconvertor/layouts/`, add a
-golden fixture, and gate with `bgconvertor eval`. The full walkthrough is
-in [docs/adding-a-layout.md](docs/adding-a-layout.md).
+Municipiile folosesc furnizori diferiți de software bugetar, iar formate
+noi apar mereu. Pipeline-ul este construit pentru asta: rulați `triage`,
+inspectați grilele mapate greșit, adăugați un modul de mapare în
+`src/bgconvertor/layouts/`, adăugați un fixture etalon și blocați regresiile
+cu `bgconvertor eval`. Ghidul complet este în
+[docs/adding-a-layout.md](docs/adding-a-layout.md).
 
-## Development
+## Dezvoltare
 
 ```bash
-uv run pytest          # offline test suite (LLM tests replay cassettes)
-uv run bgconvertor eval  # cell-level score vs hand-verified golden fixtures
+uv run pytest            # suită de teste offline (testele LLM redau casete înregistrate)
+uv run bgconvertor eval  # scor la nivel de celulă față de fixture-uri etalon verificate manual
 ```
 
-Two hard gates for every change: the test suite passes, and the golden-
-anchor eval does not regress (the digital reference file must stay 100%
-clean — it is pinned by a test). See [CONTRIBUTING.md](CONTRIBUTING.md)
-and [docs/design.md](docs/design.md).
+Două porți obligatorii pentru orice modificare: suita de teste trece, iar
+evaluarea pe ancora etalon nu regresează (fișierul digital de referință
+trebuie să rămână 100% curat — este fixat printr-un test). Vezi
+[CONTRIBUTING.md](CONTRIBUTING.md) și [docs/design.md](docs/design.md).
 
-## License
+## Licență
 
-Apache-2.0 for the code ([LICENSE](LICENSE)). Included third-party data —
-Ministry of Finance classification annexes, municipal budget PDFs, SIRUTA
-codes — is credited in [NOTICE](NOTICE).
+Apache-2.0 pentru cod ([LICENSE](LICENSE) — textul licenței rămâne în
+engleză, fiind versiunea canonică). Datele terților incluse — anexele de
+clasificație ale Ministerului Finanțelor, PDF-urile bugetare municipale,
+codurile SIRUTA — sunt creditate în [NOTICE](NOTICE).

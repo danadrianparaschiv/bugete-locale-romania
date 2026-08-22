@@ -1,94 +1,94 @@
-# bgconvertor — Romanian Local Budget PDF → Excel Converter
+# bgconvertor — Convertor PDF → Excel pentru bugetele locale din România
 
-Analysis and development plan · 2026-08-21
+Analiză și plan de dezvoltare · 2026-08-21
 
-> **Status (end of day, 2026-08-21): Phases 0–4 implemented.** All three PDFs
-> convert end to end (`bgconvertor convert <pdf> [--llm repair]`).
-> Alba Iulia (digital): 100% validation-clean. Pitești + Arad (scanned):
-> extracted via docling with orientation correction, validated against the
-> registry, LLM-repaired under a hard budget. Golden-anchor eval: 132/140
-> across all 12 fixtures; 97 offline tests. See README.md for commands.
-> Notable deviations from the original plan: OCR and mapping split into
-> separate cached stages; repair prompts are pure transcription (constraints
-> stay on our side — the model rationalized when told the expected sum);
-> full-page LLM fallback added for layouts TableFormer cannot structure;
-> investment/procurement annexes classified out of nomenclator scope.
+> **Stadiu (la sfârșitul zilei de 2026-08-21): Fazele 0–4 implementate.** Toate cele trei PDF-uri
+> se convertesc cap-coadă (`bgconvertor convert <pdf> [--llm repair]`).
+> Alba Iulia (digital): 100% curat la validare. Pitești + Arad (scanate):
+> extrase cu docling cu corecția orientării, validate față de
+> registru, reparate cu LLM sub un buget strict. Evaluare pe ancore de aur: 132/140
+> pe toate cele 12 fixture-uri; 97 de teste offline. Vezi README.md pentru comenzi.
+> Abateri notabile față de planul inițial: OCR-ul și maparea au fost separate în
+> etape distincte, cu cache propriu; prompturile de reparare sunt transcriere pură (constrângerile
+> rămân pe partea noastră — modelul raționaliza atunci când i se spunea suma așteptată);
+> a fost adăugat un fallback LLM pe pagină întreagă pentru layouturile pe care TableFormer nu le poate structura;
+> anexele de investiții/achiziții au fost clasificate ca fiind în afara sferei nomenclatorului.
 
-## 1. What the three PDFs actually contain
+## 1. Ce conțin de fapt cele trei PDF-uri
 
-All three files were profiled programmatically (page counts, text layers, metadata, rendered samples).
+Toate cele trei fișiere au fost profilate programatic (număr de pagini, straturi de text, metadate, mostre randate).
 
-| File | UAT | Pages | Type | Layout family |
+| Fișier | UAT | Pagini | Tip | Familie de layout |
 |---|---|---|---|---|
-| `budget_file_ab.pdf` | Municipiul Alba Iulia | 70 | **Born-digital** (PDF24), full text layer | "Buget detaliat" — code + rând + TOTAL + credite stingere plăți + Trim I–IV + estimări 2027–2029 |
-| `budget_file_ag.pdf` | Municipiul Pitești (Argeș) | 236 | **Scanned**, zero text layer (Ghostscript re-print of a scan) | HCL prose pages, then budget tables (cod indicator + prevederi anuale + estimări), then rotated investment lists |
-| `budget_file_ar.pdf` | Municipiul Arad | 333 | **Scanned**, zero text layer (Konica Minolta copier output) | "Buget general" matrix rotated 90° in-image; then per-chapter detail tables; then per-institution (`.10`) budgets incl. individual schools |
+| `budget_file_ab.pdf` | Municipiul Alba Iulia | 70 | **Nativ digital** (PDF24), strat de text complet | „Buget detaliat" — cod + rând + TOTAL + credite stingere plăți + Trim I–IV + estimări 2027–2029 |
+| `budget_file_ag.pdf` | Municipiul Pitești (Argeș) | 236 | **Scanat**, fără strat de text (re-tipărire Ghostscript a unei scanări) | Pagini de proză HCL, apoi tabele de buget (cod indicator + prevederi anuale + estimări), apoi liste de investiții rotite |
+| `budget_file_ar.pdf` | Municipiul Arad | 333 | **Scanat**, fără strat de text (ieșire de copiator Konica Minolta) | Matrice „Buget general" rotită 90° în imagine; apoi tabele de detaliu pe capitole; apoi bugete pe instituții (`.10`), inclusiv școli individuale |
 
-**569 of 639 pages have no text layer** — OCR is the dominant problem, not PDF parsing.
+**569 din 639 de pagini nu au strat de text** — OCR-ul este problema dominantă, nu parsarea PDF-ului.
 
-Concrete hazards observed in the samples:
+Pericole concrete observate în mostre:
 
-1. **In-image rotation** (`ar`): landscape tables scanned into portrait pages. Docling does *not* auto-correct this (open issues #1376, #2343) — a deskew/rotate pre-step is mandatory.
-2. **Official stamps overlapping data cells** (`ag` p9: stamp over the 65.02.04 column; `ar` p31, p151). OCR will misread or drop those digits.
-3. **Clipped indicator names** at column edges and struck-through/corrected values (`ag`).
-4. **Heterogeneous document units inside one PDF**: HCL decision prose, nomenclator budget tables (multiple layout families), investment-objective lists ("Denumire obiectiv / surse de finanțare / verde-maro-mixt-neutru"), per-institution school budgets with vertical side labels. The tool must **segment and classify before extracting**.
-5. **Even the digital PDF is treacherous**: pypdf text extraction scrambles column order (row number, code and TOTAL concatenate; numeric columns come out in stream order). Extraction must be coordinate-based (words + x/y positions), never plain text.
-6. **Multiple budgets per file**: `ab` = buget local (p1–54) + buget centralizat instituții din venituri proprii (p55–70). Code suffix `.02` vs `.10` distinguishes them; each has SECȚIUNEA TOTAL / FUNCȚIONARE / DEZVOLTARE runs.
-7. **Numbers in Romanian format** `1.234.567,89`, unit *mii lei*, `X` markers in some estimate cells (`ar`), negative memo lines (37.02.03), `0,00` fillers everywhere.
+1. **Rotire în interiorul imaginii** (`ar`): tabele landscape scanate în pagini portret. Docling *nu* corectează automat acest lucru (issue-uri deschise #1376, #2343) — un pas prealabil de deskew/rotire este obligatoriu.
+2. **Ștampile oficiale suprapuse peste celule cu date** (`ag` p9: ștampilă peste coloana 65.02.04; `ar` p31, p151). OCR-ul va citi greșit sau va pierde acele cifre.
+3. **Denumiri de indicatori trunchiate** la marginile coloanelor și valori tăiate/corectate (`ag`).
+4. **Unități de document eterogene în același PDF**: proză de hotărâre HCL, tabele de buget conforme nomenclatorului (mai multe familii de layout), liste de obiective de investiții („Denumire obiectiv / surse de finanțare / verde-maro-mixt-neutru"), bugete de școli pe instituții cu etichete laterale verticale. Instrumentul trebuie să **segmenteze și să clasifice înainte de a extrage**.
+5. **Chiar și PDF-ul digital este înșelător**: extragerea de text cu pypdf amestecă ordinea coloanelor (numărul de rând, codul și TOTAL se concatenează; coloanele numerice ies în ordinea din stream). Extragerea trebuie să fie bazată pe coordonate (cuvinte + poziții x/y), niciodată text simplu.
+6. **Mai multe bugete în același fișier**: `ab` = buget local (p1–54) + buget centralizat instituții din venituri proprii (p55–70). Sufixul de cod `.02` vs `.10` le distinge; fiecare are serii SECȚIUNEA TOTAL / FUNCȚIONARE / DEZVOLTARE.
+7. **Numere în format românesc** `1.234.567,89`, unitatea *mii lei*, marcaje `X` în unele celule de estimări (`ar`), linii memo negative (37.02.03), umpluturi `0,00` peste tot.
 
-## 2. The nomenclator (Ordinul 1954/2005, in force for 2026)
+## 2. Nomenclatorul (Ordinul 1954/2005, în vigoare pentru 2026)
 
-The official, current, machine-readable source is
-**https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare** — XLS/XLSX annexes whose filenames embed the amendment date and change URL on every update (scrape the page, don't hardcode URLs). Already downloaded to [reference/nomenclator/](reference/nomenclator/):
+Sursa oficială, curentă și prelucrabilă automat este
+**https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare** — anexe XLS/XLSX ale căror nume de fișiere includ data modificării și își schimbă URL-ul la fiecare actualizare (se scrapează pagina, nu se hardcodează URL-uri). Deja descărcate în [reference/nomenclator/](reference/nomenclator/):
 
-- `Anexanr2_08052026.xlsx` — **Clasificația indicatorilor privind bugetele locale**: sheet "venituri bl. 2026" (567 rows, Capitol|Subcap.|Paragraf|Denumire) + sheet "ch. funct. bl. 2026" (172 rows, functional expense codes).
-- `AnexanrIec_28052026.xlsx` — **Clasificația economică** (titlu/articol/alineat, ~1048 rows) — one shared classification for all budgets.
-- `AnexanrI_29072026.xlsx`, `Cuprins2026.xls` — overall functional classification + table of contents.
+- `Anexanr2_08052026.xlsx` — **Clasificația indicatorilor privind bugetele locale**: foaia „venituri bl. 2026" (567 rânduri, Capitol|Subcap.|Paragraf|Denumire) + foaia „ch. funct. bl. 2026" (172 rânduri, coduri funcționale de cheltuieli).
+- `AnexanrIec_28052026.xlsx` — **Clasificația economică** (titlu/articol/alineat, ~1048 rânduri) — o singură clasificație comună pentru toate bugetele.
+- `AnexanrI_29072026.xlsx`, `Cuprins2026.xls` — clasificația funcțională generală + cuprins.
 
-Notes that matter for the validator:
+Observații importante pentru validator:
 
-- data.gov.ro's copy is **frozen at 2018** — do not use it.
-- No maintained open-source digitization exists; parsing the MF XLSX ourselves (trivial with openpyxl) is the right call.
-- Code grammar: revenues `cc.02[.ss[.pp]]`; functional expenses capitol/subcapitol/paragraf `65.02.04.01`; economic titlu/articol/alineat `10.01.01`. Suffix `.02` = local budget, `.10` = own-revenue institutions. Rollup pseudo-codes `00.xx`, `49.90` (venituri proprii), `98.02`/`99.02` (excedent/deficit) are **not in Anexa 2** — they exist only in report forms and must be seeded separately.
-- Aggregation rules (validator's arithmetic backbone):
-  - `TOTAL VENITURI (00.01) = 00.02+00.15+00.16+00.17+45.02+46.02+48.02`; the full 00.xx cascade documented in `reference/` (00.02=00.03+00.12, etc.).
+- Copia de pe data.gov.ro este **înghețată la 2018** — a nu se folosi.
+- Nu există nicio digitizare open-source întreținută; parsarea XLSX-urilor MF de către noi înșine (trivială cu openpyxl) este alegerea corectă.
+- Gramatica codurilor: venituri `cc.02[.ss[.pp]]`; cheltuieli funcționale capitol/subcapitol/paragraf `65.02.04.01`; economic titlu/articol/alineat `10.01.01`. Sufixul `.02` = buget local, `.10` = instituții finanțate din venituri proprii. Pseudo-codurile de agregare `00.xx`, `49.90` (venituri proprii), `98.02`/`99.02` (excedent/deficit) **nu se află în Anexa 2** — ele există doar în formularele de raportare și trebuie adăugate separat.
+- Reguli de agregare (coloana vertebrală aritmetică a validatorului):
+  - `TOTAL VENITURI (00.01) = 00.02+00.15+00.16+00.17+45.02+46.02+48.02`; cascada completă 00.xx documentată în `reference/` (00.02=00.03+00.12 etc.).
   - `VENITURI PROPRII (49.90) = 00.02 − 11.02 − 37.02 + 00.15`.
   - capitol = Σ subcapitole; subcapitol = Σ paragrafe; economic: titlu = Σ articole = Σ alineate; grupa 01 = Σ titluri 10..65.
-  - `TOTAL = SECȚIUNEA FUNCȚIONARE + SECȚIUNEA DEZVOLTARE`; the sections are glued by `37.02.03` (negative, funcționare) = −`37.02.04` (positive, dezvoltare).
-  - In the `ab` layout: `TOTAL anual = Trim I + II + III + IV` — a per-row checksum, extremely valuable for OCR error detection.
-  - Exceptions: "din care:" memo lines are never summed; `*)` codes appear only in execution; title 85 is negative; 2026-new codes flagged `*`/`**` (42.02.98, 54.02.18, 65.02.06, …) are valid for 2026+ only.
+  - `TOTAL = SECȚIUNEA FUNCȚIONARE + SECȚIUNEA DEZVOLTARE`; secțiunile sunt legate prin `37.02.03` (negativ, funcționare) = −`37.02.04` (pozitiv, dezvoltare).
+  - În layoutul `ab`: `TOTAL anual = Trim I + II + III + IV` — o sumă de control pe rând, extrem de valoroasă pentru detectarea erorilor OCR.
+  - Excepții: liniile memo „din care:" nu se însumează niciodată; codurile `*)` apar doar în execuție; titlul 85 este negativ; codurile noi din 2026 marcate `*`/`**` (42.02.98, 54.02.18, 65.02.06, …) sunt valabile doar pentru 2026+.
 
-## 3. Extraction stack — findings and decisions
+## 3. Stiva de extragere — constatări și decizii
 
-Research summary (docling ecosystem, Aug 2026):
+Rezumatul cercetării (ecosistemul docling, aug. 2026):
 
-- **Docling classic pipeline** is the right primary extractor: pluggable OCR (default **RapidOCR**, PP-OCR v5/v6 Latin models cover Romanian `ro`; Tesseract `ron` is the alternative — EasyOCR is a 10× slower quality fallback; **ocrmac/Apple Vision does not support Romanian** — avoid), **TableFormer ACCURATE** mode is near-SOTA on dense financial tables (~94% on complex tables), and everything lands in a lossless Pydantic `DoclingDocument` with per-cell row/col indices, spans and bounding boxes, plus `TableItem.export_to_dataframe()`.
-- Docling limitations to design around: no in-image rotation correction (pre-rotate ourselves; Tesseract OSD or a cheap projection-profile heuristic), no per-cell OCR confidence (page-level confidence grades only, since v2.34 — use them to route pages), merged/dropped cells on very dense tables (mitigate with `images_scale≈2.0`, `force_full_page_ocr=True`, and test `do_cell_matching=False`).
-- Throughput: plan ~3–8 s/page on Apple Silicon CPU for OCR + ACCURATE TableFormer (≈ 45–90 min for the 569 scanned pages; parallelizable per page).
-- Alternatives considered and rejected as primary: **marker/surya** (handles rotation and benchmarks well, but Open Rail-M weights restrict commercial use), **unstructured** (weaker table fidelity), **camelot/tabula** (digital-only — though camelot lattice is a good cross-check for `ab`), **Azure/Google Document AI** (best accuracy floor + per-word confidences, but managed/vendor cost — keep as an optional escape hatch), **pure LLM-vision extraction** (best semantic understanding, but unverifiable digit hallucination on dense numeric tables — use as *validator/repair layer*, not primary extractor).
+- **Pipeline-ul clasic docling** este extractorul primar potrivit: OCR interschimbabil (implicit **RapidOCR**, modelele latine PP-OCR v5/v6 acoperă româna `ro`; Tesseract `ron` este alternativa — EasyOCR este un fallback de calitate de 10× mai lent; **ocrmac/Apple Vision nu suportă româna** — de evitat), modul **TableFormer ACCURATE** este aproape de nivelul SOTA pe tabele financiare dense (~94% pe tabele complexe), și totul ajunge într-un `DoclingDocument` Pydantic fără pierderi, cu indici rând/coloană per celulă, spanuri și bounding box-uri, plus `TableItem.export_to_dataframe()`.
+- Limitări docling de care trebuie ținut cont în proiectare: fără corecția rotirii în imagine (pre-rotim noi înșine; Tesseract OSD sau o euristică ieftină de profil de proiecție), fără scor de încredere OCR per celulă (doar note de încredere la nivel de pagină, începând cu v2.34 — folosite pentru rutarea paginilor), celule fuzionate/pierdute pe tabele foarte dense (atenuare cu `images_scale≈2.0`, `force_full_page_ocr=True` și testarea `do_cell_matching=False`).
+- Debit: de planificat ~3–8 s/pagină pe CPU Apple Silicon pentru OCR + TableFormer ACCURATE (≈ 45–90 min pentru cele 569 de pagini scanate; paralelizabil per pagină).
+- Alternative luate în calcul și respinse ca soluție primară: **marker/surya** (gestionează rotirea și are benchmarkuri bune, dar ponderile Open Rail-M restricționează utilizarea comercială), **unstructured** (fidelitate mai slabă a tabelelor), **camelot/tabula** (doar pentru PDF-uri digitale — deși camelot în mod lattice este o bună verificare încrucișată pentru `ab`), **Azure/Google Document AI** (cel mai bun prag de acuratețe + scoruri de încredere per cuvânt, dar serviciu gestionat cu costuri de furnizor — păstrat ca opțiune de rezervă), **extragere pură LLM-vision** (cea mai bună înțelegere semantică, dar halucinare neverificabilă a cifrelor pe tabele numerice dense — folosită ca *strat de validare/reparare*, nu ca extractor primar).
 
-**Core architectural principle: extract with deterministic tools, verify with arithmetic, repair with the LLM.** The nomenclator's redundancy (row checksums, hierarchy sums, section identities) means a single misread digit almost always breaks an equation — giving us high-precision, zero-cost error *detection*, so the LLM only needs to *fix* flagged cells, not read everything.
+**Principiul arhitectural central: extragem cu unelte deterministe, verificăm cu aritmetică, reparăm cu LLM-ul.** Redundanța nomenclatorului (sume de control pe rânduri, sume de ierarhie, identități de secțiune) face ca o singură cifră citită greșit să rupă aproape întotdeauna o ecuație — oferindu-ne *detectare* de erori cu precizie mare și cost zero, astfel încât LLM-ul trebuie doar să *repare* celulele semnalate, nu să citească totul.
 
-## 4. LLM: role and model choice
+## 4. LLM: rol și alegerea modelului
 
-The LLM (Claude API, Python SDK) is used for four narrow jobs, all with vision input (rendered page crops) and Pydantic-validated structured outputs (`client.messages.parse()` / `output_config.format`):
+LLM-ul (Claude API, SDK Python) este folosit pentru patru sarcini înguste, toate cu input vizual (decupaje de pagini randate) și ieșiri structurate validate cu Pydantic (`client.messages.parse()` / `output_config.format`):
 
-1. **Page/document classification** — label each page: HCL prose / budget table (which layout family, which budget `.02`/`.10`, which section) / investment list / other. Cheap, low-risk.
-2. **Targeted cell repair** — for cells flagged by the validator (broken sums, stamp overlap regions, empty cells where OCR failed): send a cropped image + neighbors, ask for the digits. Cross-check the repair by re-running the sum.
-3. **Header/name canonicalization** — match OCR'd indicator names (clipped, diacritics-mangled) to official nomenclator entries when the code itself is damaged; fuzzy string match first, LLM only for the ambiguous tail.
-4. **Full-page fallback extraction** — for pages where docling's confidence grade is POOR or the table structure is unusable (e.g. worst `ar` pages): whole-page vision extraction into the same Pydantic schema, flagged as LLM-sourced in the quality report.
+1. **Clasificarea paginilor/documentelor** — etichetează fiecare pagină: proză HCL / tabel de buget (ce familie de layout, ce buget `.02`/`.10`, ce secțiune) / listă de investiții / altele. Ieftin, cu risc scăzut.
+2. **Repararea țintită a celulelor** — pentru celulele semnalate de validator (sume rupte, zone acoperite de ștampile, celule goale unde OCR-ul a eșuat): se trimite o imagine decupată + vecinii, se cer cifrele. Reparația se verifică încrucișat prin re-rularea sumei.
+3. **Canonicalizarea antetelor/denumirilor** — potrivirea denumirilor de indicatori extrase prin OCR (trunchiate, cu diacritice stricate) cu intrările oficiale din nomenclator atunci când codul însuși este deteriorat; mai întâi potrivire fuzzy pe șiruri, LLM doar pentru restul ambiguu.
+4. **Extragere fallback pe pagină întreagă** — pentru paginile unde nota de încredere docling este POOR sau structura tabelului este inutilizabilă (de ex. cele mai proaste pagini din `ar`): extragere vizuală a întregii pagini în aceeași schemă Pydantic, marcată ca provenind din LLM în raportul de calitate.
 
-**Model recommendation** (Claude API pricing, Aug 2026):
+**Recomandare de model** (prețuri Claude API, aug. 2026):
 
-| Model | Input/Output $/MTok | Role |
+| Model | Input/Output $/MTok | Rol |
 |---|---|---|
-| **Claude Sonnet 5** (`claude-sonnet-5`) | $3/$15 (intro **$2/$10 through 2026-08-31**) | Default for repair + fallback extraction — best accuracy/cost on dense numeric vision |
-| **Claude Haiku 4.5** (`claude-haiku-4-5`) | $1/$5 | Page classification; optionally first-attempt repair with Sonnet escalation |
-| Batch API | **−50%** on any model | All non-interactive passes (the whole pipeline is batch-friendly) |
+| **Claude Sonnet 5** (`claude-sonnet-5`) | $3/$15 (introductiv **$2/$10 până la 2026-08-31**) | Implicit pentru reparare + extragere fallback — cel mai bun raport acuratețe/cost pe viziune numerică densă |
+| **Claude Haiku 4.5** (`claude-haiku-4-5`) | $1/$5 | Clasificarea paginilor; opțional prima încercare de reparare, cu escaladare la Sonnet |
+| Batch API | **−50%** la orice model | Toate trecerile non-interactive (întregul pipeline este compatibil cu batch) |
 
-Cost envelope for this corpus (569 scanned pages, ~2.5K image tokens + ~1.5K output tokens/page): even a **full** dual-pass with Sonnet 5 via Batch API is ≈ $6–12; the intended targeted-repair mode (LLM touches ~20–30% of pages) is ≈ $2–4 per corpus. Model is a CLI flag — nothing hardcoded.
+Anvelopa de cost pentru acest corpus (569 de pagini scanate, ~2,5K tokeni de imagine + ~1,5K tokeni de ieșire/pagină): chiar și o trecere dublă **completă** cu Sonnet 5 prin Batch API este ≈ $6–12; modul intenționat de reparare țintită (LLM-ul atinge ~20–30% din pagini) este ≈ $2–4 per corpus. Modelul este un flag CLI — nimic hardcodat.
 
-## 5. Proposed architecture
+## 5. Arhitectura propusă
 
 ```
 bgconvertor/
@@ -110,9 +110,9 @@ bgconvertor/
 └── tests/                    # golden pages from all 3 files, unit tests for sums/parsing
 ```
 
-Pipeline per PDF: `profile → classify → extract (per page, path chosen by class) → normalize → validate → [LLM repair loop, re-validate] → export + report`.
+Pipeline-ul per PDF: `profile → classify → extract (per page, path chosen by class) → normalize → validate → [LLM repair loop, re-validate] → export + report`.
 
-Key data model (`model.py`):
+Modelul de date principal (`model.py`):
 
 ```python
 class BudgetLine(BaseModel):
@@ -126,314 +126,314 @@ class BudgetLine(BaseModel):
     issues: list[Issue]         # populated by validator
 ```
 
-`Decimal` throughout (never float); Romanian number parser (`1.234,56`, `X`, `-`, blanks) as a single audited function.
+`Decimal` peste tot (niciodată float); parserul de numere în format românesc (`1.234,56`, `X`, `-`, celule goale) ca o singură funcție auditată.
 
-### Validation = quality measurement
+### Validarea = măsurarea calității
 
-Every check emits a typed `Issue` with severity; the quality report is an aggregation of these:
+Fiecare verificare emite un `Issue` tipizat cu severitate; raportul de calitate este o agregare a acestora:
 
-- **V1 code validity**: exists in nomenclator (right annex for `.02`/`.10`), or is a known rollup pseudo-code.
-- **V2 name concordance**: rapidfuzz score vs official denumire (diacritic-insensitive); low score → LLM canonicalization → still low → warn.
-- **V3 row checksums** (`ab` layout): TOTAL = ΣTrim.
-- **V4 hierarchy sums**: children Σ = parent, skipping memo/"din care" lines, honoring negative codes (37.02.03, title 85).
-- **V5 section identities**: TOTAL = FUNCȚIONARE + DEZVOLTARE per indicator; 37.02.03 = −37.02.04; venituri proprii formula; TOTAL VENITURI cascade.
-- **V6 cross-document**: buget local totals vs buget general (ar); HCL headline figures vs table totals (optional, LLM-read from prose).
-- **V7 extraction hygiene**: unparseable cells, empty required columns, duplicate codes in a section, page-level docling confidence grade.
+- **V1 validitatea codului**: există în nomenclator (anexa potrivită pentru `.02`/`.10`), sau este un pseudo-cod de agregare cunoscut.
+- **V2 concordanța denumirii**: scor rapidfuzz față de denumirea oficială (insensibil la diacritice); scor mic → canonicalizare LLM → tot mic → avertisment.
+- **V3 sume de control pe rânduri** (layoutul `ab`): TOTAL = ΣTrim.
+- **V4 sume de ierarhie**: Σ copii = părinte, sărind liniile memo/„din care", respectând codurile negative (37.02.03, titlul 85).
+- **V5 identități de secțiune**: TOTAL = FUNCȚIONARE + DEZVOLTARE per indicator; 37.02.03 = −37.02.04; formula veniturilor proprii; cascada TOTAL VENITURI.
+- **V6 verificări între documente**: totalurile bugetului local vs bugetul general (ar); cifrele principale din HCL vs totalurile din tabele (opțional, citite de LLM din proză).
+- **V7 igiena extragerii**: celule neparsabile, coloane obligatorii goale, coduri duplicate într-o secțiune, nota de încredere docling la nivel de pagină.
 
-Excel output (openpyxl): one workbook per PDF — `Venituri` / `Cheltuieli` sheets per budget & section with canonical columns (code, name, per-column values, source, confidence), a `Probleme` sheet listing every Issue with page/cell reference and severity color, and a `Sumar calitate` sheet (per-page stats, % lines fully validated, sum-check pass rate, LLM intervention count, unresolved flags). Investment lists and per-institution school budgets go to separate clearly-labeled sheets (they are outside the strict nomenclator scope).
+Ieșirea Excel (openpyxl): un workbook per PDF — foi `Venituri` / `Cheltuieli` per buget și secțiune cu coloane canonice (cod, denumire, valori per coloană, sursă, încredere), o foaie `Probleme` care listează fiecare Issue cu referință de pagină/celulă și culoare de severitate, și o foaie `Sumar calitate` (statistici per pagină, % linii complet validate, rata de trecere a verificărilor de sumă, numărul de intervenții LLM, semnalări nerezolvate). Listele de investiții și bugetele de școli pe instituții merg în foi separate, etichetate clar (sunt în afara sferei stricte a nomenclatorului).
 
-## 6. Robustness & debuggability — built in from the first line
+## 6. Robustețe și depanabilitate — integrate de la prima linie
 
-These files are heterogeneous enough that experimentation is the normal mode of development. The engineering goal is: **no failed run may cost more than one page of work and zero LLM dollars to diagnose.** Every rule below exists to prevent long failing loops that burn wall-clock time and API tokens.
+Aceste fișiere sunt suficient de eterogene încât experimentarea este modul normal de dezvoltare. Obiectivul ingineresc este: **nicio rulare eșuată nu are voie să coste mai mult de o pagină de muncă și zero dolari LLM pentru diagnosticare.** Fiecare regulă de mai jos există pentru a preveni buclele lungi de eșec care ard timp de perete și tokeni API.
 
-### 6.1 Page-level work units with a persistent run store
+### 6.1 Unități de lucru la nivel de pagină, cu un depozit de rulări persistent
 
-- Everything operates on **one page at a time**; a "run" is just an orchestration over per-page units.
-- Every stage writes its output as JSON to a content-addressed store:
-  `runs/<pdf-stem>/<stage>/<page>.json`, keyed by `hash(pdf) + page + stage + hash(stage config + prompt version)`.
-- Re-running is **always incremental**: completed (pdf, page, stage, config) tuples are skipped. Changing a prompt or a docling option invalidates only the affected stage, not upstream ones.
-- `--pages 1-10`, `--pages 9,31,151`, `--sample 12` (stratified by page class) let every experiment run on a slice. Development default is a slice; full runs are explicit.
-- **Fail-soft per page**: an exception in page 37 is caught, recorded as a `PageFailure` artifact (traceback + stage + config hash), and the run continues. `--fail-fast` flips this for debugging. A run summary always ends with "N ok / M failed / K cached".
+- Totul operează pe **o pagină o dată**; o „rulare" este doar o orchestrare peste unități per pagină.
+- Fiecare etapă își scrie ieșirea ca JSON într-un depozit adresat prin conținut:
+  `runs/<pdf-stem>/<stage>/<page>.json`, cu cheia `hash(pdf) + page + stage + hash(stage config + prompt version)`.
+- Re-rularea este **întotdeauna incrementală**: tuplele (pdf, page, stage, config) finalizate sunt sărite. Schimbarea unui prompt sau a unei opțiuni docling invalidează doar etapa afectată, nu și pe cele din amonte.
+- `--pages 1-10`, `--pages 9,31,151`, `--sample 12` (stratificat pe clasa paginii) permit rularea oricărui experiment pe o felie. Implicit, dezvoltarea se face pe o felie; rulările complete sunt explicite.
+- **Fail-soft per pagină**: o excepție pe pagina 37 este prinsă, înregistrată ca artefact `PageFailure` (traceback + etapă + hash de config), iar rularea continuă. `--fail-fast` inversează acest comportament pentru depanare. Un sumar de rulare se încheie întotdeauna cu „N ok / M failed / K cached".
 
-### 6.2 Debug artifacts, not log archaeology
+### 6.2 Artefacte de depanare, nu arheologie prin loguri
 
-- `--debug` writes, next to each page's JSON: the rendered page PNG, the OCR word boxes overlaid on the image (one cheap matplotlib/PIL render), the reconstructed table grid, and the row-level parse. A misextracted page is diagnosed by *opening two images*, not by re-running with print statements.
-- Structured logging (stdlib `logging` + rich handler): `-v` = stage progress per page, `-vv` = per-decision detail (column boundary choices, fuzzy-match scores, sum-check inputs). Logs carry `(pdf, page, stage)` context on every line.
-- Every `Issue` and every extracted value carries **provenance** (page, bbox, source, config hash) from day one — this is what makes the debug overlays and the Excel annotations possible without re-computation.
-- `bgconvertor inspect <pdf> <page>` — render one page with all artifacts to a folder and open it; the primary dev loop tool.
+- `--debug` scrie, lângă JSON-ul fiecărei pagini: PNG-ul paginii randate, casetele de cuvinte OCR suprapuse pe imagine (o randare ieftină matplotlib/PIL), grila de tabel reconstruită și parsarea la nivel de rând. O pagină extrasă greșit se diagnostichează *deschizând două imagini*, nu re-rulând cu instrucțiuni print.
+- Logare structurată (`logging` din stdlib + handler rich): `-v` = progresul etapelor per pagină, `-vv` = detaliu per decizie (alegerea granițelor de coloane, scoruri de potrivire fuzzy, intrările verificărilor de sumă). Logurile poartă contextul `(pdf, page, stage)` pe fiecare linie.
+- Fiecare `Issue` și fiecare valoare extrasă poartă **proveniență** (pagină, bbox, sursă, hash de config) din prima zi — asta face posibile suprapunerile de depanare și adnotările Excel fără re-calculare.
+- `bgconvertor inspect <pdf> <page>` — randează o pagină cu toate artefactele într-un folder și îl deschide; instrumentul principal al buclei de dezvoltare.
 
-### 6.3 LLM guardrails: budget, cache, replay
+### 6.3 Garduri de protecție LLM: buget, cache, replay
 
-- **Ledger**: every API call appends a JSONL record — purpose, model, page, input/output tokens, cost (from the response `usage` fields), duration. Every run prints its cost; `bgconvertor report` aggregates historic spend.
-- **Hard budget**: `--max-llm-cost 2.00` (and `--max-llm-calls`) aborts LLM passes — never the deterministic pipeline — when hit. Default budget is small; raising it is a conscious act.
-- **Call cache**: responses cached by `hash(model + prompt version + image bytes + schema)`. Re-running an experiment never re-pays for an identical call. Repair loops are capped (max 2 attempts per cell) and a cell that fails twice becomes `UNRESOLVED`, never a retry storm.
-- **`--llm off | repair | full`** with `off` as the development default. The entire pipeline must run and produce output (with more `UNRESOLVED` flags) with the LLM disabled.
-- **Recorded cassettes**: raw request/response pairs from real calls are saved as fixtures; tests and offline development replay them. No test ever hits the API.
-- Prompts are versioned files, not inline strings — a prompt change is a diffable commit and a cache-key change.
+- **Registru de cheltuieli**: fiecare apel API adaugă o înregistrare JSONL — scop, model, pagină, tokeni input/output, cost (din câmpurile `usage` ale răspunsului), durată. Fiecare rulare își afișează costul; `bgconvertor report` agregă cheltuielile istorice.
+- **Buget strict**: `--max-llm-cost 2.00` (și `--max-llm-calls`) oprește trecerile LLM — niciodată pipeline-ul determinist — la atingerea limitei. Bugetul implicit este mic; mărirea lui este un act conștient.
+- **Cache de apeluri**: răspunsurile sunt cache-uite după `hash(model + prompt version + image bytes + schema)`. Re-rularea unui experiment nu plătește niciodată din nou pentru un apel identic. Buclele de reparare sunt plafonate (maximum 2 încercări per celulă), iar o celulă care eșuează de două ori devine `UNRESOLVED`, niciodată o furtună de reîncercări.
+- **`--llm off | repair | full`** cu `off` ca implicit în dezvoltare. Întregul pipeline trebuie să ruleze și să producă ieșire (cu mai multe semnalări `UNRESOLVED`) cu LLM-ul dezactivat.
+- **Casete înregistrate**: perechile brute cerere/răspuns din apeluri reale sunt salvate ca fixture-uri; testele și dezvoltarea offline le redau. Niciun test nu atinge vreodată API-ul.
+- Prompturile sunt fișiere versionate, nu șiruri inline — o schimbare de prompt este un commit diff-abil și o schimbare de cheie de cache.
 
-### 6.4 Tests before features, measured not eyeballed
+### 6.4 Teste înaintea funcționalităților, măsurate, nu apreciate din ochi
 
-- **Golden fixture set first** (Phase 0.5, below): ~12–15 hand-picked pages covering every layout family and hazard (clean digital, stamp overlap, strikethrough, rotated matrix, school budget, investment list, HCL prose). For each: the page PNG + a hand-verified expected JSON. This is the corpus every experiment is scored against.
-- **Pure-function core**: number parser (`1.234,56`, `X`, `-`, blanks, negatives), code normalizer (`65020401` → `65.02.04.01`), sum engine, fuzzy matcher — all side-effect-free, unit-tested exhaustively (hypothesis property tests for the parser: parse∘format = id).
-- **`bgconvertor eval`**: runs the pipeline on the golden pages and reports cell-level precision/recall vs expected JSON, per layout family. Tuning docling options or prompts = run eval, compare numbers. No "it looks better".
-- **Snapshot tests per stage** on the fixtures, so an upstream change that shifts downstream output is visible in review, not discovered in production.
-- Everything runs offline in CI (cassettes + committed fixtures); the only network-touching command is `nomenclator update`.
+- **Setul de fixture-uri de aur mai întâi** (Faza 0.5, mai jos): ~12–15 pagini alese manual, acoperind fiecare familie de layout și fiecare pericol (digital curat, suprapunere de ștampilă, text tăiat, matrice rotită, buget de școală, listă de investiții, proză HCL). Pentru fiecare: PNG-ul paginii + un JSON așteptat verificat manual. Acesta este corpusul față de care este punctat fiecare experiment.
+- **Nucleu de funcții pure**: parserul de numere (`1.234,56`, `X`, `-`, celule goale, negative), normalizatorul de coduri (`65020401` → `65.02.04.01`), motorul de sume, potrivitorul fuzzy — toate fără efecte secundare, testate unitar exhaustiv (teste de proprietate hypothesis pentru parser: parse∘format = id).
+- **`bgconvertor eval`**: rulează pipeline-ul pe paginile de aur și raportează precizia/recall la nivel de celulă față de JSON-ul așteptat, per familie de layout. Reglarea opțiunilor docling sau a prompturilor = rulezi eval, compari numerele. Fără „arată mai bine".
+- **Teste snapshot per etapă** pe fixture-uri, astfel încât o schimbare în amonte care mută ieșirea din aval să fie vizibilă la review, nu descoperită în producție.
+- Totul rulează offline în CI (casete + fixture-uri comise); singura comandă care atinge rețeaua este `nomenclator update`.
 
-### 6.5 Config as data
+### 6.5 Configurația ca date
 
-One `RunConfig` (pydantic-settings): docling options, OCR engine/langs, render scale, model names, budgets, prompt versions. Serialized into every run directory and hashed into every cache key — so any artifact can answer "what settings produced you?", and two runs are comparable by diffing their configs.
+Un singur `RunConfig` (pydantic-settings): opțiuni docling, motor/limbi OCR, scară de randare, nume de modele, bugete, versiuni de prompturi. Serializat în fiecare director de rulare și inclus în hash-ul fiecărei chei de cache — astfel orice artefact poate răspunde la „ce setări te-au produs?", iar două rulări sunt comparabile prin diff-ul configurațiilor lor.
 
-## 7. Development phases
+## 7. Fazele de dezvoltare
 
-**Phase 0 — Foundations (1 day)**
-uv project, typer skeleton, and the **robustness scaffolding from §6 before any extraction code**: run store + page-level cache, structured logging, `RunConfig`, fail-soft page orchestration, LLM ledger/budget stubs, `inspect` command skeleton. Plus nomenclator ingestion: parse the three XLSX annexes into a cached registry (JSON) with hierarchy + seeded rollup codes + aggregation-rule table; `bgconvertor nomenclator update` re-scrapes the MF page (filenames change on every amendment; server needs browser UA + retries).
+**Faza 0 — Fundații (1 zi)**
+Proiect uv, schelet typer și **eșafodajul de robustețe din §6 înainte de orice cod de extragere**: depozit de rulări + cache la nivel de pagină, logare structurată, `RunConfig`, orchestrare fail-soft pe pagini, stub-uri pentru registrul de cheltuieli/bugetul LLM, scheletul comenzii `inspect`. Plus ingestia nomenclatorului: parsarea celor trei anexe XLSX într-un registru cache-uit (JSON) cu ierarhie + coduri de agregare adăugate + tabelul regulilor de agregare; `bgconvertor nomenclator update` re-scrapează pagina MF (numele fișierelor se schimbă la fiecare modificare; serverul are nevoie de UA de browser + reîncercări).
 
-**Phase 0.5 — Golden fixtures + eval harness (½–1 day)**
-Hand-pick and verify ~12–15 pages across all layout families and hazards; commit page PNGs + expected JSON; build `bgconvertor eval`. Also the pure-function core with its unit/property tests (number parser, code normalizer, sum engine). From here on, every change is scored against the fixtures.
+**Faza 0.5 — Fixture-uri de aur + harnașament de evaluare (½–1 zi)**
+Alegerea manuală și verificarea a ~12–15 pagini din toate familiile de layout și pericolele; comiterea PNG-urilor de pagini + JSON-urilor așteptate; construirea `bgconvertor eval`. Tot aici, nucleul de funcții pure cu testele sale unitare/de proprietate (parserul de numere, normalizatorul de coduri, motorul de sume). De aici înainte, fiecare schimbare este punctată față de fixture-uri.
 
-**Phase 1 — Digital path end-to-end (1–2 days)**
-`ab` file → coordinate-based extraction (pdfplumber words clustered into rows/columns; ruling lines present, so column x-boundaries are detectable) → model → validator → Excel + report. This exercises the full skeleton with zero OCR noise and produces the first real deliverable. Developed and evaluated on fixture slices (`--pages`), then a full 70-page run.
+**Faza 1 — Calea digitală cap-coadă (1–2 zile)**
+Fișierul `ab` → extragere bazată pe coordonate (cuvinte pdfplumber grupate în rânduri/coloane; liniile de riglaj sunt prezente, deci granițele x ale coloanelor sunt detectabile) → model → validator → Excel + raport. Aceasta exersează întregul schelet fără zgomot OCR și produce primul livrabil real. Dezvoltată și evaluată pe felii de fixture-uri (`--pages`), apoi o rulare completă pe 70 de pagini.
 
-**Phase 2 — Scanned path (2–4 days)**
-Docling integration (RapidOCR `ro`, `force_full_page_ocr`, ACCURATE, `images_scale=2`, MPS accelerator), orientation pre-step, page classification (heuristics + Haiku), `ag` end-to-end. Tune on the stamp/strikethrough fixture pages using `eval` + debug overlays; wire the validator-driven LLM repair loop (crop → Sonnet structured output → re-validate) behind the ledger/budget/cache from Phase 0, recording cassettes as fixtures as real calls happen.
+**Faza 2 — Calea scanată (2–4 zile)**
+Integrarea docling (RapidOCR `ro`, `force_full_page_ocr`, ACCURATE, `images_scale=2`, accelerator MPS), pasul prealabil de orientare, clasificarea paginilor (euristici + Haiku), `ag` cap-coadă. Reglaj pe paginile-fixture cu ștampile/text tăiat folosind `eval` + suprapunerile de depanare; conectarea buclei de reparare LLM conduse de validator (decupare → ieșire structurată Sonnet → re-validare) în spatele registrului/bugetului/cache-ului din Faza 0, înregistrând casete ca fixture-uri pe măsură ce au loc apeluri reale.
 
-**Phase 3 — Hard cases (2–3 days)**
-`ar`: in-image rotation handling, buget-general matrix layout (different column semantics), per-institution `.10` budgets, `X`-marker cells. Full-page LLM fallback for pages docling can't structure. Investment-list extraction to side sheets (best-effort, flagged).
+**Faza 3 — Cazurile grele (2–3 zile)**
+`ar`: gestionarea rotirii în imagine, layoutul matricial al bugetului general (semantică diferită a coloanelor), bugetele `.10` pe instituții, celulele cu marcaj `X`. Fallback LLM pe pagină întreagă pentru paginile pe care docling nu le poate structura. Extragerea listelor de investiții în foi laterale (best-effort, semnalate).
 
-**Phase 4 — Hardening (1–2 days)**
-Batch API mode for LLM passes, parallel page processing, CLI UX polish (progress, cumulative cost display), README. (Resumability, caching and `--llm` modes already exist from Phase 0 — this phase only tunes them.)
+**Faza 4 — Consolidare (1–2 zile)**
+Mod Batch API pentru trecerile LLM, procesare paralelă a paginilor, șlefuirea UX-ului CLI (progres, afișarea costului cumulat), README. (Reluabilitatea, cache-ul și modurile `--llm` există deja din Faza 0 — această fază doar le reglează.)
 
-Total: roughly 8–12 working days to a robust v1.
+Total: aproximativ 8–12 zile lucrătoare până la un v1 robust.
 
-## 8. Risks and mitigations
+## 8. Riscuri și atenuări
 
-| Risk | Mitigation |
+| Risc | Atenuare |
 |---|---|
-| OCR digit errors that *don't* break any sum (compensating/isolated cells) | Report honestly: quality score counts "arithmetically confirmed" vs "unverified" lines; optional dual-extraction (docling + LLM) diff on demand |
-| Stamps destroy digits beyond repair | Repair prompt sees row context + sum constraints; if still inconsistent → cell flagged `UNRESOLVED`, never silently guessed |
-| Layout families beyond the 4 found | Classifier has an `unknown` class → page routed to LLM fallback + warning in report |
-| Nomenclator amendments mid-year | `nomenclator update` command + registry stamped with annex dates; report records which version validated the file |
-| docling perf on 333-page file | Per-page parallelism, resumable cache; ~1h worst case is acceptable for a batch CLI |
-| Experiment loops burning time/tokens | §6 in full: page-slice runs, stage-level cache, LLM call cache + hard cost budget, offline cassettes, eval-scored changes |
+| Erori OCR de cifre care *nu* rup nicio sumă (celule compensatorii/izolate) | Raportare onestă: scorul de calitate numără liniile „confirmate aritmetic" vs „neverificate"; opțional, diff de extragere dublă (docling + LLM) la cerere |
+| Ștampilele distrug cifre dincolo de posibilitatea de reparare | Promptul de reparare vede contextul rândului + constrângerile de sumă; dacă rămâne inconsistent → celula semnalată `UNRESOLVED`, niciodată ghicită în tăcere |
+| Familii de layout dincolo de cele 4 găsite | Clasificatorul are o clasă `unknown` → pagina rutată la fallback-ul LLM + avertisment în raport |
+| Modificări ale nomenclatorului în cursul anului | Comanda `nomenclator update` + registru ștampilat cu datele anexelor; raportul înregistrează ce versiune a validat fișierul |
+| Performanța docling pe fișierul de 333 de pagini | Paralelism per pagină, cache reluabil; ~1h în cel mai rău caz este acceptabil pentru un CLI batch |
+| Buclele de experimentare care ard timp/tokeni | §6 în întregime: rulări pe felii de pagini, cache la nivel de etapă, cache de apeluri LLM + buget strict de cost, casete offline, schimbări punctate prin eval |
 
-## 9. Phase 5 — Corpus scale-out (planned 2026-08-21)
+## 9. Faza 5 — Extinderea la nivel de corpus (planificată 2026-08-21)
 
-Driver: the second batch of samples (Bistrița, Oradea, Bacău) confirmed wide
-variation in quality, format and structure, and the end goal is
-**cross-municipality analysis**. Theme: route every file to the cheapest path
-that handles it, and make new-format onboarding a contained, measured change.
+Motivația: al doilea lot de mostre (Bistrița, Oradea, Bacău) a confirmat o
+variație largă de calitate, format și structură, iar scopul final este
+**analiza între municipii**. Tema: rutarea fiecărui fișier pe calea cea mai ieftină
+care îl gestionează, și transformarea integrării unui format nou într-o schimbare izolată, măsurată.
 
-### Wave 1 — routing & correctness (~3–4 days)
+### Valul 1 — rutare și corectitudine (~3–4 zile)
 
-**5.1 `triage` command (pre-flight)** — ~1 day
-Profile all pages; orient+OCR a stratified sample (~5 pages); classify layouts.
-Report: layout families found, unknown-layout warning, scan-quality grades,
-estimated duration + LLM cost, recommended command. Stored as
-`runs/<stem>/triage.json`. *Acceptance: triage of the 6 current files matches
-known reality; an unseen layout is flagged as unknown, not silently mangled.*
+**5.1 Comanda `triage` (verificare prealabilă)** — ~1 zi
+Profilează toate paginile; orientează + OCR-izează un eșantion stratificat (~5 pagini); clasifică layouturile.
+Raport: familiile de layout găsite, avertisment de layout necunoscut, note de calitate a scanării,
+durată estimată + cost LLM, comandă recomandată. Stocat ca
+`runs/<stem>/triage.json`. *Acceptare: triajul celor 6 fișiere curente corespunde
+realității cunoscute; un layout nemaivăzut este semnalat ca necunoscut, nu mutilat în tăcere.*
 
-**5.2 Layout registry** — ~1–2 days
-Refactor the mapper's accumulated branching into `layouts/`: one module per
-family = detector (grid+text → confidence) + mapper (grid → lines) + column
-schema + identity hooks; a priority-ordered registry dispatches. Port all ~9
-known families with their tests. *Acceptance: golden eval ≥ 132/140 unchanged;
-adding a dummy family touches zero shared code.*
+**5.2 Registrul de layouturi** — ~1–2 zile
+Refactorizarea ramificațiilor acumulate ale mapper-ului în `layouts/`: un modul per
+familie = detector (grilă+text → încredere) + mapper (grilă → linii) + schemă de
+coloane + hook-uri de identitate; un registru ordonat pe priorități face dispecerizarea. Portarea tuturor celor ~9
+familii cunoscute cu testele lor. *Acceptare: evaluarea de aur ≥ 132/140 neschimbată;
+adăugarea unei familii fictive nu atinge niciun cod partajat.*
 
-**5.3 Digital grid generalization (Oradea)** — ~1–2 days
-Grid extractor v2: any N ruled columns, semantics from header words (reuse the
-scanned header vocabulary). Oradea fixtures added. Romanian UATs cluster on a
-few budget-software vendors, so each digital template likely unlocks many
-municipalities at zero OCR cost. *Acceptance: Oradea converts on the digital
-path at digital-grade cleanliness; Alba Iulia stays 100%.*
+**5.3 Generalizarea grilei digitale (Oradea)** — ~1–2 zile
+Extractorul de grilă v2: orice N coloane riglate, semantica din cuvintele din antet (refolosind
+vocabularul de antete de la calea scanată). Se adaugă fixture-uri Oradea. UAT-urile din România se grupează în jurul
+câtorva furnizori de software de buget, deci fiecare șablon digital deblochează probabil multe
+municipii cu cost OCR zero. *Acceptare: Oradea se convertește pe calea digitală
+la nivel de curățenie digitală; Alba Iulia rămâne la 100%.*
 
-### Wave 2 — scanned speed & quality (~2–3 days)
+### Valul 2 — viteză și calitate pe calea scanată (~2–3 zile)
 
-> **Wave 2 outcomes (measured, 2026-08-21):** 5.4 built and A/B-measured on
-> Bacău — 3× faster but −8pp validated cleanliness (copier text layer is
-> corrupted); shipped behind `prefer_native_text=False`, image-OCR stays the
-> default. 5.5 stamp filter built and measured on the three stamp fixtures —
-> no anchor improvement (current OCR already reads through these stamps);
-> shipped behind `stamp_filter=False`. 5.6 shipped: per-file measured
-> timings drive plan ETAs; adaptive orientation (upright-streak prior with
-> periodic full checks) cuts orient cost on upright-heavy files.
+> **Rezultatele Valului 2 (măsurate, 2026-08-21):** 5.4 construit și măsurat A/B pe
+> Bacău — de 3× mai rapid, dar −8pp curățenie validată (stratul de text al copiatorului
+> este corupt); livrat în spatele `prefer_native_text=False`, OCR-ul pe imagine rămâne
+> implicit. 5.5 filtrul de ștampile construit și măsurat pe cele trei fixture-uri cu ștampile —
+> nicio îmbunătățire a ancorelor (OCR-ul curent citește deja prin aceste ștampile);
+> livrat în spatele `stamp_filter=False`. 5.6 livrat: timpii măsurați per fișier
+> alimentează ETA-urile planului; orientarea adaptivă (prior de serie verticală cu
+> verificări complete periodice) reduce costul orientării pe fișierele majoritar verticale.
 
-**5.4 Native text-layer path for copier PDFs (Bacău)** — ~1 day
-When a page has an embedded text layer but no grid, feed docling the PDF page
-directly (no full-page OCR) so it uses the copier's text + TableFormer.
-A/B-measured on new Bacău fixtures. *Acceptance: ≥ equal anchor accuracy at
-≥3× the speed of the render-and-OCR path.*
+**5.4 Calea stratului de text nativ pentru PDF-urile de copiator (Bacău)** — ~1 zi
+Când o pagină are un strat de text încorporat, dar nu are grilă, i se dă docling-ului pagina PDF
+direct (fără OCR pe pagină întreagă), astfel încât să folosească textul copiatorului + TableFormer.
+Măsurat A/B pe fixture-uri noi Bacău. *Acceptare: acuratețe a ancorelor ≥ egală la
+viteză ≥3× față de calea randare-și-OCR.*
 
-**5.5 Scan preprocessing: stamp filter + deskew** — ~1 day
-Stamps are saturated blue/purple ink over black text: an HSV chroma filter
-before OCR should erase them nearly for free; add small-angle deskew.
-Config-gated, measured on the stamp-covered "hard" anchors. *Acceptance: hard-
-anchor pass rate improves with no regressions elsewhere.*
+**5.5 Preprocesarea scanărilor: filtru de ștampile + deskew** — ~1 zi
+Ștampilele sunt cerneală albastră/violet saturată peste text negru: un filtru de crominanță HSV
+înainte de OCR ar trebui să le șteargă aproape gratuit; se adaugă deskew pentru unghiuri mici.
+Controlat prin config, măsurat pe ancorele „grele" acoperite de ștampile. *Acceptare: rata de trecere a
+ancorelor grele se îmbunătățește fără regresii în altă parte.*
 
-**5.6 Adaptive orientation + learned ETAs** — ~1 day
-Per-file orientation prior (after N consecutive upright pages, spot-check
-instead of full 4-rotation OCR; consider rapidocr's angle classifier).
-run_stage records real timings to `runs/<stem>/timings.json`; the plan/ETA
-uses measured history instead of constants (Bacău exposed both). *Acceptance:
-Bacău-class orientation ≥3× faster; ETA within ±30% on reruns.*
+**5.6 Orientare adaptivă + ETA-uri învățate** — ~1 zi
+Prior de orientare per fișier (după N pagini verticale consecutive, verificare prin sondaj
+în loc de OCR complet pe 4 rotații; de luat în calcul clasificatorul de unghi din rapidocr).
+run_stage înregistrează timpii reali în `runs/<stem>/timings.json`; planul/ETA
+folosește istoricul măsurat în loc de constante (Bacău le-a expus pe ambele). *Acceptare:
+orientarea de tip Bacău ≥3× mai rapidă; ETA în limita ±30% la re-rulări.*
 
-### Wave 3 — LLM cost & corpus analysis (~3–4 days)
+### Valul 3 — costul LLM și analiza corpusului (~3–4 zile)
 
-> **Wave 3 outcomes (2026-08-21):** 5.7 shipped — OCR now stores per-row
-> y-extents, repair reads crop to the sum-group's rows (measured live:
-> avg input 3,600 → 1,507 tokens), cell recovery routes to Haiku
-> (`llm.cell_model`), and `llm.batch=True` submits repair reads via the
-> Batch API (−50%) through the same cache+ledger. Crops apply to pages
-> OCR'd after this change (older payloads fall back to full page). Name-
-> based kind disambiguation fixed the 51.02-class ambiguity (ab pinned at
-> 100% by a regression test). 5.8 shipped — `corpus export` (61,599 rows
-> across 6 municipalities, 94% arithmetic-verified) and `corpus report`.
+> **Rezultatele Valului 3 (2026-08-21):** 5.7 livrat — OCR-ul stochează acum extinderile
+> y per rând, citirea de reparare decupează la rândurile grupului de sumă (măsurat live:
+> input mediu 3.600 → 1.507 tokeni), recuperarea de celule se rutează la Haiku
+> (`llm.cell_model`), iar `llm.batch=True` trimite citirile de reparare prin
+> Batch API (−50%) prin același cache + registru. Decupajele se aplică paginilor
+> OCR-izate după această schimbare (payload-urile mai vechi revin la pagina întreagă). Dezambiguizarea
+> tipului pe bază de denumire a rezolvat ambiguitatea clasei 51.02 (ab fixat la
+> 100% printr-un test de regresie). 5.8 livrat — `corpus export` (61.599 rânduri
+> pe 6 municipii, 94% verificate aritmetic) și `corpus report`.
 
-**5.7 LLM efficiency: crop repair + Batch API + model routing** — ~2–3 days
-Keep per-cell bboxes in the OCR payload (schedule the field change with a
-planned re-OCR batch — it invalidates the OCR cache); repair sends row crops
-instead of full pages (5–10× cheaper, more accurate). `--llm-batch` submits
-fallback/repair sets via the Batch API (−50%) for unattended corpus runs.
-Route single-cell reads to Haiku. *Acceptance: Arad-class repair ≤ $2.5 with
-the same applied-repair count on an eval slice.*
+**5.7 Eficiență LLM: reparare pe decupaje + Batch API + rutarea modelelor** — ~2–3 zile
+Păstrarea bbox-urilor per celulă în payload-ul OCR (schimbarea de câmp se programează odată cu un
+lot planificat de re-OCR — invalidează cache-ul OCR); repararea trimite decupaje de rânduri
+în loc de pagini întregi (de 5–10× mai ieftin, mai precis). `--llm-batch` trimite
+seturile de fallback/reparare prin Batch API (−50%) pentru rulările nesupravegheate pe corpus.
+Citirile de o singură celulă se rutează la Haiku. *Acceptare: repararea de tip Arad ≤ $2.5 cu
+același număr de reparări aplicate pe o felie de evaluare.*
 
-**5.8 Corpus outputs: consolidated dataset + dashboard** — ~1–2 days
-`bgconvertor corpus export`: one normalized long-format dataset (CSV/Parquet)
-across all converted files — municipality, document/budget, section, kind,
-code, func_code, name, column, value, source (digital/ocr/llm), verified-by-
-arithmetic flag, page. `bgconvertor corpus report`: cross-municipality quality
-and spend table. *Acceptance: dataset loads in pandas and per-municipality
-totals reconcile with each workbook's Sumar sheet.*
+**5.8 Ieșiri de corpus: set de date consolidat + tablou de bord** — ~1–2 zile
+`bgconvertor corpus export`: un set de date normalizat în format lung (CSV/Parquet)
+pentru toate fișierele convertite — municipiu, document/buget, secțiune, tip,
+cod, func_code, denumire, coloană, valoare, sursă (digital/ocr/llm), indicator de verificare
+aritmetică, pagină. `bgconvertor corpus report`: tabel de calitate și cheltuieli
+între municipii. *Acceptare: setul de date se încarcă în pandas și totalurile per municipiu
+se reconciliază cu foaia Sumar a fiecărui workbook.*
 
-Cross-cutting rules: every item lands with golden fixtures + eval gates; cache
--invalidating field changes (5.7 bboxes) are batched to avoid unplanned mass
-re-OCR; new sample files feed fixtures for their families as they arrive.
+Reguli transversale: fiecare element se livrează cu fixture-uri de aur + porți de evaluare; schimbările
+de câmpuri care invalidează cache-ul (bbox-urile din 5.7) se grupează în loturi pentru a evita re-OCR-uri masive
+neplanificate; fișierele-mostră noi alimentează fixture-uri pentru familiile lor pe măsură ce sosesc.
 
-## 10. Phase 6 — Public release preparation (planned 2026-08-22)
+## 10. Faza 6 — Pregătirea lansării publice (planificată 2026-08-22)
 
-Goal: a public repo a stranger can clone, run on their own municipality's
-PDF, and extend with a new layout — without reading this session's history.
-The repo is not yet under git, so history can be born clean.
+Obiectiv: un repo public pe care un străin îl poate clona, rula pe PDF-ul
+propriului municipiu și extinde cu un layout nou — fără să citească istoricul acestei sesiuni.
+Repo-ul nu este încă sub git, deci istoricul se poate naște curat.
 
-### P1 — must happen before the repo goes public (~4–5 days with corpus integration)
+### P1 — trebuie să se întâmple înainte ca repo-ul să devină public (~4–5 zile, cu integrarea corpusului)
 
-**6.1 Git + hygiene (half day)**
-`git init`; first commit contains code only. `.gitignore` already covers
-`.env`, `runs/`, `.venv`; add `*.xlsx` outputs and `corpus.csv`. The API key
-in `.env` never enters history — and gets ROTATED anyway before publishing
-(it lived in a session transcript). Add `.env.example`. Decide the public
-name (keep `bgconvertor` or rename) before the remote exists.
+**6.1 Git + igienă (jumătate de zi)**
+`git init`; primul commit conține doar cod. `.gitignore` acoperă deja
+`.env`, `runs/`, `.venv`; se adaugă ieșirile `*.xlsx` și `corpus.csv`. Cheia API
+din `.env` nu intră niciodată în istoric — și oricum se ROTEȘTE înainte de publicare
+(a trăit într-un transcript de sesiune). Se adaugă `.env.example`. Se decide numele public
+(păstrăm `bgconvertor` sau redenumim) înainte să existe remote-ul.
 
-**6.2 License + data/legal notices (half day)**
-- Code: MIT or Apache-2.0 (Apache-2.0 recommended — patent grant, common
-  for data tooling).
-- `reference/nomenclator/*.xlsx`: official MF publications — keep, with a
-  NOTICE citing the source page and the annex's own caveat ("nu reprezintă
-  temei legal"), plus `nomenclator update` as the refresh path.
-- Budget PDFs and converted XLSX stay IN the repo, in the `data/` corpus
-  tree (decision 2026-08-22; the tree, SIRUTA manifest, checksums and
-  download.py already exist). Storage reality check: corpus is ~589MB for
-  36/42 PDFs; **Sibiu's PDF is 156MB — over GitHub's hard 100MB limit** —
-  and Bucharest's 61MB file is committed twice (Ilfov + București).
-  Approach: plain git for everything under 100MB (accept a ~0.7GB repo;
-  document the heavy clone + `--filter=blob:none` hint); the >100MB
-  file(s) are NOT committed — `data/<year>/download.py` + checksums fetch
-  them (manifest marks `oversize: true`); dedupe Bucharest to one copy
-  with both manifest entries pointing at it. Git LFS is the fallback if
-  GitHub complains, but its 1GB/mo free bandwidth dies under public
-  clones — revisit only with a budget. At multi-year scale (~3GB+),
-  migrate PDFs to Releases/HF datasets and keep only XLSX in-tree.
-- `DISCLAIMER.md`: outputs are extractions with a verified-flag, not
-  official figures; errors remain possible; check the Probleme sheet.
+**6.2 Licență + notificări privind datele/aspectele legale (jumătate de zi)**
+- Cod: MIT sau Apache-2.0 (Apache-2.0 recomandat — grant de brevet, uzual
+  pentru unelte de date).
+- `reference/nomenclator/*.xlsx`: publicații oficiale MF — se păstrează, cu un
+  NOTICE citând pagina-sursă și avertismentul propriu al anexei („nu reprezintă
+  temei legal"), plus `nomenclator update` drept cale de reîmprospătare.
+- PDF-urile de buget și XLSX-urile convertite rămân ÎN repo, în arborele
+  corpusului `data/` (decizie 2026-08-22; arborele, manifestul SIRUTA, sumele de control și
+  download.py există deja). Verificarea realității stocării: corpusul are ~589MB pentru
+  36/42 PDF-uri; **PDF-ul Sibiului are 156MB — peste limita strictă GitHub de 100MB** —
+  iar fișierul de 61MB al Bucureștiului este comis de două ori (Ilfov + București).
+  Abordare: git simplu pentru tot ce e sub 100MB (acceptăm un repo de ~0,7GB;
+  documentăm clonarea grea + indicația `--filter=blob:none`); fișierele de peste 100MB
+  NU se comit — `data/<year>/download.py` + sumele de control le descarcă
+  (manifestul le marchează `oversize: true`); Bucureștiul se deduplică la o singură copie,
+  cu ambele intrări din manifest arătând spre ea. Git LFS este soluția de rezervă dacă
+  GitHub se plânge, dar lățimea sa de bandă gratuită de 1GB/lună moare sub clonări
+  publice — se revizuiește doar cu un buget. La scară multi-anuală (~3GB+),
+  PDF-urile se migrează la Releases/seturi de date HF și doar XLSX-urile rămân în arbore.
+- `DISCLAIMER.md`: ieșirile sunt extrageri cu indicator de verificare, nu
+  cifre oficiale; erorile rămân posibile; verificați foaia Probleme.
 
-**6.3 Documentation set (1 day)**
-- `README.md` rewrite for strangers: what/why (1 paragraph + a screenshot
-  of the plan table & a workbook), quickstart (uv, one command on a sample
-  PDF), the three-layer design in 10 lines (deterministic extract →
-  arithmetic verify → budget-capped LLM repair), cost expectations table,
-  supported layout families, limitations. English primary; note that CLI
-  output is Romanian (its users are Romanian).
-- `docs/design.md`: distilled from this PLAN (architecture, run store,
-  eval methodology, measured decisions incl. the negative results). PLAN.md
-  itself moves to `docs/history.md` or gets trimmed — session-log framing
-  ("today", "tonight") must go.
-- `docs/adding-a-layout.md` — THE extension story: triage a new PDF →
-  inspect grids → write the layout module + registration line → add a
-  golden fixture → `bgconvertor eval`. Walk it with a real example
-  (Bistrița's transposed family).
-- `docs/nomenclator.md`: code grammar, rollups, identities, sources.
-- `.env.example`, `CONTRIBUTING.md` (dev setup, test/eval gates, the
-  "ab stays 100%" rule), `CHANGELOG.md` started at v0.1.0.
+**6.3 Setul de documentație (1 zi)**
+- Rescrierea `README.md` pentru străini: ce/de ce (1 paragraf + o captură de ecran
+  a tabelului de plan și a unui workbook), pornire rapidă (uv, o comandă pe un PDF-mostră),
+  designul în trei straturi în 10 rânduri (extragere deterministă →
+  verificare aritmetică → reparare LLM plafonată la buget), tabel cu așteptările de cost,
+  familiile de layout suportate, limitări. Engleza ca limbă primară; se menționează că ieșirea CLI
+  este în română (utilizatorii săi sunt români).
+- `docs/design.md`: distilat din acest PLAN (arhitectură, depozitul de rulări,
+  metodologia de evaluare, deciziile măsurate, inclusiv rezultatele negative). PLAN.md
+  însuși se mută la `docs/history.md` sau se scurtează — încadrarea de jurnal de sesiune
+  („azi", „diseară") trebuie să dispară.
+- `docs/adding-a-layout.md` — POVESTEA extensibilității: triajezi un PDF nou →
+  inspectezi grilele → scrii modulul de layout + linia de înregistrare → adaugi un
+  fixture de aur → `bgconvertor eval`. Se parcurge cu un exemplu real
+  (familia transpusă a Bistriței).
+- `docs/nomenclator.md`: gramatica codurilor, agregările, identitățile, sursele.
+- `.env.example`, `CONTRIBUTING.md` (configurarea mediului de dezvoltare, porțile de teste/eval, regula
+  „ab rămâne la 100%"), `CHANGELOG.md` început la v0.1.0.
 
-**6.4 CI + testing hardening (1 day)**
-- GitHub Actions: `uv sync` + `ruff check` + `pytest` on 3.12/3.13. The
-  suite is already offline-safe (cassettes; PDF-dependent tests skip when
-  files are absent) — CI runs the committed small PDFs' subset, incl. the
-  ab-100% pin and eval over the fixtures whose PDFs are committed.
-- New CI-friendly tests that need NO PDFs: per-family **grid fixtures**
-  (the OCR text grids as JSON — transposed, matrix, headerless, combined-
-  code, US-locale) asserting mapper output; assemble/validate unit tests on
-  synthetic documents (region switching, truncation repair, kind
-  disambiguation); CLI smoke tests via typer's runner.
-- `ruff` (lint+format) added to dev deps and pre-commit config; one
-  formatting pass over the codebase.
+**6.4 CI + consolidarea testării (1 zi)**
+- GitHub Actions: `uv sync` + `ruff check` + `pytest` pe 3.12/3.13. Suita
+  este deja sigură offline (casete; testele dependente de PDF-uri se sar când
+  fișierele lipsesc) — CI rulează subsetul PDF-urilor mici comise, inclusiv
+  fixarea ab-100% și evaluarea pe fixture-urile ale căror PDF-uri sunt comise.
+- Teste noi prietenoase cu CI, care NU au nevoie de PDF-uri: **fixture-uri de grilă** per familie
+  (grilele de text OCR ca JSON — transpusă, matrice, fără antet, cu cod combinat,
+  în format american) care aserționează ieșirea mapper-ului; teste unitare de asamblare/validare pe
+  documente sintetice (comutarea regiunilor, repararea trunchierilor, dezambiguizarea
+  tipurilor); teste smoke CLI prin runner-ul typer.
+- `ruff` (lint + format) adăugat la dependențele de dezvoltare și la configul pre-commit; o singură
+  trecere de formatare peste întregul cod.
 
-**6.5 Corpus tree integration (1 day) — prerequisite for everything below**
-- Fix the run-store key collision: every corpus file is `budget_file.pdf`,
-  so `runs/<stem>` must become `runs/<relative-path-slug>` (e.g.
-  `runs/2026-01-alba-1017-alba-iulia`). Migration shim for the existing
-  flat-file stores; the flat `budget_file_*.pdf` samples move into the
-  tree (they ARE county seats: ab=1017-alba-iulia, ar=arad, …) and golden
-  fixtures/tests repoint to `data/` paths.
-- Manifest becomes the identity source: `corpus export` rows carry
-  `siruta`, `county_code`, `city` from `data/<year>/manifest.json` instead
-  of filename guessing; converted workbook lands NEXT TO its PDF
-  (`budget_file.xlsx`) and is committed.
-- `triage`/`convert`/`report` accept a manifest entry (`--city 1017` or a
-  tree path) as well as a bare PDF path.
+**6.5 Integrarea arborelui de corpus (1 zi) — precondiție pentru tot ce urmează**
+- Rezolvarea coliziunii de chei din depozitul de rulări: fiecare fișier de corpus este `budget_file.pdf`,
+  deci `runs/<stem>` trebuie să devină `runs/<relative-path-slug>` (de ex.
+  `runs/2026-01-alba-1017-alba-iulia`). Shim de migrare pentru depozitele existente
+  cu fișiere plate; mostrele plate `budget_file_*.pdf` se mută în
+  arbore (ele SUNT reședințe de județ: ab=1017-alba-iulia, ar=arad, …), iar fixture-urile
+  de aur/testele se re-îndreaptă spre căile `data/`.
+- Manifestul devine sursa de identitate: rândurile din `corpus export` poartă
+  `siruta`, `county_code`, `city` din `data/<year>/manifest.json` în loc de
+  ghicire după numele fișierului; workbook-ul convertit ajunge LÂNGĂ PDF-ul său
+  (`budget_file.xlsx`) și este comis.
+- `triage`/`convert`/`report` acceptă o intrare de manifest (`--city 1017` sau o
+  cale din arbore), pe lângă o simplă cale de PDF.
 
-**6.6 Batch runner (1 day)**
+**6.6 Rulator de loturi (1 zi)**
 `bgconvertor batch data/2026 [--group 5] [--llm repair --max-llm-cost N
-per-file] [--only pending|failed]`: walks the manifest, processes N cities
-at a time (extraction workers within each; group = commit/checkpoint
-granularity), fail-soft per city, resumable via a `conversion_status`
-block written back into the manifest (status, pct_clean, errors, spend,
-converted_at, tool version). Ends with the corpus report table. Designed
-so a GitHub Action or a human can run "the next 5" safely.
+per-file] [--only pending|failed]`: parcurge manifestul, procesează N orașe
+odată (workeri de extragere în cadrul fiecăruia; group = granularitatea
+commit/checkpoint), fail-soft per oraș, reluabil printr-un bloc `conversion_status`
+scris înapoi în manifest (status, pct_clean, errors, spend,
+converted_at, versiunea uneltei). Se încheie cu tabelul raportului de corpus. Proiectat
+astfel încât un GitHub Action sau un om să poată rula „următoarele 5" în siguranță.
 
-**6.7 GitHub Pages site, minimal cut (1–1.5 days)**
-`bgconvertor site build` → static `site/` from the manifest + conversion
-results: an index page (42 county seats: status badge, % clean, links)
-and one page per converted city (headline totals venituri/cheltuieli per
-section, top capitole table from VERIFIED rows only, quality scorecard,
-provenance/spend, download links to xlsx + source PDF, the DISCLAIMER).
-Jinja2 templates, no JS build chain; charts as inline SVG or static PNG.
-Publish via GitHub Actions (site rebuild on `data/**` change → Pages
-deploy). Per-city analysis depth beyond this (per-capita, year-over-year,
-cross-city rankings) is P2.
+**6.7 Site GitHub Pages, varianta minimală (1–1,5 zile)**
+`bgconvertor site build` → `site/` static din manifest + rezultatele
+conversiilor: o pagină index (42 de reședințe de județ: badge de status, % curat, linkuri)
+și câte o pagină per oraș convertit (totaluri principale venituri/cheltuieli per
+secțiune, tabelul capitolelor principale doar din rândurile VERIFICATE, fișă de calitate,
+proveniență/cheltuieli, linkuri de descărcare la xlsx + PDF-ul sursă, DISCLAIMER-ul).
+Șabloane Jinja2, fără lanț de build JS; grafice ca SVG inline sau PNG static.
+Publicare prin GitHub Actions (reconstruirea site-ului la schimbări în `data/**` → deploy
+pe Pages). Profunzimea analizei per oraș dincolo de asta (per capita, an-la-an,
+clasamente între orașe) este P2.
 
-### P2 — shortly after going public (~2 days, can trail)
+### P2 — la scurt timp după publicare (~2 zile, poate urma ulterior)
 
-- **Docs polish**: layout gallery (one rendered page image per family with
-  its mapper named), FAQ (costs, key setup, "my PDF has a new layout").
-- **Issue templates**: "new municipality/layout" template that asks for
-  `bgconvertor triage` output + a sample page; bug template asking for
+- **Șlefuirea documentației**: galerie de layouturi (câte o imagine de pagină randată per familie, cu
+  mapper-ul său numit), FAQ (costuri, configurarea cheii, „PDF-ul meu are un layout nou").
+- **Șabloane de issue-uri**: șablonul „municipiu/layout nou" care cere
+  ieșirea `bgconvertor triage` + o pagină-mostră; șablonul de bug care cere
   `bgconvertor report`.
-- **Packaging**: PyPI publication (`uv build`), pinned lower bounds, and a
-  `--version` flag; optional Dockerfile for the OCR toolchain.
-- **API-key UX**: first-run message explaining `--llm off` works fully
-  offline and what a key adds; document typical spend per file class.
-- **Site analysis depth**: per-capita figures (INS population by SIRUTA),
-  cross-city comparison pages (spending structure by capitol, rankings),
-  year-over-year once a second year lands in `data/`; a county map index.
-- **Batch automation**: a scheduled/manual GitHub Action that runs
-  `batch --group 5` on runners? Likely NOT worth it (OCR needs ~30-60
-  CPU-min/city and LLM repair needs the key as a secret) — document local
-  runs as the intended path, Action only for site rebuild + eval CI.
+- **Împachetare**: publicare pe PyPI (`uv build`), limite inferioare fixate și un
+  flag `--version`; Dockerfile opțional pentru lanțul de unelte OCR.
+- **UX pentru cheia API**: mesaj la prima rulare care explică faptul că `--llm off` funcționează complet
+  offline și ce adaugă o cheie; se documentează cheltuiala tipică per clasă de fișier.
+- **Profunzimea analizei pe site**: cifre per capita (populația INS după SIRUTA),
+  pagini de comparație între orașe (structura cheltuielilor pe capitole, clasamente),
+  an-la-an odată ce un al doilea an ajunge în `data/`; un index cu harta județelor.
+- **Automatizarea loturilor**: un GitHub Action programat/manual care rulează
+  `batch --group 5` pe runneri? Probabil NU merită (OCR-ul are nevoie de ~30-60
+  min-CPU/oraș, iar repararea LLM are nevoie de cheie ca secret) — se documentează rulările
+  locale ca fiind calea intenționată, Action doar pentru reconstruirea site-ului + CI-ul de evaluare.
 
-### Explicit non-goals for the first public cut
-GUI, hosted service, non-Romanian nomenclatures, Windows CI (document
-macOS/Linux; docling works on Windows but untested here).
+### Non-obiective explicite pentru prima versiune publică
+GUI, serviciu găzduit, nomenclatoare din afara României, CI pe Windows (se documentează
+macOS/Linux; docling funcționează pe Windows, dar netestat aici).
 
-## 11. Recommended stack summary
+## 11. Rezumatul stivei recomandate
 
-Python 3.12+/uv · **typer** (CLI) · **pypdfium2 + pdfplumber** (profiling/digital) · **docling** (scanned: RapidOCR-ro + TableFormer ACCURATE) · **pydantic v2 + pydantic-settings** (schema + RunConfig everywhere) · **anthropic** SDK (Sonnet 5 repair/fallback, Haiku 4.5 classification, Batch API, structured outputs) · **rapidfuzz** (name matching) · **openpyxl** (Excel) · **rich** (terminal report + logging) · **pytest + hypothesis** (unit/property tests, snapshot tests, cassette replay, golden-page eval).
+Python 3.12+/uv · **typer** (CLI) · **pypdfium2 + pdfplumber** (profilare/digital) · **docling** (scanate: RapidOCR-ro + TableFormer ACCURATE) · **pydantic v2 + pydantic-settings** (schemă + RunConfig peste tot) · **anthropic** SDK (Sonnet 5 reparare/fallback, Haiku 4.5 clasificare, Batch API, ieșiri structurate) · **rapidfuzz** (potrivirea denumirilor) · **openpyxl** (Excel) · **rich** (raport în terminal + logare) · **pytest + hypothesis** (teste unitare/de proprietate, teste snapshot, redare de casete, evaluare pe pagini de aur).

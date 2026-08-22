@@ -1,7 +1,7 @@
 [project]
 name = "bgconvertor"
 version = "0.1.0"
-description = "Convert Romanian local administration budget PDFs to validated Excel (Ordinul 1954/2005 nomenclator)"
+description = "Conversia PDF-urilor bugetare ale administrațiilor locale din România în Excel validat (nomenclatorul Ordinul 1954/2005)"
 requires-python = ">=3.12"
 dependencies = [
     "typer>=0.12",

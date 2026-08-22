@@ -1,35 +1,39 @@
-# Design
+# Arhitectură
 
-Distilled from the project's development log (`PLAN.md` holds the full
-history, including measurements and dead ends).
+Distilat din jurnalul de dezvoltare al proiectului (`PLAN.md` conține
+istoricul complet, inclusiv măsurătorile și direcțiile abandonate).
 
-## The problem
+## Problema
 
-Romanian local budgets are published as PDF annexes to council decisions:
-some born-digital with ruled grids, many scanned — rotated in any of four
-orientations, stamped over the numbers, printed by a dozen different
-budget-software vendors with incompatible table layouts, in two number
-locales. The data inside follows one national standard, though: the
-classification of public-finance indicators (Ordinul MFP 1954/2005) and
-the arithmetic of budget law.
+Bugetele locale românești sunt publicate ca anexe PDF la hotărârile de
+consiliu: unele generate digital, cu grile trasate, multe scanate — rotite
+în oricare din cele patru orientări, cu ștampile peste cifre, tipărite de
+o duzină de furnizori diferiți de software bugetar cu machete de tabel
+incompatibile, în două convenții locale de scriere a numerelor. Datele din
+interior urmează însă un singur standard național: clasificația
+indicatorilor privind finanțele publice (Ordinul MFP 1954/2005) și
+aritmetica legii bugetare.
 
-## Core principle
+## Principiul de bază
 
-**Extract with deterministic tools, verify with arithmetic, repair with an
-LLM only under proof.**
+**Extrage cu instrumente deterministe, verifică prin aritmetică, repară cu
+un LLM doar sub demonstrație.**
 
-The classification's redundancy (row checksums, capitol = Σ subcapitole,
-grupa = Σ titluri, section identities, composition formulas printed in row
-names) means a single misread digit almost always breaks an equation. That
-gives high-precision, zero-cost error *detection* — so the expensive,
-hallucination-prone step (vision LLM) is demoted to *repair*: it re-reads
-only flagged row groups, and a repair is applied **only if the re-read
-makes the sums hold**. Cells with no constraint to prove them stay marked
-`unverified`. Nothing is ever silently guessed.
+Redundanța clasificației (sume de control pe rânduri, capitol = Σ
+subcapitole, grupa = Σ titluri, identitățile pe secțiuni, formulele de
+compoziție tipărite chiar în denumirile rândurilor) face ca o singură
+cifră citită greșit să rupă aproape întotdeauna o ecuație. Asta oferă
+*detectarea* erorilor cu precizie ridicată și cost zero — astfel încât
+pasul scump și predispus la halucinații (LLM-ul cu vedere) este retrogradat
+la *reparație*: recitește doar grupurile de rânduri semnalate, iar o
+reparație se aplică **numai dacă recitirea face ca sumele să se închidă**.
+Celulele fără nicio constrângere care să le demonstreze rămân marcate
+`unverified`. Nimic nu este vreodată ghicit în tăcere.
 
-An early measured lesson locked this in: telling the model the expected
-sum made it rationalize values toward it. Repair prompts are therefore
-pure transcription; all arithmetic stays on our side.
+O lecție măsurată devreme a fixat acest principiu: dacă i se spunea
+modelului suma așteptată, acesta raționaliza valorile către ea. Prompturile
+de reparație sunt, prin urmare, transcriere pură; toată aritmetica rămâne
+de partea noastră.
 
 ## Pipeline
 
@@ -40,49 +44,57 @@ profile -> [digital grid | orient -> OCR(docling) -> layout mappers]
         -> LLM tiers (fallback / sum-repair / cell recovery), re-validate
 ```
 
-Every stage writes per-page JSON to a **run store** keyed by
-`(file, page, stage, config-hash)`: re-runs skip finished pages, and a
-config or code-version change invalidates exactly the stages that depend
-on it. Expensive stages (OCR) are separated from cheap ones (mapping) so
-mapper iteration never re-pays OCR. Failures are per-page artifacts with
-tracebacks; a crash on page 37 never loses pages 1–36.
+Fiecare etapă scrie JSON per pagină într-un **run store** indexat după
+`(file, page, stage, config-hash)`: rulările repetate sar peste paginile
+finalizate, iar o schimbare de configurație sau de versiune de cod
+invalidează exact etapele care depind de ea. Etapele scumpe (OCR) sunt
+separate de cele ieftine (maparea), astfel încât iterarea pe mappere nu
+replătește niciodată OCR-ul. Eșecurile sunt artefacte per pagină, cu
+traceback-uri; o cădere la pagina 37 nu pierde niciodată paginile 1–36.
 
-## Layout registry
+## Registrul de machete (layouts)
 
-Grid → lines mapping strategies are pluggable (`layouts/`): transposed
-tables (indicators as columns), consolidated-budget matrices (year
-sub-rows, printed column-index row as fallback semantics), and the generic
-header-driven table mapper (shared vocabulary; positional fallback for
-headerless continuation pages, both column orders). Vendors' quirks live
-in data and small modules: combined `capitol.economic` codes (with
-PDF-truncated prefixes repaired from document context), phantom `.00`
-suffixes, OCR `x`-marker zoo, two number locales, per-page name-wrap
-styles, per-institution document splitting driven by page headers.
+Strategiile de mapare grilă → linii sunt modulare (`layouts/`): tabele
+transpuse (indicatorii pe coloane), matrici de buget consolidat (sub-rânduri
+pe ani, rândul tipărit cu indecșii coloanelor ca semantică de rezervă) și
+mapperul generic de tabel condus de antet (vocabular comun; rezervă
+pozițională pentru paginile de continuare fără antet, în ambele ordini de
+coloane). Particularitățile furnizorilor trăiesc în date și în module mici:
+coduri combinate `capitol.economic` (cu prefixe trunchiate de PDF reparate
+din contextul documentului), sufixe-fantomă `.00`, întreaga menajerie de
+marcaje `x` din OCR, două convenții locale de scriere a numerelor, stiluri
+per pagină de rupere a denumirilor pe rânduri, împărțirea documentelor pe
+instituții condusă de antetele paginilor.
 
-## Verification model
+## Modelul de verificare
 
-Issues are typed (`V1` code validity … `V7` hygiene) with severities, and
-every line carries provenance: page, source (`digital`/`ocr`/`llm`), and a
-`verified` flag = passed all checks. The corpus export exposes exactly
-this, so downstream analysis can choose its risk level.
+Problemele sunt tipizate (`V1` validitatea codului … `V7` igienă), cu
+severități, iar fiecare linie poartă proveniența: pagina, sursa
+(`digital`/`ocr`/`llm`) și un indicator `verified` = a trecut toate
+verificările. Exportul de corpus expune exact aceste informații, astfel
+încât analiza din aval își poate alege singură nivelul de risc.
 
-## LLM guardrails
+## Garduri de siguranță pentru LLM
 
-One ledger per file records every call (tokens, cost, purpose); a hard
-per-run dollar budget aborts LLM passes, never the pipeline; identical
-calls replay from a response cache forever (also the offline test
-cassettes); calls run in a thread pool; large outputs stream; Batch API
-mode halves cost for unattended runs; sum-repair reads crop to the row
-group when bounding boxes are available.
+Un registru contabil per fișier consemnează fiecare apel (tokeni, cost,
+scop); un buget dur în dolari per rulare oprește pasurile LLM, niciodată
+pipeline-ul; apelurile identice se redau la nesfârșit dintr-un cache de
+răspunsuri (care servește și drept casete de test offline); apelurile
+rulează într-un pool de thread-uri; ieșirile mari sunt transmise în flux;
+modul Batch API înjumătățește costul pentru rulările nesupravegheate;
+recitirile pentru repararea sumelor decupează imaginea la grupul de rânduri
+atunci când sunt disponibile bounding box-uri.
 
-## Measured negative results (kept on purpose)
+## Rezultate negative măsurate (păstrate intenționat)
 
-- Copier PDFs' embedded text layers looked usable but scored **worse** than
-  re-OCR on validated cleanliness (−8pp on the Bacău A/B) — shipped off by
-  default behind `prefer_native_text`.
-- A stamp-removal chroma filter didn't move a single golden anchor — the
-  OCR already read through the corpus's stamps; shipped off by default.
+- Straturile de text încorporate din PDF-urile de copiator păreau
+  utilizabile, dar au obținut scoruri **mai slabe** decât re-OCR-ul la
+  curățenia validată (−8pp pe testul A/B de la Bacău) — livrate dezactivate
+  implicit, în spatele opțiunii `prefer_native_text`.
+- Un filtru cromatic de eliminare a ștampilelor nu a mișcat nicio ancoră de
+  aur — OCR-ul citea deja prin ștampilele din corpus; livrat dezactivat
+  implicit.
 
-The eval harness (hand-verified golden anchors per layout family,
-`bgconvertor eval`) is what makes such calls cheap: hypotheses get
-numbers, not opinions.
+Harness-ul de evaluare (ancore de aur verificate manual pentru fiecare
+familie de machete, `bgconvertor eval`) este ceea ce face astfel de decizii
+ieftine: ipotezele primesc cifre, nu opinii.

@@ -1,47 +1,52 @@
-# Contributing
+# Cum contribui
 
-## Setup
+## Instalare
 
 ```bash
 uv sync
-uv run pytest        # must pass, fully offline
+uv run pytest        # trebuie să treacă, complet offline
 uv run bgconvertor eval
 ```
 
-The LLM layers need `ANTHROPIC_API_KEY` (see `.env.example`) but nothing in
-the test suite touches the network: LLM tests replay recorded responses,
-and PDF-dependent tests skip when the sample files are absent.
+Straturile LLM au nevoie de `ANTHROPIC_API_KEY` (vezi `.env.example`), dar
+nimic din suita de teste nu atinge rețeaua: testele LLM redau răspunsuri
+înregistrate, iar testele care depind de PDF-uri se omit singure când
+fișierele-eșantion lipsesc.
 
-## The two gates
+## Cele două porți
 
-Every change must keep:
+Orice modificare trebuie să păstreze:
 
-1. **`uv run pytest` green** — including `test_ab_stays_fully_clean`: the
-   digital reference file (Alba Iulia) validates 100% clean, always. If
-   your change breaks it, the change mis-files at least one line.
-2. **`uv run bgconvertor eval` not regressing** — golden fixtures in
-   `tests/fixtures/golden/` hold hand-verified cell anchors for every
-   layout family. Tuning is measured, never eyeballed.
+1. **`uv run pytest` verde** — inclusiv `test_ab_stays_fully_clean`:
+   fișierul digital de referință (Alba Iulia) se validează mereu 100%
+   curat. Dacă modificarea ta îl strică, modificarea clasifică greșit cel
+   puțin o linie.
+2. **`uv run bgconvertor eval` fără regresii** — fixture-urile etalon din
+   `tests/fixtures/golden/` conțin ancore de celule verificate manual
+   pentru fiecare familie de formate. Reglajele se măsoară, nu se apreciază
+   din ochi.
 
-Cache-invalidating changes (anything altering extraction output) must bump
-`extract_version` in `config.py` — that is what tells the run store to
-remap; without it your change silently doesn't apply to cached pages.
+Modificările care invalidează cache-ul (orice schimbă rezultatul
+extragerii) trebuie să incrementeze `extract_version` din `config.py` —
+asta îi spune magaziei de rulări să remapeze; fără asta modificarea ta pur
+și simplu nu se aplică paginilor deja procesate.
 
-## Adding support for a new municipality's layout
+## Adăugarea unui format nou de municipiu
 
-This is the most valuable contribution. Follow
-[docs/adding-a-layout.md](docs/adding-a-layout.md); in short: `triage` the
-PDF, inspect the failing grids, add a mapper in `src/bgconvertor/layouts/`
-(one module + one registration line), commit a golden fixture with
-hand-verified anchors, show the eval score.
+Aceasta este cea mai valoroasă contribuție. Urmează
+[docs/adding-a-layout.md](docs/adding-a-layout.md); pe scurt: rulează
+`triage` pe PDF, inspectează grilele care eșuează, adaugă un maper în
+`src/bgconvertor/layouts/` (un modul + o linie de înregistrare), comite un
+fixture etalon cu ancore verificate manual, arată scorul de la `eval`.
 
-When filing an issue about a PDF that converts poorly, attach the output of
-`bgconvertor triage <pdf>` and one problem page (`bgconvertor inspect`).
+Când deschizi un issue despre un PDF care se convertește prost, atașează
+rezultatul `bgconvertor triage <pdf>` și o pagină problematică
+(`bgconvertor inspect`).
 
-## Style
+## Stil
 
-`ruff check` / `ruff format` before committing. Keep the architecture's
-contract: extraction emits the payload documented in `eval_harness.py`;
-validators emit `Issue`s; nothing ever silently guesses a number — the LLM
-repair tier only applies values that make the arithmetic hold, and
-everything else stays flagged.
+`ruff check` / `ruff format` înainte de commit. Păstrează contractul
+arhitecturii: extragerea emite payload-ul documentat în `eval_harness.py`;
+validatoarele emit `Issue`-uri; nimic nu ghicește vreodată o cifră în
+tăcere — stratul de reparare LLM aplică doar valori care fac aritmetica să
+se închidă, iar tot restul rămâne marcat.

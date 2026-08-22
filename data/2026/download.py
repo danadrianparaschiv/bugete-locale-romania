@@ -15,7 +15,6 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = ROOT / "manifest.json"
 USER_AGENT = "bugetclar-public-data/1.0 (+https://github.com/danparaschiv/convertor-buget-local)"

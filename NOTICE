@@ -1,21 +1,23 @@
 bugete-locale-romania (bgconvertor)
-Copyright 2026 the bugete-locale-romania contributors
+Copyright 2026 contribuitorii bugete-locale-romania
 
-Licensed under the Apache License, Version 2.0 (see LICENSE).
+Licențiat sub Apache License, Version 2.0 (vezi LICENSE; textul licenței
+rămâne în engleză, fiind versiunea canonică).
 
-Third-party data included in this repository:
+Date ale terților incluse în acest depozit:
 
-1. reference/nomenclator/*.xls[x] — annexes of "Clasificația indicatorilor
-   privind finanțele publice", approved by Ordinul MFP nr. 1954/16.12.2005,
-   as published by the Romanian Ministry of Finance at
+1. reference/nomenclator/*.xls[x] — anexele „Clasificației indicatorilor
+   privind finanțele publice", aprobată prin Ordinul MFP nr. 1954/16.12.2005,
+   așa cum sunt publicate de Ministerul Finanțelor la
    https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare
-   The published annexes state that they do not constitute legal basis
-   ("nu reprezintă temei legal"). Refresh with `bgconvertor nomenclator update`.
+   Anexele publicate precizează că nu reprezintă temei legal.
+   Actualizare cu `bgconvertor nomenclator update`.
 
-2. data/<year>/**/budget_file.pdf — official local-government budget
-   documents (HCL annexes), public administrative records published by the
-   respective municipalities. Per-file sources and retrieval dates are in
-   data/<year>/manifest.json and data/<year>/SOURCES.md.
+2. data/<an>/**/budget_file.pdf — documente bugetare oficiale ale
+   administrațiilor locale (anexe la HCL), acte administrative publice
+   publicate de municipiile respective. Sursele și datele de preluare
+   pentru fiecare fișier sunt în data/<an>/manifest.json și
+   data/<an>/SOURCES.md.
 
-3. SIRUTA territorial codes — Institutul Național de Statistică,
+3. Codurile teritoriale SIRUTA — Institutul Național de Statistică,
    https://data.gov.ro/dataset/siruta-2025

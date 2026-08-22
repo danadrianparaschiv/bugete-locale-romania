@@ -24,7 +24,7 @@ from .runstore import RunStore
 
 app = typer.Typer(no_args_is_help=True, pretty_exceptions_show_locals=False)
 nom_app = typer.Typer(no_args_is_help=True)
-app.add_typer(nom_app, name="nomenclator", help="Manage the Ordinul 1954/2005 code registry")
+app.add_typer(nom_app, name="nomenclator", help="Gestionează registrul de coduri din Ordinul 1954/2005")
 
 console = Console()
 _state: dict = {}
@@ -32,10 +32,10 @@ _state: dict = {}
 
 @app.callback()
 def main(
-    verbose: int = typer.Option(0, "--verbose", "-v", count=True, help="-v progress, -vv detail"),
-    runs_dir: Path | None = typer.Option(None, help="Artifact store root (default: ./runs)"),
-    fail_fast: bool = typer.Option(False, help="Stop at the first page failure"),
-    debug: bool = typer.Option(False, help="Write debug artifacts (page PNGs, overlays)"),
+    verbose: int = typer.Option(0, "--verbose", "-v", count=True, help="-v progres, -vv detalii"),
+    runs_dir: Path | None = typer.Option(None, help="Rădăcina depozitului de artefacte (implicit: ./runs)"),
+    fail_fast: bool = typer.Option(False, help="Oprește la prima pagină eșuată"),
+    debug: bool = typer.Option(False, help="Scrie artefacte de depanare (PNG-uri de pagini, overlay-uri)"),
 ):
     setup_logging(verbose)
     # load .env (ANTHROPIC_API_KEY etc.) so `--llm repair` works out of the box
@@ -65,9 +65,9 @@ def _config() -> RunConfig:
 @app.command()
 def profile(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
-    pages: str | None = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
+    pages: str | None = typer.Option(None, "--pages", help="ex. 1-10 sau 9,31,151"),
 ):
-    """Run the page-census stage: text layer, geometry, per-page routing info."""
+    """Rulează etapa de recensământ al paginilor: strat de text, geometrie, rutare per pagină."""
     from pypdf import PdfReader
 
     from . import profilepdf
@@ -94,7 +94,7 @@ def inspect(
     pdf: Path = typer.Argument(..., exists=True),
     page: int = typer.Argument(..., min=1),
 ):
-    """Render one page to the debug dir and dump every stored artifact for it."""
+    """Randează o pagină în directorul de depanare și afișează toate artefactele stocate pentru ea."""
     from . import profilepdf
 
     config = _config()
@@ -122,7 +122,7 @@ def inspect(
 
 @app.command()
 def runs(pdf: Path = typer.Argument(..., exists=True)):
-    """Show cache and failure state per stage for a PDF."""
+    """Afișează starea cache-ului și a eșecurilor per etapă pentru un PDF."""
     config = _config()
     store = RunStore(config, pdf)
     table = Table(title=f"run store: {store.root}")
@@ -345,10 +345,10 @@ def _run_extraction(
 @app.command()
 def extract(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
-    pages: str | None = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
-    workers: int = typer.Option(1, min=1, max=8, help="Parallel OCR worker processes"),
+    pages: str | None = typer.Option(None, "--pages", help="ex. 1-10 sau 9,31,151"),
+    workers: int = typer.Option(1, min=1, max=8, help="Procese worker OCR în paralel"),
 ):
-    """Run extraction: coordinate-based for digital pages, docling for scans."""
+    """Rulează extracția: pe bază de coordonate pentru paginile digitale, docling pentru scanări."""
     from pypdf import PdfReader
 
     config = _config()
@@ -366,10 +366,10 @@ def extract(
 
 @app.command()
 def triage(pdf: Path = typer.Argument(..., exists=True, readable=True)):
-    """Pre-flight: classify the file, estimate cost/time, flag unknown layouts.
+    """Verificare preliminară: clasifică fișierul, estimează costul/timpul, semnalează layout-urile necunoscute.
 
-    Samples a few pages through the real extraction stack (~1 min for scans);
-    the sampled work is cached and reused by the actual conversion."""
+    Eșantionează câteva pagini prin stiva reală de extracție (~1 min pentru scanări);
+    munca eșantionată e pusă în cache și refolosită de conversia propriu-zisă."""
     from .triage import run_triage
 
     config = _config()
@@ -399,7 +399,7 @@ def triage(pdf: Path = typer.Argument(..., exists=True, readable=True)):
 
 @app.command()
 def report(pdf: Path = typer.Argument(..., exists=True)):
-    """Quality + cost report for a PDF from its run store."""
+    """Raport de calitate + cost pentru un PDF, din depozitul său de rulări."""
     config = _config()
     store = RunStore(config, pdf)
     table = Table(title=f"report: {pdf.name}")
@@ -434,12 +434,12 @@ def report(pdf: Path = typer.Argument(..., exists=True)):
 def convert(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
     pages: str | None = typer.Option(None, "--pages"),
-    out: Path | None = typer.Option(None, help="Output .xlsx (default: <pdf>.xlsx)"),
-    llm: str | None = typer.Option(None, help="off | repair (default from config)"),
-    max_llm_cost: float | None = typer.Option(None, help="Hard USD budget for LLM repair"),
-    workers: int = typer.Option(1, min=1, max=8, help="Parallel OCR worker processes"),
+    out: Path | None = typer.Option(None, help="Fișierul .xlsx de ieșire (implicit: <pdf>.xlsx)"),
+    llm: str | None = typer.Option(None, help="off | repair (implicit din configurație)"),
+    max_llm_cost: float | None = typer.Option(None, help="Buget strict în USD pentru repararea LLM"),
+    workers: int = typer.Option(1, min=1, max=8, help="Procese worker OCR în paralel"),
 ):
-    """Full pipeline: profile -> extract -> assemble -> validate [-> repair] -> Excel."""
+    """Pipeline complet: profilare -> extracție -> asamblare -> validare [-> reparare] -> Excel."""
     from pypdf import PdfReader
 
     from . import export as export_mod
@@ -611,11 +611,11 @@ def convert(
 
 @app.command("eval")
 def eval_cmd(
-    stage: str = typer.Option("extract", help="Run-store stage to score"),
-    fixtures: Path = typer.Option(Path("tests/fixtures/golden"), help="Golden fixtures dir"),
-    strict: bool = typer.Option(False, help="Exit 1 unless every anchor matches"),
+    stage: str = typer.Option("extract", help="Etapa din depozitul de rulări de evaluat"),
+    fixtures: Path = typer.Option(Path("tests/fixtures/golden"), help="Directorul fixture-urilor golden"),
+    strict: bool = typer.Option(False, help="Iese cu cod 1 dacă nu se potrivesc toate ancorele"),
 ):
-    """Score the extraction stage against the hand-verified golden fixtures."""
+    """Evaluează etapa de extracție față de fixture-urile golden verificate manual."""
     from . import eval_harness
 
     config = _config()
@@ -653,18 +653,18 @@ def eval_cmd(
 @app.command()
 def batch(
     data_dir: Path = typer.Argument(Path("data/2026"), exists=True),
-    group: int = typer.Option(5, min=1, help="Cities per checkpoint group"),
+    group: int = typer.Option(5, min=1, help="Orașe per grup de checkpoint"),
     workers: int = typer.Option(4, min=1, max=8),
     llm: str = typer.Option("repair", help="off | repair"),
-    max_llm_cost: float = typer.Option(3.00, help="USD budget per city"),
+    max_llm_cost: float = typer.Option(3.00, help="Buget USD per oraș"),
     only: str = typer.Option("pending", help="pending | failed | all"),
-    limit: int = typer.Option(0, help="Stop after N cities (0 = no limit)"),
+    limit: int = typer.Option(0, help="Oprește după N orașe (0 = fără limită)"),
 ):
-    """Convert the corpus city by city, in groups, writing status to the manifest.
+    """Convertește corpusul oraș cu oraș, în grupuri, scriind statusul în manifest.
 
-    Each city runs in its own process (fail-soft); the workbook lands next
-    to its PDF; the manifest's `conversion` block records status, quality
-    and spend. Safe to interrupt and re-run — everything resumes.
+    Fiecare oraș rulează în propriul proces (fail-soft); fișierul Excel ajunge
+    lângă PDF-ul său; blocul `conversion` din manifest înregistrează statusul,
+    calitatea și costul. Poate fi întrerupt și reluat în siguranță — totul se reia.
     """
     import datetime as dt
     import subprocess
@@ -749,16 +749,16 @@ def _workbook_stats(xlsx: Path) -> dict:
 
 
 site_app = typer.Typer(no_args_is_help=True)
-app.add_typer(site_app, name="site", help="Static GitHub Pages site for the corpus")
+app.add_typer(site_app, name="site", help="Site static GitHub Pages pentru corpus")
 
 
 @site_app.command("build")
 def site_build(
     data_dir: Path = typer.Option(Path("data/2026"), exists=True),
     out: Path = typer.Option(Path("site")),
-    base_url: str = typer.Option("", help="URL prefix when served from a subpath"),
+    base_url: str = typer.Option("", help="Prefix de URL când site-ul e servit dintr-o subcale"),
 ):
-    """Render the corpus index + per-city pages from committed files only."""
+    """Generează indexul corpusului + paginile per oraș, doar din fișierele comise."""
     from .manifest import Manifest
     from .site import build
 
@@ -770,7 +770,7 @@ def site_build(
 
 
 corpus_app = typer.Typer(no_args_is_help=True)
-app.add_typer(corpus_app, name="corpus", help="Cross-municipality dataset and report")
+app.add_typer(corpus_app, name="corpus", help="Set de date și raport la nivelul tuturor municipalităților")
 
 
 @corpus_app.command("export")
@@ -778,7 +778,7 @@ def corpus_export(
     out: Path = typer.Argument(Path("corpus.csv")),
     pdfs: list[Path] | None = typer.Argument(None),
 ):
-    """One normalized long-format dataset across all converted files."""
+    """Un singur set de date normalizat, în format lung, din toate fișierele convertite."""
     from . import corpus
 
     config = _config()
@@ -798,7 +798,7 @@ def corpus_export(
 
 @corpus_app.command("report")
 def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
-    """Quality and spend, side by side, for every converted municipality."""
+    """Calitate și cost, una lângă alta, pentru fiecare municipalitate convertită."""
     from . import corpus
 
     config = _config()
@@ -821,7 +821,7 @@ def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
 
 @nom_app.command("build")
 def nom_build():
-    """Parse the local annex XLSX files into registry.json."""
+    """Parsează fișierele XLSX de anexe locale în registry.json."""
     config = _config()
     reg = nom.build_registry(config.reference_dir)
     path = nom.save_registry(reg, config.reference_dir)
@@ -831,7 +831,7 @@ def nom_build():
 
 @nom_app.command("info")
 def nom_info():
-    """Show registry stats and sources."""
+    """Afișează statisticile și sursele registrului."""
     reg = nom.load_registry(_config().reference_dir)
     console.print(f"generated: {reg.generated_at}")
     for fname, sha in reg.sources.items():
@@ -841,7 +841,7 @@ def nom_info():
 
 @nom_app.command("update")
 def nom_update():
-    """Scrape mfinante.gov.ro for newer annexes and rebuild the registry."""
+    """Caută anexe mai noi pe mfinante.gov.ro și reconstruiește registrul."""
     config = _config()
     downloaded = nom.update(config.reference_dir)
     if downloaded:
@@ -852,7 +852,7 @@ def nom_update():
 
 @nom_app.command("check")
 def nom_check(code: str, kind: str | None = typer.Option(None)):
-    """Look up one code in the registry (dev helper)."""
+    """Caută un cod în registru (utilitar de dezvoltare)."""
     reg = nom.load_registry(_config().reference_dir)
     for k in [kind] if kind else ["revenue", "expense_functional", "expense_economic"]:
         e = reg.get(k, code)
