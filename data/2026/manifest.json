@@ -198,7 +198,17 @@
       "path": "10-buzau/44818-buzau/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariabuzau.ro/wp-content/uploads/2026/05/1.-Buget-local-detaliat.pdf",
-      "record_url": "https://primariabuzau.ro/bugetul-local/"
+      "record_url": "https://primariabuzau.ro/bugetul-local/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-22T11:30:59",
+        "tool_version": "0.1.0",
+        "lines": 1290,
+        "pct_clean": 64.8,
+        "errors": 124,
+        "warnings": 447
+      }
     },
     {
       "county_code": "11",

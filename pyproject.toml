@@ -22,8 +22,8 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/danparaschiv/bugete-locale-romania"
-Issues = "https://github.com/danparaschiv/bugete-locale-romania/issues"
+Repository = "https://github.com/danadrianparaschiv/bugete-locale-romania"
+Issues = "https://github.com/danadrianparaschiv/bugete-locale-romania/issues"
 
 [project.scripts]
 bgconvertor = "bgconvertor.cli:app"
