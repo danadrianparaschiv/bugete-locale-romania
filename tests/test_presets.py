@@ -26,9 +26,9 @@ def test_default_preset_matches_config_defaults():
 
 def test_apply_sets_llm_fields():
     cfg = RunConfig()
-    p = apply(cfg, "google:gemini-2.5-flash")
+    p = apply(cfg, "google:gemini-3.6-flash")
     assert cfg.llm.vendor == "google"
-    assert cfg.llm.repair_model == p.repair_model == "gemini-2.5-flash"
+    assert cfg.llm.repair_model == p.repair_model == "gemini-3.6-flash"
     assert cfg.llm.api_key_env == "GEMINI_API_KEY"
     assert cfg.llm.base_url and "openai" in cfg.llm.base_url
 

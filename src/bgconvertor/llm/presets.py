@@ -59,13 +59,13 @@ PRESETS: dict[str, Preset] = {
         "openai", "gpt-5-mini", "gpt-5-mini",
         "OPENAI_API_KEY", "https://api.openai.com/v1",
         "OpenAI economic — clasa Haiku, viziune solidă la preț mic"),
-    "google:gemini-3-pro": Preset(
-        "google", "gemini-3-pro-preview", "gemini-2.5-flash",
+    "google:gemini-3.1-pro": Preset(
+        "google", "gemini-3.1-pro-preview", "gemini-3.6-flash",
         "GEMINI_API_KEY",
         "https://generativelanguage.googleapis.com/v1beta/openai/",
         "Google — printre cele mai bune la OCR de documente scanate"),
-    "google:gemini-2.5-flash": Preset(
-        "google", "gemini-2.5-flash", "gemini-2.5-flash",
+    "google:gemini-3.6-flash": Preset(
+        "google", "gemini-3.6-flash", "gemini-3.6-flash",
         "GEMINI_API_KEY",
         "https://generativelanguage.googleapis.com/v1beta/openai/",
         "Google economic — OCR foarte bun la o fracțiune din preț"),

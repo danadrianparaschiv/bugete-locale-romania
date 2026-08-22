@@ -29,8 +29,8 @@ MODEL_PRICES: dict[str, tuple[float, float]] = {
     "gpt-5.1": (1.25, 10.00),
     "gpt-5-mini": (0.25, 2.00),
     # Google
-    "gemini-3-pro-preview": (2.00, 12.00),  # verificați
-    "gemini-2.5-flash": (0.30, 2.50),
+    "gemini-3.1-pro-preview": (2.50, 15.00),  # verificați
+    "gemini-3.6-flash": (0.50, 3.00),  # verificați
     # Mistral
     "mistral-medium-latest": (0.40, 2.00),
     "mistral-small-latest": (0.10, 0.30),
