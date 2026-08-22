@@ -641,10 +641,12 @@ def convert(
             "[dim]hint: reluarea cu --max-llm-cost mai mare continua repararea de unde "
             "a ramas (apelurile facute se refolosesc gratuit din cache)[/dim]"
         )
-    # corpus-tree files also get an analysis.json (feeds the static site)
+    # corpus-tree files also get an analysis.json (feeds the static site) —
+    # but only when the workbook lands in its default place beside the PDF;
+    # an explicit --out elsewhere is an experiment and must not touch corpus
     from .manifest import find_manifest
 
-    if find_manifest(pdf.parent) is not None:
+    if out_path == pdf.with_suffix(".xlsx") and find_manifest(pdf.parent) is not None:
         from .analysis import write_analysis
 
         apath = write_analysis(result, pdf.with_name("analysis.json"))
