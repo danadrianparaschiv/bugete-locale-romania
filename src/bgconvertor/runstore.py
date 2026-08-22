@@ -40,8 +40,10 @@ def store_key(pdf_path: Path) -> str:
     -> "2026-01-alba-1017-alba-iulia". Flat files keep their stem
     (backward compatible with existing stores).
     """
+    from .config import project_root
+
     try:
-        rel = pdf_path.resolve().relative_to(Path.cwd())
+        rel = pdf_path.resolve().relative_to(project_root(pdf_path.resolve().parent))
     except ValueError:
         rel = pdf_path
     parts = list(rel.parts)

@@ -13,8 +13,21 @@ import json
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def project_root(start: Path | None = None) -> Path:
+    """The repo root, found by markers — so the CLI works from any cwd
+    (e.g. running `bgconvertor convert budget_file.pdf` inside a city
+    folder of the data/ tree)."""
+    p = (start or Path.cwd()).resolve()
+    for cand in [p, *p.parents]:
+        if (cand / "pyproject.toml").exists() or (cand / ".git").exists() or (
+            cand / "reference" / "nomenclator"
+        ).is_dir():
+            return cand
+    return p
 
 
 class LLMConfig(BaseModel):
@@ -32,8 +45,8 @@ class LLMConfig(BaseModel):
 class RunConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="BGC_", env_nested_delimiter="__")
 
-    runs_dir: Path = Path("runs")
-    reference_dir: Path = Path("reference/nomenclator")
+    runs_dir: Path = Field(default_factory=lambda: project_root() / "runs")
+    reference_dir: Path = Field(default_factory=lambda: project_root() / "reference/nomenclator")
 
     # rendering
     render_scale: float = 2.0  # pypdfium2 scale factor (~144 dpi)

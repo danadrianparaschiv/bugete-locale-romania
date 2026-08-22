@@ -39,7 +39,9 @@ def main(
 ):
     setup_logging(verbose)
     # load .env (ANTHROPIC_API_KEY etc.) so `--llm repair` works out of the box
-    env_file = Path(".env")
+    from .config import project_root
+
+    env_file = project_root() / ".env"
     if env_file.exists():
         import os
 

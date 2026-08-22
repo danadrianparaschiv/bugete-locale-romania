@@ -92,6 +92,7 @@ def test_store_key_corpus_tree_vs_flat(tmp_path, monkeypatch):
     from bgconvertor.runstore import store_key
 
     monkeypatch.chdir(tmp_path)
+    (tmp_path / "pyproject.toml").write_text("")  # project-root marker
     flat = tmp_path / "budget_file_ab.pdf"
     assert store_key(flat) == "budget_file_ab"
     tree = tmp_path / "data/2026/01-alba/1017-alba-iulia/budget_file.pdf"
