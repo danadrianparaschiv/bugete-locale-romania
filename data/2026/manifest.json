@@ -371,6 +371,16 @@
       "document_status": "approved_initial",
       "source_url": "https://primaria-constanta.ro/wp-content/uploads/custom-folders/Buget-pe-surse-financiare/18.-Buget-Municipal-2026.pdf",
       "record_url": "https://primaria-constanta.ro/pagina-pmc/buget-pe-surse-financiare/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-22T13:48:18",
+        "tool_version": "0.1.0",
+        "lines": 3645,
+        "pct_clean": 74.2,
+        "errors": 857,
+        "warnings": 499
+      },
       "timeline": {
         "debate_date": "2026-04-16",
         "debate_url": "https://www.radioconstanta.ro/2026/04/16/bugetul-municipiului-constanta-este-in-consultare-publica/",
@@ -389,6 +399,16 @@
       "document_status": "approved_initial",
       "source_url": "https://sfantugheorgheinfo.ro/uploads/buget-local-initial-1784098056.pdf",
       "record_url": "https://sfantugheorgheinfo.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-22T13:53:43",
+        "tool_version": "0.1.0",
+        "lines": 1743,
+        "pct_clean": 92.3,
+        "errors": 59,
+        "warnings": 107
+      },
       "timeline": {
         "debate_date": "2026-04-03",
         "debate_url": "https://www.sfintugheorghe.ro/transparenta-decizionala/dezbateri-publice/",
@@ -407,6 +427,16 @@
       "document_status": "approved_initial",
       "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf",
       "record_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-22T13:53:45",
+        "tool_version": "0.1.0",
+        "lines": 161,
+        "pct_clean": 100,
+        "errors": 0,
+        "warnings": 0
+      },
       "timeline": {
         "debate_date": "2026-04-14",
         "debate_url": "https://www.pmtgv.ro/MonitorPMT/MOL6.d/mol6d.html",
