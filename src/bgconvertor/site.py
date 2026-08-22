@@ -19,6 +19,17 @@ from .manifest import Manifest
 log = logging.getLogger("bgc.site")
 
 
+def _ro_date(iso: str | None) -> str | None:
+    """'2026-04-28' -> '28.04.2026'; passes through anything non-ISO."""
+    if not iso:
+        return None
+    parts = iso.split("-")
+    if len(parts) == 3 and all(p.isdigit() for p in parts):
+        y, m, d = parts
+        return f"{d}.{m}.{y}"
+    return iso
+
+
 REPO_RAW = "https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main"
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
 
@@ -53,6 +64,12 @@ def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REP
             "pdf_rel": None,
             "xlsx_rel": None,
         }
+        tl = c.entry.get("timeline") or {}
+        row["debate_date"] = _ro_date(tl.get("debate_date"))
+        row["debate_url"] = tl.get("debate_url")
+        row["approved_date"] = _ro_date(tl.get("approved_date"))
+        row["approved_url"] = tl.get("approved_url")
+        row["hcl"] = tl.get("hcl")
         # committed artifacts are served from the git repo, not the Pages
         # artifact; files over GitHub's size limit are not in git at all
         repo_root = manifest.root.parent.parent

@@ -3,6 +3,15 @@
 {% block content %}
 <p><a href="{{ base }}/index.html">← toate municipiile</a></p>
 <h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
+{% if city.debate_date or city.approved_date %}
+<p class="sub">
+  {% if city.debate_date %}Pus în dezbatere publică:
+    {% if city.debate_url %}<a href="{{ city.debate_url }}">{{ city.debate_date }}</a>{% else %}{{ city.debate_date }}{% endif %}{% endif %}
+  {%- if city.debate_date and city.approved_date %} · {% endif %}
+  {% if city.approved_date %}Aprobat{% if city.hcl %} ({{ city.hcl }}){% endif %}:
+    {% if city.approved_url %}<a href="{{ city.approved_url }}">{{ city.approved_date }}</a>{% else %}{{ city.approved_date }}{% endif %}{% endif %}
+</p>
+{% endif %}
 
 <div class="cards">
   {% if a.totals_mii_lei.venituri %}

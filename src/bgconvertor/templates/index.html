@@ -5,7 +5,8 @@
 <p class="sub">{{ cities|length }} municipii reședință de județ · {{ n_converted }} convertite în format analizabil</p>
 <table>
   <thead><tr>
-    <th>Județ</th><th>Municipiu</th><th>Status</th>
+    <th>Județ</th><th>Municipiu</th>
+    <th>Pus în dezbatere</th><th>Aprobat</th><th>Status</th>
     <th class="num">Linii</th><th class="num">% verificat</th><th>Fișiere</th>
   </tr></thead>
   <tbody>
@@ -13,6 +14,17 @@
     <tr>
       <td>{{ c.county }}</td>
       <td>{% if c.analysis %}<a href="{{ base }}/city/{{ c.siruta }}.html">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}</td>
+      <td class="date">
+        {%- if c.debate_date -%}
+          {%- if c.debate_url %}<a href="{{ c.debate_url }}">{{ c.debate_date }}</a>{% else %}{{ c.debate_date }}{% endif -%}
+        {%- else %}—{% endif -%}
+      </td>
+      <td class="date">
+        {%- if c.approved_date -%}
+          {%- if c.approved_url %}<a href="{{ c.approved_url }}"{% if c.hcl %} title="{{ c.hcl }}"{% endif %}>{{ c.approved_date }}</a>
+          {%- else %}<span{% if c.hcl %} title="{{ c.hcl }}"{% endif %}>{{ c.approved_date }}</span>{% endif -%}
+        {%- else %}—{% endif -%}
+      </td>
       <td>
         {% if c.status == 'converted' %}
           {% set pc = c.pct_clean or 0 %}
