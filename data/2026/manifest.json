@@ -209,7 +209,10 @@
       "document_status": "not_found",
       "source_url": null,
       "record_url": "https://www.primariaresita.ro/",
-      "notes": "No official 2026 municipal budget PDF was located during the audit."
+      "notes": "No official 2026 municipal budget PDF was located during the audit.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "12",
@@ -310,7 +313,10 @@
       "document_status": "not_found",
       "source_url": null,
       "record_url": "https://www.targujiu.ro/",
-      "notes": "The official portal exposed older budgets, but no 2026 municipal budget PDF was located."
+      "notes": "The official portal exposed older budgets, but no 2026 municipal budget PDF was located.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "21",
@@ -351,7 +357,10 @@
       "document_status": "not_found",
       "source_url": null,
       "record_url": "https://www.primaria-iasi.ro/",
-      "notes": "The adoption meeting and HCL 190/2026 were located, but no official municipal budget PDF was exposed by the authority."
+      "notes": "The adoption meeting and HCL 190/2026 were located, but no official municipal budget PDF was exposed by the authority.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "25",
@@ -385,7 +394,10 @@
       "source_url": null,
       "record_url": "https://emol.ro/drobetaturnuseverin-mh/registru-hcl/96550/",
       "alternate_url": "https://emol.ro/pluginfile.php/1/local_emol/documenthcl/96550/BUGET%20INITIAL%202026.xlsx",
-      "notes": "The official authority published the 2026 budget as XLSX, but no official PDF was located."
+      "notes": "The official authority published the 2026 budget as XLSX, but no official PDF was located.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "28",
@@ -416,7 +428,10 @@
       "document_status": "not_found",
       "source_url": null,
       "record_url": "https://www.primariaslatina.ro/buget.html",
-      "notes": "The official budget page contained records through 2025 but no 2026 municipal budget PDF during the audit."
+      "notes": "The official budget page contained records through 2025 but no 2026 municipal budget PDF during the audit.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "31",
@@ -519,7 +534,10 @@
       "document_status": "not_found",
       "source_url": null,
       "record_url": "https://www.primariavl.ro/",
-      "notes": "No official 2026 municipal budget PDF was located in the authority's public portal during the audit."
+      "notes": "No official 2026 municipal budget PDF was located in the authority's public portal during the audit.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
     },
     {
       "county_code": "41",

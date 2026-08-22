@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
-      - run: uv run bgconvertor site build --out site
+      - run: uv run bgconvertor site build --out site --base-url /bugete-locale-romania
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

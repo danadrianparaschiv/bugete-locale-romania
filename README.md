@@ -1,7 +1,12 @@
-# bgconvertor
+# Bugete locale România
 
-Convert Romanian local-government budget PDFs into validated, analysis-ready
-Excel and datasets — even when the PDF is a rotated, stamped scan from a
+Bugetele locale ale municipiilor reședință de județ, extrase din PDF-urile
+oficiale în format analizabil — cu verificare aritmetică a fiecărei linii.
+
+This repository holds an open corpus of Romanian local-government budgets
+(official PDFs + validated Excel/datasets, SIRUTA-coded) and **bgconvertor**,
+the tool that builds it: it converts budget PDFs into validated,
+analysis-ready data — even when the PDF is a rotated, stamped scan from a
 copier.
 
 Every extracted line is checked against the official classification of
@@ -10,9 +15,10 @@ for the budget year) and against the arithmetic the budget itself must
 satisfy (quarterly sums, chapter hierarchies, section identities). What
 can't be verified is *flagged, never guessed*.
 
-The repository doubles as an open **corpus**: `data/<year>/` holds the
-official budget PDFs of Romania's county-seat municipalities (SIRUTA-coded,
-with per-file sources) alongside their converted workbooks.
+`data/<year>/` holds the official budget PDFs of Romania's county-seat
+municipalities (SIRUTA-coded, with per-file sources) alongside their
+converted workbooks; the generated site publishes a per-city analysis page
+for every converted budget.
 
 ## How it works — three layers
 

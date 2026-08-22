@@ -21,6 +21,10 @@ dependencies = [
     "jinja2>=3.1.6",
 ]
 
+[project.urls]
+Repository = "https://github.com/danparaschiv/bugete-locale-romania"
+Issues = "https://github.com/danparaschiv/bugete-locale-romania/issues"
+
 [project.scripts]
 bgconvertor = "bgconvertor.cli:app"
 
