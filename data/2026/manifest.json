@@ -1,0 +1,446 @@
+{
+  "schema_version": 1,
+  "year": 2026,
+  "audited_on": "2026-08-20",
+  "scope": "41 county-seat municipalities plus Bucharest",
+  "identifier_source": {
+    "title": "SIRUTA 2025",
+    "publisher": "Institutul Național de Statistică",
+    "url": "https://data.gov.ro/dataset/siruta-2025"
+  },
+  "entries": [
+    {
+      "county_code": "01",
+      "county_name": "Alba",
+      "capital_siruta": "1017",
+      "capital_name": "Alba Iulia",
+      "path": "01-alba/1017-alba-iulia/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.apulum.ro/ro/pdf6/Buget_Local_Initial_18052026.pdf",
+      "record_url": "https://www.apulum.ro/index.php/primaria/detail/buget"
+    },
+    {
+      "county_code": "02",
+      "county_name": "Arad",
+      "capital_siruta": "9262",
+      "capital_name": "Arad",
+      "path": "02-arad/9262-arad/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariaarad.ro/dm_arad/2026/hotarari.nsf/FD65AE2B077F02BAC2258DF00038A82D/$FILE/226%20H%20din%2029%2004%202026%20Anexe%20buget.pdf?Open",
+      "record_url": "https://www.primariaarad.ro/dm_arad/2026/hotarari.nsf/FD65AE2B077F02BAC2258DF00038A82D"
+    },
+    {
+      "county_code": "03",
+      "county_name": "Argeș",
+      "capital_siruta": "13169",
+      "capital_name": "Pitești",
+      "path": "03-arges/13169-pitesti/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariapitesti.ro/uploads/pages/files/153_-HCL_aprobare_buget_mun_Pitesti.pdf",
+      "record_url": "https://www.primariapitesti.ro/uploads/pages/files/153_-HCL_aprobare_buget_mun_Pitesti.pdf"
+    },
+    {
+      "county_code": "04",
+      "county_name": "Bacău",
+      "capital_siruta": "20297",
+      "capital_name": "Bacău",
+      "path": "04-bacau/20297-bacau/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://fisiere.municipiulbacau.ro/public/uploads/acteadministrative/20260515164319-HCL%20nr.195%20din%2013.05.2026.PDF",
+      "record_url": "https://fisiere.municipiulbacau.ro/public/uploads/acteadministrative/20260515164319-HCL%20nr.195%20din%2013.05.2026.PDF"
+    },
+    {
+      "county_code": "05",
+      "county_name": "Bihor",
+      "capital_siruta": "26564",
+      "capital_name": "Oradea",
+      "path": "05-bihor/26564-oradea/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://oradea.ro/wp-content/uploads/2026/05/Buget-local-initial-2026.pdf",
+      "record_url": "https://oradea.ro/informatii-de-interes-public/bugetul-local/"
+    },
+    {
+      "county_code": "06",
+      "county_name": "Bistrița-Năsăud",
+      "capital_siruta": "32394",
+      "capital_name": "Bistrița",
+      "path": "06-bistrita-nasaud/32394-bistrita/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariabistrita.ro/wp-content/uploads/2026/06/Buget_initial_HCL_54_29.04.2026.zip",
+      "archive_member": "Buget_initial_HCL_54_29.04.2026/BL_VEN_CH_HCL_54_29.04.2026.pdf",
+      "record_url": "https://primariabistrita.ro/primaria/transparenta-decizionala/buget/"
+    },
+    {
+      "county_code": "07",
+      "county_name": "Botoșani",
+      "capital_siruta": "35731",
+      "capital_name": "Botoșani",
+      "path": "07-botosani/35731-botosani/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariabt.ro/wp-content/uploads/formidable/9/HCL_131_2026.pdf",
+      "record_url": "https://primariabt.ro/hotarari-ale-consiliului-local/"
+    },
+    {
+      "county_code": "08",
+      "county_name": "Brașov",
+      "capital_siruta": "40198",
+      "capital_name": "Brașov",
+      "path": "08-brasov/40198-brasov/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://extranet.brasovcity.ro/Registratura/Fileo.aspx?id_registratura=1&registru=HOT&nr=318965&an=an&id_fisier=8114",
+      "record_url": "https://extranet.brasovcity.ro/Registratura/Hotarari/Detaliu.aspx?registru=HOT-HCL&nr=224&an=2026"
+    },
+    {
+      "county_code": "09",
+      "county_name": "Brăila",
+      "capital_siruta": "42682",
+      "capital_name": "Brăila",
+      "path": "09-braila/42682-braila/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariabraila.ro/wp-content/uploads/2018/documentePDF/Buget/2026/buget%20initial%2011_05/Buget%20local.pdf",
+      "record_url": "https://www.primariabraila.ro/buget/"
+    },
+    {
+      "county_code": "10",
+      "county_name": "Buzău",
+      "capital_siruta": "44818",
+      "capital_name": "Buzău",
+      "path": "10-buzau/44818-buzau/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariabuzau.ro/wp-content/uploads/2026/05/1.-Buget-local-detaliat.pdf",
+      "record_url": "https://primariabuzau.ro/bugetul-local/"
+    },
+    {
+      "county_code": "11",
+      "county_name": "Caraș-Severin",
+      "capital_siruta": "50790",
+      "capital_name": "Reșița",
+      "path": "11-caras-severin/50790-resita/budget_file.pdf",
+      "document_status": "not_found",
+      "source_url": null,
+      "record_url": "https://www.primariaresita.ro/",
+      "notes": "No official 2026 municipal budget PDF was located during the audit."
+    },
+    {
+      "county_code": "12",
+      "county_name": "Călărași",
+      "capital_siruta": "92569",
+      "capital_name": "Călărași",
+      "path": "12-calarasi/92569-calarasi/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariacalarasi.ro/wp-content/tabele/buget-surse-financiare/HCL-61-28.04.2026.pdf",
+      "record_url": "https://primariacalarasi.ro/buget-pe-surse-financiare/"
+    },
+    {
+      "county_code": "13",
+      "county_name": "Cluj",
+      "capital_siruta": "54975",
+      "capital_name": "Cluj-Napoca",
+      "path": "13-cluj/54975-cluj-napoca/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf",
+      "record_url": "https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf"
+    },
+    {
+      "county_code": "14",
+      "county_name": "Constanța",
+      "capital_siruta": "60419",
+      "capital_name": "Constanța",
+      "path": "14-constanta/60419-constanta/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primaria-constanta.ro/wp-content/uploads/custom-folders/Buget-pe-surse-financiare/18.-Buget-Municipal-2026.pdf",
+      "record_url": "https://primaria-constanta.ro/pagina-pmc/buget-pe-surse-financiare/"
+    },
+    {
+      "county_code": "15",
+      "county_name": "Covasna",
+      "capital_siruta": "63394",
+      "capital_name": "Sfântu Gheorghe",
+      "path": "15-covasna/63394-sfantu-gheorghe/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://sfantugheorgheinfo.ro/uploads/buget-local-initial-1784098056.pdf",
+      "record_url": "https://sfantugheorgheinfo.ro/"
+    },
+    {
+      "county_code": "16",
+      "county_name": "Dâmbovița",
+      "capital_siruta": "65342",
+      "capital_name": "Târgoviște",
+      "path": "16-dambovita/65342-targoviste/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf",
+      "record_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/"
+    },
+    {
+      "county_code": "17",
+      "county_name": "Dolj",
+      "capital_siruta": "69900",
+      "capital_name": "Craiova",
+      "path": "17-dolj/69900-craiova/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariacraiova.ro/uploads/articole/attachments/69f8a1e16727b145115871.pdf",
+      "record_url": "https://www.primariacraiova.ro/ro/a/3756/buget-local"
+    },
+    {
+      "county_code": "18",
+      "county_name": "Galați",
+      "capital_siruta": "75098",
+      "capital_name": "Galați",
+      "path": "18-galati/75098-galati/budget_file.pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119/$FILE/HCL_267.pdf",
+      "record_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119"
+    },
+    {
+      "county_code": "19",
+      "county_name": "Giurgiu",
+      "capital_siruta": "100521",
+      "capital_name": "Giurgiu",
+      "path": "19-giurgiu/100521-giurgiu/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariagiurgiu.ro/storage/formidable/340/BVC-2026.pdf",
+      "record_url": "https://primariagiurgiu.ro/"
+    },
+    {
+      "county_code": "20",
+      "county_name": "Gorj",
+      "capital_siruta": "77812",
+      "capital_name": "Târgu Jiu",
+      "path": "20-gorj/77812-targu-jiu/budget_file.pdf",
+      "document_status": "not_found",
+      "source_url": null,
+      "record_url": "https://www.targujiu.ro/",
+      "notes": "The official portal exposed older budgets, but no 2026 municipal budget PDF was located."
+    },
+    {
+      "county_code": "21",
+      "county_name": "Harghita",
+      "capital_siruta": "83320",
+      "capital_name": "Miercurea Ciuc",
+      "path": "21-harghita/83320-miercurea-ciuc/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://szereda.ro/files/documents/20260507%20anexa%2001.pdf",
+      "record_url": "https://szereda.ro/ro/hotarari/93/2026"
+    },
+    {
+      "county_code": "22",
+      "county_name": "Hunedoara",
+      "capital_siruta": "86687",
+      "capital_name": "Deva",
+      "path": "22-hunedoara/86687-deva/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.primariadeva.ro/images/uploads/documente/Buget_local_sursa_A_an_2026.pdf",
+      "record_url": "https://www.primariadeva.ro/"
+    },
+    {
+      "county_code": "23",
+      "county_name": "Ialomița",
+      "capital_siruta": "92658",
+      "capital_name": "Slobozia",
+      "path": "23-ialomita/92658-slobozia/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://municipiulslobozia.ro/wp-content/uploads/2026/04/Buget2026%2017.04.2026/Anexa2.pdf",
+      "record_url": "https://municipiulslobozia.ro/buget-local/"
+    },
+    {
+      "county_code": "24",
+      "county_name": "Iași",
+      "capital_siruta": "95060",
+      "capital_name": "Iași",
+      "path": "24-iasi/95060-iasi/budget_file.pdf",
+      "document_status": "not_found",
+      "source_url": null,
+      "record_url": "https://www.primaria-iasi.ro/",
+      "notes": "The adoption meeting and HCL 190/2026 were located, but no official municipal budget PDF was exposed by the authority."
+    },
+    {
+      "county_code": "25",
+      "county_name": "Ilfov",
+      "capital_siruta": "179132",
+      "capital_name": "București",
+      "path": "42-bucuresti/179132-bucuresti/budget_file.pdf",
+      "document_status": "approved_initial_legal_seat_exception",
+      "source_url": "https://doc.pmb.ro/legis/acteinterne/2026/47980/anexah167_01_26.pdf",
+      "record_url": "https://doc.pmb.ro/monitorul_oficial/2026/05/volumul_01.pdf",
+      "notes": "Ilfov's legal county seat is Bucharest; the Bucharest municipal budget is used and intentionally duplicates county code 42.",
+      "note": "Ilfov county seat is Bucharest; single copy stored under 42-bucuresti"
+    },
+    {
+      "county_code": "26",
+      "county_name": "Maramureș",
+      "capital_siruta": "106318",
+      "capital_name": "Baia Mare",
+      "path": "26-maramures/106318-baia-mare/budget_file.pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://www.baiamare.ro/Baiamare/Hotarari/2026/20%20Mai/hot250_26_Anexele1-2_mai_2026.pdf",
+      "record_url": "https://www.baiamare.ro/ro/Administratie/Consiliul-Local/Hotarari-ale-Consiliului-Local/"
+    },
+    {
+      "county_code": "27",
+      "county_name": "Mehedinți",
+      "capital_siruta": "109773",
+      "capital_name": "Drobeta-Turnu Severin",
+      "path": "27-mehedinti/109773-drobeta-turnu-severin/budget_file.pdf",
+      "document_status": "not_found_pdf",
+      "source_url": null,
+      "record_url": "https://emol.ro/drobetaturnuseverin-mh/registru-hcl/96550/",
+      "alternate_url": "https://emol.ro/pluginfile.php/1/local_emol/documenthcl/96550/BUGET%20INITIAL%202026.xlsx",
+      "notes": "The official authority published the 2026 budget as XLSX, but no official PDF was located."
+    },
+    {
+      "county_code": "28",
+      "county_name": "Mureș",
+      "capital_siruta": "114319",
+      "capital_name": "Târgu Mureș",
+      "path": "28-mures/114319-targu-mures/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://tirgumures.ro/TRANSPARENTA/PRIMARIA%20TIRGU%20MURES%20SI%20SERVICIILE%20PUBLICE%20SUBORDONATE/Buget/2026/HCLM%20nr.%20120%20din%2011.05.2026/Anexe/Anexa_2_A_Buget%20local%202026_unitati.pdf",
+      "record_url": "https://tirgumures.ro/index.php?option=com_content&view=article&id=10913"
+    },
+    {
+      "county_code": "29",
+      "county_name": "Neamț",
+      "capital_siruta": "120726",
+      "capital_name": "Piatra-Neamț",
+      "path": "29-neamt/120726-piatra-neamt/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.primariapn.ro/documents/10179/5925796/sinteza_%20buget_local_2026_proiect.pdf",
+      "record_url": "https://www.primariapn.ro/transparenta-decizionala"
+    },
+    {
+      "county_code": "30",
+      "county_name": "Olt",
+      "capital_siruta": "125347",
+      "capital_name": "Slatina",
+      "path": "30-olt/125347-slatina/budget_file.pdf",
+      "document_status": "not_found",
+      "source_url": null,
+      "record_url": "https://www.primariaslatina.ro/buget.html",
+      "notes": "The official budget page contained records through 2025 but no 2026 municipal budget PDF during the audit."
+    },
+    {
+      "county_code": "31",
+      "county_name": "Prahova",
+      "capital_siruta": "130534",
+      "capital_name": "Ploiești",
+      "path": "31-prahova/130534-ploiesti/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://ploiesti.ro/wp-content/uploads/2026/05/134_11.05.2026_buget_local.pdf",
+      "record_url": "https://ploiesti.ro/hotarari/"
+    },
+    {
+      "county_code": "32",
+      "county_name": "Satu Mare",
+      "capital_siruta": "136483",
+      "capital_name": "Satu Mare",
+      "path": "32-satu-mare/136483-satu-mare/budget_file.pdf",
+      "document_status": "official_budget_presentation",
+      "source_url": "https://www.primariasm.ro/storage/comunicare/sanyi/stiri/buget-2026/buget-2026-color-kg-ro.pdf",
+      "record_url": "https://www.primariasm.ro/buget-2026"
+    },
+    {
+      "county_code": "33",
+      "county_name": "Sălaj",
+      "capital_siruta": "139704",
+      "capital_name": "Zalău",
+      "path": "33-salaj/139704-zalau/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.zalausj.ro/ro/hotarari/2026/h144-2026.pdf",
+      "record_url": "https://www.zalausj.ro/ro/hotarari/2026/"
+    },
+    {
+      "county_code": "34",
+      "county_name": "Sibiu",
+      "capital_siruta": "143450",
+      "capital_name": "Sibiu",
+      "path": "34-sibiu/143450-sibiu/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.sibiu.ro/ro2/pdf/Bilant_executie/HCL_126_2026.pdf",
+      "record_url": "https://www.sibiu.ro/primaria/buget",
+      "oversize": true,
+      "note": "PDF is 156MB (> GitHub 100MB limit) — fetch with download.py"
+    },
+    {
+      "county_code": "35",
+      "county_name": "Suceava",
+      "capital_siruta": "146263",
+      "capital_name": "Suceava",
+      "path": "35-suceava/146263-suceava/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.primariasv.ro/dm_suceava/site.nsf/atasament/79C8B4FE52BE501EC2258DD4006DA1D0/$FILE/Anexa%201.pdf?Open",
+      "record_url": "https://www.primariasv.ro/"
+    },
+    {
+      "county_code": "36",
+      "county_name": "Teleorman",
+      "capital_siruta": "151790",
+      "capital_name": "Alexandria",
+      "path": "36-teleorman/151790-alexandria/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://alexandria.ro/storage/formidable/8/Anexa-nr.-buget-local-2026.A.234-anexa-4.pdf",
+      "record_url": "https://alexandria.ro/"
+    },
+    {
+      "county_code": "37",
+      "county_name": "Timiș",
+      "capital_siruta": "155243",
+      "capital_name": "Timișoara",
+      "path": "37-timis/155243-timisoara/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://assets.primariatm.ro/38b1baae-3a24-4104-ba2f-51ea6f8e63bf",
+      "record_url": "https://www.primariatm.ro/proiecte-hcl/88a936e0-e5db-4f62-8d14-9f7dbfdff625"
+    },
+    {
+      "county_code": "38",
+      "county_name": "Tulcea",
+      "capital_siruta": "159614",
+      "capital_name": "Tulcea",
+      "path": "38-tulcea/159614-tulcea/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://tulcea.cityon.ro/File/DownloadBinaryFile/376f5701-1700-7386-2416-3a21716aae99",
+      "record_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/FisaDocumentGeneral/166994"
+    },
+    {
+      "county_code": "39",
+      "county_name": "Vaslui",
+      "capital_siruta": "161945",
+      "capital_name": "Vaslui",
+      "path": "39-vaslui/161945-vaslui/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariavaslui.ro/wp-content/uploads/2026/06/HCL-Nr.-149-din-29.04.2026publicata-joi-30.04.2026.pdf",
+      "record_url": "https://primariavaslui.ro/monitorul-oficial-local/hotarari-ale-consiliului-local/"
+    },
+    {
+      "county_code": "40",
+      "county_name": "Vâlcea",
+      "capital_siruta": "167473",
+      "capital_name": "Râmnicu Vâlcea",
+      "path": "40-valcea/167473-ramnicu-valcea/budget_file.pdf",
+      "document_status": "not_found",
+      "source_url": null,
+      "record_url": "https://www.primariavl.ro/",
+      "notes": "No official 2026 municipal budget PDF was located in the authority's public portal during the audit."
+    },
+    {
+      "county_code": "41",
+      "county_name": "Vrancea",
+      "capital_siruta": "174744",
+      "capital_name": "Focșani",
+      "path": "41-vrancea/174744-focsani/budget_file.pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.focsani.info/fisiere/userfiles/economic/proiect_buget_2026.pdf",
+      "record_url": "https://www.focsani.info/"
+    },
+    {
+      "county_code": "42",
+      "county_name": "București",
+      "capital_siruta": "179132",
+      "capital_name": "București",
+      "path": "42-bucuresti/179132-bucuresti/budget_file.pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://doc.pmb.ro/legis/acteinterne/2026/47980/anexah167_01_26.pdf",
+      "copy_from": "25-ilfov/179132-bucuresti/budget_file.pdf",
+      "record_url": "https://doc.pmb.ro/monitorul_oficial/2026/05/volumul_01.pdf"
+    }
+  ]
+}
