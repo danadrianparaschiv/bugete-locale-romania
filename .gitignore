@@ -1,0 +1,26 @@
+# environments & caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+
+# secrets — never commit; see .env.example
+.env
+
+# per-page work artifacts (large, regenerable; runs/*/llm_cache holds the
+# replayable LLM responses — regenerable at cost, kept local)
+runs/
+
+# working outputs in the repo root (committed workbooks live in data/)
+/*.xlsx
+/corpus.csv
+/corpus.parquet
+
+# OS noise
+.DS_Store
+
+# oversize corpus files (>100MB exceeds GitHub's hard limit) — fetched by
+# data/<year>/download.py; manifest marks them oversize
+data/2026/34-sibiu/143450-sibiu/budget_file.pdf

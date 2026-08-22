@@ -1,0 +1,21 @@
+{
+  "id": "oradea_p001",
+  "pdf": "budget_file_oradea.pdf",
+  "page": 1,
+  "layout": "digital_detail",
+  "budget": "local",
+  "source_type": "digital",
+  "hazards": ["variant_grid_15_columns", "code_column_first", "values_on_name_continuation_row"],
+  "columns": ["total", "trim1", "trim2", "trim3", "trim4", "est2027", "est2028", "est2029"],
+  "anchors": [
+    {"raw_code": "000202", "code": "00.02.02", "column": "total", "value": "1008814.41", "name_contains": "VENITURI CURENTE"},
+    {"raw_code": "000202", "column": "trim1", "value": "331721.05"},
+    {"raw_code": "000202", "column": "est2027", "value": "1051629.08"},
+    {"raw_code": "030218", "code": "03.02.18", "column": "total", "value": "9000.00"},
+    {"raw_code": "040201", "code": "04.02.01", "column": "total", "value": "389320.00", "name_contains": "Cote defalcate"},
+    {"raw_code": "070201", "code": "07.02.01", "column": "total", "value": "167800.00", "name_contains": "cladiri"},
+    {"raw_code": "070201", "column": "est2027", "value": "184580.00"}
+  ],
+  "text_contains": ["BUGETUL LOCAL PE ANUL"],
+  "notes": "Digital grid variant: A3 landscape, 15 ruled columns (deduped to 12), Cod column FIRST, no Rand column, names wrap with values on the continuation row. Anchors confirmed by the revenue-cascade identities passing on this document (93.7% clean overall)."
+}

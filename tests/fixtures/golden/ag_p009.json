@@ -1,0 +1,31 @@
+{
+  "id": "ag_p009",
+  "pdf": "budget_file_ag.pdf",
+  "page": 9,
+  "layout": "scan_simple_table",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": ["stamp_overlap", "clipped_names_at_column_edge", "whole_number_values"],
+  "columns": ["total_2026", "est2027", "est2028", "est2029"],
+  "anchors": [
+    {"raw_code": "610203", "code": "61.02.03", "column": "total_2026", "value": "21303", "name_contains": "Ordine publica"},
+    {"raw_code": "610203", "column": "est2027", "value": "21303"},
+    {"raw_code": "61020304", "code": "61.02.03.04", "column": "total_2026", "value": "21303", "name_contains": "Politie locala"},
+    {"raw_code": "610205", "code": "61.02.05", "column": "total_2026", "value": "375"},
+    {"raw_code": "6502", "code": "65.02", "column": "total_2026", "value": "48152.87"},
+    {"raw_code": "6502", "column": "est2027", "value": "30297"},
+    {"raw_code": "6502", "column": "est2028", "value": "30878"},
+    {"raw_code": "6502", "column": "est2029", "value": "31260"},
+    {"raw_code": "65020301", "code": "65.02.03.01", "column": "total_2026", "value": "3943.37", "name_contains": "prescolar"},
+    {"raw_code": "65020301", "column": "est2027", "value": "476"},
+    {"raw_code": "67020501", "code": "67.02.05.01", "column": "total_2026", "value": "37100", "name_contains": "Sport"},
+    {"raw_code": "67020501", "column": "est2027", "value": "48600"},
+    {"raw_code": "740205", "code": "74.02.05", "column": "total_2026", "value": "58295"},
+    {"raw_code": "74020501", "code": "74.02.05.01", "column": "total_2026", "value": "55553", "name_contains": "Salubritate"},
+    {"raw_code": "74020502", "code": "74.02.05.02", "column": "total_2026", "value": "2742"},
+    {"raw_code": "650204", "code": "65.02.04", "column": "total_2026", "value": "18677.50", "hard": true},
+    {"raw_code": "650212", "code": "65.02.12", "column": "total_2026", "value": "2700", "hard": true}
+  ],
+  "text_contains": ["DENUMIREA INDICATORILOR", "Estimari"],
+  "notes": "Functional expense summary, whole-number mii lei (no decimals except 48152,87 / 3943,37 / 18677,50). Hard anchors sit under the round stamp. Cross-checks: 74.02.05 = 55553+2742 = 58295 (2026) and 54553+2742 = 57295 (2027)."
+}

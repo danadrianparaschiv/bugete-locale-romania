@@ -1,0 +1,19 @@
+{
+  "id": "ab_p004",
+  "pdf": "budget_file_ab.pdf",
+  "page": 4,
+  "layout": "digital_detail",
+  "budget": "local",
+  "source_type": "digital",
+  "hazards": ["column_order_scrambled_in_text_stream", "wrapped_multiline_names"],
+  "columns": ["total", "credite_stinse", "trim1", "trim2", "trim3", "trim4", "est2027", "est2028", "est2029"],
+  "anchors": [
+    {"raw_code": "42028901", "code": "42.02.89.01", "column": "total", "value": "7230.47", "name_contains": "imprumut rambursabil"},
+    {"raw_code": "42028903", "code": "42.02.89.03", "column": "total", "value": "1443.49", "name_contains": "TVA"},
+    {"raw_code": "4302", "code": "43.02", "column": "total", "value": "28173.57"},
+    {"raw_code": "430234", "code": "43.02.34", "column": "total", "value": "700.00", "name_contains": "ANCPI"},
+    {"raw_code": "430247", "code": "43.02.47", "column": "total", "value": "19845.88", "name_contains": "Fondul pentru modernizare"}
+  ],
+  "text_contains": [],
+  "notes": "Revenue continuation: subventii chapter 42.02/43.02 with long wrapped names."
+}

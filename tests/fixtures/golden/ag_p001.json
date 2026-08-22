@@ -1,0 +1,13 @@
+{
+  "id": "ag_p001",
+  "pdf": "budget_file_ag.pdf",
+  "page": 1,
+  "layout": "hcl_prose",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": ["stamp_overlap"],
+  "columns": [],
+  "anchors": [],
+  "text_contains": ["HOTARARE", "privind aprobarea bugetului", "Pitesti", "pe anul 2026"],
+  "notes": "Council decision prose page (no table). Round stamp overlaps the title area. Text matching is diacritic-folded."
+}

@@ -1,0 +1,171 @@
+"""Unit tests for assembly and validation on synthetic payloads, plus an
+integration test over the real digital PDF (skipped when absent)."""
+
+from decimal import Decimal
+from pathlib import Path
+
+import pytest
+
+from bgconvertor.assemble import assemble
+from bgconvertor.config import RunConfig
+from bgconvertor.model import ConversionResult
+from bgconvertor.nomenclator import load_registry
+from bgconvertor.runstore import RunStore
+from bgconvertor.validate import validate
+
+
+def _mk_store(tmp_path: Path) -> RunStore:
+    pdf = tmp_path / "doc.pdf"
+    pdf.write_bytes(b"%PDF fake")
+    return RunStore(RunConfig(runs_dir=tmp_path / "runs"), pdf)
+
+
+def _line(raw_code, name, section=None, func=None, code=None, **values):
+    from bgconvertor.parsing import normalize_indicator_code
+
+    return {
+        "raw_code": raw_code,
+        "code": code or normalize_indicator_code(raw_code),
+        "func_code": func,
+        "name": name,
+        "row_no": None,
+        "section": section,
+        "year": None,
+        "values": {k: str(v) for k, v in values.items()},
+    }
+
+
+@pytest.fixture
+def registry(reference_dir):
+    return load_registry(reference_dir)
+
+
+def test_assemble_documents_sections_regions(tmp_path):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA VENITURI",
+        "lines": [
+            _line(None, "====== SECTIUNEA TOTAL ======", section="SECTIUNEA TOTAL"),
+            _line("000102", "TOTAL VENITURI", total="100.00"),
+            _line("0302", "Impozit pe venit", total="100.00"),
+        ],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "lines": [
+            _line("5002", "TOTAL CHELTUIELI", total="100.00"),
+            _line("6502", "CAP. Invatamant", total="100.00"),
+            _line("6502.10", "TITLUL I", func="65.02", code="10", total="100.00"),
+        ],
+    })
+    docs = assemble(store, [1, 2])
+    assert len(docs) == 1
+    doc = docs[0]
+    assert doc.budget == "local"
+    kinds = [ln.kind for ln in doc.lines]
+    assert kinds == ["heading", "revenue", "revenue", "expense_functional",
+                     "expense_functional", "expense_economic"]
+    # section carried across pages
+    assert doc.lines[-1].section == "TOTAL"
+
+
+def test_assemble_repairs_truncated_func_prefix(tmp_path):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT",
+        "lines": [
+            _line("5002", "TOTAL CHELTUIELI", total="10.00"),
+            # the PDF prints 5002.580103 truncated to 02.580103
+            _line("02.5801", "Programe FEDR", func="02", code="58.01", total="10.00"),
+        ],
+    })
+    doc = assemble(store, [1])[0]
+    assert doc.lines[-1].func_code == "50.02"
+
+
+def test_validate_v1_unknown_code(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line("000102", "TOTAL VENITURI", total="5.00"),
+            _line("039299", "Cod inventat", total="5.00"),
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    validate(result, registry)
+    issues = [i for i in result.all_issues() if i.check == "V1_code"]
+    assert len(issues) == 1 and issues[0].code == "03.92.99"
+
+
+def test_validate_v3_row_checksum(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line("000102", "TOTAL VENITURI", total="100.00",
+                  trim1="30.00", trim2="30.00", trim3="30.00", trim4="9.00"),
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    validate(result, registry)
+    checks = [i.check for i in result.all_issues()]
+    assert "V3_row_checksum" in checks
+
+
+def test_validate_v4_hierarchy_breach_and_est_convention(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line("000102", "TOTAL VENITURI", total="1.00"),
+            _line("0302", "Impozit pe venit", total="10.00", est2027="99.00"),
+            _line("030218", "Impozitul pe veniturile din transferul proprietatilor",
+                  total="7.00"),  # breach: child sums 7 != 10; est children absent -> ok
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    validate(result, registry)
+    v4 = [i for i in result.all_issues() if i.check == "V4_hierarchy"]
+    assert len(v4) == 1
+    assert v4[0].column == "total"
+
+
+def test_validate_v5_identity(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line(None, "====== SECTIUNEA TOTAL ======", section="SECTIUNEA TOTAL"),
+            _line("000102", "TOTAL VENITURI", total="100.00"),
+            _line("000202", "VENITURI CURENTE", total="60.00"),   # 00.02
+            _line("000302", "VENITURI FISCALE", total="40.00"),   # 00.03
+            _line("001202", "VENITURI NEFISCALE", total="30.00"), # 00.12 -> 40+30 != 60
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    validate(result, registry)
+    v5 = [i for i in result.all_issues() if i.check == "V5_identity"]
+    assert any(i.code == "00.02" for i in v5)
+
+
+def test_integration_ab_pdf_fully_clean(ab_pdf, reference_dir):
+    """The real digital file must stay 100% clean — the Phase 1 quality bar."""
+    import pdfplumber
+
+    from bgconvertor.extract import digital
+
+    config = RunConfig(runs_dir=Path("runs"))
+    store = RunStore(config, ab_pdf)
+    missing = [p for p in range(1, 71) if store.get("extract", p) is None]
+    if missing:
+        with pdfplumber.open(ab_pdf) as plumber:
+            for p in missing:
+                store.put("extract", p, digital.extract_page(plumber.pages[p - 1]))
+
+    result = ConversionResult(pdf=ab_pdf.name, documents=assemble(store, list(range(1, 71))))
+    validate(result, load_registry(reference_dir))
+    stats = result.stats()
+    assert stats["documents"] == 2
+    assert stats["lines"] > 2000
+    assert stats["pct_clean"] == 100.0, [i.message for i in result.all_issues()][:10]

@@ -1,0 +1,24 @@
+{
+  "id": "ar_p001",
+  "pdf": "budget_file_ar.pdf",
+  "page": 1,
+  "layout": "scan_general_matrix",
+  "budget": "general",
+  "source_type": "scanned",
+  "hazards": ["rotated_90_in_image", "stamp_overlap", "year_rows_per_indicator"],
+  "columns": ["bugetul_local", "inst_venituri_proprii_subventii", "inst_integral_venituri_proprii", "imprumuturi", "fonduri_externe", "total", "transferuri", "total_general"],
+  "anchors": [
+    {"code": "01", "name_contains": "VENITURI TOTAL", "row_year": 2026, "column": "bugetul_local", "value": "1250646.50"},
+    {"name_contains": "VENITURI TOTAL", "row_year": 2026, "column": "total", "value": "1439793.50"},
+    {"name_contains": "VENITURI TOTAL", "row_year": 2026, "column": "transferuri", "value": "66406.00"},
+    {"name_contains": "VENITURI TOTAL", "row_year": 2026, "column": "total_general", "value": "1373387.50"},
+    {"name_contains": "VENITURI TOTAL", "row_year": 2027, "column": "bugetul_local", "value": "969696.37"},
+    {"name_contains": "VENITURI TOTAL", "row_year": 2027, "column": "total_general", "value": "1037543.37"},
+    {"name_contains": "Venituri curente", "row_year": 2026, "column": "bugetul_local", "value": "801634.58"},
+    {"name_contains": "Venituri curente", "row_year": 2026, "column": "total", "value": "820762.58"},
+    {"name_contains": "Venituri fiscale", "row_year": 2026, "column": "bugetul_local", "value": "737553.58"},
+    {"name_contains": "Impozit pe profit", "row_year": 2026, "column": "bugetul_local", "value": "0.00"}
+  ],
+  "text_contains": ["BUGETUL GENERAL AL MUNICIPIULUI ARAD", "2027-2029"],
+  "notes": "Landscape 'buget general' matrix scanned rotated 90deg: each indicator spans 4 year-rows (2026 + estimari 2027-2029), 8 value columns. Cross-check: total = sum of source columns; total_general = total - transferuri (1439793.50 - 66406.00 = 1373387.50)."
+}

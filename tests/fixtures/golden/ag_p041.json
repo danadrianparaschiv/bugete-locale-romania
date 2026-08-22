@@ -1,0 +1,111 @@
+{
+  "id": "ag_p041",
+  "pdf": "budget_file_ag.pdf",
+  "page": 41,
+  "layout": "scan_detail_economic",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": [
+    "stamp_overlap",
+    "pseudo_codes_D_F",
+    "repeated_codes_across_sections"
+  ],
+  "columns": [
+    "total_2026",
+    "credite_restante",
+    "est2027",
+    "est2028",
+    "est2029"
+  ],
+  "anchors": [
+    {
+      "raw_code": "100101",
+      "code": "10.01.01",
+      "column": "total_2026",
+      "value": "15735.00",
+      "name_contains": "Salarii de baza"
+    },
+    {
+      "raw_code": "100117",
+      "code": "10.01.17",
+      "column": "total_2026",
+      "value": "1370.00",
+      "name_contains": "Indemnizatii de hrana"
+    },
+    {
+      "raw_code": "100206",
+      "code": "10.02.06",
+      "column": "total_2026",
+      "value": "277.00",
+      "name_contains": "Vouchere"
+    },
+    {
+      "raw_code": "100307",
+      "code": "10.03.07",
+      "column": "total_2026",
+      "value": "398.00"
+    },
+    {
+      "raw_code": "200103",
+      "code": "20.01.03",
+      "column": "total_2026",
+      "value": "52.00",
+      "name_contains": "Incalzit"
+    },
+    {
+      "raw_code": "57",
+      "code": "57",
+      "column": "total_2026",
+      "value": "72076.00",
+      "name_contains": "ASISTENTA SOCIALA"
+    },
+    {
+      "raw_code": "57",
+      "column": "est2027",
+      "value": "74296.00"
+    },
+    {
+      "raw_code": "57",
+      "column": "est2028",
+      "value": "76363.00"
+    },
+    {
+      "raw_code": "57",
+      "column": "est2029",
+      "value": "78290.00"
+    },
+    {
+      "raw_code": "5702",
+      "code": "57.02",
+      "column": "total_2026",
+      "value": "72076.00"
+    },
+    {
+      "raw_code": "570201",
+      "code": "57.02.01",
+      "column": "total_2026",
+      "value": "69666.00",
+      "name_contains": "numerar"
+    },
+    {
+      "raw_code": "570202",
+      "code": "57.02.02",
+      "column": "total_2026",
+      "value": "2410.00",
+      "name_contains": "natura"
+    },
+    {
+      "raw_code": "5940",
+      "code": "59.40",
+      "column": "total_2026",
+      "value": "4.00",
+      "name_contains": "handicap neincadrate",
+      "context_contains": "invaliditate",
+      "hard": true
+    }
+  ],
+  "text_contains": [
+    "Asistenta sociala in caz de invaliditate"
+  ],
+  "notes": "Economic detail inside chapter 68.02.05.02. Codes repeat across sections on the same page (e.g. 5911, 5940 appear twice) — context matters. Pseudo-codes D / F / 01F must not be treated as indicator codes. Cross-check: 57.02 = 69666+2410 = 72076."
+}

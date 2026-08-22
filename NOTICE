@@ -1,0 +1,21 @@
+bgconvertor
+Copyright 2026 the bgconvertor contributors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party data included in this repository:
+
+1. reference/nomenclator/*.xls[x] — annexes of "Clasificația indicatorilor
+   privind finanțele publice", approved by Ordinul MFP nr. 1954/16.12.2005,
+   as published by the Romanian Ministry of Finance at
+   https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare
+   The published annexes state that they do not constitute legal basis
+   ("nu reprezintă temei legal"). Refresh with `bgconvertor nomenclator update`.
+
+2. data/<year>/**/budget_file.pdf — official local-government budget
+   documents (HCL annexes), public administrative records published by the
+   respective municipalities. Per-file sources and retrieval dates are in
+   data/<year>/manifest.json and data/<year>/SOURCES.md.
+
+3. SIRUTA territorial codes — Institutul Național de Statistică,
+   https://data.gov.ro/dataset/siruta-2025

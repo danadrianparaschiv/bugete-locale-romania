@@ -1,0 +1,13 @@
+{
+  "id": "ab_p055",
+  "pdf": "budget_file_ab.pdf",
+  "page": 55,
+  "layout": "digital_detail",
+  "budget": "own_revenue",
+  "source_type": "digital",
+  "hazards": [],
+  "columns": ["total", "credite_stinse", "trim1", "trim2", "trim3", "trim4", "est2027", "est2028", "est2029"],
+  "anchors": [],
+  "text_contains": ["BUGETUL CENTRALIZAT AL INSTITUTIILOR PUBLICE", "VENITURI PROPRII SI SUBVENTII", "SECTIUNEA TOTAL"],
+  "notes": "Start of the second budget document inside the same PDF (.10 codes). Classification must split documents here."
+}
