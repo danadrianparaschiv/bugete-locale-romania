@@ -165,7 +165,7 @@ class LLMClient:
                         response_format={"type": "json_schema", "json_schema": {
                             "name": output_model.__name__,
                             "strict": True,
-                            "schema": _strict_schema(output_model),
+                            "schema": _strict_schema(output_model, require_all=True),
                         }},
                     )
                     choice = response.choices[0]
@@ -239,14 +239,19 @@ class LLMClient:
         return parsed
 
 
-def _strict_schema(output_model) -> dict:
+def _strict_schema(output_model, require_all: bool = False) -> dict:
     """Pydantic JSON schema with additionalProperties:false on every object
-    (the API's json_schema output format requires it explicitly)."""
+    (the API's json_schema output format requires it explicitly).
+
+    require_all: OpenAI-style strict mode additionally demands that every
+    object lists ALL its properties as required."""
 
     def walk(node):
         if isinstance(node, dict):
             if node.get("type") == "object":
                 node.setdefault("additionalProperties", False)
+                if require_all and node.get("properties"):
+                    node["required"] = list(node["properties"])
             for v in node.values():
                 walk(v)
         elif isinstance(node, list):

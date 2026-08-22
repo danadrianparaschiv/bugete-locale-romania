@@ -34,8 +34,8 @@ MODEL_PRICES: dict[str, tuple[float, float]] = {
     # Mistral
     "mistral-medium-latest": (0.40, 2.00),
     "mistral-small-latest": (0.10, 0.30),
-    # Qwen (DashScope)
-    "qwen3-vl-plus": (0.20, 1.60),  # verificați
+    # Qwen (via OpenRouter)
+    "qwen/qwen3-vl-30b-a3b-thinking": (0.30, 1.20),  # verificați
 }
 BATCH_DISCOUNT = 0.5
 

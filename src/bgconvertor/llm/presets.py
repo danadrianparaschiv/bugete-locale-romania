@@ -73,11 +73,10 @@ PRESETS: dict[str, Preset] = {
         "mistral", "mistral-medium-latest", "mistral-small-latest",
         "MISTRAL_API_KEY", "https://api.mistral.ai/v1",
         "Mistral — furnizor european, rezidență a datelor în UE"),
-    "qwen:qwen3-vl": Preset(
-        "qwen", "qwen3-vl-plus", "qwen3-vl-plus",
-        "DASHSCOPE_API_KEY",
-        "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-        "Qwen — greutăți deschise, opțiune fără dependență de furnizor"),
+    "qwen:qwen3-vl-30b": Preset(
+        "qwen", "qwen/qwen3-vl-30b-a3b-thinking", "qwen/qwen3-vl-30b-a3b-thinking",
+        "OPENROUTER_API_KEY", "https://openrouter.ai/api/v1",
+        "Qwen (via OpenRouter) — greutăți deschise, fără dependență de furnizor"),
 }
 
 
