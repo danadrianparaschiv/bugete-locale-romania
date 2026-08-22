@@ -27,6 +27,13 @@
         "warnings": 0,
         "at": "2026-08-22T11:04:21",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-24",
+        "debate_url": "https://www.albaiuliainfo.ro/joi-30-aprilie-2026-primaria-municipiului-alba-iulia-organizeaza-dezbatere-publica-a-proiectului-de-buget-local-pe-anul-in-curs-85451.html",
+        "approved_date": "2026-05-05",
+        "approved_url": "https://alba24.ro/video-bugetul-municipiului-alba-iulia-in-2026-a-fost-aprobat-de-consiliul-local-principalele-investitii-ce-vor-primi-finantare-1134889.html",
+        "notes": "debate_date is the date of the announcement (article of 24.04.2026) of the dezbatere publica held 30.04.2026; the draft's exact transparency-posting date on apulum.ro was not confirmed. Approval confirmed also by apulum.ro budget section listing 'Buget local initial (5 mai 2026)' (filed 18.05.2026). HCL number not found in any fetched source."
       }
     },
     {
@@ -47,6 +54,13 @@
         "warnings": 1825,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-13",
+        "debate_url": "https://www.actualitati-arad.ro/bugetul-municipiului-arad-pentru-anul-2026-afisat-la-transparenta-decizionala/",
+        "approved_date": "2026-04-29",
+        "approved_url": "https://www.aradon.ro/aradon-stirile-judetului-arad/municipiul-arad-are-buget-aprobat-2181718/",
+        "notes": "Transparency procedure opened 13.04.2026 (objections until 28.04); dezbatere publica meeting held 28.04.2026. Approved in ordinary session Wednesday 29.04.2026 (aradon.ro, 29.04.2026 14:09; primariaarad.ro announcement confirms April ordinary session without date). HCL number not found; primariaarad.ro hotarari.nsf listing not directly fetchable."
       }
     },
     {
@@ -67,6 +81,13 @@
         "warnings": 1842,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-03-30",
+        "debate_url": "https://www.primariapitesti.ro/anunt-proiect-de-hotarare-privind-aprobarea-bugetului-municipiului-piteti-pe-anul-2026-articol3562",
+        "approved_date": "2026-04-27",
+        "approved_url": "https://epitesti.ro/stiri/economic/bugetul-2026-a-fost-aprobat",
+        "notes": "Draft-budget HCL announcement published 30.03.2026 on primariapitesti.ro (Legea 52/2003); dezbatere publica meeting held 09.04.2026 at Filarmonica Pitesti. Approved 27.04.2026 (epitesti.ro article of 27.04.2026; Arges Expres concurs but returned 403 on fetch). Coordinator hint suggests file '153_-HCL_aprobare_buget' i.e. likely HCL 153/2026, but no fetched source confirmed the number."
       }
     },
     {
@@ -87,6 +108,14 @@
         "warnings": 497,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-27",
+        "debate_url": "https://micapublicitate.desteptarea.ro/2026/04/27/primaria-municipiului-bacau-dezbatere-publica-5/",
+        "approved_date": "2026-05-13",
+        "approved_url": "https://municipiulbacau.ro/lista-hotarari-27/",
+        "hcl": "HCL 195/2026",
+        "notes": "Public-debate announcement dated 27.04.2026 (meeting held 30.04.2026, 10:00, C.A.Ex. Bacau); drafts had been posted in the transparency section. Approved by HCL 195/13.05.2026 'aprobarea Bugetului de venituri si cheltuieli si a Programului de Investitii pe anul 2026' per official lista-hotarari; press (desteptarea.ro, bacau.net) confirms marathon session of Wednesday 13.05.2026."
       }
     },
     {
@@ -107,6 +136,13 @@
         "warnings": 44,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://oradea.ro/stiri/proiectul-bugetului-municipiului-oradea-pentru-anul-2026-lansat-in-dezbatere-publica/",
+        "approved_date": "2026-04-30",
+        "approved_url": "https://oradea.ro/stiri/a-fost-aprobat-bugetul-municipiului-oradea-pentru-anul-2026/",
+        "notes": "Draft launched in dezbatere publica 09.04.2026; consultation window 10-24.04.2026, dezbatere publica meeting 22.04.2026. Approved in ordinary session 30.04.2026 (official oradea.ro news). HCL number not stated in fetched sources."
       }
     },
     {
@@ -128,6 +164,14 @@
         "warnings": 24,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://primariabistrita.ro/toate-anunturile/proiectul-de-buget-al-municipiului-bistrita-pentru-anul-2026/",
+        "approved_date": "2026-04-29",
+        "approved_url": "https://primariabistrita.ro/monitorul-oficial-local/documente-si-informatii-financiare/buget-local/",
+        "hcl": "HCL 54/2026",
+        "notes": "Draft-budget announcement published 09.04.2026, observations accepted 10-25.04.2026. Approved in ordinary session of 29.04.2026; official buget-local page lists initial budget file 'Buget_initial_HCL_54_29.04.2026' => HCL 54/29.04.2026; timponline.ro confirms session scheduled Wednesday 29 April."
       }
     },
     {
@@ -148,6 +192,14 @@
         "warnings": 713,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://primariabt.ro/monitorul-oficial-local/documente-si-informatii-financiare/proiectele-bugetelor-supuse-consultarii-publice/",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://primariabt.ro/wp-content/uploads/formidable/9/HCL_131_2026.pdf",
+        "hcl": "HCL 131/2026",
+        "notes": "Approval confirmed from HCL text: 'Botoşani, 11 mai 2026 / Nr. 131'. Debate date is the posting of proiect-buget-local_2026.pdf on the MOL 'Proiectele bugetelor supuse consultării publice' page (HTTP Last-Modified 09.04.2026); no explicit anunț with date found."
       }
     },
     {
@@ -168,6 +220,14 @@
         "warnings": 5,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-24",
+        "debate_url": "https://www.brasov.net/prioritatile-brasovului-pentru-2026-dezbatere-publica-pe-proiectul-de-buget-vineri-dimineata/",
+        "approved_date": "2026-04-29",
+        "approved_url": "https://hcl.usr.ro/brasov/2026/h224",
+        "hcl": "HCL 224/2026",
+        "notes": "Dezbatere publică held 24.04.2026 09:00 at primărie (draft published earlier on buget2026.brasovcity.ro, exact posting date not confirmed). HCL 224/29.04.2026 'Aprobarea bugetului UAT Municipiul Brașov pe anul 2026' per HCL register (hcl.usr.ro); approval also reported by bizbrasov.ro on 29.04.2026 (unanimous vote)."
       }
     },
     {
@@ -188,6 +248,14 @@
         "warnings": 1616,
         "at": "2026-08-22T11:04:23",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://hcl.usr.ro/braila/2026/h238",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://hcl.usr.ro/braila/2026/h238",
+        "hcl": "HCL 238/2026",
+        "notes": "HCL 238/11.05.2026 preamble: 'anunțul nr. 66798 din 09.04.2026 prin care s-a supus dezbaterii publice proiectul bugetului local'. Approved unanimously in CLM ordinary session 11.05.2026 (probr.ro, obiectivbr.ro). Companion HCL 243/11.05.2026 approved the bugetul general centralizat."
       }
     },
     {
@@ -208,6 +276,14 @@
         "pct_clean": 64.8,
         "errors": 124,
         "warnings": 447
+      },
+      "timeline": {
+        "debate_date": "2026-04-07",
+        "debate_url": "https://www.buzau.net/stiri-din-buzau/primaria-buzau-anunta-dezbaterea-publica-a-bugetului-municipiului-buzau-pentru-2026",
+        "approved_date": "2026-04-30",
+        "approved_url": "https://hcl.usr.ro/buzau/2026/h75",
+        "hcl": "HCL 75/2026",
+        "notes": "Draft put in dezbatere publică, announced 07.04.2026 (press; official anunț also on primariabuzau.ro, 15-day consultation). Approved in ordinary session 30.04.2026 as HCL 75/2026 'aprobarea bugetului Municipiului Buzău pe anul 2026' (agenda item: proiect nr. 84/24.04.2026); mayor quote 'Azi, 30 aprilie 2026, am aprobat' (bursa.ro). Passed 15 of 23 votes, 8 abstentions."
       }
     },
     {
@@ -222,6 +298,12 @@
       "notes": "No official 2026 municipal budget PDF was located during the audit.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "approved_date": "2026-04-15",
+        "approved_url": "https://se.primariaresita.ro/SE/Registratura/DetaliuHCL?nr=161&an=2026",
+        "hcl": "HCL 161/2026",
+        "notes": "HCL PDF (scanned, verified visually): 'HOTĂRÂREA Nr.161 din 15.04.2026 privind aprobarea Bugetului de venituri și cheltuieli al Municipiului Reșița pe anul 2026', ședință ordinară 15.04.2026; consistent with expressdebanat.ro article of 16.04.2026 (adoption 'miercuri' = 15.04). No public-consultation announcement for the draft found (referat de aprobare dated 06.04.2026)."
       }
     },
     {
@@ -242,6 +324,14 @@
         "warnings": 168,
         "at": "2026-08-22T11:05:30",
         "tool_version": "0.1.0"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://primariacalarasi.ro/monitorul-oficial-local/documente-si-informatii-financiare/buget-pe-surse-financiare/",
+        "approved_date": "2026-04-28",
+        "approved_url": "https://primariacalarasi.ro/wp-content/tabele/buget-surse-financiare/HCL-61-28.04.2026.pdf",
+        "hcl": "HCL 61/2026",
+        "notes": "HCL 61 preamble cites 'procesul-verbal nr. 77696/09.04.2026 privind afișarea proiectului de hotărâre privind aprobarea bugetului propriu... pe anul 2026' (draft PROIECT-BUGET-Initial-2026-site.pdf uploaded 09.04.2026). HCL PDF (scanned, verified visually): 'Nr. 61, Adoptată la Călărași, Astăzi, 28.04.2026', ședință ordinară, 18 votes for out of 18."
       }
     },
     {
@@ -252,7 +342,15 @@
       "path": "13-cluj/54975-cluj-napoca/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf",
-      "record_url": "https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf"
+      "record_url": "https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf",
+      "timeline": {
+        "debate_date": "2026-04-08",
+        "debate_url": "https://primariaclujnapoca.ro/cetateni/dezbatere-publica/proiectul-de-buget-al-municipiului-cluj-napoca-pentru-anul-2026/",
+        "approved_date": "2026-04-28",
+        "approved_url": "https://primariaclujnapoca.ro/consiliu-local/hotarare-de-consiliu/hotararea-149-din-2026/",
+        "hcl": "HCL 149/2026",
+        "notes": "Draft published for consultation 2026-04-08 (consultation window 8-23 Apr, Legea 273/2006); public debate meeting held 16 Apr; approved in extraordinary session 28 Apr 2026 (HCL 149/2026 'aprobarea bugetului general')."
+      }
     },
     {
       "county_code": "14",
@@ -262,7 +360,15 @@
       "path": "14-constanta/60419-constanta/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primaria-constanta.ro/wp-content/uploads/custom-folders/Buget-pe-surse-financiare/18.-Buget-Municipal-2026.pdf",
-      "record_url": "https://primaria-constanta.ro/pagina-pmc/buget-pe-surse-financiare/"
+      "record_url": "https://primaria-constanta.ro/pagina-pmc/buget-pe-surse-financiare/",
+      "timeline": {
+        "debate_date": "2026-04-16",
+        "debate_url": "https://www.radioconstanta.ro/2026/04/16/bugetul-municipiului-constanta-este-in-consultare-publica/",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://hcl.usr.ro/ct/2026/h130",
+        "hcl": "HCL 130/2026",
+        "notes": "Draft in public consultation from 16 Apr 2026 (press report of the primărie announcement; comment deadline 30.04.2026); official announcement page (primaria-constanta.ro) blocked fetch (403). Approved in extraordinary online session 11 May 2026: draft PH nr. 140/2026 adopted as HCL 130/11.05.2026 'privind aprobarea bugetului local pe anul 2026'."
+      }
     },
     {
       "county_code": "15",
@@ -272,7 +378,15 @@
       "path": "15-covasna/63394-sfantu-gheorghe/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://sfantugheorgheinfo.ro/uploads/buget-local-initial-1784098056.pdf",
-      "record_url": "https://sfantugheorgheinfo.ro/"
+      "record_url": "https://sfantugheorgheinfo.ro/",
+      "timeline": {
+        "debate_date": "2026-04-03",
+        "debate_url": "https://www.sfintugheorghe.ro/transparenta-decizionala/dezbateri-publice/",
+        "approved_date": "2026-04-28",
+        "approved_url": "https://www.sfantugheorgheinfo.ro/hotarari/hotararea-nr-1302026-privind-aprobarea-bugetului-general-al-municipiului-sfantu-gheorghe-pe-anul-2026",
+        "hcl": "HCL 130/2026",
+        "notes": "Anunț public din 03.04.2026 for PH nr. 10524/03.04.2026 privind aprobarea bugetului local 2026 (official dezbateri-publice page); consultation until 27 Apr (press). Approved 28 aprilie 2026, HOTĂRÂREA NR. 130/2026 privind aprobarea bugetului general al municipiului pe anul 2026. An earlier anunț (nr. 258/20.01.2026) also referenced a budget-2026 debate, pre-dating the late state budget."
+      }
     },
     {
       "county_code": "16",
@@ -282,7 +396,15 @@
       "path": "16-dambovita/65342-targoviste/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf",
-      "record_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/"
+      "record_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/",
+      "timeline": {
+        "debate_date": "2026-04-14",
+        "debate_url": "https://www.pmtgv.ro/MonitorPMT/MOL6.d/mol6d.html",
+        "approved_date": "2026-04-30",
+        "approved_url": "https://www.pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/Targoviste_HCL_nr_149_din_30_aprilie_2026.pdf",
+        "hcl": "HCL 149/2026",
+        "notes": "ANUNȚ dated 14.04.2026 on the official Monitor Oficial Local page for 'proiectul Bugetului de Venituri și Cheltuieli pe anul 2026' (docs at /MonitorPMT/MOL6.d/2026/20260414/ANUNT.pdf; draft = Proiect de hotărâre nr. 150). HCL 149 din 30 aprilie 2026 (official PDF; text contains 30.04.2026 and budget articles). Press reports council approved budget 30 Apr in a very short session."
+      }
     },
     {
       "county_code": "17",
@@ -292,7 +414,15 @@
       "path": "17-dolj/69900-craiova/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariacraiova.ro/uploads/articole/attachments/69f8a1e16727b145115871.pdf",
-      "record_url": "https://www.primariacraiova.ro/ro/a/3756/buget-local"
+      "record_url": "https://www.primariacraiova.ro/ro/a/3756/buget-local",
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://ecopolitic.ro/lia-olguta-vasilescu-astazi-va-fi-pus-in-dezbatere-publica-proiectul-de-buget-pe-anul-2026-craiova-pierde-aproximativ-10-milioane-de-euro-anul-acesta/",
+        "approved_date": "2026-05-07",
+        "approved_url": "https://hcl.usr.ro/craiova/2026/h202",
+        "hcl": "HCL 202/2026",
+        "notes": "Draft put in dezbatere publică 9 Apr 2026 (mayor's announcement, comments until 24 Apr; primariacraiova.ro itself not directly fetchable). Approved in extraordinary online session 7 May 2026 (cvlpress.ro/07.05.2026); HCL 202/07.05.2026 'Bugetul de venituri și cheltuieli al municipiului Craiova pe anul 2026' per official HCL aggregator."
+      }
     },
     {
       "county_code": "18",
@@ -302,7 +432,15 @@
       "path": "18-galati/75098-galati/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119/$FILE/HCL_267.pdf",
-      "record_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119"
+      "record_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119",
+      "timeline": {
+        "debate_date": "2026-04-06",
+        "debate_url": "https://primariagalati.ro/portal/galati/portal.nsf/AllByUNID/anunturi-publice-00032dee?OpenDocument%3FOpen=",
+        "approved_date": "2026-05-07",
+        "approved_url": "https://hcl.usr.ro/galati/2026/h196",
+        "hcl": "HCL 196/2026",
+        "notes": "Official primărie anunț public: 'astăzi, 06.04.2026, nr. înregistrare 60661, se aduce la cunoștință publică documentul: Proiect de buget local al Municipiului Galați pe anul 2026'. Approved 7 May 2026 (16 pro/3 contra/6 abțineri, extraordinary session, per Viața Liberă); HCL 196/07.05.2026 'Aprobarea bugetului general de venituri și cheltuieli al Municipiului Galați'."
+      }
     },
     {
       "county_code": "19",
@@ -312,7 +450,13 @@
       "path": "19-giurgiu/100521-giurgiu/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariagiurgiu.ro/storage/formidable/340/BVC-2026.pdf",
-      "record_url": "https://primariagiurgiu.ro/"
+      "record_url": "https://primariagiurgiu.ro/",
+      "timeline": {
+        "approved_date": "2026-05-08",
+        "approved_url": "https://primariagiurgiu.ro/monitorul-oficial-local/hotararile-autoritatii-deliberative/hotarari-ale-consiliului-local/2026-registrul-pentru-evidenta-hcl/",
+        "hcl": "HCL 108/2026",
+        "notes": "HCL 108/08.05.2026 'aprobarea Bugetului local de venituri si cheltuieli pe anul 2026' (extraordinary session 08.05.2026, per official HCL registry). No dated public-consultation announcement found; draft PHCL nr. 115 was registered only 07.05.2026 (one day before adoption, per PHCL registry); an undated Proiect-Buget-2026.pdf sits in the 'Proiecte de buget' section."
+      }
     },
     {
       "county_code": "20",
@@ -326,6 +470,14 @@
       "notes": "The official portal exposed older budgets, but no 2026 municipal budget PDF was located.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://www.tvsud.ro/dezbatere-publica-pe-tema-bugetului-targu-jiului-anuntul-reprezentantului-platformei-generatia-schimbare.html",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://www.tvsud.ro/bugetul-municipiului-targu-jiu-aprobat-in-sedinta-extraordinara.html",
+        "hcl": "HCL 183/2026",
+        "notes": "Draft budget published on targujiu.ro 09.04.2026 (press quote); public debate held online 21.04.2026. Approved in extraordinary session 11.05.2026 (draft PH nr. 206/30.04.2026); HCL number 183/11.05.2026 confirmed via citation 'H.C.L. nr. 183 din 11.05.2026 privind aprobarea bugetului local' in HCL 191/2026 PDF on targujiu.ro."
       }
     },
     {
@@ -336,7 +488,13 @@
       "path": "21-harghita/83320-miercurea-ciuc/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://szereda.ro/files/documents/20260507%20anexa%2001.pdf",
-      "record_url": "https://szereda.ro/ro/hotarari/93/2026"
+      "record_url": "https://szereda.ro/ro/hotarari/93/2026",
+      "timeline": {
+        "approved_date": "2026-05-07",
+        "approved_url": "https://miercureaciuc.ro/ro/buget",
+        "hcl": "HCL 93/2026",
+        "notes": "HCL 93/2026 ('Hot nr 93 BVC') on official budget page with 16 annexes dated 07.05.2026; szekelyhon.ro (07.05.2026) confirms budget adopted in extraordinary session of Thursday 07.05.2026 (mayor: item could only be put on agenda on 7 May due to late state budget). No public-consultation announcement for the draft found (dezbateri-publice section contains only urbanism items)."
+      }
     },
     {
       "county_code": "22",
@@ -346,7 +504,15 @@
       "path": "22-hunedoara/86687-deva/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.primariadeva.ro/images/uploads/documente/Buget_local_sursa_A_an_2026.pdf",
-      "record_url": "https://www.primariadeva.ro/"
+      "record_url": "https://www.primariadeva.ro/",
+      "timeline": {
+        "debate_date": "2026-04-14",
+        "debate_url": "https://www.primariadeva.ro/index.php/informatii_publice/anunt/8469",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://www.primariadeva.ro/index.php/informatii_publice/buget",
+        "hcl": "HCL 186/2026",
+        "notes": "Public consultation announcement 'CONSULTARE PUBLICA CU PRIVIRE LA BUGETUL GENERAL AL MUNICIPIULUI DEVA PE ANUL 2026' published 14.04.2026, comment window 14.04-29.04.2026. HCL 186/11.05.2026 'aprobarea bugetului general de venituri si cheltuieli al Municipiului Deva pe anul 2026 si a estimarilor 2027-2029' listed on official buget page; AGERPRES confirms approval Monday 11.05.2026."
+      }
     },
     {
       "county_code": "23",
@@ -356,7 +522,15 @@
       "path": "23-ialomita/92658-slobozia/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://municipiulslobozia.ro/wp-content/uploads/2026/04/Buget2026%2017.04.2026/Anexa2.pdf",
-      "record_url": "https://municipiulslobozia.ro/buget-local/"
+      "record_url": "https://municipiulslobozia.ro/buget-local/",
+      "timeline": {
+        "debate_date": "2026-04-17",
+        "debate_url": "https://obiectiv.net/anunt-dezbatere-publica-proiectul-de-buget-al-municipiului-slobozia-pe-anul-2026-88866.html/",
+        "approved_date": "2026-04-30",
+        "approved_url": "https://portal.municipiulslobozia.ro:4443/RegistruHotDisp/Details?type=hcl&Number=116&Year=2026",
+        "hcl": "HCL 116/2026",
+        "notes": "Public debate announcement published 17.04.2026 (matches 'BUGET 2026 - forma actualizata 17.04.2026' on municipiulslobozia.ro surse-financiare-buget page); public debate meeting held 21.04.2026 at Centrul Cultural Ionel Perlea. HCL 116/30.04.2026 'aprobarea bugetului general de venituri si cheltuieli al Municipiului Slobozia, pe anul 2026' (official HCL portal)."
+      }
     },
     {
       "county_code": "24",
@@ -370,6 +544,14 @@
       "notes": "The adoption meeting and HCL 190/2026 were located, but no official municipal budget PDF was exposed by the authority.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "debate_date": "2026-04-07",
+        "debate_url": "https://www.primaria-iasi.ro/dm_iasi/Hotarari.nsf/C3E95FBE52FA208AC2258DD2004348E8/$FILE/anunt%20proiect%20HCL%20Buget%202026.pdf?Open=",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://hcl.usr.ro/iasi/2026/h190",
+        "hcl": "HCL 190/2026",
+        "notes": "Official anunt nr. 47014/07.04.2026 posted the draft budget HCL for 15-day public consultation starting 07.04.2026 (text extracted from PDF). Approved in extraordinary CLM session 11.05.2026 after 144 amendments (AGERPRES/Iasul Metropolitan); HCL 190/11.05.2026 'repartizarea excedentului anilor precedenti... si aprobarea bugetului general al Municipiului Iasi pe anul 2026' per hcl.usr.ro listing."
       }
     },
     {
@@ -382,7 +564,15 @@
       "source_url": "https://doc.pmb.ro/legis/acteinterne/2026/47980/anexah167_01_26.pdf",
       "record_url": "https://doc.pmb.ro/monitorul_oficial/2026/05/volumul_01.pdf",
       "notes": "Ilfov's legal county seat is Bucharest; the Bucharest municipal budget is used and intentionally duplicates county code 42.",
-      "note": "Ilfov county seat is Bucharest; single copy stored under 42-bucuresti"
+      "note": "Ilfov county seat is Bucharest; single copy stored under 42-bucuresti",
+      "timeline": {
+        "debate_date": "2026-04-20",
+        "debate_url": "https://agerpres.ro/administratie/2026/04/20/bugetul-pmb-in-dezbatere-publica-32-pentru-investitii--1548283",
+        "approved_date": "2026-05-05",
+        "approved_url": "https://hcl.usr.ro/pmb/2026/h167",
+        "hcl": "HCGMB 167/2026",
+        "notes": "HCGMB 167 din 05.05.2026 privind aprobarea Bugetului Municipiului București pe anul 2026 (full text fetched from hcl.usr.ro; adoption also reported same day by Digi24). Draft put in dezbatere publică Monday 2026-04-20 (Agerpres/Mediafax); Legea 52/2003 public debate meeting held 2026-04-24."
+      }
     },
     {
       "county_code": "26",
@@ -392,7 +582,15 @@
       "path": "26-maramures/106318-baia-mare/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://www.baiamare.ro/Baiamare/Hotarari/2026/20%20Mai/hot250_26_Anexele1-2_mai_2026.pdf",
-      "record_url": "https://www.baiamare.ro/ro/Administratie/Consiliul-Local/Hotarari-ale-Consiliului-Local/"
+      "record_url": "https://www.baiamare.ro/ro/Administratie/Consiliul-Local/Hotarari-ale-Consiliului-Local/",
+      "timeline": {
+        "debate_date": "2026-04-01",
+        "debate_url": "https://www.baiamare.ro/ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2026/Proiect-privind-Bugetul-Municipiului-Baia-Mare-pentru-anul-2026/",
+        "approved_date": "2026-04-17",
+        "approved_url": "https://www.baiamare.ro/ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2026/Bugetul-Municipiului-Baia-Mare-pe-anul-2026--aprobat-conform-HCL-nr.18817.04.2026/",
+        "hcl": "HCL 188/2026",
+        "notes": "Official page: 'aprobat conform HCL nr.188/17.04.2026'; extraordinary session Friday 17 April (Glasul MM). Debate date = Last-Modified (01.04.2026 15:08 GMT) of the draft-budget PDFs on the official 'Proiect' page (no explicit announcement date on page); consistent with the 15-day art.39 window before the 17.04 vote. Source hint hot250/20 Mai is not the initial approval (rectifications HCL 241/30.04 etc. followed)."
+      }
     },
     {
       "county_code": "27",
@@ -407,6 +605,14 @@
       "notes": "The official authority published the 2026 budget as XLSX, but no official PDF was located.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "debate_date": "2026-04-22",
+        "debate_url": "https://emol.ro/drobeta-turnuseverin-mh/registru-phcl/261702",
+        "approved_date": "2026-04-29",
+        "approved_url": "https://emol.ro/drobeta-turnuseverin-mh/registru-hcl/264982",
+        "hcl": "HCL 63/2026",
+        "notes": "eMOL (Monitorul Oficial Local): Proiect de hotărâre nr. 98/22.04.2026 privind aprobarea bugetului de venituri și cheltuieli al Consiliului Local pe anul 2026, aprobat în ședința ordinară din 29.04.2026 ca HCL 63/29.04.2026. Debate date is the draft's registration/publication date in the public eMOL register (no separate Legea 52/2003 announcement found; only 7 days before vote)."
       }
     },
     {
@@ -417,7 +623,15 @@
       "path": "28-mures/114319-targu-mures/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://tirgumures.ro/TRANSPARENTA/PRIMARIA%20TIRGU%20MURES%20SI%20SERVICIILE%20PUBLICE%20SUBORDONATE/Buget/2026/HCLM%20nr.%20120%20din%2011.05.2026/Anexe/Anexa_2_A_Buget%20local%202026_unitati.pdf",
-      "record_url": "https://tirgumures.ro/index.php?option=com_content&view=article&id=10913"
+      "record_url": "https://tirgumures.ro/index.php?option=com_content&view=article&id=10913",
+      "timeline": {
+        "debate_date": "2026-04-29",
+        "debate_url": "https://www.cuvantul-liber.ro/554763/proiect-buget-targu-mures/",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://hcl.usr.ro/tgmures/2026",
+        "hcl": "HCL 120/2026",
+        "notes": "HCL 120 din 11.05.2026 privind aprobarea bugetului UAT Municipiul Târgu Mureș pe anul 2026 (hcl.usr.ro registry, extraordinary session; also zi-de-zi.ro 11.05). Draft published on tirgumures.ro 2026-04-29 per Cuvântul Liber article of 30.04 ('Ieri ... a publicat proiectul de buget')."
+      }
     },
     {
       "county_code": "29",
@@ -427,7 +641,15 @@
       "path": "29-neamt/120726-piatra-neamt/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.primariapn.ro/documents/10179/5925796/sinteza_%20buget_local_2026_proiect.pdf",
-      "record_url": "https://www.primariapn.ro/transparenta-decizionala"
+      "record_url": "https://www.primariapn.ro/transparenta-decizionala",
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://www.primariapn.ro/dezbateri",
+        "approved_date": "2026-05-05",
+        "approved_url": "https://www.primariapn.ro/hotarari-ale-consiliului-local-2026",
+        "hcl": "HCL 174/2026",
+        "notes": "Official dezbateri page: 'Consultare publică cu privire la Proiectul de buget ... pe anul 2026' posted 09.04.2026; Legea 52/2003 public debate meeting 24.04.2026. HCL 174 din 05.05.2026 privind aprobarea bugetului general centralizat al municipiului (official HCL registry, file hcl_174_05_05_2026.pdf); VivaFM reported the 5-minute approval session on 07.05."
+      }
     },
     {
       "county_code": "30",
@@ -441,6 +663,14 @@
       "notes": "The official budget page contained records through 2025 but no 2026 municipal budget PDF during the audit.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "debate_date": "2026-03-19",
+        "debate_url": "http://www.primariaslatina.ro/images/transparenta/anunt_29257_190326.pdf",
+        "approved_date": "2026-05-11",
+        "approved_url": "http://www.primariaslatina.ro/hotarari_dispozitii_2026-H-pag5.html",
+        "hcl": "HCL 133/2026",
+        "notes": "Announcement PDF (fetched): 'Astăzi 19.03.2026 ... anunță deschiderea procedurii de transparență decizională' for the 2026 local budget draft. HCL 133/11.05.2026 aprobare buget local de venituri și cheltuieli pe anul 2026 (registry, file h_133_110526.pdf)."
       }
     },
     {
@@ -451,7 +681,15 @@
       "path": "31-prahova/130534-ploiesti/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://ploiesti.ro/wp-content/uploads/2026/05/134_11.05.2026_buget_local.pdf",
-      "record_url": "https://ploiesti.ro/hotarari/"
+      "record_url": "https://ploiesti.ro/hotarari/",
+      "timeline": {
+        "debate_date": "2026-04-20",
+        "debate_url": "https://www.observatorulph.ro/eveniment/2785043-primaria-ploiesti-a-lansat-in-dezbatere-publica-proiectul-bugetului-local-pe-2026",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://ploiesti.ro/hotarari/hcl-134-2026/",
+        "hcl": "HCL 134/2026",
+        "notes": "Transparency procedure opened 20.04.2026; public debate event held 08.05.2026. Approved in extraordinary session 11.05.2026 (session suspended ~3h for amendments)."
+      }
     },
     {
       "county_code": "32",
@@ -461,7 +699,15 @@
       "path": "32-satu-mare/136483-satu-mare/budget_file.pdf",
       "document_status": "official_budget_presentation",
       "source_url": "https://www.primariasm.ro/storage/comunicare/sanyi/stiri/buget-2026/buget-2026-color-kg-ro.pdf",
-      "record_url": "https://www.primariasm.ro/buget-2026"
+      "record_url": "https://www.primariasm.ro/buget-2026",
+      "timeline": {
+        "debate_date": "2026-03-30",
+        "debate_url": "https://www.primariasm.ro/proiect-de-hotarare-privind-aprobarea-bugetului-local-de-venituri-si-cheltuieli-al-municipiului-satu-mare-pe-anul-2026",
+        "approved_date": "2026-05-11",
+        "approved_url": "https://hcl.usr.ro/satu_mare",
+        "hcl": "HCL 103/2026",
+        "notes": "Draft budget documents dated 30.03.2026 on official page, suggestions deadline 14.04.2026 15:00. HCL 103/11.05.2026 privind aprobarea Bugetului local (hcl.usr.ro index of Satu Mare HCLs)."
+      }
     },
     {
       "county_code": "33",
@@ -471,7 +717,15 @@
       "path": "33-salaj/139704-zalau/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.zalausj.ro/ro/hotarari/2026/h144-2026.pdf",
-      "record_url": "https://www.zalausj.ro/ro/hotarari/2026/"
+      "record_url": "https://www.zalausj.ro/ro/hotarari/2026/",
+      "timeline": {
+        "debate_date": "2026-05-06",
+        "debate_url": "https://www.ztv.ro/social/dezbatere-publica-privind-aprobarea-bugetului-general-al-municipiului-zalau",
+        "approved_date": "2026-05-07",
+        "approved_url": "https://zalausj.ro/portal/zalau/portal.nsf/AllByUNID/Buget+2026++Peste+453+milioane+lei+pentru+Zalau+in+2026-000186A2?OpenDocument=",
+        "hcl": "HCL 144/2026",
+        "notes": "debate_date is the public debate meeting (06.05.2026, announced 05.05.2026); exact date the draft was first posted for consultation not confirmed. Approved in ordinary session 07.05.2026; Hotărârea nr. 144 din 07.05.2026 'aprobarea bugetului general al Municipiului Zalău pentru anul 2026' confirmed in official register zalausj.ro/Templateweb/2026/hotarari.nsf."
+      }
     },
     {
       "county_code": "34",
@@ -483,7 +737,15 @@
       "source_url": "https://www.sibiu.ro/ro2/pdf/Bilant_executie/HCL_126_2026.pdf",
       "record_url": "https://www.sibiu.ro/primaria/buget",
       "oversize": true,
-      "note": "PDF is 156MB (> GitHub 100MB limit) — fetch with download.py"
+      "note": "PDF is 156MB (> GitHub 100MB limit) — fetch with download.py",
+      "timeline": {
+        "debate_date": "2026-04-08",
+        "debate_url": "https://sibiu.ro/primaria/comunicat/14536",
+        "approved_date": "2026-04-24",
+        "approved_url": "https://www.turnulsfatului.ro/2026/04/24/bugetul-sibiului-in-2026-are-investitii-mai-mari-si-salarii-mai-mici-alesii-au-aprobat-cheltuirea-a-168-de-miliarde-de-lei-fara-nicio-discutie-multumim-ne-revedem-luni/",
+        "hcl": "HCL 126/2026",
+        "notes": "Draft published for public consultation 08.04.2026 (official comunicat; feedback until 23.04). Approved unanimously in extraordinary session 24.04.2026; HCL 126/24.04.2026 (sibiu.ro HCL_126_2026.pdf)."
+      }
     },
     {
       "county_code": "35",
@@ -493,7 +755,15 @@
       "path": "35-suceava/146263-suceava/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.primariasv.ro/dm_suceava/site.nsf/atasament/79C8B4FE52BE501EC2258DD4006DA1D0/$FILE/Anexa%201.pdf?Open",
-      "record_url": "https://www.primariasv.ro/"
+      "record_url": "https://www.primariasv.ro/",
+      "timeline": {
+        "debate_date": "2026-04-09",
+        "debate_url": "https://www.primariasv.ro/dm_suceava/site.nsf/pagini/proiect+de+hotarare+privind+aprobarea+bugetului+municipiului+suceava+pe+anul+2026-0004619A",
+        "approved_date": "2026-05-08",
+        "approved_url": "https://hcl.usr.ro/suceava",
+        "hcl": "HCL 118/2026",
+        "notes": "Official primariasv.ro page 'Proiect de hotărâre privind aprobarea Bugetului Municipiului Suceava pe anul 2026' dated 09.04.2026 (dezbatere publică section). HCL 118/08.05.2026 'aprobarea Bugetului General al Municipiului Suceava pentru anul 2026 și estimări 2027-2029'; unanimous vote per svnews.ro."
+      }
     },
     {
       "county_code": "36",
@@ -503,7 +773,15 @@
       "path": "36-teleorman/151790-alexandria/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://alexandria.ro/storage/formidable/8/Anexa-nr.-buget-local-2026.A.234-anexa-4.pdf",
-      "record_url": "https://alexandria.ro/"
+      "record_url": "https://alexandria.ro/",
+      "timeline": {
+        "debate_date": "2026-04-24",
+        "debate_url": "https://alexandria.ro/anunt-dezbatere-publica-buget-2026/",
+        "approved_date": "2026-05-06",
+        "approved_url": "https://alexandria.ro/monitorul-oficial-local/hotarari-adoptate/hcl-2026/",
+        "hcl": "HCL 165/2026",
+        "notes": "Official 'Anunț dezbatere publică BUGET 2026' published 24.04.2026 (page metadata datePublished). HCL 165/06.05.2026 'Aprobarea Bugetului General al Municipiului Alexandria pe anul 2026' from official adopted-decisions register. alexandria.ro has a broken TLS certificate chain (fetched with certificate verification disabled)."
+      }
     },
     {
       "county_code": "37",
@@ -513,7 +791,15 @@
       "path": "37-timis/155243-timisoara/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://assets.primariatm.ro/38b1baae-3a24-4104-ba2f-51ea6f8e63bf",
-      "record_url": "https://www.primariatm.ro/proiecte-hcl/88a936e0-e5db-4f62-8d14-9f7dbfdff625"
+      "record_url": "https://www.primariatm.ro/proiecte-hcl/88a936e0-e5db-4f62-8d14-9f7dbfdff625",
+      "timeline": {
+        "debate_date": "2026-05-19",
+        "debate_url": "https://stiridetimisoara.ro/buget-timisoara-2026-vot-online_80754.html",
+        "approved_date": "2026-05-25",
+        "approved_url": "https://www.primariatm.ro/hcl/2026/209",
+        "hcl": "HCL 209/2026",
+        "notes": "Draft budget posted on primariatm.ro 2026-05-19 (per stiridetimisoara.ro); primariatm.ro announced the public debate meeting (held 2026-05-21) on 2026-05-20. Approved in extraordinary online session 2026-05-25, HCL 209/25.05.2026 'privind aprobarea bugetului local al Municipiului Timișoara pe anul 2026' (23 for, 3 abstentions), confirmed on primariatm.ro."
+      }
     },
     {
       "county_code": "38",
@@ -523,7 +809,15 @@
       "path": "38-tulcea/159614-tulcea/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://tulcea.cityon.ro/File/DownloadBinaryFile/376f5701-1700-7386-2416-3a21716aae99",
-      "record_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/FisaDocumentGeneral/166994"
+      "record_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/FisaDocumentGeneral/166994",
+      "timeline": {
+        "debate_date": "2026-04-17",
+        "debate_url": "https://www.primariatulcea.ro/2026/04/17/anuntul-nr-15071-din-17-04-2026-privind-proiectul-bugetului-local-de-venituri-si-cheltuieli-al-municipiului-tulcea-pe-anul-2026/",
+        "approved_date": "2026-05-12",
+        "approved_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/ListaHotarariDeConsiliuLocal/8348",
+        "hcl": "HCL 110/2026",
+        "notes": "Anunț nr. 15071/17.04.2026 published the draft; public debate meeting 2026-05-04 (minuta on primariatulcea.ro). Approved in extraordinary session 2026-05-12: HCL 110 din 12.05.2026 'privind aprobarea bugetului de venituri și cheltuieli al Municipiului Tulcea pentru anul 2026' (Monitorul Oficial Local, tulcea.cityon.ro)."
+      }
     },
     {
       "county_code": "39",
@@ -533,7 +827,15 @@
       "path": "39-vaslui/161945-vaslui/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariavaslui.ro/wp-content/uploads/2026/06/HCL-Nr.-149-din-29.04.2026publicata-joi-30.04.2026.pdf",
-      "record_url": "https://primariavaslui.ro/monitorul-oficial-local/hotarari-ale-consiliului-local/"
+      "record_url": "https://primariavaslui.ro/monitorul-oficial-local/hotarari-ale-consiliului-local/",
+      "timeline": {
+        "debate_date": "2026-04-05",
+        "debate_url": "https://vremeanoua.ro/bugetul-municipiului-vaslui-a-fost-pus-in-dezbatere-publica-iata-unde-se-indreapta-banii-vasluienilor/",
+        "approved_date": "2026-04-29",
+        "approved_url": "https://hotarari.ro/vaslui/hcl-149-2026",
+        "hcl": "HCL 149/2026",
+        "notes": "Draft in public debate per press article of 2026-04-05 (amendments accepted until 2026-04-20); exact primărie posting date not found. HCL 149/29.04.2026 'aprobarea bugetului general al Municipiului Vaslui pe anul 2026' (14 for, 5 against, 4 abstentions)."
+      }
     },
     {
       "county_code": "40",
@@ -547,6 +849,14 @@
       "notes": "No official 2026 municipal budget PDF was located in the authority's public portal during the audit.",
       "conversion": {
         "status": "missing_pdf"
+      },
+      "timeline": {
+        "debate_date": "2026-04-14",
+        "debate_url": "https://primariavl.ro/consiliul-local/dezbateri-vl",
+        "approved_date": "2026-05-08",
+        "approved_url": "https://dm.primariavl.ro/dm/2026/hotarari.nsf/7bc19da5efdf2be6c2256c59003667d1?OpenView",
+        "hcl": "HCL 118/2026",
+        "notes": "'Proiect de buget al Municipiului Râmnicu Vâlcea pe anul 2026' published 2026-04-14 on primariavl.ro (consultation 14-26 April 2026). HCL 118/08.05.2026 'aprobare buget local si liste investitii pe anul 2026' per official register dm.primariavl.ro (press: stiripesurse.ro 08.05.2026 confirms Friday approval)."
       }
     },
     {
@@ -557,7 +867,15 @@
       "path": "41-vrancea/174744-focsani/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.focsani.info/fisiere/userfiles/economic/proiect_buget_2026.pdf",
-      "record_url": "https://www.focsani.info/"
+      "record_url": "https://www.focsani.info/",
+      "timeline": {
+        "debate_date": "2026-05-14",
+        "debate_url": "https://www.constructiibursa.ro/primaria-municipiului-focsani-fara-buget-aproape-de-jumatatea-anului--8680239",
+        "approved_date": "2026-06-04",
+        "approved_url": "https://www.focsani.info/fisiere/userfiles/adpl/registru_evidenta_ph_2026.pdf",
+        "hcl": "HCL 236/2026",
+        "notes": "Press (constructiibursa.ro): 'abia în data de 14 mai administrația locală a publicat proiectul de buget pentru dezbatere publică'. Official register of draft decisions (focsani.info PDF): project 'Aprobarea Bugetului General al Municipiului Focșani pe anul 2026' registered 30.05.2026, adopted 04.06.2026 as HCL 236/04.06.2026 (extraordinary session convened by Dispoziția 327/30.05.2026; vote 18-1 per monitoruldevrancea.ro)."
+      }
     },
     {
       "county_code": "42",
@@ -568,7 +886,15 @@
       "document_status": "approved_initial",
       "source_url": "https://doc.pmb.ro/legis/acteinterne/2026/47980/anexah167_01_26.pdf",
       "copy_from": "25-ilfov/179132-bucuresti/budget_file.pdf",
-      "record_url": "https://doc.pmb.ro/monitorul_oficial/2026/05/volumul_01.pdf"
+      "record_url": "https://doc.pmb.ro/monitorul_oficial/2026/05/volumul_01.pdf",
+      "timeline": {
+        "debate_date": "2026-04-20",
+        "debate_url": "https://agerpres.ro/administratie/2026/04/20/bugetul-pmb-in-dezbatere-publica-32-pentru-investitii--1548283",
+        "approved_date": "2026-05-05",
+        "approved_url": "https://hcl.usr.ro/pmb/2026/h167",
+        "hcl": "HCGMB 167/2026",
+        "notes": "HCGMB 167 din 05.05.2026 privind aprobarea Bugetului Municipiului București pe anul 2026 (full text fetched from hcl.usr.ro; adoption also reported same day by Digi24). Draft put in dezbatere publică Monday 2026-04-20 (Agerpres/Mediafax); Legea 52/2003 public debate meeting held 2026-04-24."
+      }
     }
   ]
 }
