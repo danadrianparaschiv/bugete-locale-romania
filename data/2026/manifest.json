@@ -48,10 +48,10 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 5578,
-        "pct_clean": 63.2,
-        "errors": 1397,
-        "warnings": 1825,
+        "lines": 5838,
+        "pct_clean": 62.2,
+        "errors": 1214,
+        "warnings": 2300,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       },
@@ -75,10 +75,10 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 3178,
-        "pct_clean": 44.2,
-        "errors": 515,
-        "warnings": 1842,
+        "lines": 3198,
+        "pct_clean": 44.7,
+        "errors": 434,
+        "warnings": 1956,
         "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       },
@@ -348,10 +348,10 @@
         "workbook": "budget_file.xlsx",
         "at": "2026-08-22T13:15:04",
         "tool_version": "0.1.0",
-        "lines": 15891,
-        "pct_clean": 43,
-        "errors": 1746,
-        "warnings": 8619
+        "lines": 15993,
+        "pct_clean": 44.3,
+        "errors": 1341,
+        "warnings": 8533
       },
       "timeline": {
         "debate_date": "2026-04-08",
