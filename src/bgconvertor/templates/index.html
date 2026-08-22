@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Bugete locale {{ year }} — municipii reședință de județ{% endblock %}
+{% block content %}
+<h1>Bugetele locale {{ year }}</h1>
+<p class="sub">{{ cities|length }} municipii reședință de județ · {{ n_converted }} convertite în format analizabil</p>
+<table>
+  <thead><tr>
+    <th>Județ</th><th>Municipiu</th><th>Status</th>
+    <th class="num">Linii</th><th class="num">% verificat</th><th>Fișiere</th>
+  </tr></thead>
+  <tbody>
+  {% for c in cities %}
+    <tr>
+      <td>{{ c.county }}</td>
+      <td>{% if c.analysis %}<a href="{{ base }}/city/{{ c.siruta }}.html">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}</td>
+      <td>
+        {% if c.status == 'converted' %}
+          {% set pc = c.pct_clean or 0 %}
+          <span class="badge {% if pc >= 90 %}b-ok{% elif pc >= 60 %}b-mid{% else %}b-low{% endif %}">convertit</span>
+        {% else %}<span class="badge b-pending">{{ c.status }}</span>{% endif %}
+      </td>
+      <td class="num">{{ c.lines or '—' }}</td>
+      <td class="num">{{ c.pct_clean if c.pct_clean is not none else '—' }}</td>
+      <td>
+        {% if c.xlsx_rel %}<a href="{{ base }}/{{ c.xlsx_rel }}">xlsx</a>{% endif %}
+        {% if c.pdf_rel %}<a href="{{ base }}/{{ c.pdf_rel }}">pdf</a>
+        {% elif c.source_url %}<a href="{{ c.source_url }}">sursă</a>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

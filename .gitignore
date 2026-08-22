@@ -24,3 +24,4 @@ runs/
 # oversize corpus files (>100MB exceeds GitHub's hard limit) — fetched by
 # data/<year>/download.py; manifest marks them oversize
 data/2026/34-sibiu/143450-sibiu/budget_file.pdf
+site/

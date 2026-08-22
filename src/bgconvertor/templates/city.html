@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ city.name }} — buget local {{ year }}{% endblock %}
+{% block content %}
+<p><a href="{{ base }}/index.html">← toate municipiile</a></p>
+<h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
+
+<div class="cards">
+  {% if a.totals_mii_lei.venituri %}
+  <div class="card"><div class="k">Total venituri (mii lei)</div>
+    <div class="v">{{ "{:,.0f}".format(a.totals_mii_lei.venituri).replace(",", ".") }}</div></div>
+  {% endif %}
+  {% if a.totals_mii_lei.cheltuieli %}
+  <div class="card"><div class="k">Total cheltuieli (mii lei)</div>
+    <div class="v">{{ "{:,.0f}".format(a.totals_mii_lei.cheltuieli).replace(",", ".") }}</div></div>
+  {% endif %}
+  <div class="card"><div class="k">Linii de date / % verificate</div>
+    <div class="v">{{ a.quality.lines }} <span style="font-size:1rem;color:var(--dim)">/ {{ a.quality.pct_clean }}%</span></div></div>
+</div>
+
+{% if a.top_capitole %}
+<h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>
+<table>
+  <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>
+  <tbody>
+  {% for cap in a.top_capitole %}
+    <tr><td>{{ cap.code }}</td><td>{{ cap.name }}</td>
+        <td class="num">{{ "{:,.0f}".format(cap.total).replace(",", ".") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<h2 style="font-size:1.1rem;margin-top:1.5rem">Calitatea conversiei</h2>
+<table>
+  <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
+  <tr><td>Linii de date</td><td class="num">{{ a.quality.lines }}</td></tr>
+  <tr><td>Complet verificate</td><td class="num">{{ a.quality.pct_clean }}%</td></tr>
+  <tr><td>Erori marcate</td><td class="num">{{ a.quality.errors }}</td></tr>
+  <tr><td>Avertismente</td><td class="num">{{ a.quality.warnings }}</td></tr>
+</table>
+
+<p style="margin-top:1.25rem">
+  {% if city.xlsx_rel %}<a href="{{ base }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
+  {% if city.pdf_rel %}<a href="{{ base }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
+</p>
+{% endblock %}

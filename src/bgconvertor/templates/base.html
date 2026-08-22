@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Bugete locale{% endblock %}</title>
+<style>
+  :root { --ink:#1a1d21; --dim:#6a7178; --line:#e3e6e9; --ok:#1a7f37; --warn:#b8860b; --bad:#b02a37; --bg:#ffffff; --card:#f6f8fa; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+  main { max-width: 62rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+  .sub { color: var(--dim); margin-bottom: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--line); }
+  th { color: var(--dim); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .badge { display:inline-block; padding:.1rem .5rem; border-radius:999px; font-size:.8rem; }
+  .b-ok { background:#e6f4ea; color:var(--ok); }
+  .b-mid { background:#fcf3d7; color:var(--warn); }
+  .b-low { background:#fbe9eb; color:var(--bad); }
+  .b-pending { background:var(--card); color:var(--dim); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:1rem; margin:1.25rem 0; }
+  .card { background:var(--card); border-radius:.6rem; padding:1rem; }
+  .card .k { color:var(--dim); font-size:.85rem; }
+  .card .v { font-size:1.5rem; font-weight:650; font-variant-numeric: tabular-nums; }
+  a { color:#0b57d0; text-decoration:none; } a:hover { text-decoration:underline; }
+  .note { color:var(--dim); font-size:.85rem; margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+</style>
+</head>
+<body><main>
+{% block content %}{% endblock %}
+<p class="note">Date extrase automat din documentele PDF oficiale; cifrele provin exclusiv din
+liniile verificate aritmetic. Nu sunt cifre oficiale — vezi <a href="{{ base }}/DISCLAIMER.md">DISCLAIMER</a>.
+Generat de <a href="https://github.com/">bgconvertor</a>.</p>
+</main></body></html>

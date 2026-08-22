@@ -596,6 +596,14 @@ def convert(
             "[dim]hint: reluarea cu --max-llm-cost mai mare continua repararea de unde "
             "a ramas (apelurile facute se refolosesc gratuit din cache)[/dim]"
         )
+    # corpus-tree files also get an analysis.json (feeds the static site)
+    from .manifest import find_manifest
+
+    if find_manifest(pdf.parent) is not None:
+        from .analysis import write_analysis
+
+        apath = write_analysis(result, pdf.with_name("analysis.json"))
+        console.print(f"[dim]analysis: {apath}[/dim]")
     console.print(f"[dim]detalii oricand: `bgconvertor report {pdf.name}`[/dim]")
 
 
@@ -736,6 +744,27 @@ def _workbook_stats(xlsx: Path) -> dict:
         }
     except Exception:  # noqa: BLE001 - stats are best-effort
         return {}
+
+
+site_app = typer.Typer(no_args_is_help=True)
+app.add_typer(site_app, name="site", help="Static GitHub Pages site for the corpus")
+
+
+@site_app.command("build")
+def site_build(
+    data_dir: Path = typer.Option(Path("data/2026"), exists=True),
+    out: Path = typer.Option(Path("site")),
+    base_url: str = typer.Option("", help="URL prefix when served from a subpath"),
+):
+    """Render the corpus index + per-city pages from committed files only."""
+    from .manifest import Manifest
+    from .site import build
+
+    r = build(Manifest(data_dir / "manifest.json"), out, base_url)
+    console.print(
+        f"[bold green]✓ site: {r['cities']} orase, {r['converted_pages']} pagini "
+        f"de analiza -> {r['out']}/[/bold green]"
+    )
 
 
 corpus_app = typer.Typer(no_args_is_help=True)
