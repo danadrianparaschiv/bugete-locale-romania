@@ -1,0 +1,15 @@
+{
+  "quality": {
+    "lines": 15891,
+    "pct_clean": 43.0,
+    "errors": 1746,
+    "warnings": 8619,
+    "documents": 46
+  },
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}
