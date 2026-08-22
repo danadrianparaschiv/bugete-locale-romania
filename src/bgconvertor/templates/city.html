@@ -3,15 +3,6 @@
 {% block content %}
 <p><a href="{{ base }}/index.html">← toate municipiile</a></p>
 <h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
-{% if city.debate_date or city.approved_date %}
-<p class="sub">
-  {% if city.debate_date %}Pus în dezbatere publică:
-    {% if city.debate_url %}<a href="{{ city.debate_url }}">{{ city.debate_date }}</a>{% else %}{{ city.debate_date }}{% endif %}{% endif %}
-  {%- if city.debate_date and city.approved_date %} · {% endif %}
-  {% if city.approved_date %}Aprobat{% if city.hcl %} ({{ city.hcl }}){% endif %}:
-    {% if city.approved_url %}<a href="{{ city.approved_url }}">{{ city.approved_date }}</a>{% else %}{{ city.approved_date }}{% endif %}{% endif %}
-</p>
-{% endif %}
 
 <div class="cards">
   {% if a.totals_mii_lei.venituri %}
@@ -25,6 +16,21 @@
   <div class="card"><div class="k">Linii de date / % verificate</div>
     <div class="v">{{ a.quality.lines }} <span style="font-size:1rem;color:var(--dim)">/ {{ a.quality.pct_clean }}%</span></div></div>
 </div>
+
+{% if city.debate_date or city.approved_date %}
+<h2 style="font-size:1.1rem">Adoptarea bugetului</h2>
+<table>
+  {% if city.debate_date %}
+  <tr><td>Pus în dezbatere publică</td>
+      <td>{{ city.debate_date }}{% if city.debate_url %} · <a href="{{ city.debate_url }}">anunț</a>{% endif %}</td></tr>
+  {% endif %}
+  {% if city.approved_date %}
+  <tr><td>Aprobat</td>
+      <td>{% if city.hcl %}<strong>{{ city.hcl }}</strong> din {% endif %}{{ city.approved_date }}{% if city.approved_url %} · <a href="{{ city.approved_url }}">hotărârea</a>{% endif %}</td></tr>
+  {% endif %}
+</table>
+{% if city.timeline_notes %}<p class="note" style="margin-top:.5rem;border:none;padding:0">{{ city.timeline_notes }}</p>{% endif %}
+{% endif %}
 
 {% if a.top_capitole %}
 <h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>

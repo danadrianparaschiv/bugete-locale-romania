@@ -70,6 +70,7 @@ def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REP
         row["approved_date"] = _ro_date(tl.get("approved_date"))
         row["approved_url"] = tl.get("approved_url")
         row["hcl"] = tl.get("hcl")
+        row["timeline_notes"] = tl.get("notes")
         # committed artifacts are served from the git repo, not the Pages
         # artifact; files over GitHub's size limit are not in git at all
         repo_root = manifest.root.parent.parent
