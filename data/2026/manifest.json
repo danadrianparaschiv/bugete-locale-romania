@@ -25,7 +25,7 @@
         "pct_clean": 100.0,
         "errors": 0,
         "warnings": 0,
-        "at": "2026-08-22T10:44:48",
+        "at": "2026-08-22T11:04:21",
         "tool_version": "0.1.0"
       }
     },
@@ -41,11 +41,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 5589,
-        "pct_clean": 63.1,
-        "errors": 1417,
-        "warnings": 1849,
-        "at": "2026-08-22T10:44:48",
+        "lines": 5578,
+        "pct_clean": 63.2,
+        "errors": 1397,
+        "warnings": 1825,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -61,11 +61,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 3232,
-        "pct_clean": 50.5,
-        "errors": 490,
-        "warnings": 1637,
-        "at": "2026-08-22T10:44:48",
+        "lines": 3178,
+        "pct_clean": 44.2,
+        "errors": 515,
+        "warnings": 1842,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -81,11 +81,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1729,
-        "pct_clean": 62.8,
-        "errors": 1661,
-        "warnings": 399,
-        "at": "2026-08-22T10:44:48",
+        "lines": 1893,
+        "pct_clean": 57.4,
+        "errors": 962,
+        "warnings": 497,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -101,11 +101,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1314,
-        "pct_clean": 93.8,
-        "errors": 182,
-        "warnings": 42,
-        "at": "2026-08-22T10:44:48",
+        "lines": 1315,
+        "pct_clean": 93.7,
+        "errors": 197,
+        "warnings": 44,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -122,11 +122,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 237,
-        "pct_clean": 57.4,
-        "errors": 59,
-        "warnings": 90,
-        "at": "2026-08-22T10:44:48",
+        "lines": 149,
+        "pct_clean": 74.5,
+        "errors": 43,
+        "warnings": 24,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -142,11 +142,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 5516,
-        "pct_clean": 75.8,
-        "errors": 1886,
-        "warnings": 724,
-        "at": "2026-08-22T10:46:12",
+        "lines": 4755,
+        "pct_clean": 72.1,
+        "errors": 1898,
+        "warnings": 713,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -162,11 +162,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1750,
-        "pct_clean": 97.0,
-        "errors": 85,
-        "warnings": 4,
-        "at": "2026-08-22T10:44:48",
+        "lines": 1768,
+        "pct_clean": 96.8,
+        "errors": 81,
+        "warnings": 5,
+        "at": "2026-08-22T11:04:22",
         "tool_version": "0.1.0"
       }
     },
@@ -182,11 +182,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 6711,
-        "pct_clean": 64.5,
-        "errors": 1713,
-        "warnings": 1628,
-        "at": "2026-08-22T10:44:49",
+        "lines": 6681,
+        "pct_clean": 64.9,
+        "errors": 1655,
+        "warnings": 1616,
+        "at": "2026-08-22T11:04:23",
         "tool_version": "0.1.0"
       }
     },
@@ -219,7 +219,17 @@
       "path": "12-calarasi/92569-calarasi/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariacalarasi.ro/wp-content/tabele/buget-surse-financiare/HCL-61-28.04.2026.pdf",
-      "record_url": "https://primariacalarasi.ro/buget-pe-surse-financiare/"
+      "record_url": "https://primariacalarasi.ro/buget-pe-surse-financiare/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 171,
+        "pct_clean": 23.4,
+        "errors": 53,
+        "warnings": 164,
+        "at": "2026-08-22T11:04:23",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "13",

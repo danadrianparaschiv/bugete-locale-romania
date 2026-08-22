@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 1729,
-    "pct_clean": 62.8,
-    "errors": 1661,
-    "warnings": 399,
+    "lines": 1893,
+    "pct_clean": 57.4,
+    "errors": 962,
+    "warnings": 497,
     "documents": 2
   },
   "totals_mii_lei": {

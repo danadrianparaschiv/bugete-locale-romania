@@ -27,6 +27,9 @@ POSITIONAL_ROLES = {
     4: ["code", "name", "total_2026", "credite_restante"],
     5: ["code", "name", "total_2026", "est2027", "est2028"],
     6: ["code", "name", "total_2026", "est2027", "est2028", "est2029"],
+    7: ["code", "name", "total_2026", "trim1", "trim2", "trim3", "trim4"],
+    10: ["code", "name", "total_2026", "trim1", "trim2", "trim3", "trim4",
+         "est2027", "est2028", "est2029"],
 }
 
 
@@ -52,7 +55,7 @@ def _positional_columns(grid, n_cols: int) -> dict[int, str] | None:
     )
     # wrapped-name and section rows legitimately have empty numeric cells,
     # so the numeric bar is lower when the code-column signal is strong
-    if codeish >= 0.5 * len(rows) and numericish >= 0.35 * len(rows):
+    if codeish >= len(rows) / 3 and numericish >= 0.35 * len(rows):
         return dict(enumerate(roles))
     return None
 

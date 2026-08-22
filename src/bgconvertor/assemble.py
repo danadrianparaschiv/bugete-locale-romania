@@ -108,7 +108,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
     cap_context: str | None = None  # current functional capitol (e.g. "65.02")
 
     for page in pages:
-        payload = store.get("llm_extract", page) or store.get("extract", page)
+        payload = _pick_payload(store, page)
         if payload is None:
             continue
         is_scanned = payload.get("layout") != "digital_detail"
@@ -196,6 +196,52 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                     line.code = econ
                     line.func_code = cap_context
                     line.kind = "expense_economic"
+            # vendor code style without the budget suffix: '42.55' means
+            # 42.<suffix>.55; '65.00.10' uses '00' as a suffix placeholder,
+            # its tail being either functional detail or an economic code
+            if registry is not None and line.code and line.func_code is None:
+                m00 = re.match(r"^(\d{2})\.00(?:\.(.+))?$", line.code)
+                m2 = re.match(r"^(\d{2})\.(\d{2})$", line.code)
+                if m00:
+                    cap = f"{m00.group(1)}.{doc.suffix}"
+                    tail = m00.group(2) or ""
+                    full_cand = f"{cap}.{tail}" if tail else cap
+                    from .parsing import normalize_indicator_code as _nic
+
+                    tail_code = _nic(tail) if tail else None
+                    is_func = registry.get("expense_functional", full_cand) is not None
+                    is_rev = registry.get("revenue", full_cand) is not None
+                    is_econ = tail_code and registry.get("expense_economic", tail_code) is not None
+                    tail_parts = tail.split(".") if tail else []
+                    if is_rev and region == "revenue":
+                        line.code = full_cand
+                        line.kind = "revenue"
+                    elif is_econ and (not is_func or infer_kind(
+                        tail_code, registry, region, None, line.name
+                    ) == "expense_economic"):
+                        line.code, line.func_code = tail_code, cap
+                        line.kind = "expense_economic"
+                    elif is_func:
+                        line.code = full_cand
+                        line.kind = "expense_functional"
+                    elif is_rev:
+                        line.code = full_cand
+                        line.kind = "revenue"
+                    elif len(tail_parts) == 2 and registry.get(
+                        "expense_functional", f"{cap}.{tail_parts[0]}"
+                    ) and registry.get("expense_economic", tail_parts[1]):
+                        # '61.00.05.71': subcapitol + economic titlu combined
+                        line.code = tail_parts[1]
+                        line.func_code = f"{cap}.{tail_parts[0]}"
+                        line.kind = "expense_economic"
+                    elif not tail:
+                        line.code = full_cand
+                        line.kind = "expense_functional"
+                elif m2 and not registry.exists(line.code):
+                    with_suffix = f"{m2.group(1)}.{doc.suffix}.{m2.group(2)}"
+                    if registry.exists(with_suffix):
+                        line.code = with_suffix
+
             # registry-driven kind for any line whose code lacks explicit
             # functional context (scans, and digital vendors that print bare
             # economic codes like Oradea's '710101')
@@ -233,6 +279,26 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             d.title[:40], d.budget, d.pages[0], d.pages[-1], len(d.lines),
         )
     return documents
+
+
+def _pick_payload(store: RunStore, page: int):
+    """Deterministic extraction wins whenever it is usable; the full-page
+    LLM transcription only fills in for pages the mappers could not read
+    (it may predate mapper improvements)."""
+    det = store.get("extract", page)
+    llm = store.get("llm_extract", page)
+    if det is not None:
+        if det.get("layout") in (
+            "investment_list", "allocations_annex", "annex_other", "hcl_prose"
+        ):
+            return det  # deliberately out of scope — an LLM transcription adds noise
+        if llm is None:
+            return det
+        def _good(pl):
+            return sum(1 for ln in pl.get("lines", []) if ln.get("code") and ln.get("values"))
+        # whichever reads more of the page wins; deterministic wins ties
+        return det if _good(det) >= _good(llm) else llm
+    return llm or det
 
 
 def _to_line(

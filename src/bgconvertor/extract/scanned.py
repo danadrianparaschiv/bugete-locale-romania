@@ -14,7 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from ..layouts import map_grid
-from ..layouts.common import fold, split_header
+from ..layouts.common import fold, is_code_cell, split_header
 
 log = logging.getLogger("bgc.extract.scanned")
 
@@ -194,7 +194,7 @@ INVEST_HINT = re.compile(
     r"valoare actualizata|executat la|rest de executat|credite de angajament|"
     r"surse de finantare|denumire.{0,20}obiectiv|neetichetat|nr\.? si data|"
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
-    r"cheltuieli efectuate"
+    r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv"
 )
 ALLOC_HINT = re.compile(
     r"unitati administrativ|repartizarea pe comune|pe localitati|"
@@ -228,8 +228,13 @@ def _guess_layout(lines: list[dict], text: str) -> str:
         return "scan_simple_table"
     # a table with data but essentially no indicator codes is an annex
     # (procurement lists, per-institution allocations, personnel tables) —
-    # kept for side sheets, out of nomenclator scope
+    # kept for side sheets, out of nomenclator scope. Codes present in the
+    # RAW rows but unmapped mean an unknown coding scheme, not an annex.
     coded = sum(1 for ln in lines if ln.get("code"))
-    if len(lines) >= 5 and coded < 2:
+    raw_codeish = sum(
+        1 for ln in lines
+        if ln.get("raw_code") or is_code_cell((ln.get("name") or "")[:12])
+    )
+    if len(lines) >= 5 and coded < 2 and raw_codeish < 3:
         return "annex_other"
     return "scan_table_other"

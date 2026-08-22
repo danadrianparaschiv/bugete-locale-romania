@@ -1,0 +1,46 @@
+{
+  "quality": {
+    "lines": 171,
+    "pct_clean": 23.4,
+    "errors": 53,
+    "warnings": 168,
+    "documents": 2
+  },
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 36110.0
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE,SERVICII SI DEZVOLTARE PUBLICA",
+      "total": 32281.0
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT DE STAT (20 institutii)",
+      "total": 14250.0
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+      "total": 7280.0
+    },
+    {
+      "code": "54.02",
+      "name": "ALTE SERVICII PUBLICE GENERALE",
+      "total": 4128.0
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 2275.0
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

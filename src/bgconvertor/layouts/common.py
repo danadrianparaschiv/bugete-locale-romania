@@ -50,7 +50,7 @@ HEADER_PATTERNS = [
 # (e.g. the "din care credite..." subcolumn whose header OCR loses).
 ROLE_FALLBACK = {"total_2026": "credite_restante"}
 HEADER_HINT = re.compile(r"denumirea|cod\b|indicator|prevederi|estimari|buget|mii lei|trim")
-CODE_LIKE = re.compile(r"^\d{2}[\d.\s]*\*?\)?$")
+CODE_LIKE = re.compile(r"^\d{2}[\d./\s]*\*?\)?$")  # '/' = OCR-mangled dot
 YEAR_RE = re.compile(r"^(19|20)\d{2}$")
 SECTION_ROW = re.compile(
     r"^(\d{6,10}\s+\S.*|sectiunea\s.*|total capitol\b.*|\d{1,3}\.\s+\S.*)$", re.I

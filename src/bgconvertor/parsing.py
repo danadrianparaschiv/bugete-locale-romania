@@ -166,7 +166,12 @@ def normalize_indicator_code(raw: str | None) -> str | None:
     """
     if raw is None:
         return None
-    s = _SPACE_RE.sub("", str(raw)).rstrip("*").rstrip(")").rstrip("*")
+    stripped = str(raw).strip().replace("/", ".")
+    # space-separated code halves ('42 55', '65. 00.60') — some vendors and
+    # OCR print separators as spaces or slashes
+    if re.fullmatch(r"\d{2}[ .]+\d{2}([ .]+\d{2}){0,2}", stripped):
+        stripped = re.sub(r"[ .]+", ".", stripped)
+    s = _SPACE_RE.sub("", stripped).rstrip("*").rstrip(")").rstrip("*")
     if not s:
         return None
     if "," in s and "." not in s:
