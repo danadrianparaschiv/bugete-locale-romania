@@ -226,8 +226,8 @@
         "lines": 171,
         "pct_clean": 23.4,
         "errors": 53,
-        "warnings": 164,
-        "at": "2026-08-22T11:04:23",
+        "warnings": 168,
+        "at": "2026-08-22T11:05:30",
         "tool_version": "0.1.0"
       }
     },
