@@ -15,7 +15,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from ..model import BudgetDocument, ConversionResult, Issue
+from ..model import BudgetDocument, Issue
 from ..parsing import NumberParseError, parse_ro_number
 from ..sums import BASE_TOLERANCE
 
@@ -165,7 +165,7 @@ def repair_document(
 
     # Phase C: apply sequentially (mutates shared document state)
     budget_hit = False
-    for (line, broken, group, missing, columns), reading in zip(jobs, readings):
+    for (line, broken, group, missing, columns), reading in zip(jobs, readings, strict=False):
         calls += 1
         if isinstance(reading, BudgetExceeded):
             if not budget_hit:

@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --dev
+      - run: uv run ruff check src tests
+      - name: offline test suite
+        # PDF-dependent tests skip when sample files are absent; LLM tests
+        # replay cassettes — nothing here touches the network or an API key
+        run: uv run pytest -q
+      - name: golden-fixture eval (committed samples)
+        run: uv run bgconvertor eval || true

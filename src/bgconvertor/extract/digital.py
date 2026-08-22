@@ -18,7 +18,7 @@ import re
 import unicodedata
 from decimal import Decimal
 
-from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number
+from ..parsing import NumberParseError, parse_ro_number
 
 log = logging.getLogger("bgc.extract.digital")
 
@@ -130,7 +130,7 @@ def extract_page(plumber_page) -> dict:
 
 
 def _column_boundaries(page) -> list[float]:
-    xs = sorted({round(l["x0"], 1) for l in page.lines if abs(l["x0"] - l["x1"]) < 0.5})
+    xs = sorted({round(ln["x0"], 1) for ln in page.lines if abs(ln["x0"] - ln["x1"]) < 0.5})
     deduped: list[float] = []
     for x in xs:
         if not deduped or x - deduped[-1] >= MIN_LINE_GAP:

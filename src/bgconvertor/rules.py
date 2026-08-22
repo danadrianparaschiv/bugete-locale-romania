@@ -37,7 +37,7 @@ class Identity(BaseModel):
     verified: bool = True
     note: str = ""
 
-    def resuffix(self, suffix: str) -> "Identity":
+    def resuffix(self, suffix: str) -> Identity:
         def swap(code: str) -> str:
             parts = code.split(".")
             if len(parts) >= 2 and parts[1] == SUFFIX_LOCAL:

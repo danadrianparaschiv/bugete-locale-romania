@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -34,7 +33,7 @@ _state: dict = {}
 @app.callback()
 def main(
     verbose: int = typer.Option(0, "--verbose", "-v", count=True, help="-v progress, -vv detail"),
-    runs_dir: Optional[Path] = typer.Option(None, help="Artifact store root (default: ./runs)"),
+    runs_dir: Path | None = typer.Option(None, help="Artifact store root (default: ./runs)"),
     fail_fast: bool = typer.Option(False, help="Stop at the first page failure"),
     debug: bool = typer.Option(False, help="Write debug artifacts (page PNGs, overlays)"),
 ):
@@ -64,7 +63,7 @@ def _config() -> RunConfig:
 @app.command()
 def profile(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
-    pages: Optional[str] = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
+    pages: str | None = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
 ):
     """Run the page-census stage: text layer, geometry, per-page routing info."""
     from pypdf import PdfReader
@@ -344,7 +343,7 @@ def _run_extraction(
 @app.command()
 def extract(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
-    pages: Optional[str] = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
+    pages: str | None = typer.Option(None, "--pages", help="e.g. 1-10 or 9,31,151"),
     workers: int = typer.Option(1, min=1, max=8, help="Parallel OCR worker processes"),
 ):
     """Run extraction: coordinate-based for digital pages, docling for scans."""
@@ -401,7 +400,6 @@ def report(pdf: Path = typer.Argument(..., exists=True)):
     """Quality + cost report for a PDF from its run store."""
     config = _config()
     store = RunStore(config, pdf)
-    total = len(store.pages_done("profile"))
     table = Table(title=f"report: {pdf.name}")
     for col in ("stage", "pages done", "failures"):
         table.add_column(col, justify="right")
@@ -415,7 +413,7 @@ def report(pdf: Path = typer.Argument(..., exists=True)):
     if ledger_path.exists():
         from collections import Counter
 
-        recs = [json.loads(l) for l in ledger_path.read_text().splitlines()]
+        recs = [json.loads(line) for line in ledger_path.read_text().splitlines()]
         by_purpose = Counter()
         cost_by_purpose: dict = Counter()
         for r in recs:
@@ -433,10 +431,10 @@ def report(pdf: Path = typer.Argument(..., exists=True)):
 @app.command()
 def convert(
     pdf: Path = typer.Argument(..., exists=True, readable=True),
-    pages: Optional[str] = typer.Option(None, "--pages"),
-    out: Optional[Path] = typer.Option(None, help="Output .xlsx (default: <pdf>.xlsx)"),
-    llm: Optional[str] = typer.Option(None, help="off | repair (default from config)"),
-    max_llm_cost: Optional[float] = typer.Option(None, help="Hard USD budget for LLM repair"),
+    pages: str | None = typer.Option(None, "--pages"),
+    out: Path | None = typer.Option(None, help="Output .xlsx (default: <pdf>.xlsx)"),
+    llm: str | None = typer.Option(None, help="off | repair (default from config)"),
+    max_llm_cost: float | None = typer.Option(None, help="Hard USD budget for LLM repair"),
     workers: int = typer.Option(1, min=1, max=8, help="Parallel OCR worker processes"),
 ):
     """Full pipeline: profile -> extract -> assemble -> validate [-> repair] -> Excel."""
@@ -557,8 +555,8 @@ def convert(
             pl = store.get("ocr", p) or store.get("ocr_native", p) or {}
             grids, rows_y = pl.get("tables_raw", []), pl.get("tables_rows_y", [])
             hits = []
-            for grid, ys in zip(grids, rows_y):
-                for row, band in zip(grid, ys):
+            for grid, ys in zip(grids, rows_y, strict=False):
+                for row, band in zip(grid, ys, strict=False):
                     if any(c.strip().replace(" ", "") in codes for c in row if c.strip()):
                         hits.append(band)
             if not hits:
@@ -649,7 +647,7 @@ app.add_typer(corpus_app, name="corpus", help="Cross-municipality dataset and re
 @corpus_app.command("export")
 def corpus_export(
     out: Path = typer.Argument(Path("corpus.csv")),
-    pdfs: Optional[list[Path]] = typer.Argument(None),
+    pdfs: list[Path] | None = typer.Argument(None),
 ):
     """One normalized long-format dataset across all converted files."""
     from . import corpus
@@ -670,7 +668,7 @@ def corpus_export(
 
 
 @corpus_app.command("report")
-def corpus_report(pdfs: Optional[list[Path]] = typer.Argument(None)):
+def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
     """Quality and spend, side by side, for every converted municipality."""
     from . import corpus
 
@@ -724,7 +722,7 @@ def nom_update():
 
 
 @nom_app.command("check")
-def nom_check(code: str, kind: Optional[str] = typer.Option(None)):
+def nom_check(code: str, kind: str | None = typer.Option(None)):
     """Look up one code in the registry (dev helper)."""
     reg = nom.load_registry(_config().reference_dir)
     for k in [kind] if kind else ["revenue", "expense_functional", "expense_economic"]:

@@ -1,7 +1,6 @@
 """Unit tests for assembly and validation on synthetic payloads, plus an
 integration test over the real digital PDF (skipped when absent)."""
 
-from decimal import Decimal
 from pathlib import Path
 
 import pytest

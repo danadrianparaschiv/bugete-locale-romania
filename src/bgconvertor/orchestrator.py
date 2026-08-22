@@ -7,10 +7,10 @@ page that raises is recorded as a failure artifact and the run continues
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Callable
-
 import time
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from typing import Any
 
 from rich.progress import (
     BarColumn,

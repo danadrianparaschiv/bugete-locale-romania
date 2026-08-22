@@ -32,7 +32,7 @@ def _score(result) -> tuple[float, str]:
     if result is None or result.txts is None:
         return 0.0, ""
     total = 0.0
-    for text, conf in zip(result.txts, result.scores):
+    for text, conf in zip(result.txts, result.scores, strict=False):
         total += float(conf) * len(text)
     return total, " ".join(result.txts)
 

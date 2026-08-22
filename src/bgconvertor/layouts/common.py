@@ -10,7 +10,11 @@ import re
 import unicodedata
 from decimal import Decimal
 
-from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number, split_combined_code
+from ..parsing import (
+    NumberParseError,
+    parse_ro_number,
+    split_combined_code,
+)
 
 HEADER_PATTERNS = [
     # order matters: specific labels must win over their generic substrings

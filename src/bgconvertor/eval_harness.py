@@ -25,7 +25,6 @@ This module also pins the EXTRACTION OUTPUT CONTRACT that every extractor
 
 from __future__ import annotations
 
-import json
 import unicodedata
 from decimal import Decimal, InvalidOperation
 from pathlib import Path

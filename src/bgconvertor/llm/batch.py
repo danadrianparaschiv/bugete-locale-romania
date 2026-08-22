@@ -9,7 +9,6 @@ later interactive run replays batch results for free, and vice versa.
 from __future__ import annotations
 
 import base64
-import json
 import logging
 import time
 
@@ -72,7 +71,6 @@ def batch_structured(client: LLMClient, jobs: list[dict]) -> dict[str, object]:
     log.info("batch %s submitted: %d requests", batch.id, len(requests))
     while True:
         batch = api.messages.batches.retrieve(batch.id)
-        counts = batch.request_counts
         log.info("batch %s: %s", batch.id, batch.processing_status)
         if batch.processing_status == "ended":
             break

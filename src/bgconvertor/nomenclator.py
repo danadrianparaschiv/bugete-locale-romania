@@ -13,12 +13,12 @@ Files recognized in the reference directory:
 from __future__ import annotations
 
 import datetime as dt
-import json
 import logging
 import re
 import warnings
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, Literal
+from typing import Literal
 
 import openpyxl
 
@@ -208,7 +208,7 @@ def build_registry(reference_dir: Path) -> Registry:
         entries.extend(parse_annex(newest))
         sources[newest.name] = file_sha256(newest)
     return Registry(
-        generated_at=dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        generated_at=dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
         sources=sources,
         entries=entries,
     )

@@ -66,7 +66,8 @@ def run_triage(config: RunConfig, store: RunStore, pdf: Path) -> dict:
     grades: Counter = Counter()
     fallback_hits = 0
     if sample_pages:
-        from .extract import orient, scanned as sc
+        from .extract import orient
+        from .extract import scanned as sc
 
         for p in sample_pages:
             if store.get("orient", p) is None:
@@ -93,7 +94,7 @@ def run_triage(config: RunConfig, store: RunStore, pdf: Path) -> dict:
         round(fallback_hits / max(1, len(sample_pages)) * len(scanned)) if sample_pages else 0
     )
     est_llm_cost = est_fallback_pages * 0.13 + 0.5  # + repair floor
-    unknown = [l for l in layouts if l not in KNOWN_GOOD_LAYOUTS]
+    unknown = [lay for lay in layouts if lay not in KNOWN_GOOD_LAYOUTS]
 
     result = {
         "pdf": pdf.name,

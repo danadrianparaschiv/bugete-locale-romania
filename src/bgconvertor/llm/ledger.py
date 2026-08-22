@@ -90,7 +90,7 @@ class Ledger:
     ) -> float:
         cost = 0.0 if cached else estimate_cost(model, input_tokens, output_tokens, batch)
         rec = {
-            "ts": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+            "ts": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
             "purpose": purpose,
             "model": model,
             "page": page,

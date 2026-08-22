@@ -107,7 +107,6 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
     region = "heading"  # heading | revenue | expense
     cap_context: str | None = None  # current functional capitol (e.g. "65.02")
 
-    combined_seen = False  # this document prints capitol-combined codes
     for page in pages:
         payload = store.get("llm_extract", page) or store.get("extract", page)
         if payload is None:
@@ -134,7 +133,6 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 )
                 documents.append(doc)
                 section, region = None, "heading"
-                combined_seen = False
         if doc is None:
             if not payload.get("lines"):
                 continue  # prose pages (HCL) before any budget document
@@ -178,8 +176,6 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 "ocr" if is_scanned else "digital",
                 suppress_cell_issues=out_of_scope,
             )
-            if line.func_code:
-                combined_seen = True
             # PDF-truncated combined codes: '5002.580103' prints as
             # '02.580103' (the generator clips the capitol). Only combined-
             # format documents produce these; the current capitol context
@@ -203,7 +199,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             # economic codes like Oradea's '710101')
             if registry is not None and line.code and line.func_code is None:
                 prev_kind = next(
-                    (l.kind for l in reversed(doc.lines) if l.kind != "heading"), None
+                    (prev.kind for prev in reversed(doc.lines) if prev.kind != "heading"), None
                 )
                 line.kind = infer_kind(line.code, registry, region, prev_kind, line.name)
                 if line.kind == "expense_economic" and line.section:

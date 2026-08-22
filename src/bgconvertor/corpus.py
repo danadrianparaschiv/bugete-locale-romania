@@ -121,7 +121,7 @@ def report(config: RunConfig, pdfs: list[Path]) -> list[dict]:
         spend = calls = 0
         ledger = store.root / "llm_ledger.jsonl"
         if ledger.exists():
-            recs = [json.loads(l) for l in ledger.read_text().splitlines()]
+            recs = [json.loads(line) for line in ledger.read_text().splitlines()]
             spend = sum(r["cost_usd"] for r in recs)
             calls = len(recs)
         n_pages = len(store.pages_done("profile"))
