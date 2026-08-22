@@ -170,7 +170,9 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             ):
                 region = "expense"
 
-            out_of_scope = payload.get("layout") in ("investment_list", "allocations_annex")
+            out_of_scope = payload.get("layout") in (
+                "investment_list", "allocations_annex", "annex_other"
+            )
             line = _to_line(
                 raw, page, section, region,
                 "ocr" if is_scanned else "digital",

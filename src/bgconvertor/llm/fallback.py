@@ -112,8 +112,12 @@ def needs_fallback(payload: dict | None) -> bool:
     """A table was detected but almost nothing usable was mapped."""
     if not payload or not payload.get("n_tables"):
         return False
-    if payload.get("layout") in ("investment_list", "hcl_prose", "allocations_annex"):
+    if payload.get("layout") in (
+        "investment_list", "hcl_prose", "allocations_annex", "annex_other"
+    ):
         return False  # out of nomenclator scope — side-sheet data, not repair
+    if payload.get("n_numeric_cells", 999) < 10:
+        return False  # nothing numeric on the page worth a paid transcription
     lines = payload.get("lines", [])
     if len(lines) < 6:
         return False  # tiny end-of-document tables aren't worth a paid call

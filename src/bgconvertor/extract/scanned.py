@@ -170,6 +170,13 @@ def map_payload(ocr_payload: dict) -> dict:
             for row in grid[:3] for c in row
         ])
     )
+    n_numeric = sum(
+        1
+        for grid in ocr_payload.get("tables_raw", [])
+        for row in grid
+        for c in row
+        if sum(ch.isdigit() for ch in c) >= 3
+    )
     return {
         "lines": lines,
         "text": text,
@@ -177,6 +184,7 @@ def map_payload(ocr_payload: dict) -> dict:
         "rotation_applied": ocr_payload.get("rotation_applied", 0),
         "confidence_grade": ocr_payload.get("confidence_grade"),
         "n_tables": len(ocr_payload.get("tables_raw", [])),
+        "n_numeric_cells": n_numeric,
     }
 
 
@@ -188,7 +196,10 @@ INVEST_HINT = re.compile(
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
     r"cheltuieli efectuate"
 )
-ALLOC_HINT = re.compile(r"unitati administrativ|repartizarea pe comune|pe localitati")
+ALLOC_HINT = re.compile(
+    r"unitati administrativ|repartizarea pe comune|pe localitati|"
+    r"fondul de salarii|numarul de personal"
+)
 INVEST_TAG = re.compile(r"^-?\s*(verde|maro|mixt|neutru|neetichetat)\b")
 
 
@@ -215,4 +226,10 @@ def _guess_layout(lines: list[dict], text: str) -> str:
         return "scan_detail_economic"
     if {"est2027", "est2028", "est2029"} & cols:
         return "scan_simple_table"
+    # a table with data but essentially no indicator codes is an annex
+    # (procurement lists, per-institution allocations, personnel tables) —
+    # kept for side sheets, out of nomenclator scope
+    coded = sum(1 for ln in lines if ln.get("code"))
+    if len(lines) >= 5 and coded < 2:
+        return "annex_other"
     return "scan_table_other"

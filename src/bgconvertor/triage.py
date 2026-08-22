@@ -21,7 +21,7 @@ SCAN_SAMPLES = 5
 KNOWN_GOOD_LAYOUTS = {
     "digital_detail", "scan_simple_table", "scan_detail_economic",
     "scan_general_matrix", "scan_transposed_detail", "hcl_prose",
-    "investment_list",
+    "investment_list", "allocations_annex", "annex_other",
 }
 
 
