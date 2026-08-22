@@ -31,6 +31,10 @@ def project_root(start: Path | None = None) -> Path:
 
 
 class LLMConfig(BaseModel):
+    preset: str | None = None  # "vendor:model" key from llm/presets.py
+    vendor: str = "anthropic"  # anthropic | openai | google | mistral | qwen
+    api_key_env: str = "ANTHROPIC_API_KEY"
+    base_url: str | None = None  # OpenAI-compatible endpoint for non-Anthropic
     repair_model: str = "claude-sonnet-5"
     cell_model: str = "claude-haiku-4-5"  # transcription-only cell recovery
     batch: bool = False  # Batch API (-50%) for unattended repair/fallback runs

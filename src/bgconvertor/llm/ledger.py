@@ -14,9 +14,28 @@ from dataclasses import dataclass
 from pathlib import Path
 
 # USD per 1M tokens (input, output). Update alongside model choices.
+# Prices marked "verificați" are conservative placeholders — check the
+# vendor's current list price before a large run; the budget stops earlier,
+# never later, when a placeholder overshoots.
 MODEL_PRICES: dict[str, tuple[float, float]] = {
+    # Anthropic
+    "claude-fable-5": (25.00, 125.00),  # verificați
+    "claude-opus-5": (15.00, 75.00),  # verificați
     "claude-sonnet-5": (3.00, 15.00),
+    "claude-opus-4-5": (5.00, 25.00),
+    "claude-sonnet-4-5": (3.00, 15.00),
     "claude-haiku-4-5": (1.00, 5.00),
+    # OpenAI
+    "gpt-5.1": (1.25, 10.00),
+    "gpt-5-mini": (0.25, 2.00),
+    # Google
+    "gemini-3-pro-preview": (2.00, 12.00),  # verificați
+    "gemini-2.5-flash": (0.30, 2.50),
+    # Mistral
+    "mistral-medium-latest": (0.40, 2.00),
+    "mistral-small-latest": (0.10, 0.30),
+    # Qwen (DashScope)
+    "qwen3-vl-plus": (0.20, 1.60),  # verificați
 }
 BATCH_DISCOUNT = 0.5
 

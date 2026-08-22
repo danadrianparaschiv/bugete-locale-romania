@@ -48,6 +48,29 @@ class LLMClient:
             self._client = anthropic.Anthropic(timeout=1500.0)
         return self._client
 
+    def _api_compat(self):
+        """OpenAI-compatible client for non-Anthropic vendors."""
+        if self._client is None:
+            import os
+
+            try:
+                from openai import OpenAI
+            except ImportError:
+                raise RuntimeError(
+                    "furnizorii non-Anthropic necesită pachetul openai: "
+                    "`uv add openai` sau `uv sync --extra vendors`"
+                ) from None
+            key = os.environ.get(self.config.llm.api_key_env)
+            if not key:
+                raise RuntimeError(
+                    f"lipsește {self.config.llm.api_key_env} din mediu/.env "
+                    f"(necesară pentru furnizorul {self.config.llm.vendor})"
+                )
+            self._client = OpenAI(
+                api_key=key, base_url=self.config.llm.base_url, timeout=1500.0,
+            )
+        return self._client
+
     def _cache_key(self, purpose, prompt, output_model, model, image_bytes: bytes) -> Path:
         key = hashlib.sha256(
             b"|".join([
@@ -121,9 +144,39 @@ class LLMClient:
 
         t0 = time.time()
         parsed: T | None = None
+        in_tok = out_tok = 0
+        stop: str | None = None
         for attempt in (1, 2):
+            got_response = False
             try:
-                if max_tokens > 16000:
+                if self.config.llm.vendor != "anthropic":
+                    payload: list[dict] = []
+                    if image is not None:
+                        payload.append({
+                            "type": "image_url",
+                            "image_url": {"url": "data:image/png;base64,"
+                                          + base64.standard_b64encode(image_bytes).decode()},
+                        })
+                    payload.append({"type": "text", "text": prompt})
+                    response = self._api_compat().chat.completions.create(
+                        model=model,
+                        max_completion_tokens=max_tokens,
+                        messages=[{"role": "user", "content": payload}],
+                        response_format={"type": "json_schema", "json_schema": {
+                            "name": output_model.__name__,
+                            "strict": True,
+                            "schema": _strict_schema(output_model),
+                        }},
+                    )
+                    choice = response.choices[0]
+                    in_tok = response.usage.prompt_tokens
+                    out_tok = response.usage.completion_tokens
+                    stop = ("max_tokens" if choice.finish_reason == "length"
+                            else choice.finish_reason)
+                    got_response = True
+                    text = choice.message.content or ""
+                    parsed = output_model.model_validate_json(text) if text else None
+                elif max_tokens > 16000:
                     # the SDK refuses long non-streaming requests — stream and
                     # validate the final JSON against the schema ourselves
                     with self._api().messages.stream(
@@ -136,6 +189,10 @@ class LLMClient:
                         }},
                     ) as stream:
                         response = stream.get_final_message()
+                    in_tok = response.usage.input_tokens
+                    out_tok = response.usage.output_tokens
+                    stop = response.stop_reason
+                    got_response = True
                     text = "".join(
                         b.text for b in response.content if getattr(b, "type", "") == "text"
                     )
@@ -148,26 +205,28 @@ class LLMClient:
                         output_format=output_model,
                     )
                     parsed = response.parsed_output
+                    in_tok = response.usage.input_tokens
+                    out_tok = response.usage.output_tokens
+                    stop = response.stop_reason
+                    got_response = True
             except Exception as exc:
                 # truncated JSON etc. — treat like an empty output and retry bigger
                 log.warning("%s call p%s parse error (attempt %d): %r",
                             purpose, page, attempt, exc)
-                response = None
                 parsed = None
-            if response is not None:
+                stop = None
+            if got_response:
                 cost = self.ledger.record(
-                    purpose, model,
-                    response.usage.input_tokens, response.usage.output_tokens,
+                    purpose, model, in_tok, out_tok,
                     page=page, duration_ms=int((time.time() - t0) * 1000),
                 )
             if parsed is not None:
                 break
-            stop = getattr(response, "stop_reason", None) if response is not None else None
             log.warning("%s call p%s returned no structured output (attempt %d, "
                         "stop_reason=%s)", purpose, page, attempt, stop)
             # adaptive thinking spends from max_tokens: a max_tokens stop means
             # the cap was too small for thinking + JSON — retry with room
-            if stop == "max_tokens" or response is None:
+            if stop == "max_tokens" or not got_response:
                 max_tokens = min(64000, max_tokens * 4)
         if parsed is None:
             raise RuntimeError(f"no structured output after retry ({purpose}, p{page})")
@@ -175,8 +234,7 @@ class LLMClient:
 
         self.cache_store(
             purpose, prompt, output_model, parsed,
-            response.usage.input_tokens, response.usage.output_tokens,
-            model=model, image=image,
+            in_tok, out_tok, model=model, image=image,
         )
         return parsed
 

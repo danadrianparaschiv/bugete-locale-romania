@@ -365,6 +365,32 @@ def extract(
 
 
 @app.command()
+def models():
+    """Preseturile de modele disponibile pentru `--model-preset`."""
+    from rich.table import Table
+
+    from .llm.ledger import MODEL_PRICES
+    from .llm.presets import DEFAULT_PRESET, PRESETS
+
+    t = Table(title="preseturi de modele (furnizor:model)")
+    t.add_column("preset", no_wrap=True)
+    t.add_column("reparare", no_wrap=True)
+    t.add_column("celule", no_wrap=True)
+    t.add_column("$/MTok in/out", justify="right", no_wrap=True)
+    t.add_column("descriere")
+    for key, p in PRESETS.items():
+        pin, pout = MODEL_PRICES[p.repair_model]
+        name = f"[bold]{key}[/bold] (implicit)" if key == DEFAULT_PRESET else key
+        t.add_row(name, p.repair_model, p.cell_model, f"{pin:g}/{pout:g}", p.description)
+    console.print(t)
+    console.print(
+        "[dim]cheile API per furnizor: vezi .env.example; prețurile marcate "
+        "«verificați» în ledger.py sunt plafoane estimative — confirmați "
+        "lista de prețuri curentă înainte de rulări mari[/dim]"
+    )
+
+
+@app.command()
 def triage(pdf: Path = typer.Argument(..., exists=True, readable=True)):
     """Verificare preliminară: clasifică fișierul, estimează costul/timpul, semnalează layout-urile necunoscute.
 
@@ -437,6 +463,9 @@ def convert(
     out: Path | None = typer.Option(None, help="Fișierul .xlsx de ieșire (implicit: <pdf>.xlsx)"),
     llm: str | None = typer.Option(None, help="off | repair (implicit din configurație)"),
     max_llm_cost: float | None = typer.Option(None, help="Buget strict în USD pentru repararea LLM"),
+    model_preset: str | None = typer.Option(
+        None, "--model-preset",
+        help="Preset de modele «furnizor:model» — lista: `bgconvertor models`"),
     workers: int = typer.Option(1, min=1, max=8, help="Procese worker OCR în paralel"),
 ):
     """Pipeline complet: profilare -> extracție -> asamblare -> validare [-> reparare] -> Excel."""
@@ -453,6 +482,20 @@ def convert(
         config.llm.mode = llm
     if max_llm_cost is not None:
         config.llm.max_cost_usd = max_llm_cost
+    if model_preset:
+        from .llm import presets
+
+        try:
+            p = presets.apply(config, model_preset)
+        except ValueError as exc:
+            console.print(f"[red]{exc}[/red]")
+            raise typer.Exit(2) from None
+        if config.llm.batch and p.vendor != "anthropic":
+            console.print("[red]modul Batch API este disponibil doar pentru "
+                          "furnizorul anthropic[/red]")
+            raise typer.Exit(2)
+        console.print(f"model preset: [bold]{model_preset}[/bold] — "
+                      f"reparare {p.repair_model}, celule {p.cell_model}")
     store = RunStore(config, pdf)
     n_pages = len(PdfReader(pdf).pages)
     selected = parse_pages(pages, n_pages)

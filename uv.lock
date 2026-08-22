@@ -129,6 +129,11 @@ dependencies = [
     { name = "typer" },
 ]
 
+[package.optional-dependencies]
+vendors = [
+    { name = "openai" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "hypothesis" },
@@ -143,6 +148,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.27" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "onnxruntime", specifier = ">=1.29.0" },
+    { name = "openai", marker = "extra == 'vendors'", specifier = ">=1.60" },
     { name = "openpyxl", specifier = ">=3.1" },
     { name = "pdfplumber", specifier = ">=0.11.10" },
     { name = "pillow", specifier = ">=12.3.0" },
@@ -154,6 +160,7 @@ requires-dist = [
     { name = "rich", specifier = ">=13.7" },
     { name = "typer", specifier = ">=0.12" },
 ]
+provides-extras = ["vendors"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1682,6 +1689,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/0a/0f/c338cb5500a522c7e671a3bb1276f4562404fbecce8a0e274565aa968484/onnxruntime-1.29.0-cp314-cp314-win_arm64.whl", hash = "sha256:e417ef8628dcce310d2d53023e750ea298ec14d4341ae6dc3a572bfd9bc7fa97", size = 14124294, upload-time = "2026-08-17T22:54:31.015Z" },
     { url = "https://files.pythonhosted.org/packages/b8/e7/61064289a9a1301b25c1f0f574fe98aba31c2d388db3c1dbec664f78621f/onnxruntime-1.29.0-cp314-cp314t-manylinux_2_28_aarch64.whl", hash = "sha256:11264bb58f7b7cf6af835ab10d36838d73680580820fd6f51d90124a1ca8f449", size = 20826174, upload-time = "2026-08-17T22:54:34.283Z" },
     { url = "https://files.pythonhosted.org/packages/60/21/d0c04b561b46e9bff89b5f500fb7415b8ca0669f7902204f76ab06bb0c7e/onnxruntime-1.29.0-cp314-cp314t-manylinux_2_28_x86_64.whl", hash = "sha256:1ea91cef3b971506e51ae9c37c16d027774ec64994a524ec1bdfb027d68a9832", size = 23138547, upload-time = "2026-08-17T22:54:37.491Z" },
+]
+
+[[package]]
+name = "openai"
+version = "3.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "httpx2" },
+    { name = "jiter" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7d/9c/ba0c292b4032ede74c249ca314ad64eb1bb5a03a843f6e01facb02f80cd8/openai-3.3.1.tar.gz", hash = "sha256:6f22807de1a976c932cecda620e8172a8c3fdbaeed29c7f21564e0c2410edf56", size = 1282113, upload-time = "2026-08-19T16:31:35.006Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6a/db/2b7a1b3de659bb82aef979116c74e809982b13e42c057759767552b5155f/openai-3.3.1-py3-none-any.whl", hash = "sha256:9652df7fdf8ee6f5bd58e0a12f2b1d414a18e0f06bb7a9a57c8643a5f5469bd3", size = 1690337, upload-time = "2026-08-19T16:31:32.812Z" },
 ]
 
 [[package]]

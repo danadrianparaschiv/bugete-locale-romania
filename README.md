@@ -71,6 +71,25 @@ Fișierul Excel rezultat conține foi de date pentru fiecare document
 bugetar și secțiune, o foaie „Probleme" care localizează fiecare problemă
 (pagină + cod + coloană) și un scor de calitate în „Sumar calitate".
 
+## Alegerea modelelor LLM
+
+Straturile LLM pot rula pe preseturi predefinite «furnizor:model» —
+implicit `anthropic:claude-sonnet-5`, cu o scară Anthropic de la
+`claude-fable-5` (scanările cele mai grele) până la `claude-haiku-4-5`
+(cel mai ieftin), plus furnizori alternativi: OpenAI, Google, Mistral
+(rezidență UE a datelor), Qwen (greutăți deschise). Lista completă, cu
+prețuri: `bgconvertor models`.
+
+```bash
+uv sync --extra vendors   # necesar o singură dată pentru furnizorii non-Anthropic
+uv run bgconvertor convert <pdf> --llm repair --model-preset google:gemini-2.5-flash
+```
+
+Poarta de acceptare aritmetică face alegerea sigură: un model mai slab
+repară mai puține grupuri, dar nu poate corupe datele — o corecție se
+aplică doar dacă face sumele să se închidă. Cheile API per furnizor sunt
+în `.env.example`.
+
 ## La ce să vă așteptați
 
 | Tip de fișier | Rezultat tipic | Cost LLM |
