@@ -17,7 +17,17 @@
       "path": "01-alba/1017-alba-iulia/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.apulum.ro/ro/pdf6/Buget_Local_Initial_18052026.pdf",
-      "record_url": "https://www.apulum.ro/index.php/primaria/detail/buget"
+      "record_url": "https://www.apulum.ro/index.php/primaria/detail/buget",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 2046,
+        "pct_clean": 100.0,
+        "errors": 0,
+        "warnings": 0,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "02",
@@ -27,7 +37,17 @@
       "path": "02-arad/9262-arad/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariaarad.ro/dm_arad/2026/hotarari.nsf/FD65AE2B077F02BAC2258DF00038A82D/$FILE/226%20H%20din%2029%2004%202026%20Anexe%20buget.pdf?Open",
-      "record_url": "https://www.primariaarad.ro/dm_arad/2026/hotarari.nsf/FD65AE2B077F02BAC2258DF00038A82D"
+      "record_url": "https://www.primariaarad.ro/dm_arad/2026/hotarari.nsf/FD65AE2B077F02BAC2258DF00038A82D",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 5589,
+        "pct_clean": 63.1,
+        "errors": 1417,
+        "warnings": 1849,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "03",
@@ -37,7 +57,17 @@
       "path": "03-arges/13169-pitesti/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariapitesti.ro/uploads/pages/files/153_-HCL_aprobare_buget_mun_Pitesti.pdf",
-      "record_url": "https://www.primariapitesti.ro/uploads/pages/files/153_-HCL_aprobare_buget_mun_Pitesti.pdf"
+      "record_url": "https://www.primariapitesti.ro/uploads/pages/files/153_-HCL_aprobare_buget_mun_Pitesti.pdf",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 3232,
+        "pct_clean": 50.5,
+        "errors": 490,
+        "warnings": 1637,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "04",
@@ -47,7 +77,17 @@
       "path": "04-bacau/20297-bacau/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://fisiere.municipiulbacau.ro/public/uploads/acteadministrative/20260515164319-HCL%20nr.195%20din%2013.05.2026.PDF",
-      "record_url": "https://fisiere.municipiulbacau.ro/public/uploads/acteadministrative/20260515164319-HCL%20nr.195%20din%2013.05.2026.PDF"
+      "record_url": "https://fisiere.municipiulbacau.ro/public/uploads/acteadministrative/20260515164319-HCL%20nr.195%20din%2013.05.2026.PDF",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1729,
+        "pct_clean": 62.8,
+        "errors": 1661,
+        "warnings": 399,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "05",
@@ -57,7 +97,17 @@
       "path": "05-bihor/26564-oradea/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://oradea.ro/wp-content/uploads/2026/05/Buget-local-initial-2026.pdf",
-      "record_url": "https://oradea.ro/informatii-de-interes-public/bugetul-local/"
+      "record_url": "https://oradea.ro/informatii-de-interes-public/bugetul-local/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1314,
+        "pct_clean": 93.8,
+        "errors": 182,
+        "warnings": 42,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "06",
@@ -68,7 +118,17 @@
       "document_status": "approved_initial",
       "source_url": "https://primariabistrita.ro/wp-content/uploads/2026/06/Buget_initial_HCL_54_29.04.2026.zip",
       "archive_member": "Buget_initial_HCL_54_29.04.2026/BL_VEN_CH_HCL_54_29.04.2026.pdf",
-      "record_url": "https://primariabistrita.ro/primaria/transparenta-decizionala/buget/"
+      "record_url": "https://primariabistrita.ro/primaria/transparenta-decizionala/buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 237,
+        "pct_clean": 57.4,
+        "errors": 59,
+        "warnings": 90,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "07",
@@ -78,7 +138,17 @@
       "path": "07-botosani/35731-botosani/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariabt.ro/wp-content/uploads/formidable/9/HCL_131_2026.pdf",
-      "record_url": "https://primariabt.ro/hotarari-ale-consiliului-local/"
+      "record_url": "https://primariabt.ro/hotarari-ale-consiliului-local/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 5516,
+        "pct_clean": 75.8,
+        "errors": 1886,
+        "warnings": 724,
+        "at": "2026-08-22T10:46:12",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "08",
@@ -88,7 +158,17 @@
       "path": "08-brasov/40198-brasov/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://extranet.brasovcity.ro/Registratura/Fileo.aspx?id_registratura=1&registru=HOT&nr=318965&an=an&id_fisier=8114",
-      "record_url": "https://extranet.brasovcity.ro/Registratura/Hotarari/Detaliu.aspx?registru=HOT-HCL&nr=224&an=2026"
+      "record_url": "https://extranet.brasovcity.ro/Registratura/Hotarari/Detaliu.aspx?registru=HOT-HCL&nr=224&an=2026",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1750,
+        "pct_clean": 97.0,
+        "errors": 85,
+        "warnings": 4,
+        "at": "2026-08-22T10:44:48",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "09",
@@ -98,7 +178,17 @@
       "path": "09-braila/42682-braila/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariabraila.ro/wp-content/uploads/2018/documentePDF/Buget/2026/buget%20initial%2011_05/Buget%20local.pdf",
-      "record_url": "https://www.primariabraila.ro/buget/"
+      "record_url": "https://www.primariabraila.ro/buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 6711,
+        "pct_clean": 64.5,
+        "errors": 1713,
+        "warnings": 1628,
+        "at": "2026-08-22T10:44:49",
+        "tool_version": "0.1.0"
+      }
     },
     {
       "county_code": "10",

@@ -10,8 +10,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 @pytest.fixture
 def ab_ready():
-    pdf = PROJECT_ROOT / "budget_file_ab.pdf"
-    if not (pdf.exists() and (PROJECT_ROOT / "runs/budget_file_ab/extract").is_dir()):
+    pdf = PROJECT_ROOT / "data/2026/01-alba/1017-alba-iulia/budget_file.pdf"
+    if not (pdf.exists() and (PROJECT_ROOT / "runs/2026-01-alba-1017-alba-iulia/extract").is_dir()):
         pytest.skip("ab extraction not present")
     return pdf
 
@@ -38,7 +38,7 @@ def test_export_rows_shape_and_verified(ab_ready, monkeypatch, tmp_path):
         "document", "budget", "suffix", "section", "kind",
         "code", "func_code", "name", "column", "value", "source", "verified", "page",
     }
-    assert r["municipality"] == "ab"
+    assert r["municipality"] == "Alba Iulia"  # resolved via SIRUTA manifest
     assert all(row["verified"] for row in rows)  # ab is 100% clean
 
     out = tmp_path / "corpus.csv"

@@ -1,29 +1,113 @@
 {
   "id": "ar_p151",
-  "pdf": "budget_file_ar.pdf",
+  "pdf": "data/2026/02-arad/9262-arad/budget_file.pdf",
   "page": 151,
   "layout": "scan_expense_chapter",
   "budget": "local",
   "source_type": "scanned",
-  "hazards": ["stamp_overlap", "section_header_rows", "bold_italic_mixed"],
-  "columns": ["buget_2026", "credite_restante"],
-  "anchors": [
-    {"raw_code": "84.02", "code": "84.02", "column": "buget_2026", "value": "256221.36", "name_contains": "TRANSPORTURI"},
-    {"raw_code": "84.02", "column": "credite_restante", "value": "4767.00"},
-    {"name_contains": "SECTIUNEA DE FUNCTIONARE", "column": "buget_2026", "value": "124885.22"},
-    {"name_contains": "SECTIUNEA DE DEZVOLTARE", "column": "buget_2026", "value": "131336.14"},
-    {"raw_code": "20", "code": "20", "column": "buget_2026", "value": "55759.22", "context_contains": "FUNCTIONARE"},
-    {"raw_code": "20.02", "code": "20.02", "column": "buget_2026", "value": "54401.00", "name_contains": "Reparatii curente"},
-    {"raw_code": "20.02", "column": "credite_restante", "value": "2007.00"},
-    {"raw_code": "40.03", "code": "40.03", "column": "buget_2026", "value": "53895.00"},
-    {"raw_code": "81.02", "code": "81.02", "column": "buget_2026", "value": "15231.00"},
-    {"raw_code": "81.02.05", "code": "81.02.05", "column": "buget_2026", "value": "15231.00"},
-    {"raw_code": "56", "code": "56", "column": "buget_2026", "value": "93588.14", "context_contains": "DEZVOLTARE"},
-    {"raw_code": "56.48", "code": "56.48", "column": "buget_2026", "value": "93474.00"},
-    {"raw_code": "56.48.01", "code": "56.48.01", "column": "buget_2026", "value": "12296.50"},
-    {"raw_code": "56.48.02", "code": "56.48.02", "column": "buget_2026", "value": "71861.50"},
-    {"raw_code": "56.48.03", "code": "56.48.03", "column": "buget_2026", "value": "9316.00"}
+  "hazards": [
+    "stamp_overlap",
+    "section_header_rows",
+    "bold_italic_mixed"
   ],
-  "text_contains": ["TOTAL CAPITOL 84.02"],
+  "columns": [
+    "buget_2026",
+    "credite_restante"
+  ],
+  "anchors": [
+    {
+      "raw_code": "84.02",
+      "code": "84.02",
+      "column": "buget_2026",
+      "value": "256221.36",
+      "name_contains": "TRANSPORTURI"
+    },
+    {
+      "raw_code": "84.02",
+      "column": "credite_restante",
+      "value": "4767.00"
+    },
+    {
+      "name_contains": "SECTIUNEA DE FUNCTIONARE",
+      "column": "buget_2026",
+      "value": "124885.22"
+    },
+    {
+      "name_contains": "SECTIUNEA DE DEZVOLTARE",
+      "column": "buget_2026",
+      "value": "131336.14"
+    },
+    {
+      "raw_code": "20",
+      "code": "20",
+      "column": "buget_2026",
+      "value": "55759.22",
+      "context_contains": "FUNCTIONARE"
+    },
+    {
+      "raw_code": "20.02",
+      "code": "20.02",
+      "column": "buget_2026",
+      "value": "54401.00",
+      "name_contains": "Reparatii curente"
+    },
+    {
+      "raw_code": "20.02",
+      "column": "credite_restante",
+      "value": "2007.00"
+    },
+    {
+      "raw_code": "40.03",
+      "code": "40.03",
+      "column": "buget_2026",
+      "value": "53895.00"
+    },
+    {
+      "raw_code": "81.02",
+      "code": "81.02",
+      "column": "buget_2026",
+      "value": "15231.00"
+    },
+    {
+      "raw_code": "81.02.05",
+      "code": "81.02.05",
+      "column": "buget_2026",
+      "value": "15231.00"
+    },
+    {
+      "raw_code": "56",
+      "code": "56",
+      "column": "buget_2026",
+      "value": "93588.14",
+      "context_contains": "DEZVOLTARE"
+    },
+    {
+      "raw_code": "56.48",
+      "code": "56.48",
+      "column": "buget_2026",
+      "value": "93474.00"
+    },
+    {
+      "raw_code": "56.48.01",
+      "code": "56.48.01",
+      "column": "buget_2026",
+      "value": "12296.50"
+    },
+    {
+      "raw_code": "56.48.02",
+      "code": "56.48.02",
+      "column": "buget_2026",
+      "value": "71861.50"
+    },
+    {
+      "raw_code": "56.48.03",
+      "code": "56.48.03",
+      "column": "buget_2026",
+      "value": "9316.00"
+    }
+  ],
+  "text_contains": [
+    "TOTAL CAPITOL 84.02"
+  ],
   "notes": "Per-chapter economic detail with inverted section header rows. Cross-checks: FUNCTIONARE + DEZVOLTARE = 124885.22 + 131336.14 = 256221.36 = capitol total; 56.48 = 12296.50 + 71861.50 + 9316.00 = 93474.00."
 }

@@ -1,29 +1,124 @@
 {
   "id": "ar_p301",
-  "pdf": "budget_file_ar.pdf",
+  "pdf": "data/2026/02-arad/9262-arad/budget_file.pdf",
   "page": 301,
   "layout": "scan_institution_budget",
   "budget": "own_revenue",
   "source_type": "scanned",
-  "hazards": ["stamp_overlap", "vertical_side_labels", "many_institutions_per_page", "negative_values"],
-  "columns": ["buget_2026"],
-  "anchors": [
-    {"name_contains": "TOTAL VENITURI", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "50.00"},
-    {"raw_code": "33.10.14", "code": "33.10.14", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "50.00"},
-    {"raw_code": "65.10", "code": "65.10", "name_contains": "TOTAL CHELTUIELI", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "159.00"},
-    {"raw_code": "20.01", "code": "20.01", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "68.00"},
-    {"raw_code": "20.03", "code": "20.03", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "50.00"},
-    {"raw_code": "20.30", "code": "20.30", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "41.00"},
-    {"raw_code": "93.01", "code": "93.01", "context_contains": "Stiinte Aplicate", "column": "buget_2026", "value": "-109.00", "hard": true},
-    {"name_contains": "TOTAL VENITURI", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "915.00"},
-    {"raw_code": "33.10.14", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "715.00"},
-    {"raw_code": "43.10.09", "code": "43.10.09", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "200.00"},
-    {"raw_code": "65.10", "name_contains": "TOTAL CHELTUIELI", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "1072.00"},
-    {"raw_code": "20.01", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "536.00"},
-    {"raw_code": "20.02", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "50.00"},
-    {"raw_code": "20.03", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "484.00"},
-    {"raw_code": "20.05", "context_contains": "Csiky Gergely", "column": "buget_2026", "value": "2.00"}
+  "hazards": [
+    "stamp_overlap",
+    "vertical_side_labels",
+    "many_institutions_per_page",
+    "negative_values"
   ],
-  "text_contains": ["Liceul Tehnologic de Stiinte Aplicate Arad", "Colegiul \"Csiky Gergely\" Arad"],
+  "columns": [
+    "buget_2026"
+  ],
+  "anchors": [
+    {
+      "name_contains": "TOTAL VENITURI",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "33.10.14",
+      "code": "33.10.14",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "65.10",
+      "code": "65.10",
+      "name_contains": "TOTAL CHELTUIELI",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "159.00"
+    },
+    {
+      "raw_code": "20.01",
+      "code": "20.01",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "68.00"
+    },
+    {
+      "raw_code": "20.03",
+      "code": "20.03",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "20.30",
+      "code": "20.30",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "41.00"
+    },
+    {
+      "raw_code": "93.01",
+      "code": "93.01",
+      "context_contains": "Stiinte Aplicate",
+      "column": "buget_2026",
+      "value": "-109.00",
+      "hard": true
+    },
+    {
+      "name_contains": "TOTAL VENITURI",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "915.00"
+    },
+    {
+      "raw_code": "33.10.14",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "715.00"
+    },
+    {
+      "raw_code": "43.10.09",
+      "code": "43.10.09",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "200.00"
+    },
+    {
+      "raw_code": "65.10",
+      "name_contains": "TOTAL CHELTUIELI",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "1072.00"
+    },
+    {
+      "raw_code": "20.01",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "536.00"
+    },
+    {
+      "raw_code": "20.02",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "20.03",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "484.00"
+    },
+    {
+      "raw_code": "20.05",
+      "context_contains": "Csiky Gergely",
+      "column": "buget_2026",
+      "value": "2.00"
+    }
+  ],
+  "text_contains": [
+    "Liceul Tehnologic de Stiinte Aplicate Arad",
+    "Colegiul \"Csiky Gergely\" Arad"
+  ],
   "notes": "Per-institution (school) budgets, several per page, .10 codes; the institution heading is the disambiguating section context. Cross-checks: Stiinte Aplicate 68+50+41 = 159 = TOTAL CHELTUIELI, deficit 50-159 = -109; Csiky 536+50+484+2 = 1072."
 }

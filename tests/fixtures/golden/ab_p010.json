@@ -1,25 +1,91 @@
 {
   "id": "ab_p010",
-  "pdf": "budget_file_ab.pdf",
+  "pdf": "data/2026/01-alba/1017-alba-iulia/budget_file.pdf",
   "page": 10,
   "layout": "digital_detail",
   "budget": "local",
   "source_type": "digital",
-  "hazards": ["column_order_scrambled_in_text_stream", "combined_functional_economic_codes"],
-  "columns": ["total", "credite_stinse", "trim1", "trim2", "trim3", "trim4", "est2027", "est2028", "est2029"],
+  "hazards": [
+    "column_order_scrambled_in_text_stream",
+    "combined_functional_economic_codes"
+  ],
+  "columns": [
+    "total",
+    "credite_stinse",
+    "trim1",
+    "trim2",
+    "trim3",
+    "trim4",
+    "est2027",
+    "est2028",
+    "est2029"
+  ],
   "anchors": [
-    {"raw_code": "5102.2005", "column": "total", "value": "125.00", "name_contains": "obiectelor de inventar"},
-    {"raw_code": "5102.200530", "column": "total", "value": "125.00", "name_contains": "Alte obiecte de inventar"},
-    {"raw_code": "5102.2006", "column": "total", "value": "100.00"},
-    {"raw_code": "5102.200601", "column": "total", "value": "50.00"},
-    {"raw_code": "5102.200602", "column": "total", "value": "50.00"},
-    {"raw_code": "5102.2030", "column": "total", "value": "4599.00"},
-    {"raw_code": "5102.203002", "column": "total", "value": "45.00", "name_contains": "Protocol"},
-    {"raw_code": "5102.203004", "column": "total", "value": "250.00", "name_contains": "Chirii"},
-    {"raw_code": "5102.203030", "column": "total", "value": "4304.00"},
-    {"raw_code": "5102.59", "column": "total", "value": "350.00"},
-    {"raw_code": "5102.70", "column": "total", "value": "700.00", "name_contains": "CHELTUIELI DE CAPITAL"},
-    {"raw_code": "5102.71", "column": "total", "value": "700.00"}
+    {
+      "raw_code": "5102.2005",
+      "column": "total",
+      "value": "125.00",
+      "name_contains": "obiectelor de inventar"
+    },
+    {
+      "raw_code": "5102.200530",
+      "column": "total",
+      "value": "125.00",
+      "name_contains": "Alte obiecte de inventar"
+    },
+    {
+      "raw_code": "5102.2006",
+      "column": "total",
+      "value": "100.00"
+    },
+    {
+      "raw_code": "5102.200601",
+      "column": "total",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "5102.200602",
+      "column": "total",
+      "value": "50.00"
+    },
+    {
+      "raw_code": "5102.2030",
+      "column": "total",
+      "value": "4599.00"
+    },
+    {
+      "raw_code": "5102.203002",
+      "column": "total",
+      "value": "45.00",
+      "name_contains": "Protocol"
+    },
+    {
+      "raw_code": "5102.203004",
+      "column": "total",
+      "value": "250.00",
+      "name_contains": "Chirii"
+    },
+    {
+      "raw_code": "5102.203030",
+      "column": "total",
+      "value": "4304.00"
+    },
+    {
+      "raw_code": "5102.59",
+      "column": "total",
+      "value": "350.00"
+    },
+    {
+      "raw_code": "5102.70",
+      "column": "total",
+      "value": "700.00",
+      "name_contains": "CHELTUIELI DE CAPITAL"
+    },
+    {
+      "raw_code": "5102.71",
+      "column": "total",
+      "value": "700.00"
+    }
   ],
   "text_contains": [],
   "notes": "Expense page: codes printed as capitol.economic (5102.2030 = capitol 51.02 x articol 20.30). Verified alineat sums: 20.05=20.05.30=125; 20.06=50+50=100; 20.30=45+250+4304=4599."

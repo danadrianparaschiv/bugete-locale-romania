@@ -1,0 +1,66 @@
+{
+  "quality": {
+    "lines": 1314,
+    "pct_clean": 93.8,
+    "errors": 182,
+    "warnings": 42,
+    "documents": 1
+  },
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 1879752.4
+  },
+  "top_capitole": [
+    {
+      "code": "50.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 1879752.4
+    },
+    {
+      "code": "49.90",
+      "name": "VENITURI PROPRII",
+      "total": 855067.14
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 437588.54
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 309445.87
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 247704.84
+    },
+    {
+      "code": "81.02",
+      "name": "COMBUSTIBILI SI ENERGIE",
+      "total": 223090.15
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 162336.17
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+      "total": 122321.61
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 100971.34
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 94639.49
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

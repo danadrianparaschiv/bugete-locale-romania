@@ -1,0 +1,66 @@
+{
+  "quality": {
+    "lines": 2046,
+    "pct_clean": 100.0,
+    "errors": 0,
+    "warnings": 0,
+    "documents": 2
+  },
+  "totals_mii_lei": {
+    "venituri": 646801.06,
+    "cheltuieli": 650517.76
+  },
+  "top_capitole": [
+    {
+      "code": "50.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 650517.76
+    },
+    {
+      "code": "63.02",
+      "name": "Partea a III-a CHELTUIELI SOCIAL-CULTURALE",
+      "total": 231192.59
+    },
+    {
+      "code": "79.02",
+      "name": "Partea a V-a ACTIUNI ECONOMICE",
+      "total": 193399.05
+    },
+    {
+      "code": "84.02",
+      "name": "CAP. Transporturi",
+      "total": 191507.05
+    },
+    {
+      "code": "69.02",
+      "name": "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE, MEDIU SI APE",
+      "total": 169257.32
+    },
+    {
+      "code": "70.02",
+      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "total": 159535.93
+    },
+    {
+      "code": "65.02",
+      "name": "CAP. Invatamant",
+      "total": 96572.75
+    },
+    {
+      "code": "67.02",
+      "name": "CAP. Cultura, recreere si religie",
+      "total": 67833.99
+    },
+    {
+      "code": "68.02",
+      "name": "CAP. Asigurari si asistenta sociala",
+      "total": 59185.85
+    },
+    {
+      "code": "50.10",
+      "name": "TOTAL CHELTUIELI (cod 50.10+59.10+63.10+70.10+79.10)",
+      "total": 36223.43
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

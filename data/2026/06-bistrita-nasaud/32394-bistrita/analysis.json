@@ -1,0 +1,66 @@
+{
+  "quality": {
+    "lines": 237,
+    "pct_clean": 57.4,
+    "errors": 59,
+    "warnings": 90,
+    "documents": 2
+  },
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 356154.8
+  },
+  "top_capitole": [
+    {
+      "code": "49.02",
+      "name": "CHELTUIELILE SECTIUNII DE FUNCTIONARE (cod 50.02 + 59.02 + 63.02 + 70.",
+      "total": 356154.8
+    },
+    {
+      "code": "63.02",
+      "name": "nonmilitara) Partea a III-a CHELTUIELI SOCIAL-CULTURALE (cod65.02+66.0",
+      "total": 193437.8
+    },
+    {
+      "code": "79.02",
+      "name": "Partea a V-a ACTIUNI ECONOMICE (cod 80.02+81.02+83.02+84.02+87.02)",
+      "total": 158191.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi  (cod 84.02.03+84.02.04+84.02.06+84.02.50)",
+      "total": 127608.0
+    },
+    {
+      "code": "50.02",
+      "name": "Partea l-a SERVICII PUBLICE GENERALE (cod 51.02+54.02+55.02+56.02)",
+      "total": 89213.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la 70.",
+      "total": 88899.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "total": 70318.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala (cod68.02.04+68.02.05+68.02.06+68.02.10",
+      "total": 59216.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "total": 57585.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant   (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.12+65.0",
+      "total": 46593.8
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

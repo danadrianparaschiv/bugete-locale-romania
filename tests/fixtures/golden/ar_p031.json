@@ -1,29 +1,117 @@
 {
   "id": "ar_p031",
-  "pdf": "budget_file_ar.pdf",
+  "pdf": "data/2026/02-arad/9262-arad/budget_file.pdf",
   "page": 31,
   "layout": "scan_revenue_detail",
   "budget": "local",
   "source_type": "scanned",
-  "hazards": ["stamp_overlap", "x_markers", "wrapped_multiline_names", "dotted_codes"],
-  "columns": ["buget_2026", "est2027", "est2028", "est2029"],
-  "anchors": [
-    {"raw_code": "42.02.93", "code": "42.02.93", "column": "buget_2026", "value": "26666.00"},
-    {"raw_code": "42.02.93", "column": "est2027", "value": "2995.00"},
-    {"raw_code": "42.02.93.03", "code": "42.02.93.03", "column": "buget_2026", "value": "26666.00"},
-    {"raw_code": "43.02", "code": "43.02", "column": "buget_2026", "value": "85738.01"},
-    {"raw_code": "43.02", "column": "est2027", "value": "95000.00"},
-    {"raw_code": "43.02", "column": "est2028", "value": "55000.00"},
-    {"raw_code": "43.02", "column": "est2029", "value": "0.00"},
-    {"raw_code": "43.02.47", "code": "43.02.47", "column": "buget_2026", "value": "82300.00", "name_contains": "Fondul pentru modernizare"},
-    {"raw_code": "43.02.49", "code": "43.02.49", "column": "buget_2026", "value": "3438.01"},
-    {"raw_code": "43.02.49.01", "code": "43.02.49.01", "column": "buget_2026", "value": "2841.30"},
-    {"raw_code": "43.02.49.03", "code": "43.02.49.03", "column": "buget_2026", "value": "596.71", "name_contains": "TVA"},
-    {"raw_code": "45.02", "code": "45.02", "column": "buget_2026", "value": "114988.50"},
-    {"raw_code": "45.02", "column": "est2027", "value": "46940.00"},
-    {"raw_code": "45.02.01.03", "code": "45.02.01.03", "column": "buget_2026", "value": "0.00", "name_contains": "Prefinantare", "hard": true},
-    {"raw_code": "45.02.02.01", "code": "45.02.02.01", "column": "est2027", "value": "X", "hard": true}
+  "hazards": [
+    "stamp_overlap",
+    "x_markers",
+    "wrapped_multiline_names",
+    "dotted_codes"
   ],
-  "text_contains": ["Cod indicator", "PREVEDERI"],
+  "columns": [
+    "buget_2026",
+    "est2027",
+    "est2028",
+    "est2029"
+  ],
+  "anchors": [
+    {
+      "raw_code": "42.02.93",
+      "code": "42.02.93",
+      "column": "buget_2026",
+      "value": "26666.00"
+    },
+    {
+      "raw_code": "42.02.93",
+      "column": "est2027",
+      "value": "2995.00"
+    },
+    {
+      "raw_code": "42.02.93.03",
+      "code": "42.02.93.03",
+      "column": "buget_2026",
+      "value": "26666.00"
+    },
+    {
+      "raw_code": "43.02",
+      "code": "43.02",
+      "column": "buget_2026",
+      "value": "85738.01"
+    },
+    {
+      "raw_code": "43.02",
+      "column": "est2027",
+      "value": "95000.00"
+    },
+    {
+      "raw_code": "43.02",
+      "column": "est2028",
+      "value": "55000.00"
+    },
+    {
+      "raw_code": "43.02",
+      "column": "est2029",
+      "value": "0.00"
+    },
+    {
+      "raw_code": "43.02.47",
+      "code": "43.02.47",
+      "column": "buget_2026",
+      "value": "82300.00",
+      "name_contains": "Fondul pentru modernizare"
+    },
+    {
+      "raw_code": "43.02.49",
+      "code": "43.02.49",
+      "column": "buget_2026",
+      "value": "3438.01"
+    },
+    {
+      "raw_code": "43.02.49.01",
+      "code": "43.02.49.01",
+      "column": "buget_2026",
+      "value": "2841.30"
+    },
+    {
+      "raw_code": "43.02.49.03",
+      "code": "43.02.49.03",
+      "column": "buget_2026",
+      "value": "596.71",
+      "name_contains": "TVA"
+    },
+    {
+      "raw_code": "45.02",
+      "code": "45.02",
+      "column": "buget_2026",
+      "value": "114988.50"
+    },
+    {
+      "raw_code": "45.02",
+      "column": "est2027",
+      "value": "46940.00"
+    },
+    {
+      "raw_code": "45.02.01.03",
+      "code": "45.02.01.03",
+      "column": "buget_2026",
+      "value": "0.00",
+      "name_contains": "Prefinantare",
+      "hard": true
+    },
+    {
+      "raw_code": "45.02.02.01",
+      "code": "45.02.02.01",
+      "column": "est2027",
+      "value": "X",
+      "hard": true
+    }
+  ],
+  "text_contains": [
+    "Cod indicator",
+    "PREVEDERI"
+  ],
   "notes": "Portrait revenue detail with dotted codes and Nr.crt. column. X marks 'not applicable' estimate cells (rows 515-520 area, partly under the stamp). Cross-check: 43.02.49 = 2841.30 + 0 + 596.71 = 3438.01."
 }

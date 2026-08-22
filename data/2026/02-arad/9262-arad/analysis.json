@@ -1,0 +1,21 @@
+{
+  "quality": {
+    "lines": 5589,
+    "pct_clean": 63.1,
+    "errors": 1417,
+    "warnings": 1849,
+    "documents": 7
+  },
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "50.02",
+      "name": "Partea I SERVICII PUBLICE GENERALE (cod 51.02+54.02+55.02+56.02)",
+      "total": 103864.14
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

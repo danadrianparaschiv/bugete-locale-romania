@@ -1,18 +1,47 @@
 {
   "id": "ag_p171",
-  "pdf": "budget_file_ag.pdf",
+  "pdf": "data/2026/03-arges/13169-pitesti/budget_file.pdf",
   "page": 171,
   "layout": "investment_list",
   "budget": "local",
   "source_type": "scanned",
-  "hazards": ["rotated_90_in_image", "stamp_overlap", "not_nomenclator_table"],
-  "columns": ["valoare_an_curent", "buget_local", "credite_externe", "credite_interne", "buget_fen"],
-  "anchors": [
-    {"name_contains": "Sistem sonorizare si acustica Bazin Olimpic", "column": "valoare_an_curent", "value": "60"},
-    {"name_contains": "Modernizare zona skate-parc", "column": "valoare_an_curent", "value": "70"},
-    {"name_contains": "terenuri padel", "column": "valoare_an_curent", "value": "50"},
-    {"name_contains": "Modernizare loc de joaca -baza Trivale", "column": "valoare_an_curent", "value": "50"}
+  "hazards": [
+    "rotated_90_in_image",
+    "stamp_overlap",
+    "not_nomenclator_table"
   ],
-  "text_contains": ["Surse de finantare", "neetichetat"],
+  "columns": [
+    "valoare_an_curent",
+    "buget_local",
+    "credite_externe",
+    "credite_interne",
+    "buget_fen"
+  ],
+  "anchors": [
+    {
+      "name_contains": "Sistem sonorizare si acustica Bazin Olimpic",
+      "column": "valoare_an_curent",
+      "value": "60"
+    },
+    {
+      "name_contains": "Modernizare zona skate-parc",
+      "column": "valoare_an_curent",
+      "value": "70"
+    },
+    {
+      "name_contains": "terenuri padel",
+      "column": "valoare_an_curent",
+      "value": "50"
+    },
+    {
+      "name_contains": "Modernizare loc de joaca -baza Trivale",
+      "column": "valoare_an_curent",
+      "value": "50"
+    }
+  ],
+  "text_contains": [
+    "Surse de finantare",
+    "neetichetat"
+  ],
   "notes": "Investment objectives list ('program de investitii'), rotated 90 degrees inside the scan. Outside strict nomenclator scope — extracted best-effort to a side sheet. Rows carry green/maro/mixt/neutru tagging sub-rows."
 }

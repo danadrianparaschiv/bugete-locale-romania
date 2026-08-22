@@ -15,7 +15,7 @@ def reference_dir() -> Path:
 
 @pytest.fixture
 def ab_pdf() -> Path:
-    p = PROJECT_ROOT / "budget_file_ab.pdf"
+    p = PROJECT_ROOT / "data/2026/01-alba/1017-alba-iulia/budget_file.pdf"
     if not p.exists():
         pytest.skip("sample PDF not present")
     return p
