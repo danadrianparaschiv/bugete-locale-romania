@@ -66,7 +66,24 @@ class Manifest:
         return None
 
     def set_status(self, city: CityEntry, **fields) -> None:
-        city.entry.setdefault("conversion", {}).update(fields)
+        # Merge onto a fresh read of the file: a long-lived process (batch)
+        # must not clobber fields another process added since our load.
+        try:
+            fresh = json.loads(self.path.read_text())
+        except (OSError, json.JSONDecodeError):
+            fresh = None
+        if fresh is not None:
+            rel = city.entry.get("path")
+            for e in fresh.get("entries", []):
+                if e.get("path") == rel:
+                    conv = dict(e.get("conversion") or {})
+                    conv.update(city.entry.get("conversion") or {})
+                    conv.update(fields)
+                    e["conversion"] = conv
+                    city.entry = e  # keep later updates on the fresh dict
+            self.data = fresh
+        else:
+            city.entry.setdefault("conversion", {}).update(fields)
         self.save()
 
     def save(self) -> None:
