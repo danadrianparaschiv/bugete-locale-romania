@@ -27,13 +27,35 @@ from .runstore import RunStore
 log = logging.getLogger("bgc.corpus")
 
 COLUMNS = [
-    "municipality", "document", "budget", "suffix", "section", "kind",
+    "municipality", "siruta", "county_code", "county", "year",
+    "document", "budget", "suffix", "section", "kind",
     "code", "func_code", "name", "column", "value", "source", "verified", "page",
 ]
 
 
+def _identity(pdf: Path) -> dict:
+    """siruta/county/city from the governing manifest; filename fallback."""
+    from .manifest import find_manifest
+
+    m = find_manifest(pdf.parent)
+    if m:
+        c = m.by_pdf(pdf)
+        if c:
+            return {
+                "municipality": c.name,
+                "siruta": c.siruta,
+                "county_code": c.county_code,
+                "county": c.county_name,
+                "year": m.year,
+            }
+    return {
+        "municipality": pdf.stem.removeprefix("budget_file_"),
+        "siruta": None, "county_code": None, "county": None, "year": None,
+    }
+
+
 def _municipality(pdf: Path) -> str:
-    return pdf.stem.removeprefix("budget_file_")
+    return _identity(pdf)["municipality"]
 
 
 def build_result(config: RunConfig, pdf: Path) -> ConversionResult:
@@ -54,7 +76,7 @@ def build_result(config: RunConfig, pdf: Path) -> ConversionResult:
 def export_rows(config: RunConfig, pdf: Path):
     """Yield long-format dataset rows for one converted PDF."""
     result = build_result(config, pdf)
-    muni = _municipality(pdf)
+    ident = _identity(pdf)
     for doc in result.documents:
         for ln in doc.lines:
             if ln.kind == "heading" or ln.code is None:
@@ -62,7 +84,7 @@ def export_rows(config: RunConfig, pdf: Path):
             verified = not any(i.severity == "error" for i in ln.issues)
             for column, value in ln.values.items():
                 yield {
-                    "municipality": muni,
+                    **ident,
                     "document": doc.title[:60],
                     "budget": doc.budget,
                     "suffix": doc.suffix,
@@ -140,10 +162,17 @@ def report(config: RunConfig, pdfs: list[Path]) -> list[dict]:
 
 
 def discover_pdfs(config: RunConfig, root: Path) -> list[Path]:
-    """PDFs in `root` that already have a run store with extraction artifacts."""
+    """PDFs (flat and corpus-tree) that have extraction artifacts."""
+    from .manifest import default_manifest
+    from .runstore import store_key
+
+    candidates = sorted(root.glob("*.pdf"))
+    m = default_manifest(root)
+    if m:
+        candidates += [c.pdf for c in m.cities() if c.pdf.exists()]
     found = []
-    for pdf in sorted(root.glob("*.pdf")):
-        stem_dir = config.runs_dir / pdf.stem / "extract"
-        if stem_dir.is_dir() and any(stem_dir.glob("p*.json")):
+    for pdf in candidates:
+        stage_dir = config.runs_dir / store_key(pdf) / "extract"
+        if stage_dir.is_dir() and any(stage_dir.glob("p*.json")):
             found.append(pdf)
     return found

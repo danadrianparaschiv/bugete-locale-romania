@@ -34,7 +34,8 @@ def test_export_rows_shape_and_verified(ab_ready, monkeypatch, tmp_path):
     assert len(rows) > 5000  # 2046 lines x several columns
     r = rows[0]
     assert set(r) == {
-        "municipality", "document", "budget", "suffix", "section", "kind",
+        "municipality", "siruta", "county_code", "county", "year",
+        "document", "budget", "suffix", "section", "kind",
         "code", "func_code", "name", "column", "value", "source", "verified", "page",
     }
     assert r["municipality"] == "ab"

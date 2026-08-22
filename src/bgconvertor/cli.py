@@ -640,6 +640,104 @@ def eval_cmd(
         raise typer.Exit(1)
 
 
+@app.command()
+def batch(
+    data_dir: Path = typer.Argument(Path("data/2026"), exists=True),
+    group: int = typer.Option(5, min=1, help="Cities per checkpoint group"),
+    workers: int = typer.Option(4, min=1, max=8),
+    llm: str = typer.Option("repair", help="off | repair"),
+    max_llm_cost: float = typer.Option(3.00, help="USD budget per city"),
+    only: str = typer.Option("pending", help="pending | failed | all"),
+    limit: int = typer.Option(0, help="Stop after N cities (0 = no limit)"),
+):
+    """Convert the corpus city by city, in groups, writing status to the manifest.
+
+    Each city runs in its own process (fail-soft); the workbook lands next
+    to its PDF; the manifest's `conversion` block records status, quality
+    and spend. Safe to interrupt and re-run — everything resumes.
+    """
+    import datetime as dt
+    import subprocess
+    import sys
+
+    from .manifest import Manifest
+
+    manifest = Manifest(data_dir / "manifest.json")
+    todo = []
+    for city in manifest.cities():
+        st = (city.entry.get("conversion") or {}).get("status")
+        if only == "pending" and st == "converted":
+            continue
+        if only == "failed" and st != "failed":
+            continue
+        if not city.pdf.exists():
+            if not (city.entry.get("conversion") or {}).get("status"):
+                manifest.set_status(city, status="missing_pdf")
+            continue
+        todo.append(city)
+    if limit:
+        todo = todo[:limit]
+    if not todo:
+        console.print("[green]nimic de procesat — totul e convertit[/green]")
+        return
+
+    console.print(f"[bold]batch: {len(todo)} orase, grupuri de {group}, "
+                  f"LLM {llm} (${max_llm_cost:.2f}/oras)[/bold]")
+    done = 0
+    for i in range(0, len(todo), group):
+        chunk = todo[i:i + group]
+        console.print(f"\n[bold cyan]— grupul {i // group + 1}: "
+                      f"{', '.join(c.name for c in chunk)}[/bold cyan]")
+        for city in chunk:
+            out_xlsx = city.pdf.with_suffix(".xlsx")
+            cmd = [sys.executable, "-m", "bgconvertor.cli", "convert", str(city.pdf),
+                   "--workers", str(workers), "--out", str(out_xlsx)]
+            if llm != "off":
+                cmd += ["--llm", llm, "--max-llm-cost", str(max_llm_cost)]
+            console.print(f"  [bold]{city.name}[/bold] ({city.siruta}) …")
+            proc = subprocess.run(cmd, capture_output=True, text=True)
+            if proc.returncode != 0:
+                tail = (proc.stdout + proc.stderr)[-400:]
+                manifest.set_status(
+                    city, status="failed",
+                    error=tail.splitlines()[-1] if tail else f"exit {proc.returncode}",
+                    at=dt.datetime.now().isoformat(timespec="seconds"),
+                )
+                console.print(f"  [red]✗ {city.name} a esuat[/red]")
+                continue
+            stats = _workbook_stats(out_xlsx)
+            manifest.set_status(
+                city, status="converted", workbook=out_xlsx.name,
+                at=dt.datetime.now().isoformat(timespec="seconds"),
+                tool_version="0.1.0", **stats,
+            )
+            done += 1
+            console.print(
+                f"  [green]✓ {city.name}[/green]: {stats.get('lines', '?')} linii, "
+                f"{stats.get('pct_clean', '?')}% curate"
+            )
+        console.print(f"[dim]checkpoint: {done}/{len(todo)} convertite — "
+                      "moment bun pentru un commit al data/[/dim]")
+
+
+def _workbook_stats(xlsx: Path) -> dict:
+    try:
+        import openpyxl
+
+        wb = openpyxl.load_workbook(xlsx, read_only=True)
+        rows = {str(r[0]): r[1] for r in wb["Sumar calitate"].iter_rows(values_only=True)
+                if r and r[0]}
+        wb.close()
+        return {
+            "lines": rows.get("Linii de date"),
+            "pct_clean": rows.get("% curat"),
+            "errors": rows.get("Erori"),
+            "warnings": rows.get("Avertismente"),
+        }
+    except Exception:  # noqa: BLE001 - stats are best-effort
+        return {}
+
+
 corpus_app = typer.Typer(no_args_is_help=True)
 app.add_typer(corpus_app, name="corpus", help="Cross-municipality dataset and report")
 
