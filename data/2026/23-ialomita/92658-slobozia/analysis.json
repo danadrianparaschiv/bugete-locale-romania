@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 105,
-    "pct_clean": 25.7,
-    "errors": 1,
-    "warnings": 77,
+    "lines": 134,
+    "pct_clean": 82.8,
+    "errors": 10,
+    "warnings": 14,
     "documents": 1
   },
   "llm_models": [],
