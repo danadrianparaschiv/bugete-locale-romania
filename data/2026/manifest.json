@@ -904,9 +904,9 @@
         "workbook": "budget_file.xlsx",
         "lines": 4050,
         "pct_clean": 69.1,
-        "errors": 872,
-        "warnings": 1339,
-        "at": "2026-08-23T19:01:38",
+        "errors": 873,
+        "warnings": 1334,
+        "at": "2026-08-23T20:10:10",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
@@ -1048,10 +1048,10 @@
         "status": "converted",
         "workbook": "budget_file.xlsx",
         "lines": 1876,
-        "pct_clean": 34.2,
-        "errors": 374,
-        "warnings": 1181,
-        "at": "2026-08-23T19:01:38",
+        "pct_clean": 38.5,
+        "errors": 377,
+        "warnings": 1099,
+        "at": "2026-08-23T20:10:10",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
