@@ -34,7 +34,38 @@ REPO_RAW = "https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
 
 
-def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REPO_RAW) -> dict:
+def discover_years(data_root: Path) -> list[int]:
+    """Corpus years with a manifest under data/, newest first."""
+    return sorted(
+        (int(d.name) for d in data_root.iterdir()
+         if d.name.isdigit() and (d / "manifest.json").exists()),
+        reverse=True,
+    )
+
+
+def build_all(data_root: Path, out: Path, base_url: str = "", raw_base: str = REPO_RAW) -> list[dict]:
+    """One site for every corpus year: newest at out/, older at out/<year>/."""
+    years = discover_years(data_root)
+    if not years:
+        raise FileNotFoundError(f"niciun manifest sub {data_root}/<an>/manifest.json")
+    editions = [
+        {"year": y, "href": f"{base_url}/" if i == 0 else f"{base_url}/{y}/"}
+        for i, y in enumerate(years)
+    ]
+    results = []
+    for i, y in enumerate(years):
+        results.append(build(
+            Manifest(data_root / str(y) / "manifest.json"),
+            out if i == 0 else out / str(y),
+            base_url if i == 0 else f"{base_url}/{y}",
+            raw_base,
+            editions=editions,
+        ))
+    return results
+
+
+def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REPO_RAW,
+          editions: list[dict] | None = None) -> dict:
     env = Environment(
         loader=PackageLoader("bgconvertor", "templates"),
         autoescape=select_autoescape(["html"]),
@@ -89,7 +120,7 @@ def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REP
 
     index = env.get_template("index.html").render(
         cities=cities, year=manifest.year, n_converted=n_converted,
-        base=base_url, raw=raw_base,
+        base=base_url, raw=raw_base, editions=editions or [],
     )
     (out / "index.html").write_text(index)
 

@@ -812,19 +812,28 @@ app.add_typer(site_app, name="site", help="Site static GitHub Pages pentru corpu
 
 @site_app.command("build")
 def site_build(
-    data_dir: Path = typer.Option(Path("data/2026"), exists=True),
+    data_dir: Path = typer.Option(Path("data"), exists=True,
+                                  help="Rădăcina data/ (toți anii) sau un singur data/<an>"),
     out: Path = typer.Option(Path("site")),
     base_url: str = typer.Option("", help="Prefix de URL când site-ul e servit dintr-o subcale"),
 ):
-    """Generează indexul corpusului + paginile per oraș, doar din fișierele comise."""
-    from .manifest import Manifest
-    from .site import build
+    """Generează indexul corpusului + paginile per oraș, doar din fișierele comise.
 
-    r = build(Manifest(data_dir / "manifest.json"), out, base_url)
-    console.print(
-        f"[bold green]✓ site: {r['cities']} orase, {r['converted_pages']} pagini "
-        f"de analiza -> {r['out']}/[/bold green]"
-    )
+    Cu rădăcina data/, cel mai recent an ajunge la rădăcina site-ului, iar
+    edițiile anterioare la <out>/<an>/, legate între ele din index.
+    """
+    from .manifest import Manifest
+    from .site import build, build_all
+
+    if (data_dir / "manifest.json").exists():
+        results = [build(Manifest(data_dir / "manifest.json"), out, base_url)]
+    else:
+        results = build_all(data_dir, out, base_url)
+    for r in results:
+        console.print(
+            f"[bold green]✓ site: {r['cities']} orase, {r['converted_pages']} pagini "
+            f"de analiza -> {r['out']}/[/bold green]"
+        )
 
 
 corpus_app = typer.Typer(no_args_is_help=True)

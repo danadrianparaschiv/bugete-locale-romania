@@ -3,6 +3,33 @@
 {% block content %}
 <h1>Bugetele locale {{ year }}</h1>
 <p class="sub">{{ cities|length }} municipii reședință de județ · {{ n_converted }} convertite în format analizabil</p>
+{% if editions|length > 1 %}
+<p class="years">Ediții:
+  {%- for e in editions %}
+  {% if e.year == year %}<strong>{{ e.year }}</strong>{% else %}<a href="{{ e.href }}">{{ e.year }}</a>{% endif %}
+  {%- if not loop.last %} ·{% endif %}
+  {%- endfor %}
+</p>
+{% endif %}
+
+<section class="about">
+  <p><strong>De ce.</strong> Primăriile își publică bugetele doar ca PDF — de
+  multe ori scanări rotite și ștampilate — imposibil de comparat între orașe
+  sau de analizat într-un tabel. Proiectul le transformă în date deschise,
+  verificabile.</p>
+  <p><strong>Ce face.</strong> <a href="https://github.com/danadrianparaschiv/bugete-locale-romania">bgconvertor</a>
+  extrage automat tabelele din PDF-urile oficiale și verifică fiecare linie
+  față de clasificația bugetară (Ordinul MFP 1954/2005) și față de aritmetica
+  bugetului (sume trimestriale, capitol = Σ subcapitole, identități între
+  secțiuni). Ce nu trece verificarea este marcat, niciodată ghicit.</p>
+  <p><strong>Ce găsiți aici.</strong> Pentru fiecare municipiu: PDF-ul oficial
+  cu sursa lui, fișierul Excel convertit și o pagină de analiză. În
+  <a href="https://github.com/danadrianparaschiv/bugete-locale-romania">repository</a>
+  mai sunt setul de date normalizat pe toate orașele
+  (<a href="https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main/corpus.csv">corpus.csv</a>)
+  și codul convertorului.</p>
+</section>
+
 <table>
   <thead><tr>
     <th>Județ</th><th>Municipiu</th>
