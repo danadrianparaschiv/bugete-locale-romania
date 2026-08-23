@@ -17,6 +17,30 @@
     <div class="v">{{ a.quality.lines }} <span style="font-size:1rem;color:var(--dim)">/ {{ a.quality.pct_clean }}%</span></div></div>
 </div>
 
+{% if evolution %}
+<h2 style="font-size:1.1rem">Evoluție an-la-an</h2>
+<table>
+  <thead><tr><th>An</th>
+    <th class="num">Venituri (mii lei)</th><th class="num">Δ</th>
+    <th class="num">Cheltuieli (mii lei)</th><th class="num">Δ</th></tr></thead>
+  <tbody>
+  {% for r in evolution %}
+    <tr>
+      <td>{% if r.year == year %}<strong>{{ r.year }}</strong>
+          {%- elif r.href %}<a href="{{ r.href }}">{{ r.year }}</a>
+          {%- else %}{{ r.year }}{% endif %}</td>
+      <td class="num">{% if r.venituri is not none %}{{ "{:,.0f}".format(r.venituri).replace(",", ".") }}{% else %}—{% endif %}</td>
+      <td class="num">{{ r.d_venituri or "—" }}</td>
+      <td class="num">{% if r.cheltuieli is not none %}{{ "{:,.0f}".format(r.cheltuieli).replace(",", ".") }}{% else %}—{% endif %}</td>
+      <td class="num">{{ r.d_cheltuieli or "—" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="note" style="border:none;padding:0;margin-top:.5rem">Valori nominale, din
+liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
+{% endif %}
+
 {% if city.debate_date or city.approved_date %}
 <h2 style="font-size:1.1rem">Adoptarea bugetului</h2>
 <table>

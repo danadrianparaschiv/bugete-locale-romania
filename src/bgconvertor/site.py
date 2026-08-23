@@ -57,6 +57,43 @@ def _row(city: City, cy: CityYear) -> dict:
     }
 
 
+def _pct_change(prev: float | None, cur: float | None) -> str | None:
+    if not prev or cur is None:
+        return None
+    return f"{(cur - prev) / prev * 100:+.1f}%"
+
+
+def _evolution(city: City, editions: list[dict]) -> list[dict] | None:
+    """Chronological totals for every year the corpus lists this city.
+
+    None unless at least two years carry figures — a one-row table says
+    nothing the cards above it don't.
+    """
+    href_by_year = {str(e["year"]): e["href"] for e in editions}
+    rows = []
+    prev: CityYear | None = None
+    for key in sorted(city.years, key=int):
+        cy = city.years[key]
+        t = cy.totals_mii_lei
+        pt = prev.totals_mii_lei if prev else {}
+        href = None
+        if cy.has_analysis and key in href_by_year:
+            href = f"{href_by_year[key]}city/{city.siruta}.html"
+        rows.append({
+            "year": int(key),
+            "venituri": t.get("venituri"),
+            "cheltuieli": t.get("cheltuieli"),
+            "d_venituri": _pct_change(pt.get("venituri"), t.get("venituri")),
+            "d_cheltuieli": _pct_change(pt.get("cheltuieli"), t.get("cheltuieli")),
+            "href": href,
+        })
+        if t:
+            prev = cy
+    if sum(1 for r in rows if r["venituri"] is not None or r["cheltuieli"] is not None) < 2:
+        return None
+    return rows
+
+
 def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: str,
                 editions: list[dict], repo_root: Path) -> dict:
     env = Environment(
@@ -75,6 +112,7 @@ def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: s
             n_converted += 1
             page = env.get_template("city.html").render(
                 city=row, a=cy, year=year, base=base_url, raw=raw_base,
+                evolution=_evolution(city, editions),
             )
             (out / "city" / f"{city.siruta}.html").write_text(page)
 

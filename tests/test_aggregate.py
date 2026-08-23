@@ -8,7 +8,7 @@ from bgconvertor import aggregate as agg
 from bgconvertor.site import build_all
 
 
-def _write_year(data_root, year, converted):
+def _write_year(data_root, year, converted, totals=(123.4, 120.0)):
     ydir = data_root / str(year)
     city = ydir / "01-alba" / "1017-alba-iulia"
     city.mkdir(parents=True)
@@ -26,7 +26,7 @@ def _write_year(data_root, year, converted):
         (city / "budget_file.xlsx").write_bytes(b"xlsx")
         (city / "analysis.json").write_text(json.dumps({
             "quality": {"lines": 100, "pct_clean": 95.0, "errors": 0, "warnings": 5, "documents": 1},
-            "totals_mii_lei": {"venituri": 123.4, "cheltuieli": 120.0},
+            "totals_mii_lei": {"venituri": totals[0], "cheltuieli": totals[1]},
             "top_capitole": [{"code": "65.02", "name": "Învățământ", "total": 50.0}],
         }))
     (ydir / "manifest.json").write_text(json.dumps({"year": year, "entries": [entry]}))
@@ -89,3 +89,25 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert data["schema_version"] == agg.SCHEMA_VERSION
     assert data["years"] == [2026, 2025]
     assert data["cities"][0]["years"]["2026"]["totals_mii_lei"]["cheltuieli"] == 120.0
+
+    # a single year with figures -> no year-over-year section
+    assert "Evoluție an-la-an" not in (out / "city" / "1017.html").read_text()
+
+
+def test_city_page_year_over_year(tmp_path):
+    data_root = tmp_path / "data"
+    _write_year(data_root, 2025, converted=True, totals=(100.0, 80.0))
+    _write_year(data_root, 2026, converted=True, totals=(110.0, 76.0))
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+
+    page = (out / "city" / "1017.html").read_text()
+    assert "Evoluție an-la-an" in page
+    assert "+10.0%" in page and "-5.0%" in page
+    assert '<a href="/repo/2025/city/1017.html">2025</a>' in page
+    assert "<strong>2026</strong>" in page
+
+    page25 = (out / "2025" / "city" / "1017.html").read_text()
+    assert "Evoluție an-la-an" in page25
+    assert '<a href="/repo/city/1017.html">2026</a>' in page25
+    assert "<strong>2025</strong>" in page25
