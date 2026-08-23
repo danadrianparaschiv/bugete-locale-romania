@@ -863,6 +863,25 @@ def corpus_export(
                   "aritmetice si de nomenclator — stratul sigur pentru analiza[/dim]")
 
 
+@corpus_app.command("aggregate")
+def corpus_aggregate(
+    data_dir: Path = typer.Option(Path("data"), exists=True, help="Rădăcina data/ cu toți anii"),
+    out: Path = typer.Option(Path("corpus.json")),
+):
+    """Agregatul corpusului (toți anii, toate orașele) într-un singur JSON.
+
+    Doar indicatorii afișați de site (identitate, cronologie, calitate,
+    totaluri, top capitole); datele la nivel de linie rămân în `corpus export`.
+    """
+    from .aggregate import build_aggregate, write_aggregate
+
+    corpus = build_aggregate(data_dir)
+    write_aggregate(corpus, out)
+    n_years = {y: sum(1 for c in corpus.cities if str(y) in c.years) for y in corpus.years}
+    per_year = " · ".join(f"{y}: {n} orase" for y, n in n_years.items())
+    console.print(f"[bold green]✓ agregat: {len(corpus.cities)} orase ({per_year}) -> {out}[/bold green]")
+
+
 @corpus_app.command("report")
 def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
     """Calitate și cost, una lângă alta, pentru fiecare municipalitate convertită."""

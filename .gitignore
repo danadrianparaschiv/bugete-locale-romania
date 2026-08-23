@@ -17,6 +17,7 @@ runs/
 /*.xlsx
 /corpus.csv
 /corpus.parquet
+/corpus.json
 
 # OS noise
 .DS_Store
