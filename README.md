@@ -74,16 +74,23 @@ bugetar și secțiune, o foaie „Probleme" care localizează fiecare problemă
 ## Alegerea modelelor LLM
 
 Straturile LLM pot rula pe preseturi predefinite «furnizor:model» —
-implicit `anthropic:claude-sonnet-5`, cu o scară Anthropic de la
-`claude-fable-5` (scanările cele mai grele) până la `claude-haiku-4-5`
-(cel mai ieftin), plus furnizori alternativi: OpenAI, Google, Mistral
-(rezidență UE a datelor), Qwen (greutăți deschise). Lista completă, cu
+Anthropic (implicit), OpenAI, Google, Mistral, Qwen. Lista completă, cu
 prețuri: `bgconvertor models`.
 
 ```bash
 uv sync --extra vendors   # necesar o singură dată pentru furnizorii non-Anthropic
-uv run bgconvertor convert <pdf> --llm repair --model-preset google:gemini-2.5-flash
+uv run bgconvertor convert <pdf> --llm repair --model-preset google:gemini-3.6-flash
 ```
+
+Recomandări din evaluarea pe corpus (5 orașe × 12 preseturi, 65 de
+rulări — [docs/eval-modele.md](docs/eval-modele.md)):
+
+- **`anthropic:claude-sonnet-5`** *(implicit)* — cele mai multe linii
+  verificate în absolut; alegerea când calitatea primează.
+- **`google:gemini-3.6-flash`** — 94% din randamentul implicitului la 8%
+  din cost; alegerea pentru conversii în masă.
+- Modelele premium (fable-5, opus-5) merită doar cu plafoane generoase pe
+  fișiere mici: la buget fix, costul lor per apel le lasă fără pagini.
 
 Poarta de acceptare aritmetică face alegerea sigură: un model mai slab
 repară mai puține grupuri, dar nu poate corupe datele — o corecție se
