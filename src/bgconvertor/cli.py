@@ -708,6 +708,9 @@ def batch(
     workers: int = typer.Option(4, min=1, max=8),
     llm: str = typer.Option("repair", help="off | repair"),
     max_llm_cost: float = typer.Option(3.00, help="Buget USD per oraș"),
+    model_preset: str | None = typer.Option(
+        None, "--model-preset",
+        help="Preset «furnizor:model» pentru fiecare oraș — lista: `bgconvertor models`"),
     only: str = typer.Option("pending", help="pending | failed | all"),
     limit: int = typer.Option(0, help="Oprește după N orașe (0 = fără limită)"),
 ):
@@ -755,6 +758,8 @@ def batch(
                    "--workers", str(workers), "--out", str(out_xlsx)]
             if llm != "off":
                 cmd += ["--llm", llm, "--max-llm-cost", str(max_llm_cost)]
+                if model_preset:
+                    cmd += ["--model-preset", model_preset]
             console.print(f"  [bold]{city.name}[/bold] ({city.siruta}) …")
             proc = subprocess.run(cmd, capture_output=True, text=True)
             if proc.returncode != 0:
@@ -767,6 +772,8 @@ def batch(
                 console.print(f"  [red]✗ {city.name} a esuat[/red]")
                 continue
             stats = _workbook_stats(out_xlsx)
+            if llm != "off" and model_preset:
+                stats["llm_preset"] = model_preset
             manifest.set_status(
                 city, status="converted", workbook=out_xlsx.name,
                 at=dt.datetime.now().isoformat(timespec="seconds"),
