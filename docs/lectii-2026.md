@@ -162,5 +162,7 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
 ---
 
 *Document viu — se actualizează pe măsură ce corpusul 2026 se închide și
-campania 2027 începe. Ultima actualizare: august 2026, la 20/41 de orașe
-convertite.*
+campania 2027 începe. Ultima actualizare: august 2026, la 26/41 de orașe
+convertite (batch-ul digital a adăugat încă două exemple la lecția
+«fișierul mic nu e anexa»: Ploiești publicase doar textul HCL, iar
+Baia Mare folosește layout-ul standard MF «Formular 11», încă nemapat).*
