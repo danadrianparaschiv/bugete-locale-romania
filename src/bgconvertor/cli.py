@@ -665,6 +665,7 @@ def eval_cmd(
     stage: str = typer.Option("extract", help="Etapa din depozitul de rulări de evaluat"),
     fixtures: Path = typer.Option(Path("tests/fixtures/golden"), help="Directorul fixture-urilor golden"),
     strict: bool = typer.Option(False, help="Iese cu cod 1 dacă nu se potrivesc toate ancorele"),
+    min_anchors: int = typer.Option(0, help="Iese cu cod 1 dacă ancorele potrivite scad sub prag (poartă anti-regresie)"),
 ):
     """Evaluează etapa de extracție față de fixture-urile golden verificate manual."""
     from . import eval_harness
@@ -698,6 +699,9 @@ def eval_cmd(
         f"{len(evaluated)}/{len(results)} evaluated fixtures"
     )
     if strict and (matched < total or len(evaluated) < len(results)):
+        raise typer.Exit(1)
+    if min_anchors and matched < min_anchors:
+        console.print(f"[red]regresie: {matched} ancore potrivite < pragul de {min_anchors}[/red]")
         raise typer.Exit(1)
 
 

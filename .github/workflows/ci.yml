@@ -18,9 +18,17 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --dev
       - run: uv run ruff check src tests
+      - name: materialize digital reference extraction (Alba Iulia)
+        # ~25s, fully offline (digital PDF, no OCR, no LLM). Populates runs/
+        # so the anchor test (test_ab_stays_fully_clean) and the digital
+        # golden fixtures actually run instead of skipping.
+        run: uv run bgconvertor convert data/2026/01-alba/1017-alba-iulia/budget_file.pdf
       - name: offline test suite
-        # PDF-dependent tests skip when sample files are absent; LLM tests
-        # replay cassettes — nothing here touches the network or an API key
+        # LLM tests replay cassettes — nothing here touches the network or
+        # an API key; tests for PDFs not extracted above still skip
         run: uv run pytest -q
-      - name: golden-fixture eval (committed samples)
-        run: uv run bgconvertor eval || true
+      - name: golden-fixture eval — digital family gate
+        # The 4 Alba Iulia fixtures (35 anchors) are computable in CI;
+        # scanned-layout fixtures need local OCR caches and stay a local
+        # gate (see CONTRIBUTING). Regression below the floor fails CI.
+        run: uv run bgconvertor eval --min-anchors 35
