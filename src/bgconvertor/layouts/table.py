@@ -116,12 +116,15 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
     for row in grid[first_data:]:
         cells = {i: row[i].strip() if i < len(row) else "" for i in range(n_cols)}
         raw_code, name, values, cell_issues, row_no = None, [], {}, [], None
+        func_ctx = None
         for i, text in cells.items():
             role = columns.get(i)
             if not text:
                 continue
             if role == "code":
                 raw_code = text
+            elif role == "func_code":
+                func_ctx = text.replace(" ", "")
             elif role == "name":
                 if not name or name[-1] != text:  # docling row-span dup
                     name.append(text)
@@ -163,5 +166,10 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
         if raw_code and not values and len(re.sub(r"\D", "", raw_code)) >= 6 and name_text:
             section = f"{raw_code} {name_text}"
 
-        lines.append(mk_line(raw_code, name_text, section, values, cell_issues, row_no))
+        if raw_code is None and func_ctx:
+            # functional subtotal row in a dual-code grid: the economic cell
+            # is empty and the functional code IS the line code
+            raw_code, func_ctx = func_ctx, None
+        lines.append(mk_line(raw_code, name_text, section, values, cell_issues,
+                             row_no, func_ctx=func_ctx))
     return lines

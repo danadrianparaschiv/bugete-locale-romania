@@ -25,6 +25,13 @@ CUI_HEADER_RE = re.compile(
 )
 _NOT_INSTITUTION = ("TOTAL", "SECTIUNEA", "CHELTUIELI", "VENITURI", "BUGETUL",
                     "DENUMIREA", "ANEXA")
+# PMB (București) per-unit annexes: each unit page carries "<Name> - 02<letter>",
+# the letter being the funding source (A=local, G=venituri proprii, D=externe)
+PMB_INST_RE = re.compile(
+    r"([A-ZĂÂÎȘȚ][\w ĂÂÎȘȚăâîșț.,\-'&]{5,70}?)\s*-\s*02([A-Z])\b"
+)
+PMB_SOURCE = {"A": ("local", "02"), "G": ("own_revenue", "10"),
+              "D": ("unknown", "08")}
 SECTION_CANON = {
     "SECTIUNEA TOTAL": "TOTAL",
     "SECTIUNEA FUNCTIONARE": "FUNCTIONARE",
@@ -130,9 +137,16 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             cui_m = CUI_HEADER_RE.match(text)
             if cui_m and not cui_m.group(1).strip().startswith(_NOT_INSTITUTION):
                 inst = cui_m.group(1).strip()[:60]
+        inst_source = None
+        if inst is None:
+            pmb_m = PMB_INST_RE.search(text)
+            if pmb_m and not pmb_m.group(1).strip().upper().startswith(_NOT_INSTITUTION):
+                inst = pmb_m.group(1).strip()[:60]
+                inst_source = PMB_SOURCE.get(pmb_m.group(2))
         if inst and doc is not None and not meta:
             base = doc.title.split(" — ")[0]
-            meta = (base, doc.budget, doc.suffix)
+            budget, suffix = inst_source or (doc.budget, doc.suffix)
+            meta = (base, budget, suffix)
         if meta:
             title, budget, suffix = meta
             if inst:
@@ -253,6 +267,16 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                     with_suffix = f"{m2.group(1)}.{doc.suffix}.{m2.group(2)}"
                     if registry.exists(with_suffix):
                         line.code = with_suffix
+                elif not registry.exists(line.code):
+                    # source digit dropped entirely (PMB): 67.03.04 -> 67.02.03.04,
+                    # bare capitol 67 -> 67.02 — adopt only if the completed code
+                    # exists in the nomenclator
+                    m3 = re.match(r"^(\d{2})\.(\d{2}(?:\.\d{2})?)$|^(\d{2})$", line.code)
+                    if m3:
+                        cand = (f"{m3.group(1)}.{doc.suffix}.{m3.group(2)}"
+                                if m3.group(1) else f"{m3.group(3)}.{doc.suffix}")
+                        if registry.exists(cand):
+                            line.code = cand
 
             # registry-driven kind for any line whose code lacks explicit
             # functional context (scans, and digital vendors that print bare

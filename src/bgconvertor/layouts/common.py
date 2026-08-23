@@ -18,6 +18,10 @@ from ..parsing import (
 
 HEADER_PATTERNS = [
     # order matters: specific labels must win over their generic substrings
+    # dual-code grids (PMB): one column per classification — the economic
+    # code is the line code, the functional one is its capitol context
+    (re.compile(r"clasificatie func"), "func_code"),
+    (re.compile(r"clasificatie econ"), "code"),
     (re.compile(r"cod indicator|indicator bugetar"), "code"),
     (re.compile(r"cod\s*rand"), "rowno"),
     (re.compile(r"\bcod\b"), "code"),
@@ -72,8 +76,11 @@ def is_code_cell(text: str) -> bool:
     )
 
 
-def mk_line(raw_code, name, section, values, cell_issues, row_no) -> dict:
+def mk_line(raw_code, name, section, values, cell_issues, row_no,
+            func_ctx: str | None = None) -> dict:
     code, func_code = split_combined_code(raw_code)
+    if func_ctx and func_code is None:
+        func_code = func_ctx
     line = {
         "raw_code": (raw_code or "").replace(" ", "") or None,
         "code": code,

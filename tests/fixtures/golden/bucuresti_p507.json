@@ -1,0 +1,54 @@
+{
+  "id": "bucuresti_p507",
+  "pdf": "data/2026/42-bucuresti/179132-bucuresti/budget_file.pdf",
+  "page": 507,
+  "layout": "scan_detail_economic",
+  "budget": "own_revenue",
+  "source_type": "scanned",
+  "hazards": [
+    "dual_code_columns_functional_plus_economic",
+    "garbage_embedded_text_layer",
+    "pmb_institution_header_dash_02letter"
+  ],
+  "columns": ["total", "credite_restante"],
+  "anchors": [
+    {
+      "raw_code": "68.05.02",
+      "code": "68.05.02",
+      "column": "total",
+      "value": "309800.00",
+      "name_contains": "Asistenta sociala"
+    },
+    {
+      "raw_code": "20",
+      "code": "20",
+      "column": "total",
+      "value": "7800.00",
+      "name_contains": "BUNURI"
+    },
+    {
+      "raw_code": "20.01.09",
+      "code": "20.01.09",
+      "column": "total",
+      "value": "200.00"
+    },
+    {
+      "raw_code": "20.03.01",
+      "code": "20.03.01",
+      "column": "total",
+      "value": "2850.00",
+      "name_contains": "Hrana"
+    },
+    {
+      "raw_code": "20.04.02",
+      "code": "20.04.02",
+      "column": "total",
+      "value": "300.00",
+      "name_contains": "Materiale sanitare"
+    }
+  ],
+  "text_contains": [
+    "Directia Generala De Asistenta Sociala"
+  ],
+  "notes": "Grila PMB cu doua coloane de cod: functional (68.05.02) + economic (20.xx). Ancorele verificate manual din grila OCR p507 (Directia Generala de Asistenta Sociala - 02G, venituri proprii). Codurile economice devin codul liniei cu func_code = coloana functionala; randul subtotal functional (economic gol) pastreaza codul functional."
+}
