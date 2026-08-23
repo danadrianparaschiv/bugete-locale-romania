@@ -1,16 +1,69 @@
 {
   "quality": {
-    "lines": 5962,
-    "pct_clean": 9.5,
-    "errors": 4645,
-    "warnings": 6098,
-    "documents": 1
+    "lines": 8851,
+    "pct_clean": 82.6,
+    "errors": 1722,
+    "warnings": 1203,
+    "documents": 289
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 928000.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 672651.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 472753.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 346349.0
+    },
+    {
+      "code": "67.10",
+      "name": "Cultura, recreere si religie",
+      "total": 63372.0
+    },
+    {
+      "code": "54.10",
+      "name": "Alte servicii publice generale",
+      "total": 13583.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 13575.0
+    },
+    {
+      "code": "74.10",
+      "name": "Protectia mediului",
+      "total": 4408.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "total": 1950.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 550.0
+    }
+  ],
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
