@@ -73,6 +73,8 @@ class City(BaseModel):
     name: str
     county: str
     county_code: str
+    populatie: int | None = None  # RPL2021; reference/municipii.json
+    suprafata_km2: float | None = None
     years: dict[str, CityYear] = Field(default_factory=dict)  # keyed by str(year)
 
 
@@ -125,15 +127,27 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
     return cy
 
 
+def _load_reference(repo_root: Path) -> dict:
+    """SIRUTA -> {populatie, suprafata_km2, ...} from reference/municipii.json."""
+    path = repo_root / "reference" / "municipii.json"
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text()).get("municipii", {})
+
+
 def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
     """Merge per-year manifests into one city-keyed corpus, newest year first."""
     ordered = sorted(manifests, key=lambda m: m.year, reverse=True)
+    reference = _load_reference(ordered[0].root.parent.parent)
     cities: dict[str, City] = {}
     for m in ordered:
         for c in m.cities():
+            ref = reference.get(c.siruta, {})
             city = cities.setdefault(c.siruta, City(
                 siruta=c.siruta, name=c.name,
                 county=c.county_name, county_code=c.county_code,
+                populatie=ref.get("populatie"),
+                suprafata_km2=ref.get("suprafata_km2"),
             ))
             city.years[str(m.year)] = city_year(m, c)
     return Corpus(

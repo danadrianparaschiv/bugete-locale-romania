@@ -41,6 +41,8 @@ def _row(city: City, cy: CityYear) -> dict:
         "name": city.name,
         "county": city.county,
         "county_code": city.county_code,
+        "populatie": city.populatie,
+        "suprafata_km2": city.suprafata_km2,
         "status": cy.status,
         "pct_clean": cy.quality.pct_clean if cy.quality else None,
         "lines": cy.quality.lines if cy.quality else None,

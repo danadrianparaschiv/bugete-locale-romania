@@ -17,6 +17,30 @@
     <div class="v">{{ a.quality.lines }} <span style="font-size:1rem;color:var(--dim)">/ {{ a.quality.pct_clean }}%</span></div></div>
 </div>
 
+<p class="sub">SIRUTA {{ city.siruta }}
+  {%- if city.populatie %} · {{ "{:,.0f}".format(city.populatie).replace(",", ".") }} locuitori (2021){% endif %}
+  {%- if city.suprafata_km2 %} · {{ city.suprafata_km2 }} km²{% endif %}</p>
+
+{% if city.source_url %}
+<p style="word-break:break-all">Sursa bugetului:
+  <a href="{{ city.source_url }}">{{ city.source_url }}</a></p>
+{% endif %}
+
+{% if city.debate_date or city.approved_date %}
+<h2 style="font-size:1.1rem">Adoptarea bugetului</h2>
+<table>
+  {% if city.debate_date %}
+  <tr><td>Pus în dezbatere publică</td>
+      <td>{{ city.debate_date }}{% if city.debate_url %} · <a href="{{ city.debate_url }}">anunț</a>{% endif %}</td></tr>
+  {% endif %}
+  {% if city.approved_date %}
+  <tr><td>Aprobat</td>
+      <td>{% if city.hcl %}<strong>{{ city.hcl }}</strong> din {% endif %}{{ city.approved_date }}{% if city.approved_url %} · <a href="{{ city.approved_url }}">hotărârea</a>{% endif %}</td></tr>
+  {% endif %}
+</table>
+{% if city.timeline_notes %}<p class="note" style="margin-top:.5rem;border:none;padding:0">{{ city.timeline_notes }}</p>{% endif %}
+{% endif %}
+
 {% if evolution %}
 <h2 style="font-size:1.1rem">Evoluție an-la-an</h2>
 <table>
@@ -41,34 +65,6 @@
 liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
 {% endif %}
 
-{% if city.debate_date or city.approved_date %}
-<h2 style="font-size:1.1rem">Adoptarea bugetului</h2>
-<table>
-  {% if city.debate_date %}
-  <tr><td>Pus în dezbatere publică</td>
-      <td>{{ city.debate_date }}{% if city.debate_url %} · <a href="{{ city.debate_url }}">anunț</a>{% endif %}</td></tr>
-  {% endif %}
-  {% if city.approved_date %}
-  <tr><td>Aprobat</td>
-      <td>{% if city.hcl %}<strong>{{ city.hcl }}</strong> din {% endif %}{{ city.approved_date }}{% if city.approved_url %} · <a href="{{ city.approved_url }}">hotărârea</a>{% endif %}</td></tr>
-  {% endif %}
-</table>
-{% if city.timeline_notes %}<p class="note" style="margin-top:.5rem;border:none;padding:0">{{ city.timeline_notes }}</p>{% endif %}
-{% endif %}
-
-{% if a.top_capitole %}
-<h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>
-<table>
-  <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>
-  <tbody>
-  {% for cap in a.top_capitole %}
-    <tr><td>{{ cap.code }}</td><td>{{ cap.name }}</td>
-        <td class="num">{{ "{:,.0f}".format(cap.total).replace(",", ".") }}</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
-{% endif %}
-
 <h2 style="font-size:1.1rem;margin-top:1.5rem">Calitatea conversiei</h2>
 <table>
   <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
@@ -85,4 +81,17 @@ liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu da
   {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
   {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
 </p>
+
+{% if a.top_capitole %}
+<h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>
+<table>
+  <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>
+  <tbody>
+  {% for cap in a.top_capitole %}
+    <tr><td>{{ cap.code }}</td><td>{{ cap.name }}</td>
+        <td class="num">{{ "{:,.0f}".format(cap.total).replace(",", ".") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
 {% endblock %}

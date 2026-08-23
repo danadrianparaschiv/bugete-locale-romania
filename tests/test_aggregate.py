@@ -94,6 +94,27 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert "Evoluție an-la-an" not in (out / "city" / "1017.html").read_text()
 
 
+def test_reference_populates_city_meta(data_root, tmp_path):
+    ref = tmp_path / "reference"
+    ref.mkdir()
+    (ref / "municipii.json").write_text(json.dumps({
+        "municipii": {"1017": {"populatie": 64227, "suprafata_km2": 103.65}}
+    }))
+    corpus = agg.build_aggregate(data_root)
+    assert corpus.cities[0].populatie == 64227
+    assert corpus.cities[0].suprafata_km2 == 103.65
+
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+    page = (out / "city" / "1017.html").read_text()
+    assert "SIRUTA 1017" in page
+    assert "64.227 locuitori (2021)" in page and "103.65 km²" in page
+    # ordered layout: meta line, then quality, downloads, top capitole last
+    assert page.index("SIRUTA 1017") < page.index("Adoptarea bugetului") \
+        < page.index("Calitatea conversiei") < page.index("Descarcă Excel") \
+        < page.index("Cheltuieli pe capitole")
+
+
 def test_city_page_year_over_year(tmp_path):
     data_root = tmp_path / "data"
     _write_year(data_root, 2025, converted=True, totals=(100.0, 80.0))
