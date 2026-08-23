@@ -195,7 +195,11 @@ def repair_document(
             ))
             continue
         for column in columns:
-            applied, recovered = _apply_if_consistent(group, missing, reading, column)
+            repair_model = getattr(concurrency, "repair_model", None)
+            applied, recovered = _apply_if_consistent(
+                group, missing, reading, column,
+                repair_source=f"llm:{repair_model}" if repair_model else "llm",
+            )
             for new_line in recovered:
                 new_line.kind = line.kind
                 new_line.section = line.section
@@ -283,7 +287,7 @@ def repair_unparseable(doc: BudgetDocument, client, page_image_fn) -> list[Issue
                     continue
                 if isinstance(parsed, Decimal):
                     ln.values[issue.column] = parsed
-                    ln.source = "llm"
+                    ln.source = f"llm:{cell_model}" if cell_model else "llm"
                     ln.issues.remove(issue)
                     ln.issues.append(Issue(
                         check="V6_repair", severity="info", page=page,
@@ -368,7 +372,8 @@ def _read_group(
 
 
 def _apply_if_consistent(
-    group, missing: list[str], reading: RowSetReading, column: str
+    group, missing: list[str], reading: RowSetReading, column: str,
+    repair_source: str = "llm",
 ) -> tuple[bool, list]:
     """Apply the re-read values if the sum holds; returns (applied, new lines).
 
@@ -408,11 +413,11 @@ def _apply_if_consistent(
         v = val(ln)
         if ln.values.get(column) != v:
             ln.values[column] = v
-            ln.source = "llm"
+            ln.source = repair_source
     recovered = [
         BudgetLine(
             code=code, raw_code=code.replace(".", ""), name="(rând recuperat de LLM)",
-            page=parent.page, values={column: v}, source="llm",
+            page=parent.page, values={column: v}, source=repair_source,
         )
         for code, v in missing_vals.items()
         if v != 0

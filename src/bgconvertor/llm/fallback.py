@@ -64,11 +64,12 @@ def extract_page_llm(client, image, columns: list[str], page: int) -> dict:
     from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number
 
     cfg = client.config.llm
+    fb_model = cfg.fallback_model or cfg.repair_model
     reading: PageReading = client.structured(
         "fallback_extract",
         FALLBACK_PROMPT.format(columns=", ".join(f'"{c}"' for c in columns)),
         PageReading,
-        model=cfg.fallback_model or cfg.repair_model,
+        model=fb_model,
         image=image,
         page=page,
         max_tokens=24000,  # dense pages + thinking regularly exceed 16K; >16K streams
@@ -97,7 +98,7 @@ def extract_page_llm(client, image, columns: list[str], page: int) -> dict:
             "section": row.section,
             "year": None,
             "values": values,
-            "source": "llm",
+            "source": f"llm:{fb_model}",
         }
         if cell_issues:
             line["cell_issues"] = cell_issues

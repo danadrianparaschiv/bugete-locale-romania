@@ -157,6 +157,13 @@ def _summary_sheet(wb: Workbook, result: ConversionResult) -> None:
         ("Erori", stats["issues"]["error"]),
         ("Avertismente", stats["issues"]["warning"]),
     ]
+    llm_models = sorted({
+        ln.source.split(":", 1)[1] if ":" in ln.source else "model neînregistrat"
+        for doc in result.documents for ln in doc.lines
+        if ln.source.startswith("llm")
+    })
+    if llm_models:
+        rows.append(("Modele LLM folosite", ", ".join(llm_models)))
     for doc in result.documents:
         rows.append((f"— {doc.title[:60]}", f"{doc.budget}, pag. {doc.pages[0]}-{doc.pages[-1]}, {len(doc.lines)} linii"))
     for label, value in rows:

@@ -52,6 +52,9 @@
   <tr><td>Complet verificate</td><td class="num">{{ a.quality.pct_clean }}%</td></tr>
   <tr><td>Erori marcate</td><td class="num">{{ a.quality.errors }}</td></tr>
   <tr><td>Avertismente</td><td class="num">{{ a.quality.warnings }}</td></tr>
+  {% if a.llm_models %}
+  <tr><td>Modele LLM folosite</td><td class="num">{{ a.llm_models | join(", ") }}</td></tr>
+  {% endif %}
 </table>
 
 <p style="margin-top:1.25rem">
