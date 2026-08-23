@@ -10,7 +10,6 @@ MAX_PASSES the remaining cells stay flagged UNRESOLVED — never guessed.
 from __future__ import annotations
 
 import logging
-import re
 from decimal import Decimal
 
 from pydantic import BaseModel, Field
@@ -326,24 +325,7 @@ def _parent_of(code: str, kind: str) -> str | None:
     return parent_code(code, kind)
 
 
-FORMULA_RE = re.compile(r"\(\s*cod\.?\s*([0-9+.\s]+?la[0-9+.\s]+|[0-9+.\s]+)\)", re.IGNORECASE)
-
-
-def formula_children(name: str) -> list[str] | None:
-    """Codes from a printed formula like '(cod 74.02.03+74.02.05+74.02.50)'.
-
-    Returns None when the formula contains a 'la' range (incomplete
-    enumeration) or no formula is present.
-    """
-    m = FORMULA_RE.search(name)
-    if not m:
-        return None
-    body = m.group(1)
-    if "la" in body:
-        return None
-    codes = [c.strip() for c in body.split("+")]
-    codes = [c for c in codes if re.fullmatch(r"\d{2}(\.\d{2}){0,3}", c)]
-    return codes or None
+from ..validate import formula_children  # noqa: E402 — moved; kept for callers
 
 
 def _group_prompt(group, missing: list[str], columns: list[str], labels: dict) -> str:

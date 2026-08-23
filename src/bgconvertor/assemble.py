@@ -321,6 +321,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             doc.lines.append(line)
 
     for d in documents:
+        _derive_rows_from_formulas(d)
         if registry is not None:
             _fix_misread_codes(d, registry)
         log.info(
@@ -328,6 +329,62 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             d.title[:40], d.budget, d.pages[0], d.pages[-1], len(d.lines),
         )
     return documents
+
+
+def _derive_rows_from_formulas(doc) -> None:
+    """Deterministic recovery of rows OCR dropped, from printed formulas.
+
+    When a parent's name prints its composition ("Hrana (cod 20.03.01+
+    20.03.02)") and exactly ONE cited child row is absent, that child's
+    value is the arithmetic residual — determined, not guessed. Two or
+    more absents stay for the LLM tier (under-determined)."""
+    from .model import Issue
+    from .sums import BASE_TOLERANCE
+    from .validate import formula_children
+
+    by_key: dict[tuple, BudgetLine] = {}
+    for ln in doc.lines:
+        if ln.code:
+            by_key.setdefault((ln.section, ln.kind, ln.func_code, ln.code), ln)
+    inserts = []
+    for ln in doc.lines:
+        if not ln.code or not ln.values:
+            continue
+        formula = formula_children(ln.name)
+        if not formula or ln.code in formula:
+            continue
+        ctx = (ln.section, ln.kind, ln.func_code)
+        present = [by_key[(*ctx, c)] for c in formula if (*ctx, c) in by_key]
+        missing = [c for c in formula if (*ctx, c) not in by_key]
+        if len(missing) != 1 or not present:
+            continue
+        bad_cols = {i.column for i in ln.issues if i.severity == "error"}
+        values: dict[str, Decimal] = {}
+        n = max(2, len(formula))
+        for col, pv in ln.values.items():
+            if col in bad_cols:
+                continue  # the parent's own value is unproven in this column
+            s = sum((p.values.get(col, Decimal(0)) for p in present), Decimal(0))
+            residual = pv - s
+            if abs(residual) > BASE_TOLERANCE * n:
+                values[col] = residual
+        if not values:
+            continue
+        row = BudgetLine(
+            code=missing[0], raw_code=missing[0].replace(".", ""),
+            name="(rând derivat din formula tipărită)", kind=ln.kind,
+            page=ln.page, section=ln.section, func_code=ln.func_code,
+            values=values, source="formula",
+        )
+        row.issues.append(Issue(
+            check="V4_hierarchy", severity="info", page=ln.page,
+            code=missing[0], column=None,
+            message=f"rând absent, derivat aritmetic din formula părintelui {ln.code}",
+        ))
+        by_key[(*ctx, missing[0])] = row
+        inserts.append((ln, row))
+    for parent, row in inserts:
+        doc.lines.insert(doc.lines.index(parent) + 1, row)
 
 
 def _fix_misread_codes(doc, registry) -> None:
