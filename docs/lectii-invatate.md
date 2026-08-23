@@ -220,4 +220,8 @@ vreodată corectată automat).
 
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
 actualizare: august 2026, la 32/41 orașe pe 2026 și 37/42 pe 2025, după
-reconcilierea costurilor cu facturile furnizorilor.*
+reconcilierea costurilor cu facturile furnizorilor și recuperarea
+machetelor MF «Formular 11» (Baia Mare: 0 → 691 linii extrase). Lecția
+«fișierul mic nu e anexa» a mai primit două exemple: Ploiești publicase
+doar textul HCL, iar Satu Mare un comunicat de presă — în ambele cazuri
+documentul bugetar propriu-zis lipsește, oricât de bun ar fi convertorul.*
