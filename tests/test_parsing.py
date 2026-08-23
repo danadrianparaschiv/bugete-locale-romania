@@ -124,3 +124,11 @@ class TestUSFormatOCR:
         import pytest as _pytest
         with _pytest.raises(NumberParseError):
             parse_ro_number("15,000.00 / 0.00", ocr=True)  # dual cell stays flagged
+
+
+def test_source_letter_suffix_stripped():
+    from bgconvertor.parsing import normalize_indicator_code
+    assert normalize_indicator_code("51.02A") == "51.02"
+    assert normalize_indicator_code("50.02A") == "50.02"
+    # a bare pseudo-code letter still rejects
+    assert normalize_indicator_code("01F") is None

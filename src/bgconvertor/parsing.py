@@ -174,6 +174,11 @@ def normalize_indicator_code(raw: str | None) -> str | None:
     s = _SPACE_RE.sub("", stripped).rstrip("*").rstrip(")").rstrip("*")
     if not s:
         return None
+    # funding-source letter glued to a capitol code (Timișoara '51.02A',
+    # PMB-family '50.02A'): the letter is the source variant, not the code
+    m_src = re.fullmatch(r"(\d{2}\.\d{2})[A-Z]", s)
+    if m_src:
+        s = m_src.group(1)
     if "," in s and "." not in s:
         s = s.replace(",", ".")  # vendor/OCR comma-printed codes: 59,40
     m3 = re.match(r"^00(\d)\.(\d{2})$", s)

@@ -78,7 +78,7 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    extract_version: str = "30"  # dual-code grids (func_code column, PMB)
+    extract_version: str = "31"  # source-letter codes (51.02A), inverse name wrap
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

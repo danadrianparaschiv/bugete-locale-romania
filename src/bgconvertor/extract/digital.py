@@ -110,6 +110,17 @@ def extract_page(plumber_page) -> dict:
                 prev["cell_issues"] = prev.get("cell_issues", []) + cell_issues
             continue
 
+        if (raw_code is not None and not name and not values and lines
+                and lines[-1]["raw_code"] is None and lines[-1]["name"]):
+            # Craiova-style inverse wrap: the NAME row (with values) prints
+            # above, the code row below is otherwise empty — reunite them
+            code, func_code = _normalize(raw_code)
+            prev = lines[-1]
+            prev["raw_code"], prev["code"], prev["func_code"] = raw_code, code, func_code
+            if rand is not None:
+                prev["row_no"] = rand
+            continue
+
         code, func_code = _normalize(raw_code)
         line = {
             "raw_code": raw_code,
