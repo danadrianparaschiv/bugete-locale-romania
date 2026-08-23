@@ -1,10 +1,10 @@
 {
   "quality": {
-    "lines": 536,
-    "pct_clean": 34.1,
-    "errors": 47,
-    "warnings": 387,
-    "documents": 2
+    "lines": 560,
+    "pct_clean": 60.5,
+    "errors": 39,
+    "warnings": 231,
+    "documents": 1
   },
   "llm_models": [
     "gemini-3.6-flash"

@@ -466,11 +466,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 536,
-        "pct_clean": 34.1,
-        "errors": 47,
-        "warnings": 387,
-        "at": "2026-08-23T16:49:07",
+        "lines": 560,
+        "pct_clean": 60.5,
+        "errors": 39,
+        "warnings": 231,
+        "at": "2026-08-23T19:01:38",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
@@ -902,11 +902,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 3138,
-        "pct_clean": 68.4,
-        "errors": 1508,
-        "warnings": 854,
-        "at": "2026-08-23T16:49:07",
+        "lines": 4050,
+        "pct_clean": 69.1,
+        "errors": 872,
+        "warnings": 1339,
+        "at": "2026-08-23T19:01:38",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
@@ -989,11 +989,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 242,
-        "pct_clean": 24.0,
-        "errors": 9,
-        "warnings": 178,
-        "at": "2026-08-23T10:40:36",
+        "lines": 340,
+        "pct_clean": 79.1,
+        "errors": 26,
+        "warnings": 51,
+        "at": "2026-08-23T19:01:38",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
@@ -1047,11 +1047,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1830,
-        "pct_clean": 34.8,
-        "errors": 258,
-        "warnings": 1299,
-        "at": "2026-08-23T16:49:07",
+        "lines": 1876,
+        "pct_clean": 34.2,
+        "errors": 374,
+        "warnings": 1181,
+        "at": "2026-08-23T19:01:38",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
