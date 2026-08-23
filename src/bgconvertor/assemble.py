@@ -18,6 +18,13 @@ log = logging.getLogger("bgc.assemble")
 
 DOC_TITLE_RE = re.compile(r"(BUGETUL\s+[A-Z][A-ZĂÂÎȘȚ ,\-]{10,})")
 INSTITUTION_RE = re.compile(r"Institutia publica:\s*([A-ZĂÂÎȘȚ0-9 .,\-\"']{4,}?)(?:\s+Buge|\s*$)")
+# Târgu Mureș per-unit annex: the institution page opens with the org name in
+# caps followed by its fiscal code (CUI), e.g. "CENTRUL DE CULTURA ... 47113359"
+CUI_HEADER_RE = re.compile(
+    r"^\s*([A-ZĂÂÎȘȚ][A-ZĂÂÎȘȚ0-9 .,\-\"']{8,90}?)\s+(\d{6,9})\s",
+)
+_NOT_INSTITUTION = ("TOTAL", "SECTIUNEA", "CHELTUIELI", "VENITURI", "BUGETUL",
+                    "DENUMIREA", "ANEXA")
 SECTION_CANON = {
     "SECTIUNEA TOTAL": "TOTAL",
     "SECTIUNEA FUNCTIONARE": "FUNCTIONARE",
@@ -116,8 +123,13 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
         # per-institution budgets (Braila): the page header names the
         # institution — each CHANGE of institution starts a new document,
         # regardless of whether the page repeats a recognizable title
-        inst_m = INSTITUTION_RE.search(payload.get("text") or "")
+        text = payload.get("text") or ""
+        inst_m = INSTITUTION_RE.search(text)
         inst = inst_m.group(1).strip()[:60] if inst_m else None
+        if inst is None:
+            cui_m = CUI_HEADER_RE.match(text)
+            if cui_m and not cui_m.group(1).strip().startswith(_NOT_INSTITUTION):
+                inst = cui_m.group(1).strip()[:60]
         if inst and doc is not None and not meta:
             base = doc.title.split(" — ")[0]
             meta = (base, doc.budget, doc.suffix)
