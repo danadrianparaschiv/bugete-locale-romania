@@ -1,0 +1,296 @@
+{
+ "sursa": {
+  "descriere": "Populația (RPL 2021, INS) și suprafața municipiilor reședință de județ, prin Wikidata (proprietatea P843 = cod SIRUTA); suprafețele pentru Sfântu Gheorghe și Miercurea Ciuc completate din infobox-urile Wikipedia.",
+  "wikidata_interogat_la": "2026-08-24",
+  "populatie_referinta": "recensământul din 1 decembrie 2021 (RPL2021)"
+ },
+ "municipii": {
+  "1017": {
+   "nume": "Alba Iulia",
+   "wikidata": "Q174665",
+   "populatie": 64227,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 103.65
+  },
+  "9262": {
+   "nume": "Arad",
+   "wikidata": "Q173591",
+   "populatie": 145078,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 116.5
+  },
+  "13169": {
+   "nume": "Pitești",
+   "wikidata": "Q187938",
+   "populatie": 141275,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 111.13
+  },
+  "20297": {
+   "nume": "Bacău",
+   "wikidata": "Q10737004",
+   "populatie": 136087,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 43.1
+  },
+  "26564": {
+   "nume": "Oradea",
+   "wikidata": "Q93358",
+   "populatie": 183105,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 116.1
+  },
+  "32394": {
+   "nume": "Bistrița",
+   "wikidata": "Q187205",
+   "populatie": 78877,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 145.47
+  },
+  "35731": {
+   "nume": "Botoșani",
+   "wikidata": "Q178855",
+   "populatie": 90010,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 41.36
+  },
+  "40198": {
+   "nume": "Brașov",
+   "wikidata": "Q82174",
+   "populatie": 237589,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 267.0
+  },
+  "42682": {
+   "nume": "Brăila",
+   "wikidata": "Q188478",
+   "populatie": 154686,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 77.9
+  },
+  "44818": {
+   "nume": "Buzău",
+   "wikidata": "Q201404",
+   "populatie": 103481,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 81.3
+  },
+  "50790": {
+   "nume": "Reșița",
+   "wikidata": "Q75634",
+   "populatie": 58393,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 197.65
+  },
+  "54975": {
+   "nume": "Cluj-Napoca",
+   "wikidata": "Q100188",
+   "populatie": 286598,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 179.5
+  },
+  "60419": {
+   "nume": "Constanța",
+   "wikidata": "Q79808",
+   "populatie": 263707,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 124.89
+  },
+  "63394": {
+   "nume": "Sfântu Gheorghe",
+   "wikidata": "Q202362",
+   "populatie": 50080,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 72.92
+  },
+  "65342": {
+   "nume": "Târgoviște",
+   "wikidata": "Q188673",
+   "populatie": 66965,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 50.4
+  },
+  "69900": {
+   "nume": "Craiova",
+   "wikidata": "Q168057",
+   "populatie": 234140,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 81.41
+  },
+  "75098": {
+   "nume": "Galați",
+   "wikidata": "Q170996",
+   "populatie": 217851,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 246.4
+  },
+  "77812": {
+   "nume": "Târgu Jiu",
+   "wikidata": "Q202357",
+   "populatie": 73545,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 161.0
+  },
+  "83320": {
+   "nume": "Miercurea Ciuc",
+   "wikidata": "Q193420",
+   "populatie": 34484,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 117.66
+  },
+  "86687": {
+   "nume": "Deva",
+   "wikidata": "Q204850",
+   "populatie": 53113,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 34.0
+  },
+  "92569": {
+   "nume": "Călărași",
+   "wikidata": "Q212561",
+   "populatie": 58211,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 133.22
+  },
+  "92658": {
+   "nume": "Slobozia",
+   "wikidata": "Q215723",
+   "populatie": 41550,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 132.87
+  },
+  "95060": {
+   "nume": "Iași",
+   "wikidata": "Q46852",
+   "populatie": 271692,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 94.0
+  },
+  "100521": {
+   "nume": "Giurgiu",
+   "wikidata": "Q202351",
+   "populatie": 54551,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 46.94
+  },
+  "106318": {
+   "nume": "Baia Mare",
+   "wikidata": "Q185280",
+   "populatie": 108759,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 236.0
+  },
+  "109773": {
+   "nume": "Drobeta-Turnu Severin",
+   "wikidata": "Q193890",
+   "populatie": 79865,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 57.43
+  },
+  "114319": {
+   "nume": "Târgu Mureș",
+   "wikidata": "Q186349",
+   "populatie": 116033,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 66.96
+  },
+  "120726": {
+   "nume": "Piatra-Neamț",
+   "wikidata": "Q187945",
+   "populatie": 79679,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 77.4
+  },
+  "125347": {
+   "nume": "Slatina",
+   "wikidata": "Q207074",
+   "populatie": 63487,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 53.93
+  },
+  "130534": {
+   "nume": "Ploiești",
+   "wikidata": "Q179585",
+   "populatie": 180539,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 89.2
+  },
+  "136483": {
+   "nume": "Satu Mare",
+   "wikidata": "Q185332",
+   "populatie": 91520,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 150.3
+  },
+  "139704": {
+   "nume": "Zalău",
+   "wikidata": "Q145292",
+   "populatie": 52359,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 90.09
+  },
+  "143450": {
+   "nume": "Sibiu",
+   "wikidata": "Q83324",
+   "populatie": 134308,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 121.0
+  },
+  "146263": {
+   "nume": "Suceava",
+   "wikidata": "Q46400",
+   "populatie": 119694,
+   "populatie_data": "2023-07-01",
+   "suprafata_km2": 52.0
+  },
+  "151790": {
+   "nume": "Alexandria",
+   "wikidata": "Q209929",
+   "populatie": 40390,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 9.56
+  },
+  "155243": {
+   "nume": "Timișoara",
+   "wikidata": "Q83404",
+   "populatie": 250849,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 130.5
+  },
+  "159614": {
+   "nume": "Tulcea",
+   "wikidata": "Q11585",
+   "populatie": 65624,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 199.94
+  },
+  "161945": {
+   "nume": "Vaslui",
+   "wikidata": "Q192269",
+   "populatie": 63035,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 68.0
+  },
+  "167473": {
+   "nume": "Râmnicu Vâlcea",
+   "wikidata": "Q192758",
+   "populatie": 93151,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 89.52
+  },
+  "174744": {
+   "nume": "Focșani",
+   "wikidata": "Q192265",
+   "populatie": 66648,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 54.8
+  },
+  "179132": {
+   "nume": "București",
+   "wikidata": "Q19660",
+   "populatie": 1716961,
+   "populatie_data": "2021-12-01",
+   "suprafata_km2": 226.0
+  }
+ }
+}
