@@ -1,21 +1,19 @@
 {
   "quality": {
-    "lines": 171,
-    "pct_clean": 23.4,
-    "errors": 53,
-    "warnings": 168,
+    "lines": 423,
+    "pct_clean": 35.7,
+    "errors": 98,
+    "warnings": 363,
     "documents": 2
   },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 225165.0,
     "cheltuieli": null
   },
   "top_capitole": [
-    {
-      "code": "84.02",
-      "name": "TRANSPORTURI",
-      "total": 36110.0
-    },
     {
       "code": "70.02",
       "name": "LOCUINTE,SERVICII SI DEZVOLTARE PUBLICA",
