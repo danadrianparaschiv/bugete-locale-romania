@@ -574,6 +574,17 @@
         "approved_url": "https://www.primariadeva.ro/index.php/informatii_publice/buget",
         "hcl": "HCL 186/2026",
         "notes": "Anunțul de consultare publică 'CONSULTARE PUBLICA CU PRIVIRE LA BUGETUL GENERAL AL MUNICIPIULUI DEVA PE ANUL 2026' a fost publicat la 14.04.2026, cu perioada de observații 14.04-29.04.2026. HCL 186/11.05.2026 'aprobarea bugetului general de venituri si cheltuieli al Municipiului Deva pe anul 2026 si a estimarilor 2027-2029' este listată pe pagina oficială de buget; AGERPRES confirmă aprobarea de luni, 11.05.2026."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 664,
+        "pct_clean": 100.0,
+        "errors": 0,
+        "warnings": 0,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -592,6 +603,17 @@
         "approved_url": "https://portal.municipiulslobozia.ro:4443/RegistruHotDisp/Details?type=hcl&Number=116&Year=2026",
         "hcl": "HCL 116/2026",
         "notes": "Anunțul de dezbatere publică a fost publicat la 17.04.2026 (corespunde cu 'BUGET 2026 - forma actualizata 17.04.2026' de pe pagina surse-financiare-buget a municipiulslobozia.ro); ședința de dezbatere publică a avut loc la 21.04.2026 la Centrul Cultural Ionel Perlea. HCL 116/30.04.2026 'aprobarea bugetului general de venituri si cheltuieli al Municipiului Slobozia, pe anul 2026' (portalul oficial de hotărâri)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 105,
+        "pct_clean": 25.7,
+        "errors": 1,
+        "warnings": 77,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -652,7 +674,8 @@
         "approved_url": "https://www.baiamare.ro/ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2026/Bugetul-Municipiului-Baia-Mare-pe-anul-2026--aprobat-conform-HCL-nr.18817.04.2026/",
         "hcl": "HCL 188/2026",
         "notes": "Pagina oficială: 'aprobat conform HCL nr.188/17.04.2026'; ședință extraordinară vineri, 17 aprilie (Glasul MM). Data dezbaterii = antetul Last-Modified (01.04.2026 15:08 GMT) al PDF-urilor proiectului de buget de pe pagina oficială 'Proiect' (fără dată explicită de anunț pe pagină); concordă cu fereastra de 15 zile prevăzută de art. 39 înainte de votul din 17.04. Indiciul-sursă hot250/20 Mai nu reprezintă aprobarea inițială (au urmat rectificări: HCL 241/30.04 etc.)."
-      }
+      },
+      "notes": "Anexa (Formular 11, rectificarea HCL 250/20.05.2026) e într-un layout standard MF nerecunoscut încă de extractor; de adăugat maparea și de căutat bugetul inițial HCL 188/17.04.2026."
     },
     {
       "county_code": "27",
@@ -722,6 +745,17 @@
         "approved_url": "https://www.primariapn.ro/hotarari-ale-consiliului-local-2026",
         "hcl": "HCL 174/2026",
         "notes": "Pagina oficială de dezbateri: 'Consultare publică cu privire la Proiectul de buget ... pe anul 2026' publicată la 09.04.2026; ședința de dezbatere publică conform Legii 52/2003 la 24.04.2026. HCL 174 din 05.05.2026 privind aprobarea bugetului general centralizat al municipiului (registrul oficial de hotărâri, fișierul hcl_174_05_05_2026.pdf); VivaFM a relatat la 07.05 despre ședința de aprobare de 5 minute."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 133,
+        "pct_clean": 76.7,
+        "errors": 10,
+        "warnings": 28,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -752,7 +786,7 @@
       "capital_siruta": "130534",
       "capital_name": "Ploiești",
       "path": "31-prahova/130534-ploiesti/budget_file.pdf",
-      "document_status": "approved_initial",
+      "document_status": "wrong_document",
       "source_url": "https://ploiesti.ro/wp-content/uploads/2026/05/134_11.05.2026_buget_local.pdf",
       "record_url": "https://ploiesti.ro/hotarari/",
       "timeline": {
@@ -762,7 +796,8 @@
         "approved_url": "https://ploiesti.ro/hotarari/hcl-134-2026/",
         "hcl": "HCL 134/2026",
         "notes": "Procedura de transparență a fost deschisă la 20.04.2026; dezbaterea publică a avut loc la 08.05.2026. Aprobat în ședința extraordinară din 11.05.2026 (ședință suspendată circa 3 ore pentru amendamente)."
-      }
+      },
+      "notes": "Fișierul de la source_url conține doar textul HCL 134/2026, fără anexa bugetară — de găsit anexa completă pe ploiesti.ro."
     },
     {
       "county_code": "32",
@@ -877,6 +912,17 @@
         "approved_url": "https://alexandria.ro/monitorul-oficial-local/hotarari-adoptate/hcl-2026/",
         "hcl": "HCL 165/2026",
         "notes": "'Anunț dezbatere publică BUGET 2026' oficial, publicat la 24.04.2026 (metadatele paginii, datePublished). HCL 165/06.05.2026 'Aprobarea Bugetului General al Municipiului Alexandria pe anul 2026' din registrul oficial al hotărârilor adoptate. alexandria.ro are un lanț de certificate TLS defect (accesat cu verificarea certificatului dezactivată)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 87,
+        "pct_clean": 78.2,
+        "errors": 0,
+        "warnings": 16,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -895,6 +941,17 @@
         "approved_url": "https://www.primariatm.ro/hcl/2026/209",
         "hcl": "HCL 209/2026",
         "notes": "Proiectul de buget a fost publicat pe primariatm.ro la 2026-05-19 (conform stiridetimisoara.ro); primariatm.ro a anunțat la 2026-05-20 ședința de dezbatere publică (desfășurată la 2026-05-21). Aprobat în ședința extraordinară online din 2026-05-25, HCL 209/25.05.2026 'privind aprobarea bugetului local al Municipiului Timișoara pe anul 2026' (23 pentru, 3 abțineri), confirmat pe primariatm.ro."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 242,
+        "pct_clean": 24.0,
+        "errors": 9,
+        "warnings": 178,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -971,6 +1028,17 @@
         "approved_url": "https://www.focsani.info/fisiere/userfiles/adpl/registru_evidenta_ph_2026.pdf",
         "hcl": "HCL 236/2026",
         "notes": "Presa (constructiibursa.ro): 'abia în data de 14 mai administrația locală a publicat proiectul de buget pentru dezbatere publică'. Registrul oficial al proiectelor de hotărâri (PDF pe focsani.info): proiectul 'Aprobarea Bugetului General al Municipiului Focșani pe anul 2026' a fost înregistrat la 30.05.2026 și adoptat la 04.06.2026 ca HCL 236/04.06.2026 (ședință extraordinară convocată prin Dispoziția 327/30.05.2026; vot 18-1 conform monitoruldevrancea.ro)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 241,
+        "pct_clean": 73.0,
+        "errors": 36,
+        "warnings": 72,
+        "at": "2026-08-23T10:40:36",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {

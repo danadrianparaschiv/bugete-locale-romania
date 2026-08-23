@@ -1,0 +1,67 @@
+{
+  "quality": {
+    "lines": 664,
+    "pct_clean": 100.0,
+    "errors": 0,
+    "warnings": 0,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 426162.82,
+    "cheltuieli": 457871.86
+  },
+  "top_capitole": [
+    {
+      "code": "50.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 457871.86
+    },
+    {
+      "code": "69.02",
+      "name": "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE, MEDIU SI APE",
+      "total": 183342.89
+    },
+    {
+      "code": "63.02",
+      "name": "Partea a III-a CHELTUIELI SOCIAL-CULTURALE",
+      "total": 173273.6
+    },
+    {
+      "code": "70.02",
+      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "total": 133965.72
+    },
+    {
+      "code": "65.02",
+      "name": "CAP. Invatamant",
+      "total": 67029.9
+    },
+    {
+      "code": "68.02",
+      "name": "CAP. Asigurari si asistenta sociala",
+      "total": 54683.5
+    },
+    {
+      "code": "79.02",
+      "name": "Partea a V-a ACTIUNI ECONOMICE",
+      "total": 52021.84
+    },
+    {
+      "code": "84.02",
+      "name": "CAP. Transporturi",
+      "total": 52021.84
+    },
+    {
+      "code": "74.02",
+      "name": "CAP. Protectia mediului",
+      "total": 49377.17
+    },
+    {
+      "code": "67.02",
+      "name": "CAP. Cultura, recreere si religie © MINDSOFT-SICO - MUNICIPIUL DEVA",
+      "total": 46533.2
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

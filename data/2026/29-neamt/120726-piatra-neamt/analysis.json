@@ -1,0 +1,57 @@
+{
+  "quality": {
+    "lines": 133,
+    "pct_clean": 76.7,
+    "errors": 10,
+    "warnings": 28,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 493008.7
+  },
+  "top_capitole": [
+    {
+      "code": "50.02",
+      "name": "CHELTUIELI - TOTAL (cod 51.02 + 54.02 + 55.02 + 61.02 + 65.02 + 66.02 ",
+      "total": 493008.7
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 138149.0
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE",
+      "total": 60883.1
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 9928.0
+    },
+    {
+      "code": "54.02",
+      "name": "SERVICII PUBLICE GENERALE",
+      "total": 5446.0
+    },
+    {
+      "code": "55.02",
+      "name": "DATORIA PUBLICA - DOBANZI",
+      "total": 3327.0
+    },
+    {
+      "code": "80.02",
+      "name": "ACTIUNI GENERALE ECONOMICE, COMERCIALE SI DE MUNCA",
+      "total": 1510.0
+    },
+    {
+      "code": "96.02",
+      "name": "",
+      "total": -1202.43
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}
