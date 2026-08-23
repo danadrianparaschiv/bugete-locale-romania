@@ -293,6 +293,17 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
                         line.func_code = normalize_indicator_code(m.group(1))
 
+            # Vaslui-style headings carry the capitol as TEXT, without the
+            # source digit: "CAPITOL 51 - ..." / "51.01.03 - Autorități
+            # executive" — adopt it as context when the completed code exists
+            if line.code is None and registry is not None and region == "expense":
+                hm = (re.match(r"^CAPITOL(?:UL)?\s+(\d{2})\b", name)
+                      or re.match(r"^(\d{2})((?:\.\d{2}){0,2})\s*[-–—]", name))
+                if hm:
+                    tail = (hm.group(2) or "").strip(".") if (hm.lastindex or 1) >= 2 else ""
+                    cand = f"{hm.group(1)}.{doc.suffix}" + (f".{tail}" if tail else "")
+                    if registry.get("expense_functional", cand):
+                        cap_context = cand
             # Track capitol context; repair PDF-truncated economic prefixes
             # ("5002.580103" prints as "02.580103" — the generator clips it).
             if (
@@ -310,11 +321,61 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             doc.lines.append(line)
 
     for d in documents:
+        if registry is not None:
+            _fix_misread_codes(d, registry)
         log.info(
             "document %r (%s): pages %d-%d, %d lines",
             d.title[:40], d.budget, d.pages[0], d.pages[-1], len(d.lines),
         )
     return documents
+
+
+def _fix_misread_codes(doc, registry) -> None:
+    """Name-driven correction of OCR-misread economic codes.
+
+    Sibiu: 'Piese de schimb' printed as 20.01.08 (a 6 read as 8) collides
+    with the real 20.01.08. When duplicated codes carry different names, a
+    line whose name badly mismatches its code's official name but strongly
+    matches an ABSENT sibling (same parent) is reassigned to that sibling."""
+    from collections import defaultdict
+
+    from rapidfuzz import fuzz
+
+    from .validate import _fold
+
+    groups: dict[tuple, list] = defaultdict(list)
+    for ln in doc.lines:
+        if ln.kind == "expense_economic" and ln.code:
+            groups[(ln.func_code, ln.section, ln.code)].append(ln)
+    for (func, section, code), lines in list(groups.items()):
+        if len(lines) < 2 or "." not in code:
+            continue
+        parent = code.rsplit(".", 1)[0]
+        for ln in lines:
+            own = registry.get("expense_economic", code)
+            if own is None or fuzz.token_set_ratio(
+                _fold(ln.name), _fold(own.name)) >= 50:
+                continue
+            best = None
+            for sib in registry.children("expense_economic", parent):
+                if sib == code or (func, section, sib) in groups:
+                    continue
+                ent = registry.get("expense_economic", sib)
+                score = fuzz.token_set_ratio(_fold(ln.name), _fold(ent.name))
+                if score >= 85 and (best is None or score > best[0]):
+                    best = (score, sib)
+            if best:
+                from .model import Issue
+
+                ln.issues.append(Issue(
+                    check="V1_code", severity="info", page=ln.page,
+                    code=best[1], column=None,
+                    message=f"cod OCR corectat după nume: {code} -> {best[1]} "
+                            f"({best[0]:.0f}% potrivire cu numele oficial)",
+                ))
+                ln.code = best[1]
+                ln.raw_code = best[1].replace(".", "")
+                groups[(func, section, best[1])] = [ln]
 
 
 def _pick_payload(store: RunStore, page: int):
