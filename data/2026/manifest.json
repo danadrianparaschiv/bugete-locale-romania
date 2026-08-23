@@ -682,11 +682,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 8851,
-        "pct_clean": 82.6,
-        "errors": 1722,
-        "warnings": 1203,
-        "at": "2026-08-23T18:06:25",
+        "lines": 9288,
+        "pct_clean": 81.8,
+        "errors": 806,
+        "warnings": 1375,
+        "at": "2026-08-23T23:05:50",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
@@ -1128,11 +1128,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 8851,
-        "pct_clean": 82.6,
-        "errors": 1722,
-        "warnings": 1203,
-        "at": "2026-08-23T18:06:25",
+        "lines": 9288,
+        "pct_clean": 81.8,
+        "errors": 806,
+        "warnings": 1375,
+        "at": "2026-08-23T23:05:50",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash"
       }
