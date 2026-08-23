@@ -462,6 +462,17 @@
         "approved_url": "https://hcl.usr.ro/craiova/2026/h202",
         "hcl": "HCL 202/2026",
         "notes": "Proiectul a fost supus dezbaterii publice la 9 aprilie 2026 (anunțul primarului, observații până la 24 aprilie; primariacraiova.ro nu a putut fi accesat direct). Aprobat în ședința extraordinară online din 7 mai 2026 (cvlpress.ro/07.05.2026); HCL 202/07.05.2026 'Bugetul de venituri și cheltuieli al municipiului Craiova pe anul 2026' conform agregatorului oficial de hotărâri."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 536,
+        "pct_clean": 34.1,
+        "errors": 47,
+        "warnings": 387,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -507,6 +518,17 @@
         "approved_url": "https://primariagiurgiu.ro/monitorul-oficial-local/hotararile-autoritatii-deliberative/hotarari-ale-consiliului-local/2026-registrul-pentru-evidenta-hcl/",
         "hcl": "HCL 108/2026",
         "notes": "HCL 108/08.05.2026 'aprobarea Bugetului local de venituri si cheltuieli pe anul 2026' (ședință extraordinară 08.05.2026, conform registrului oficial de hotărâri). Nu a fost găsit un anunț de consultare publică datat; proiectul PHCL nr. 115 a fost înregistrat abia la 07.05.2026 (cu o zi înainte de adoptare, conform registrului PHCL); un fișier nedatat Proiect-Buget-2026.pdf se află în secțiunea 'Proiecte de buget'."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1122,
+        "pct_clean": 66.6,
+        "errors": 522,
+        "warnings": 438,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -656,6 +678,17 @@
         "approved_url": "https://hcl.usr.ro/pmb/2026/h167",
         "hcl": "HCGMB 167/2026",
         "notes": "HCGMB 167 din 05.05.2026 privind aprobarea Bugetului Municipiului București pe anul 2026 (text integral preluat de pe hcl.usr.ro; adoptarea a fost relatată în aceeași zi și de Digi24). Proiectul a fost supus dezbaterii publice luni, 2026-04-20 (Agerpres/Mediafax); ședința de dezbatere publică conform Legii 52/2003 a avut loc la 2026-04-24."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 5962,
+        "pct_clean": 9.5,
+        "errors": 4645,
+        "warnings": 6098,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -865,6 +898,17 @@
         "approved_url": "https://www.turnulsfatului.ro/2026/04/24/bugetul-sibiului-in-2026-are-investitii-mai-mari-si-salarii-mai-mici-alesii-au-aprobat-cheltuirea-a-168-de-miliarde-de-lei-fara-nicio-discutie-multumim-ne-revedem-luni/",
         "hcl": "HCL 126/2026",
         "notes": "Proiectul a fost publicat pentru consultare publică la 08.04.2026 (comunicat oficial; observații până la 23.04). Aprobat în unanimitate în ședința extraordinară din 24.04.2026; HCL 126/24.04.2026 (sibiu.ro, fișierul HCL_126_2026.pdf)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 3138,
+        "pct_clean": 68.4,
+        "errors": 1508,
+        "warnings": 854,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -970,6 +1014,17 @@
         "approved_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/ListaHotarariDeConsiliuLocal/8348",
         "hcl": "HCL 110/2026",
         "notes": "Anunțul nr. 15071/17.04.2026 a publicat proiectul; ședința de dezbatere publică a avut loc la 2026-05-04 (minuta pe primariatulcea.ro). Aprobat în ședința extraordinară din 2026-05-12: HCL 110 din 12.05.2026 'privind aprobarea bugetului de venituri și cheltuieli al Municipiului Tulcea pentru anul 2026' (Monitorul Oficial Local, tulcea.cityon.ro)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 700,
+        "pct_clean": 73.7,
+        "errors": 261,
+        "warnings": 154,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -988,6 +1043,17 @@
         "approved_url": "https://hotarari.ro/vaslui/hcl-149-2026",
         "hcl": "HCL 149/2026",
         "notes": "Proiect în dezbatere publică potrivit articolului de presă din 2026-04-05 (amendamente acceptate până la 2026-04-20); data exactă a publicării de către primărie nu a fost găsită. HCL 149/29.04.2026 'aprobarea bugetului general al Municipiului Vaslui pe anul 2026' (14 pentru, 5 împotrivă, 4 abțineri)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1830,
+        "pct_clean": 34.8,
+        "errors": 258,
+        "warnings": 1299,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -1058,6 +1124,17 @@
         "approved_url": "https://hcl.usr.ro/pmb/2026/h167",
         "hcl": "HCGMB 167/2026",
         "notes": "HCGMB 167 din 05.05.2026 privind aprobarea Bugetului Municipiului București pe anul 2026 (text integral preluat de pe hcl.usr.ro; adoptarea a fost relatată în aceeași zi și de Digi24). Proiectul a fost supus dezbaterii publice luni, 2026-04-20 (Agerpres/Mediafax); ședința de dezbatere publică conform Legii 52/2003 a avut loc la 2026-04-24."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 5962,
+        "pct_clean": 9.5,
+        "errors": 4645,
+        "warnings": 6098,
+        "at": "2026-08-23T16:49:07",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     }
   ]

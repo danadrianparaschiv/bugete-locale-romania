@@ -1,0 +1,57 @@
+{
+  "quality": {
+    "lines": 3138,
+    "pct_clean": 68.4,
+    "errors": 1508,
+    "warnings": 854,
+    "documents": 10
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 3533.0,
+    "cheltuieli": 15000.0
+  },
+  "top_capitole": [
+    {
+      "code": "50.10",
+      "name": "TOTAL CHELTUIELI (cod 50.10+59.10+63.10+70.10+79.10)",
+      "total": 15000.0
+    },
+    {
+      "code": "59.10",
+      "name": "Partea a II-a APARARE,ORDINE PUBLICA SI SIGURANTA",
+      "total": 0.0
+    },
+    {
+      "code": "63.10",
+      "name": "NATIONALA Partea a III-a CHELTUIELI SOCIAL-CULTURALE",
+      "total": 0.0
+    },
+    {
+      "code": "61.10",
+      "name": "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE, MEDIU SI APE",
+      "total": 0.0
+    },
+    {
+      "code": "79.10",
+      "name": "Partea a V-a ACTIUNI ECONOMICE",
+      "total": 0.0
+    },
+    {
+      "code": "98.10",
+      "name": "EXCEDENT",
+      "total": 0.0
+    },
+    {
+      "code": "99.10",
+      "name": "DEFICIT",
+      "total": 0.0
+    },
+    {
+      "code": "96.10",
+      "name": "Partea a VII-a REZERVE, EXCEDENT / DEFICIT",
+      "total": 0.0
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}
