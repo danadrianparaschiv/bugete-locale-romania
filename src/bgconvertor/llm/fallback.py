@@ -63,10 +63,12 @@ def extract_page_llm(client, image, columns: list[str], page: int) -> dict:
     """Full-page transcription -> extraction-contract payload."""
     from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number
 
+    cfg = client.config.llm
     reading: PageReading = client.structured(
         "fallback_extract",
         FALLBACK_PROMPT.format(columns=", ".join(f'"{c}"' for c in columns)),
         PageReading,
+        model=cfg.fallback_model or cfg.repair_model,
         image=image,
         page=page,
         max_tokens=24000,  # dense pages + thinking regularly exceed 16K; >16K streams

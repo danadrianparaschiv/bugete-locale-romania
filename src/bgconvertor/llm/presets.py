@@ -24,6 +24,7 @@ class Preset:
     api_key_env: str
     base_url: str | None  # None -> native Anthropic SDK
     description: str  # shown by `bgconvertor models` (user-facing, Romanian)
+    fallback_model: str | None = None  # full-page transcription; None -> repair_model
 
 
 def _anthropic(repair: str, cell: str, desc: str) -> Preset:
@@ -77,6 +78,23 @@ PRESETS: dict[str, Preset] = {
         "qwen", "qwen/qwen3-vl-30b-a3b-thinking", "qwen/qwen3-vl-30b-a3b-thinking",
         "OPENROUTER_API_KEY", "https://openrouter.ai/api/v1",
         "Qwen (via OpenRouter) — greutăți deschise, fără dependență de furnizor"),
+    # combinația sugerată de evaluarea pe corpus (docs/eval-modele.md):
+    # reparare ieftină pe Gemini Flash, transcriere de pagină pe Sonnet
+    "mixt:flash+sonnet": Preset(
+        "mixt", "gemini-3.6-flash", "gemini-3.6-flash",
+        "GEMINI_API_KEY",
+        "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "mixt — reparare Gemini Flash + transcriere de pagină Sonnet 5",
+        fallback_model="claude-sonnet-5"),
+}
+
+# model -> (api_key_env, base_url) pentru rutarea per apel; modelele claude-*
+# merg mereu prin SDK-ul nativ Anthropic și nu apar aici
+MODEL_ROUTES: dict[str, tuple[str, str]] = {
+    m: (p.api_key_env, p.base_url)
+    for p in PRESETS.values() if p.base_url
+    for m in (p.repair_model, p.cell_model, p.fallback_model)
+    if m and not m.startswith("claude-")
 }
 
 
@@ -98,6 +116,7 @@ def apply(config, key: str) -> Preset:
     config.llm.repair_model = p.repair_model
     config.llm.cell_model = p.cell_model
     config.llm.classify_model = p.cell_model
+    config.llm.fallback_model = p.fallback_model
     config.llm.api_key_env = p.api_key_env
     config.llm.base_url = p.base_url
     return p

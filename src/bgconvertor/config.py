@@ -37,6 +37,8 @@ class LLMConfig(BaseModel):
     base_url: str | None = None  # OpenAI-compatible endpoint for non-Anthropic
     repair_model: str = "claude-sonnet-5"
     cell_model: str = "claude-haiku-4-5"  # transcription-only cell recovery
+    fallback_model: str | None = None  # full-page transcription; None -> repair_model
+    call_deadline_s: int = 1800  # hard per-call wait bound in worker pools
     batch: bool = False  # Batch API (-50%) for unattended repair/fallback runs
     classify_model: str = "claude-haiku-4-5"
     mode: str = "off"  # off | repair | full — development default is off
@@ -91,7 +93,10 @@ class RunConfig(BaseSettings):
             "tableformer_mode", "docling_cell_matching",
         ],
         "llm": ["render_scale", "llm.repair_model", "llm.prompt_version"],
-        "llm_extract": ["render_scale", "llm.repair_model", "llm.prompt_version"],
+        "llm_extract": [
+            "render_scale", "llm.repair_model", "llm.fallback_model",
+            "llm.prompt_version",
+        ],
     }
 
     def _field_value(self, dotted: str) -> Any:

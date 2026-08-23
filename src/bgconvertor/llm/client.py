@@ -38,6 +38,7 @@ class LLMClient:
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self._client = None
+        self._compat: dict[str, object] = {}  # base_url -> OpenAI-compat client
 
     def _api(self):
         if self._client is None:
@@ -48,9 +49,30 @@ class LLMClient:
             self._client = anthropic.Anthropic(timeout=1500.0)
         return self._client
 
-    def _api_compat(self):
-        """OpenAI-compatible client for non-Anthropic vendors."""
-        if self._client is None:
+    def _route(self, model: str) -> tuple[str, str] | None:
+        """(api_key_env, base_url) for a compat model; None -> native Anthropic."""
+        if model.startswith("claude-"):
+            return None
+        from .presets import MODEL_ROUTES
+
+        route = MODEL_ROUTES.get(model)
+        if route is None and self.config.llm.base_url:
+            route = (self.config.llm.api_key_env, self.config.llm.base_url)
+        if route is None:
+            raise RuntimeError(
+                f"nu știu pe ce endpoint să rutez modelul {model!r} — "
+                "adăugați-l într-un preset (llm/presets.py) sau setați "
+                "BGC_LLM__BASE_URL/BGC_LLM__API_KEY_ENV"
+            )
+        return route
+
+    def _api_compat(self, model: str):
+        """OpenAI-compatible client for non-Anthropic models, cached per endpoint.
+
+        Bounded hard (timeout + one SDK retry): a hung request must never
+        stall a run for hours — the pool-level deadline is the backstop."""
+        key_env, base_url = self._route(model)
+        if base_url not in self._compat:
             import os
 
             try:
@@ -60,16 +82,15 @@ class LLMClient:
                     "furnizorii non-Anthropic necesită pachetul openai: "
                     "`uv add openai` sau `uv sync --extra vendors`"
                 ) from None
-            key = os.environ.get(self.config.llm.api_key_env)
+            key = os.environ.get(key_env)
             if not key:
                 raise RuntimeError(
-                    f"lipsește {self.config.llm.api_key_env} din mediu/.env "
-                    f"(necesară pentru furnizorul {self.config.llm.vendor})"
+                    f"lipsește {key_env} din mediu/.env (necesară pentru {model})"
                 )
-            self._client = OpenAI(
-                api_key=key, base_url=self.config.llm.base_url, timeout=1500.0,
+            self._compat[base_url] = OpenAI(
+                api_key=key, base_url=base_url, timeout=600.0, max_retries=1,
             )
-        return self._client
+        return self._compat[base_url]
 
     def _cache_key(self, purpose, prompt, output_model, model, image_bytes: bytes) -> Path:
         key = hashlib.sha256(
@@ -149,7 +170,7 @@ class LLMClient:
         for attempt in (1, 2):
             got_response = False
             try:
-                if self.config.llm.vendor != "anthropic":
+                if not model.startswith("claude-"):
                     payload: list[dict] = []
                     if image is not None:
                         payload.append({
@@ -158,7 +179,7 @@ class LLMClient:
                                           + base64.standard_b64encode(image_bytes).decode()},
                         })
                     payload.append({"type": "text", "text": prompt})
-                    response = self._api_compat().chat.completions.create(
+                    response = self._api_compat(model).chat.completions.create(
                         model=model,
                         max_completion_tokens=max_tokens,
                         messages=[{"role": "user", "content": payload}],
@@ -175,7 +196,7 @@ class LLMClient:
                             else choice.finish_reason)
                     got_response = True
                     text = choice.message.content or ""
-                    parsed = output_model.model_validate_json(text) if text else None
+                    parsed = _lenient_validate(output_model, text) if text else None
                 elif max_tokens > 16000:
                     # the SDK refuses long non-streaming requests — stream and
                     # validate the final JSON against the schema ourselves
@@ -196,7 +217,7 @@ class LLMClient:
                     text = "".join(
                         b.text for b in response.content if getattr(b, "type", "") == "text"
                     )
-                    parsed = output_model.model_validate_json(text) if text else None
+                    parsed = _lenient_validate(output_model, text) if text else None
                 else:
                     response = self._api().messages.parse(
                         model=model,
@@ -237,6 +258,34 @@ class LLMClient:
             in_tok, out_tok, model=model, image=image,
         )
         return parsed
+
+
+def _lenient_validate(output_model, text: str):
+    """Validate model output, tolerating prose/markdown wrapping.
+
+    A schema miss on an already-paid call is wasted money: before giving
+    up, strip ``` fences and try the largest {...} / [...] slice. Raises
+    only when no candidate validates (caller treats it as a parse error)."""
+    text = text.strip()
+    try:
+        return output_model.model_validate_json(text)
+    except Exception:
+        pass
+    candidates = []
+    if "```" in text:
+        for chunk in text.split("```")[1::2]:
+            candidates.append(chunk.removeprefix("json").strip())
+    for opener, closer in ("{}", "[]"):
+        start, end = text.find(opener), text.rfind(closer)
+        if 0 <= start < end:
+            candidates.append(text[start:end + 1])
+    for cand in candidates:
+        try:
+            return output_model.model_validate_json(cand)
+        except Exception:
+            continue
+    # let the caller's retry logic see the original failure
+    return output_model.model_validate_json(text)
 
 
 def _strict_schema(output_model, require_all: bool = False) -> dict:

@@ -148,14 +148,26 @@ def repair_document(
         readings = [results[str(i)] for i in range(len(jobs))]
     elif n_workers > 1 and len(jobs) > 1:
         from concurrent.futures import ThreadPoolExecutor
+        from concurrent.futures import TimeoutError as FutTimeout
 
-        with ThreadPoolExecutor(max_workers=n_workers) as pool:
+        # hard per-future deadline: a hung HTTP call must never stall the
+        # run for hours (seen live: 1.5h freeze via OpenRouter). Stuck
+        # workers are abandoned; the SDK-level timeout reaps them later.
+        deadline = getattr(concurrency, "call_deadline_s", 1800) or 1800
+        pool = ThreadPoolExecutor(max_workers=n_workers)
+        try:
             futures = [pool.submit(_read, job) for job in jobs]
             for fut in futures:
                 try:
-                    readings.append(fut.result())
+                    readings.append(fut.result(timeout=deadline))
+                except FutTimeout:
+                    log.warning("repair call abandoned after %ds without a result",
+                                deadline)
+                    readings.append(RuntimeError(f"call deadline {deadline}s hit"))
                 except Exception as exc:  # noqa: BLE001 - collected per job
                     readings.append(exc)
+        finally:
+            pool.shutdown(wait=False, cancel_futures=True)
     else:
         for job in jobs:
             try:

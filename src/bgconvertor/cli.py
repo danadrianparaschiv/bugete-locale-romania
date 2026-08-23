@@ -381,7 +381,10 @@ def models():
     for key, p in PRESETS.items():
         pin, pout = MODEL_PRICES[p.repair_model]
         name = f"[bold]{key}[/bold] (implicit)" if key == DEFAULT_PRESET else key
-        t.add_row(name, p.repair_model, p.cell_model, f"{pin:g}/{pout:g}", p.description)
+        repair = p.repair_model
+        if p.fallback_model:
+            repair += f" (+{p.fallback_model} pt. pagini)"
+        t.add_row(name, repair, p.cell_model, f"{pin:g}/{pout:g}", p.description)
     console.print(t)
     console.print(
         "[dim]cheile API per furnizor: vezi .env.example; prețurile marcate "
@@ -490,12 +493,15 @@ def convert(
         except ValueError as exc:
             console.print(f"[red]{exc}[/red]")
             raise typer.Exit(2) from None
-        if config.llm.batch and p.vendor != "anthropic":
+        preset_models = [p.repair_model, p.cell_model, p.fallback_model or p.repair_model]
+        if config.llm.batch and not all(m.startswith("claude-") for m in preset_models):
             console.print("[red]modul Batch API este disponibil doar pentru "
-                          "furnizorul anthropic[/red]")
+                          "modele Anthropic[/red]")
             raise typer.Exit(2)
-        console.print(f"model preset: [bold]{model_preset}[/bold] — "
-                      f"reparare {p.repair_model}, celule {p.cell_model}")
+        desc = f"reparare {p.repair_model}, celule {p.cell_model}"
+        if p.fallback_model:
+            desc += f", transcriere pagină {p.fallback_model}"
+        console.print(f"model preset: [bold]{model_preset}[/bold] — {desc}")
     store = RunStore(config, pdf)
     n_pages = len(PdfReader(pdf).pages)
     selected = parse_pages(pages, n_pages)

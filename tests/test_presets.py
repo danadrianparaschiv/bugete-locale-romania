@@ -36,3 +36,24 @@ def test_apply_sets_llm_fields():
 def test_unknown_preset_lists_options():
     with pytest.raises(ValueError, match="anthropic:claude-sonnet-5"):
         resolve("acme:supermodel")
+
+
+def test_mixed_preset_sets_fallback_and_routes():
+    cfg = RunConfig()
+    apply(cfg, "mixt:flash+sonnet")
+    assert cfg.llm.fallback_model == "claude-sonnet-5"
+    assert cfg.llm.repair_model == "gemini-3.6-flash"
+    # compat models must be routable; claude models never appear in routes
+    from bgconvertor.llm.presets import MODEL_ROUTES
+    assert "gemini-3.6-flash" in MODEL_ROUTES
+    assert not any(m.startswith("claude-") for m in MODEL_ROUTES)
+    # applying a non-mixed preset clears the fallback slot
+    apply(cfg, "anthropic:claude-sonnet-5")
+    assert cfg.llm.fallback_model is None
+
+
+def test_fallback_model_changes_llm_extract_hash():
+    a, b = RunConfig(), RunConfig()
+    b.llm.fallback_model = "claude-sonnet-5"
+    assert a.stage_hash("llm_extract") != b.stage_hash("llm_extract")
+    assert a.stage_hash("llm") == b.stage_hash("llm")
