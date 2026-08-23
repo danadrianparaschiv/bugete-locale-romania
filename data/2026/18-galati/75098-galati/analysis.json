@@ -1,0 +1,69 @@
+{
+  "quality": {
+    "lines": 223,
+    "pct_clean": 73.1,
+    "errors": 169,
+    "warnings": 71,
+    "documents": 1
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "63.02",
+      "name": "Partea a III-a Cheltuieli Social - Culturale",
+      "total": 295328.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 172333.0
+    },
+    {
+      "code": "50.02",
+      "name": "Partea I-a Servicii publice generale",
+      "total": 153782.7
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 81921.7
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 59749.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 57627.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 50353.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 11797.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 5001.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 4995.53
+    }
+  ],
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

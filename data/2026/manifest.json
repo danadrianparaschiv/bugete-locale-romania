@@ -480,6 +480,17 @@
         "approved_url": "https://hcl.usr.ro/galati/2026/h196",
         "hcl": "HCL 196/2026",
         "notes": "Anunț public oficial al primăriei: 'astăzi, 06.04.2026, nr. înregistrare 60661, se aduce la cunoștință publică documentul: Proiect de buget local al Municipiului Galați pe anul 2026'. Aprobat la 7 mai 2026 (16 pentru/3 contra/6 abțineri, ședință extraordinară, conform Viața Liberă); HCL 196/07.05.2026 'Aprobarea bugetului general de venituri și cheltuieli al Municipiului Galați'."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 223,
+        "pct_clean": 73.1,
+        "errors": 169,
+        "warnings": 71,
+        "at": "2026-08-23T09:59:50",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -534,6 +545,17 @@
         "approved_url": "https://miercureaciuc.ro/ro/buget",
         "hcl": "HCL 93/2026",
         "notes": "HCL 93/2026 ('Hot nr 93 BVC') pe pagina oficială de buget, cu 16 anexe datate 07.05.2026; szekelyhon.ro (07.05.2026) confirmă adoptarea bugetului în ședința extraordinară de joi, 07.05.2026 (primarul: punctul a putut fi introdus pe ordinea de zi abia la 7 mai din cauza adoptării târzii a bugetului de stat). Nu a fost găsit un anunț de consultare publică pentru proiect (secțiunea dezbateri-publice conține doar subiecte de urbanism)."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 613,
+        "pct_clean": 90.7,
+        "errors": 63,
+        "warnings": 43,
+        "at": "2026-08-23T09:59:50",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -671,6 +693,17 @@
         "approved_url": "https://hcl.usr.ro/tgmures/2026",
         "hcl": "HCL 120/2026",
         "notes": "HCL 120 din 11.05.2026 privind aprobarea bugetului UAT Municipiul Târgu Mureș pe anul 2026 (registrul hcl.usr.ro, ședință extraordinară; de asemenea zi-de-zi.ro, 11.05). Proiectul a fost publicat pe tirgumures.ro la 2026-04-29, conform articolului din Cuvântul Liber din 30.04 ('Ieri ... a publicat proiectul de buget')."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 2984,
+        "pct_clean": 84.3,
+        "errors": 43,
+        "warnings": 444,
+        "at": "2026-08-23T09:59:50",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -737,7 +770,7 @@
       "capital_siruta": "136483",
       "capital_name": "Satu Mare",
       "path": "32-satu-mare/136483-satu-mare/budget_file.pdf",
-      "document_status": "official_budget_presentation",
+      "document_status": "wrong_document",
       "source_url": "https://www.primariasm.ro/storage/comunicare/sanyi/stiri/buget-2026/buget-2026-color-kg-ro.pdf",
       "record_url": "https://www.primariasm.ro/buget-2026",
       "timeline": {
@@ -747,7 +780,8 @@
         "approved_url": "https://hcl.usr.ro/satu_mare",
         "hcl": "HCL 103/2026",
         "notes": "Documentele proiectului de buget, datate 30.03.2026, pe pagina oficială; termen pentru sugestii 14.04.2026, ora 15:00. HCL 103/11.05.2026 privind aprobarea Bugetului local (indexul hcl.usr.ro al hotărârilor din Satu Mare)."
-      }
+      },
+      "notes": "Fișierul publicat la source_url este broșura de prezentare a bugetului pentru cetățeni, nu anexa bugetară pe Ordinul 1954/2005 — de găsit anexa HCL reală."
     },
     {
       "county_code": "33",
@@ -765,6 +799,17 @@
         "approved_url": "https://zalausj.ro/portal/zalau/portal.nsf/AllByUNID/Buget+2026++Peste+453+milioane+lei+pentru+Zalau+in+2026-000186A2?OpenDocument=",
         "hcl": "HCL 144/2026",
         "notes": "debate_date este ședința de dezbatere publică (06.05.2026, anunțată la 05.05.2026); data exactă la care proiectul a fost publicat inițial în consultare nu a fost confirmată. Aprobat în ședința ordinară din 07.05.2026; Hotărârea nr. 144 din 07.05.2026 'aprobarea bugetului general al Municipiului Zalău pentru anul 2026' este confirmată în registrul oficial zalausj.ro/Templateweb/2026/hotarari.nsf."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 1000,
+        "pct_clean": 50.8,
+        "errors": 335,
+        "warnings": 441,
+        "at": "2026-08-23T09:59:50",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
@@ -803,6 +848,17 @@
         "approved_url": "https://hcl.usr.ro/suceava",
         "hcl": "HCL 118/2026",
         "notes": "Pagina oficială primariasv.ro 'Proiect de hotărâre privind aprobarea Bugetului Municipiului Suceava pe anul 2026' este datată 09.04.2026 (secțiunea dezbatere publică). HCL 118/08.05.2026 'aprobarea Bugetului General al Municipiului Suceava pentru anul 2026 și estimări 2027-2029'; vot în unanimitate conform svnews.ro."
+      },
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "lines": 775,
+        "pct_clean": 95.9,
+        "errors": 8,
+        "warnings": 29,
+        "at": "2026-08-23T09:59:50",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       }
     },
     {
