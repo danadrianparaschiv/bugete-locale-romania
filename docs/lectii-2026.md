@@ -1,0 +1,166 @@
+# Lecții învățate: procesarea bugetelor locale 2026
+
+Retrospectiva primului an al corpusului — ce am aflat convertind bugetele
+municipiilor reședință de județ pe 2026 și de ce să ținem cont când
+repetăm exercițiul pentru 2027. Toate cifrele provin din conversiile și
+evaluările efectuate (manifest, `evals/rezultate.csv`, istoricul git).
+
+## 1. Contextul anului: bugetul de stat întârziat comprimă totul
+
+Legea bugetului de stat 43/2026 a apărut abia în aprilie, iar efectul s-a
+văzut în lanț: majoritatea municipiilor au publicat proiectele în
+7–9 aprilie (imediat după legea de stat) și au aprobat între 27 aprilie
+și 13 mai. Coada s-a întins până pe 4 iunie (Focșani).
+
+**Pentru 2027**: fereastra de colectare a documentelor e îngustă și
+târzie — nu planifica achiziția corpusului pentru ianuarie; monitorizează
+apariția legii bugetului de stat și pornește colectarea la 1–2 săptămâni
+după ea, când apar simultan aproape toate proiectele.
+
+## 2. Proveniența documentelor: sursa e jumătate din problemă
+
+- **Nu orice PDF „de buget" e anexa bugetară.** Satu Mare a publicat la
+  loc de cinste broșura de prezentare pentru cetățeni („STABILITATE ÎN
+  VREMURI DE CRIZĂ") — zero tabele pe Ordinul 1954. Am descoperit-o abia
+  la conversie (0 linii extrase). Semnalul de alarmă exista în triaj:
+  toate paginile „unknown". **Regulă pentru 2027: triajul face parte din
+  achiziție** — un fișier cu layout-uri necunoscute pe tot eșantionul se
+  verifică manual înainte de a intra în corpus.
+- **Versiunile documentului contează și trebuie înregistrate.** Corpusul
+  2026 amestecă `official_proposal` (proiectul pus în dezbatere — 5 din
+  8 orașe ale batch-ului digital), `approved_initial` (anexa HCL) și
+  `approved_rectification` (Baia Mare — prima versiune găsită era deja
+  rectificarea din 20 mai, nu bugetul inițial din 17 aprilie). Cifrele
+  diferă între versiuni; orice analiză comparativă trebuie să citeze
+  `document_status`. **Pentru 2027**: revenire programată la 2–3 luni
+  după aprobare pentru a înlocui proiectele cu anexele aprobate.
+- **Șase municipii nu au publicat deloc un PDF utilizabil** (Reșița,
+  Târgu Jiu, Iași, Slatina, Drobeta-Turnu Severin, Râmnicu Vâlcea) — la
+  Iași am găsit HCL-ul de aprobare, dar nu și anexa. Drobeta a publicat
+  **XLSX** (singura!) — de altfel formatul ideal; merită cerut explicit
+  prin solicitări 544/2001 acolo unde PDF-ul lipsește.
+- **Cronologia adoptării e o sursă de date în sine.** Cercetarea datelor
+  de dezbatere/aprobare a scos constatări de transparență: Giurgiu a
+  înregistrat proiectul cu o zi înainte de vot, Miercurea Ciuc l-a pus pe
+  ordinea de zi în ziua aprobării, Reșița nu are niciun anunț de
+  consultare găsibil. **Pentru 2027**: colectarea cronologiei se face
+  odată cu documentul (anunțul de dezbatere + HCL-ul), nu retroactiv —
+  retroactiv a costat o campanie separată de cercetare web.
+- **Sursele oficiale sunt fragile**: linkuri Lotus-Notes cu ID-uri
+  opace, TLS stricat (alexandria.ro), fișiere de 156MB (Sibiu, peste
+  limita GitHub), site-uri care resping fetch-urile automate (403 la
+  primăriile Constanța, Craiova, pmb.ro). Manifest-ul cu sume de control
+  și `download.py` pentru fișierele mari s-au dovedit alegeri corecte.
+
+## 3. Calitatea documentelor: un spectru, nu o dihotomie
+
+Distribuția reală pe 2026, măsurată:
+
+| Clasă | Exemple | Rezultat tipic |
+|---|---|---|
+| Digital cu grilă | Alba Iulia, Târgoviște | 100% verificat, $0 |
+| Digital cu anexă pe unități | Târgu Mureș (38 instituții) | 84% după separarea instituțiilor |
+| Scanare bună, layout cunoscut | Suceava, Sfântu Gheorghe | 92–96% |
+| Scanare cu layout necunoscut | Miercurea Ciuc (2.5% determinist) | ~90% doar cu transcriere LLM |
+| Scanare aproape nestructurabilă | Galați (0% determinist) | ~73%, în întregime LLM |
+| Maraton de copiator | Cluj-Napoca (753 pagini) | 44% și platou — restul cere alt tip de recuperare |
+
+Lecții concrete:
+
+- **Grădina zoologică a furnizorilor e nesfârșită**: formate numerice
+  românești și americane, marcaje „X" în zeci de variante OCR, coduri
+  combinate capitol+economic, tabele transpuse, matrice de buget
+  centralizat, pagini de continuare fără antet, denumiri rupte pe două
+  rânduri. Fiecare oraș nou a adus măcar o variație; registrul de
+  machete + fixture-urile etalon au făcut extinderile sigure (evalul
+  130/148 n-a regresat nicio dată).
+- **Anexele pe unități cer separare pe instituții**, altfel codurile
+  repetate produc mii de avertismente false (Târgu Mureș: 13.5% → 84.3%
+  doar din separare). Delimitatorii diferă per furnizor („Instituția
+  publică:", nume în majuscule + CUI) — de căutat activ la orașe noi.
+- **Triajul înainte de orice cheltuială** a fost cel mai bun instrument
+  economic: estimările de cost au prăbușit repetat presupunerile
+  (Brăila de la $25 estimat inițial la $0.50 real) și au prins
+  documentul greșit de la Satu Mare.
+
+## 4. Adaptarea procesului de conversie
+
+- **Poarta aritmetică e fundația.** O corecție LLM se aplică doar dacă
+  face sumele să se închidă — de aceea am putut amesteca liber modele
+  ieftine și scumpe fără risc pe date. Nicio decizie din 2026 nu a
+  slăbit această regulă și nici în 2027 nu trebuie s-o facă vreuna.
+- **Cache + reluare gratuită au plătit chirie de multe ori**: blocaje,
+  chei expirate, plafoane atinse — toate reluate la $0. Promovarea celor
+  3 orașe din evaluare direct în corpus (cache integral) a făcut un
+  batch aproape gratuit.
+- **Plafonul de buget se poate depăși** cu apeluri mari concurente
+  (maxim observat: $7.29 la plafon $3 — apeluri de transcriere de ~$1+
+  lansate în paralel). Remediere rămasă pentru 2027: rezervarea costului
+  estimat la lansarea apelului.
+- **Rulările lungi au nevoie de watchdog**: un request agățat spre un
+  furnizor a înghețat o rulare 1.5 ore fără nicio eroare. Acum există
+  deadline per apel și abandon la lipsă de progres — obligatorii pentru
+  batch-uri peste noapte.
+- **Proveniența trebuie salvată la producere, nu reconstituită.**
+  Am ajuns să știm per linie ce model a citit-o (`llm:<model>`), per
+  oraș ce preset a rulat (`llm_preset` în manifest) și per apel costul
+  (ledger). Reconstituirea retroactivă a fost posibilă doar parțial
+  („model neînregistrat" pentru cache-urile vechi). În 2027 totul se
+  naște cu proveniență.
+- **Manifestul e o resursă partajată**: un proces de batch cu manifestul
+  în memorie a șters de două ori date adăugate între timp (cronologia).
+  Scrierile trebuie să fie mereu «citește proaspăt + îmbină» — regulă
+  valabilă pentru orice câmp nou adăugat în manifest.
+
+## 5. Modelele LLM: economia bate ierarhia
+
+Evaluarea sistematică (5 orașe × 12 preseturi, 65 de rulări, $76 —
+detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
+
+- **La buget fix, prețul per apel bate calitatea marginală**: modelele
+  premium au transcris cel mai bine per pagină, dar și-au permis prea
+  puține pagini; modele medii le-au bătut pe orașele grele.
+- **`gemini-3.6-flash` a livrat 94% din randamentul lui
+  `claude-sonnet-5` la 8% din cost** — batch-urile 2026 târzii au rulat
+  pe el la ~$0.15–0.35/oraș față de $3–8 în primele batch-uri.
+- **Sarcinile diferă**: repararea punctuală e accesibilă și modelelor
+  ieftine; transcrierea integrală de pagină separă brutal capabilitatea
+  (haiku: 0 linii verificate pe Galați). De aici slotul separat
+  `fallback_model` și presetul mixt.
+- **Fiabilitatea de integrare e o axă separată de capabilitate**: erori
+  de schemă (rezolvate ulterior cu parser tolerant), ID-uri de model
+  retrase peste noapte (`gemini-2.5-flash`), blocaje de rețea. Faza de
+  fum de ~$0.40 înaintea oricărei cheltuieli serioase și-a plătit
+  costul de zeci de ori.
+- **Prețurile și ID-urile modelelor sunt perisabile** — de verificat la
+  zi înaintea oricărei campanii 2027; plafoanele conservatoare din
+  `ledger.py` opresc devreme, niciodată târziu.
+
+## 6. Checklist pentru campania 2027
+
+1. Așteaptă legea bugetului de stat; pornește colectarea la 1–2
+   săptămâni după — recolta e concentrată în ~3 săptămâni.
+2. La achiziție, pentru fiecare oraș: anexa aprobată (nu broșura, nu
+   doar HCL-ul), anunțul de dezbatere + data, HCL nr./data, sursa
+   arhivată în manifest cu sumă de control; triaj imediat — layout
+   „unknown" generalizat = verificare manuală.
+3. Preferă formate mașină-lizibile unde există (XLSX); cere prin
+   544/2001 unde nu există nimic.
+4. Actualizează nomenclatorul (`bgconvertor nomenclator update`) —
+   clasificația în vigoare pentru 2027 poate diferi.
+5. Verifică ID-urile și prețurile modelelor; rulează faza de fum
+   (~$0.50) înainte de batch-uri.
+6. Convertește cu presetul economic validat (astăzi:
+   `google:gemini-3.6-flash`); păstrează referința premium pentru
+   orașele unde procentul contează.
+7. Planifică de la început a doua trecere: înlocuirea proiectelor cu
+   anexele aprobate + reconvertirea țintită (proveniența per linie
+   spune exact unde merită un model mai bun).
+8. Implementat înainte de campanie: rezervarea bugetului la lansarea
+   apelului; ordinea paginilor de fallback după randament.
+
+---
+
+*Document viu — se actualizează pe măsură ce corpusul 2026 se închide și
+campania 2027 începe. Ultima actualizare: august 2026, la 20/41 de orașe
+convertite.*
