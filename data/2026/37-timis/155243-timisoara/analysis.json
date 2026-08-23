@@ -3,7 +3,7 @@
     "lines": 340,
     "pct_clean": 79.1,
     "errors": 26,
-    "warnings": 51,
+    "warnings": 47,
     "documents": 1
   },
   "llm_models": [],
@@ -12,5 +12,6 @@
     "cheltuieli": null
   },
   "top_capitole": [],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

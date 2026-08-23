@@ -1,36 +1,17 @@
 {
   "quality": {
-    "lines": 6681,
-    "pct_clean": 64.9,
-    "errors": 1655,
-    "warnings": 1616,
-    "documents": 32
+    "lines": 6682,
+    "pct_clean": 69.9,
+    "errors": 1812,
+    "warnings": 1263,
+    "documents": 41
   },
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [
-    {
-      "code": "63.02",
-      "name": "Partea a lil-a Cheltuieli Social - Culturale",
-      "total": 589.72
-    },
-    {
-      "code": "99.02",
-      "name": "Deficit",
-      "total": 589.72
-    },
-    {
-      "code": "98.02",
-      "name": "Excedent",
-      "total": 0.0
-    },
-    {
-      "code": "96.02",
-      "name": "Rezerve, Excedent/Deficit",
-      "total": -589.72
-    }
-  ],
+  "top_capitole": [],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
