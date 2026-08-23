@@ -64,6 +64,7 @@ class CityYear(BaseModel):
     quality: Quality | None = None
     totals_mii_lei: dict[str, float] = Field(default_factory=dict)
     top_capitole: list[Capitol] = Field(default_factory=list)
+    infografic: dict | None = None  # chart-ready block from analysis.json
     llm_models: list[str] = Field(default_factory=list)
     files: Files = Field(default_factory=Files)
 
@@ -121,6 +122,7 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
         cy.quality = Quality(**(a.get("quality") or {}))
         cy.totals_mii_lei = a.get("totals_mii_lei") or {}
         cy.top_capitole = [Capitol(**cap) for cap in a.get("top_capitole") or []]
+        cy.infografic = a.get("infografic")
         cy.llm_models = a.get("llm_models") or []
     elif conv:
         cy.quality = Quality(lines=conv.get("lines"), pct_clean=conv.get("pct_clean"))

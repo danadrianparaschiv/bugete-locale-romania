@@ -82,7 +82,65 @@ liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu da
   {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
 </p>
 
-{% if a.top_capitole %}
+{% if a.infografic %}
+<h2 style="font-size:1.3rem;margin-top:2rem">Analiza bugetului</h2>
+<p class="note" style="border:none;padding:0;margin:0 0 1rem">Grafice generate automat
+din liniile verificate aritmetic ale bugetului local; sume în mii lei, afișate în milioane.</p>
+
+{% if a.infografic.venituri %}
+<div id="ig-sec-ven">
+  <h3 class="ig-h">De unde vin banii</h3>
+  <div class="ig-grid2">
+    <div class="ig-card"><div id="ig-ven"></div></div>
+    <div class="ig-card"><ul class="vlist" id="ig-ven-list"></ul></div>
+  </div>
+</div>
+{% endif %}
+
+<h3 class="ig-h">Unde se duc banii</h3>
+{% if a.infografic.sectiuni %}
+<p class="note" style="border:none;padding:0;margin:0 0 .6rem">
+  Funcționare {{ "{:,.0f}".format(a.infografic.sectiuni.functionare / 1000).replace(",", ".") }} mil. lei ·
+  dezvoltare {{ "{:,.0f}".format(a.infografic.sectiuni.dezvoltare / 1000).replace(",", ".") }} mil. lei</p>
+{% endif %}
+<div class="toolbar" id="ig-tabs">
+  <button data-mode="val" class="on">Total</button>
+  <button data-mode="func">Doar funcționare</button>
+  <button data-mode="dezv">Doar dezvoltare</button>
+</div>
+<div class="ig-card">
+  <div class="bars" id="ig-bars"></div>
+  <div class="detail" id="ig-detail"></div>
+</div>
+
+<div class="ig-card" style="margin-top:1rem">
+  <h3 class="ig-h" style="margin-top:0">Din fiecare 100 de lei cheltuiți</h3>
+  <div class="hundred" id="ig-hundred"></div>
+  <div class="hlegend" id="ig-hundred-legend"></div>
+</div>
+
+{% if a.infografic.trim %}
+<div id="ig-sec-trim">
+  <h3 class="ig-h">Ritmul anului, pe trimestre</h3>
+  <div class="ig-card"><div id="ig-trim"></div>
+    <div class="hlegend"><span><i style="background:#1a7f37"></i>funcționare</span>
+      <span><i style="background:#b8860b"></i>dezvoltare</span>
+      <span><i style="background:#0b57d0"></i>venituri</span></div></div>
+</div>
+{% endif %}
+
+{% if a.infografic.ani %}
+<div id="ig-sec-ani">
+  <h3 class="ig-h">Estimările pentru 2027–2029</h3>
+  <div class="ig-card"><div id="ig-ani"></div>
+    <p class="note" style="border:none;padding:0;margin-top:.5rem" id="ig-ani-note"></p></div>
+</div>
+{% endif %}
+
+<script>var IG = {{ a.infografic | tojson }};</script>
+<script>{% include "infografic.js" %}</script>
+
+{% elif a.top_capitole %}
 <h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>
 <table>
   <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>

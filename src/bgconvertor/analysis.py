@@ -8,12 +8,28 @@ All figures are drawn from VERIFIED lines only and are in mii lei.
 from __future__ import annotations
 
 import json
+import re
 from decimal import Decimal
 from pathlib import Path
 
 from .model import ConversionResult
 
 TOTAL_COLS = ("total", "total_2026", "buget_2026")
+TRIM_COLS = ("trim1", "trim2", "trim3", "trim4")
+EST_COLS = ("est2027", "est2028", "est2029")
+
+# revenue chapters grouped by who controls the money (rest -> "proprii")
+GRUP_STAT = {"11.02", "42.02", "43.02"}
+GRUP_UE = {"45.02", "46.02", "48.02"}
+
+# functional codes that are grand totals, "Partea ..." subtotals, or the
+# excedent/deficit block — aggregates, not chapters
+AGG_FUNC_PREFIX = {"49", "50", "59", "63", "69", "79", "89", "96", "97", "98", "99"}
+
+
+def _is_capitol(ln) -> bool:
+    return (ln.code.split(".")[0] not in AGG_FUNC_PREFIX
+            and not ln.name.lstrip().lower().startswith("partea"))
 
 
 def _line_total(ln) -> Decimal | None:
@@ -21,6 +37,139 @@ def _line_total(ln) -> Decimal | None:
         if col in ln.values:
             return ln.values[col]
     return None
+
+
+def _clean_name(name: str) -> str:
+    """Drop the printed '(cod 42.02.01+…)' enumerations and 'CAP.' prefixes."""
+    name = re.sub(r"\s*\(\s*cod[^)]*\)?\s*", " ", name, flags=re.I)
+    name = re.sub(r"^\s*CAP\.?\s*", "", name)
+    return " ".join(name.split()).strip(" ,+")
+
+
+def _floats(ln, cols) -> list[float] | None:
+    """All requested columns as floats, or None if any is absent."""
+    if not all(c in ln.values for c in cols):
+        return None
+    return [float(ln.values[c]) for c in cols]
+
+
+def infografic(result: ConversionResult) -> dict | None:
+    """Chart-ready snapshot of the main local budget (suffix 02), verified lines only.
+
+    Every block is optional: what cannot be assembled from verified lines is
+    simply absent, and the site falls back to the plain top-10 table. Nothing
+    is ever estimated to fill a gap.
+    """
+    docs = [d for d in result.documents if d.suffix == "02"]
+    verified = [
+        ln for d in docs for ln in d.lines
+        if ln.kind != "heading" and ln.code and not any(i.severity == "error" for i in ln.issues)
+    ]
+    if not verified:
+        return None
+
+    def rows(pred):
+        return [ln for ln in verified if pred(ln)]
+
+    def total_row(kind, codes, section):
+        for ln in verified:
+            if ln.kind == kind and ln.section == section and (
+                ln.code in codes if kind != "revenue" else (ln.raw_code or "").startswith("0001")
+            ):
+                if _line_total(ln) is not None:
+                    return ln
+        return None
+
+    out: dict = {"unitate": "mii lei"}
+    tot_ch = total_row("expense_functional", ("50.02", "49.02"), "TOTAL")
+    tot_ven = total_row("revenue", (), "TOTAL")
+    total_cheltuieli = float(_line_total(tot_ch)) if tot_ch else None
+    total_venituri = float(_line_total(tot_ven)) if tot_ven else None
+
+    # venituri pe surse: revenue chapters (xx.02), no aggregates (00.*, 49.*)
+    surse = []
+    for ln in rows(lambda x: x.kind == "revenue" and x.code and len(x.code) == 5
+                   and x.section in (None, "TOTAL")
+                   and not x.code.startswith(("00.", "49."))):
+        v = _line_total(ln)
+        if v is None or float(v) == 0:
+            continue
+        grup = "stat" if ln.code in GRUP_STAT else "ue" if ln.code in GRUP_UE else "proprii"
+        surse.append({"cod": ln.code, "nume": _clean_name(ln.name)[:80], "grup": grup, "val": float(v)})
+    surse.sort(key=lambda s: -s["val"])
+    if surse and total_venituri:
+        acoperire = sum(s["val"] for s in surse) / total_venituri * 100
+        if 90 <= acoperire <= 110:
+            out["venituri"] = {"total": total_venituri, "surse": surse,
+                               "acoperire_pct": round(acoperire, 1)}
+
+    # capitole with functionare/dezvoltare split, quarters, and subchapters
+    def by_code(kind, length, section):
+        best: dict[str, object] = {}
+        for ln in rows(lambda x: x.kind == kind and x.code and len(x.code) == length
+                       and x.section == section):
+            v = _line_total(ln)
+            if v is None:
+                continue
+            prev = best.get(ln.code)
+            if prev is None or float(v) > float(_line_total(prev)):
+                best[ln.code] = ln
+        return best
+
+    cap_t = by_code("expense_functional", 5, "TOTAL")
+    cap_f = by_code("expense_functional", 5, "FUNCTIONARE")
+    cap_d = by_code("expense_functional", 5, "DEZVOLTARE")
+    sub_t = by_code("expense_functional", 8, "TOTAL")
+    capitole = []
+    for cod, ln in cap_t.items():
+        if not _is_capitol(ln):
+            continue
+        val = float(_line_total(ln))
+        if val == 0:
+            continue
+        copii = sorted(
+            ({"nume": _clean_name(s.name)[:70], "val": float(_line_total(s))}
+             for c, s in sub_t.items() if c.startswith(cod) and float(_line_total(s)) > 0),
+            key=lambda k: -k["val"])[:8]
+        cap = {"cod": cod, "nume": _clean_name(ln.name)[:70], "val": val, "copii": copii}
+        for key, src in (("func", cap_f.get(cod)), ("dezv", cap_d.get(cod))):
+            if src is not None:
+                cap[key] = float(_line_total(src))
+        trim = _floats(ln, TRIM_COLS)
+        if trim:
+            cap["trim"] = trim
+        capitole.append(cap)
+    capitole.sort(key=lambda c: -c["val"])
+    if capitole and total_cheltuieli:
+        acoperire = sum(c["val"] for c in capitole) / total_cheltuieli * 100
+        if 90 <= acoperire <= 110:
+            out["capitole"] = capitole
+            out["total_cheltuieli"] = total_cheltuieli
+
+    # sections + quarterly rhythm from the section total rows
+    fu = total_row("expense_functional", ("50.02", "49.02"), "FUNCTIONARE")
+    dv = total_row("expense_functional", ("50.02", "49.02"), "DEZVOLTARE")
+    if fu is not None and dv is not None:
+        out["sectiuni"] = {"functionare": float(_line_total(fu)),
+                           "dezvoltare": float(_line_total(dv))}
+        trim_f, trim_d = _floats(fu, TRIM_COLS), _floats(dv, TRIM_COLS)
+        trim_v = _floats(tot_ven, TRIM_COLS) if tot_ven is not None else None
+        if trim_f and trim_d:
+            out["trim"] = {"functionare": trim_f, "dezvoltare": trim_d}
+            if trim_v:
+                out["trim"]["venituri"] = trim_v
+
+    # multi-year projections from the printed estimate columns
+    if tot_ch is not None:
+        est_c = _floats(tot_ch, EST_COLS)
+        est_v = _floats(tot_ven, EST_COLS) if tot_ven is not None else None
+        if est_c and total_cheltuieli is not None:
+            out["ani"] = {"cheltuieli": [total_cheltuieli, *est_c]}
+            if est_v and total_venituri is not None:
+                out["ani"]["venituri"] = [total_venituri, *est_v]
+
+    # a chart-worthy snapshot needs at least the expense breakdown
+    return out if "capitole" in out else None
 
 
 def city_analysis(result: ConversionResult) -> dict:
@@ -56,6 +205,8 @@ def city_analysis(result: ConversionResult) -> dict:
     for ln in verified:
         if ln.kind != "expense_functional" or not ln.code or len(ln.code) != 5:
             continue
+        if not _is_capitol(ln):  # skip TOTAL / "Partea ..." / excedent aggregates
+            continue
         v = _line_total(ln)
         if v is None or ln.section not in (None, "TOTAL"):
             continue
@@ -86,6 +237,7 @@ def city_analysis(result: ConversionResult) -> dict:
             "cheltuieli": total_cheltuieli,
         },
         "top_capitole": top_capitole,
+        "infografic": infografic(result),
         "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md.",
     }
 
