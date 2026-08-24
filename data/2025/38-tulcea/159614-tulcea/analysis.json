@@ -1,0 +1,70 @@
+{
+  "quality": {
+    "lines": 654,
+    "pct_clean": 81.7,
+    "errors": 147,
+    "warnings": 133,
+    "documents": 5
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "Locuințe,servicii și dezvoltare publică",
+      "total": 143648.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învățământ",
+      "total": 100268.9
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 63985.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistentă socială",
+      "total": 53446.5
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritāți publice și acțiuni externe",
+      "total": 47631.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protecția mediului",
+      "total": 31580.2
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere și religie",
+      "total": 16402.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publică și siguranță națională",
+      "total": 10463.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sănătate",
+      "total": 8035.4
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibil și energie",
+      "total": 7000.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

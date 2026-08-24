@@ -770,7 +770,18 @@
       "document_status": "official_proposal",
       "source_url": "https://tulcea.cityon.ro/File/DownloadBinaryFile/56b86a1b-488d-f3ad-2d2c-3a18e51147ec",
       "record_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/FisaDocumentGeneral/107549",
-      "notes": "Official proposal attachment; the CityOn record marks it as approved in the 27.03.2025 council meeting."
+      "notes": "Official proposal attachment; the CityOn record marks it as approved in the 27.03.2025 council meeting.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:24:09",
+        "tool_version": "0.1.0",
+        "lines": 654,
+        "pct_clean": 81.7,
+        "errors": 147,
+        "warnings": 133,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "39",
@@ -780,7 +791,18 @@
       "path": "39-vaslui/161945-vaslui/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://primariavaslui.ro/~documents/hotarari-cl-2025/hcl-nr-368-din-16-12-2025-privind-rectificarea-bugetului-local-al-municipiului-vaslui-etapa-decembrie-2025/?layout=file",
-      "record_url": "https://primariavaslui.ro/hotararile-autoritatii-deliberative-anul-2025/"
+      "record_url": "https://primariavaslui.ro/hotararile-autoritatii-deliberative-anul-2025/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:32:53",
+        "tool_version": "0.1.0",
+        "lines": 1338,
+        "pct_clean": 58.6,
+        "errors": 28,
+        "warnings": 904,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "40",
@@ -790,7 +812,18 @@
       "path": "40-valcea/167473-ramnicu-valcea/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://dm.primariavl.ro/dm/2025/hotarari.nsf/vwHotarariByAn/87DF645156FEA932C2258CD900357581/$FILE/191.%20Rectificare%20buget%20local%20si%20lista%20de%20investitii%20pe%20anul%202025.pdf",
-      "record_url": "https://www.primariavl.ro/"
+      "record_url": "https://www.primariavl.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:56:46",
+        "tool_version": "0.1.0",
+        "lines": 327,
+        "pct_clean": 47.7,
+        "errors": 145,
+        "warnings": 157,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "41",
@@ -800,7 +833,18 @@
       "path": "41-vrancea/174744-focsani/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.focsani.info/fisiere/userfiles/economic/proiect_buget_2025.pdf",
-      "record_url": "https://www.focsani.info/pagina/buget-pe-anul-2025"
+      "record_url": "https://www.focsani.info/pagina/buget-pe-anul-2025",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T13:02:38",
+        "tool_version": "0.1.0",
+        "lines": 229,
+        "pct_clean": 80.3,
+        "errors": 23,
+        "warnings": 46,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "42",
@@ -811,7 +855,18 @@
       "document_status": "approved_rectification",
       "source_url": "https://doc.pmb.ro/institutii/cgmb/buget/docs/2025/20251203/pdf/1.1.pdf",
       "record_url": "https://www.pmb.ro/buget",
-      "copy_from": "25-ilfov/179132-bucuresti/budget_file.pdf"
+      "copy_from": "25-ilfov/179132-bucuresti/budget_file.pdf",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T13:02:39",
+        "tool_version": "0.1.0",
+        "lines": 0,
+        "pct_clean": 0,
+        "errors": 0,
+        "warnings": 0,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     }
   ]
 }
