@@ -122,7 +122,7 @@ def test_snapshot_and_capitole(tmp_path):
     assert snap["probleme"] == []
 
 
-def _corpus_with_execution(tmp_path, plan_venituri):
+def _corpus_with_execution(tmp_path, plan_venituri, plan_cheltuieli=2000.0):
     """A minimal data/ tree: one converted city plus its execution reports."""
     data = tmp_path / "data"
     city = data / "2026" / "01-alba" / "1017-alba-iulia"
@@ -130,7 +130,7 @@ def _corpus_with_execution(tmp_path, plan_venituri):
     (city / "budget_file.pdf").write_bytes(b"%PDF-fake")
     (city / "analysis.json").write_text(json.dumps({
         "quality": {"lines": 10, "pct_clean": 100.0},
-        "totals_mii_lei": {"venituri": plan_venituri, "cheltuieli": 2000.0},
+        "totals_mii_lei": {"venituri": plan_venituri, "cheltuieli": plan_cheltuieli},
     }))
     (data / "2026" / "manifest.json").write_text(json.dumps({"year": 2026, "entries": [{
         "county_code": "01", "county_name": "Alba", "capital_siruta": "1017",
@@ -357,3 +357,30 @@ def test_partial_plan_suppresses_share(tmp_path):
     assert e.plan_incomplet is True
     assert e.pct_venituri is None
     assert e.venituri == 1000.0  # the official figure is still reported
+
+
+def test_plan_printed_in_lei_is_rescaled(tmp_path):
+    """Cluj, Timișoara și Vaslui publică bugetul în lei; corpusul e în mii lei."""
+    corpus = build_aggregate(_corpus_with_execution(
+        tmp_path, plan_venituri=2_000_000.0, plan_cheltuieli=1_800_000.0))
+    cy = corpus.cities[0].years["2026"]
+    assert cy.scara_corectata is True
+    assert cy.totals_mii_lei["venituri"] == 2000.0  # împărțit la 1000
+    assert cy.executie.pct_venituri == 50.0  # raport plauzibil după corecție
+
+
+def test_ordinary_overshoot_is_not_rescaled(tmp_path):
+    """O depășire obișnuită nu declanșează corecția de scară."""
+    corpus = build_aggregate(_corpus_with_execution(tmp_path, plan_venituri=2500.0))
+    cy = corpus.cities[0].years["2026"]
+    assert cy.scara_corectata is False
+    assert cy.totals_mii_lei["venituri"] == 2500.0
+
+
+def test_absurdly_low_share_discredits_the_plan(tmp_path):
+    """Un plan mult prea mare față de execuție e la fel de suspect ca unul prea mic."""
+    # execuția e 1000 mii lei; un plan de 90.000 ar da 1,1% la jumătatea anului
+    corpus = build_aggregate(_corpus_with_execution(
+        tmp_path, plan_venituri=90_000.0, plan_cheltuieli=88_000.0))
+    e = corpus.cities[0].years["2026"].executie
+    assert e.plan_incomplet is True and e.pct_venituri is None

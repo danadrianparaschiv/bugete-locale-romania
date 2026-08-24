@@ -30,6 +30,14 @@ GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gi
 # partial (bad scan), not that the city overspent — rectifications explain
 # some overshoot, an 8x ratio never does
 PLAN_RATIO_LIMIT = 130.0
+# below this share of the plan, a mid-year execution figure means the plan
+# total is wrong (usually a per-institution annex read as the whole budget)
+PLAN_RATIO_FLOOR = 2.0
+# some municipalities print their budget in lei, not mii lei; the corpus is
+# in mii lei, so such a total comes out 1000x too large. Only correct when the
+# evidence is overwhelming — never on a borderline case.
+SCALE_LEI = 1000
+SCALE_EVIDENCE = 100.0
 
 
 class Capitol(BaseModel):
@@ -85,6 +93,7 @@ class CityYear(BaseModel):
     top_capitole: list[Capitol] = Field(default_factory=list)
     infografic: dict | None = None  # chart-ready block from analysis.json
     executie: Executie | None = None  # Forexebug quarterly execution
+    scara_corectata: bool = False  # plan printed in lei, rescaled to mii lei
     llm_models: list[str] = Field(default_factory=list)
     files: Files = Field(default_factory=Files)
 
@@ -167,9 +176,35 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
         cy.quality = Quality(lines=conv.get("lines"), pct_clean=conv.get("pct_clean"))
 
     cy.executie = _load_executie(repo_root, manifest.year, c.pdf)
-    if cy.executie is not None:
-        _add_plan_share(cy.executie, cy.totals_mii_lei)
     return cy
+
+
+def _fix_scale(cy: CityYear, populatie: int | None) -> bool:
+    """Rescale a plan printed in lei to the corpus unit, mii lei.
+
+    Two independent witnesses, both official and both already in mii lei: the
+    Forexebug execution for the same city-year, and — failing that — the
+    city's population, since no municipality plans on the order of a million
+    lei per inhabitant. A correction applies only when a witness is off by
+    roughly three orders of magnitude, so an ordinary overshoot never triggers it.
+    """
+    plan = cy.totals_mii_lei
+    values = [v for v in (plan.get("venituri"), plan.get("cheltuieli")) if v]
+    if not values:
+        return False
+
+    witness = None
+    if cy.executie is not None and cy.executie.venituri:
+        witness = cy.executie.venituri  # cumulative, so the plan should exceed it
+    elif populatie:
+        witness = populatie * 3.0  # ≈3 mii lei per inhabitant, a low bound
+
+    if not witness or min(values) / witness < SCALE_EVIDENCE:
+        return False
+    for key in ("venituri", "cheltuieli"):
+        if plan.get(key):
+            plan[key] = plan[key] / SCALE_LEI
+    return True
 
 
 def _add_plan_share(e: Executie, plan: dict[str, float]) -> None:
@@ -194,8 +229,12 @@ def _add_plan_share(e: Executie, plan: dict[str, float]) -> None:
         if not planned:
             continue
         shares = [None if get(b, key) is None else get(b, key) / planned * 100 for b in blocks]
-        if any(s is not None and s > PLAN_RATIO_LIMIT for s in shares):
-            e.plan_incomplet = True  # one broken ratio discredits the plan total
+        # a share far above 100% means the plan total is a fragment; one far
+        # below means it is inflated (wrong scale, or a whole-county figure).
+        # Either way the plan is not trustworthy, so no ratio is shown.
+        if any(s is not None and not (PLAN_RATIO_FLOOR <= s <= PLAN_RATIO_LIMIT)
+               for s in shares):
+            e.plan_incomplet = True
             continue
         for block, share in zip(blocks, shares, strict=True):
             if share is not None:
@@ -224,7 +263,12 @@ def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
                 populatie=ref.get("populatie"),
                 suprafata_km2=ref.get("suprafata_km2"),
             ))
-            city.years[str(m.year)] = city_year(m, c)
+            cy = city_year(m, c)
+            # scale and plan share need the city's identity data, known here
+            cy.scara_corectata = _fix_scale(cy, city.populatie)
+            if cy.executie is not None:
+                _add_plan_share(cy.executie, cy.totals_mii_lei)
+            city.years[str(m.year)] = cy
     return Corpus(
         years=[m.year for m in ordered],
         cities=sorted(cities.values(), key=lambda c: (c.county_code, c.name)),

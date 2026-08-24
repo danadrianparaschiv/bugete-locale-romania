@@ -27,6 +27,46 @@ GRUP_UE = {"45.02", "46.02", "48.02"}
 AGG_FUNC_PREFIX = {"49", "50", "59", "63", "69", "79", "89", "96", "97", "98", "99"}
 
 
+def _is_total_section(ln) -> bool:
+    """Line belongs to the whole-budget view rather than a section split.
+
+    The section field is only trustworthy when it names one of the two legal
+    sections; many layouts leave stray header text in it, and treating that as
+    a section hid every capitol in those documents.
+    """
+    return (ln.section or "TOTAL").strip().upper() not in ("FUNCTIONARE", "DEZVOLTARE")
+
+
+def _plausible(total: float | None, parts: list[float]) -> float | None:
+    """Drop a total that the document's own parts contradict.
+
+    A whole-budget figure can never be smaller than the largest single chapter
+    inside it; when it is, the row we matched is not the total (mis-parsed
+    page, per-institution annex, stray line).
+    """
+    if total is None or not parts:
+        return total
+    return total if total >= max(parts) else None
+
+
+def _is_total_venituri(ln) -> bool:
+    """The 'TOTAL VENITURI' row, however the document spells its code.
+
+    Layouts print it as ``000102``, ``00.01`` or ``0001``; matching the raw
+    string alone silently missed every dotted variant, which is most of them.
+    """
+    if ln.kind != "revenue":
+        return False
+    digits = (ln.raw_code or "").replace(".", "")
+    return digits.startswith("0001") or (ln.code or "") == "00.01"
+
+
+def _is_total_cheltuieli(ln) -> bool:
+    return (ln.kind == "expense_functional"
+            and ln.code in ("50.02", "50.10", "49.02", "49.10")
+            and "CHELTUIELI" in ln.name.upper())
+
+
 def _is_capitol(ln) -> bool:
     return (ln.code.split(".")[0] not in AGG_FUNC_PREFIX
             and not ln.name.lstrip().lower().startswith("partea"))
@@ -72,13 +112,24 @@ def infografic(result: ConversionResult) -> dict | None:
         return [ln for ln in verified if pred(ln)]
 
     def total_row(kind, codes, section):
+        """Largest matching total row in a section — layouts repeat it per page."""
+        best = None
         for ln in verified:
-            if ln.kind == kind and (ln.section or "TOTAL") == section and (
-                ln.code in codes if kind != "revenue" else (ln.raw_code or "").startswith("0001")
-            ):
-                if _line_total(ln) is not None:
-                    return ln
-        return None
+            if ln.kind != kind:
+                continue
+            if not (_is_total_section(ln) if section == "TOTAL"
+                    else (ln.section or "").strip().upper() == section):
+                continue
+            # the grand-total code also lands on "Partea a N-a ..." headings in
+            # some layouts; those are subtotals, not the total
+            match = _is_total_venituri(ln) if kind == "revenue" else (
+                ln.code in codes and not ln.name.lstrip().lower().startswith("partea"))
+            v = _line_total(ln)
+            if not match or v is None or float(v) <= 0:
+                continue
+            if best is None or float(v) > float(_line_total(best)):
+                best = ln
+        return best
 
     out: dict = {"unitate": "mii lei"}
     tot_ch = total_row("expense_functional", ("50.02", "49.02"), "TOTAL")
@@ -89,7 +140,7 @@ def infografic(result: ConversionResult) -> dict | None:
     # venituri pe surse: revenue chapters (xx.02), no aggregates (00.*, 49.*)
     surse = []
     for ln in rows(lambda x: x.kind == "revenue" and x.code and len(x.code) == 5
-                   and x.section in (None, "TOTAL")
+                   and _is_total_section(x)
                    and not x.code.startswith(("00.", "49."))):
         v = _line_total(ln)
         if v is None or float(v) == 0:
@@ -107,7 +158,8 @@ def infografic(result: ConversionResult) -> dict | None:
     def by_code(kind, length, section):
         best: dict[str, object] = {}
         for ln in rows(lambda x: x.kind == kind and x.code and len(x.code) == length
-                       and (x.section or "TOTAL") == section):
+                       and (_is_total_section(x) if section == "TOTAL"
+                            else (x.section or "").strip().upper() == section)):
             v = _line_total(ln)
             if v is None:
                 continue
@@ -182,22 +234,17 @@ def city_analysis(result: ConversionResult) -> dict:
     ]
 
     def first_total(pred) -> float | None:
-        for ln in verified:
-            if pred(ln):
-                v = _line_total(ln)
-                if v is not None:
-                    return float(v)
-        return None
+        """Largest matching total: the row repeats per page and per section,
+        and the whole-budget figure is the largest of them."""
+        vals = [float(_line_total(ln)) for ln in verified
+                if pred(ln) and _line_total(ln) is not None and float(_line_total(ln)) > 0]
+        return max(vals) if vals else None
 
     total_venituri = first_total(
-        lambda ln: ln.kind == "revenue" and (ln.raw_code or "").startswith("0001")
-        and (ln.section in (None, "TOTAL"))
+        lambda ln: _is_total_venituri(ln) and _is_total_section(ln)
     )
     total_cheltuieli = first_total(
-        lambda ln: ln.kind == "expense_functional"
-        and ln.code in ("50.02", "50.10", "49.02", "49.10")
-        and "CHELTUIELI" in ln.name.upper()
-        and (ln.section in (None, "TOTAL"))
+        lambda ln: _is_total_cheltuieli(ln) and _is_total_section(ln)
     )
 
     # top functional capitole by total, verified lines, main local-budget doc
@@ -208,12 +255,29 @@ def city_analysis(result: ConversionResult) -> dict:
         if not _is_capitol(ln):  # skip TOTAL / "Partea ..." / excedent aggregates
             continue
         v = _line_total(ln)
-        if v is None or ln.section not in (None, "TOTAL"):
+        if v is None or not _is_total_section(ln):
             continue
         prev = capitole.get(ln.code)
         if prev is None or float(v) > prev["total"]:
             capitole[ln.code] = {"code": ln.code, "name": ln.name[:70], "total": float(v)}
-    top_capitole = sorted(capitole.values(), key=lambda c: -c["total"])[:10]
+    all_capitole = sorted(capitole.values(), key=lambda c: -c["total"])
+    top_capitole = all_capitole[:10]
+
+
+    # a total smaller than the largest chapter under it is not the total
+    rev_chapters = [
+        float(_line_total(ln)) for ln in verified
+        if ln.kind == "revenue" and ln.code and len(ln.code) == 5
+        and not ln.code.startswith(("00.", "49.")) and _is_total_section(ln)
+        and _line_total(ln) is not None
+    ]
+    total_venituri = _plausible(total_venituri, rev_chapters)
+    total_cheltuieli = _plausible(total_cheltuieli, [c["total"] for c in all_capitole])
+
+    # No fallback total for expenses: summing the verified capitole was tried
+    # and understates badly wherever those capitole are themselves partial
+    # (Botoșani would report 48.290 against an actual ~700.000 mii lei). An
+    # absent figure is honest; a plausible-looking wrong one is not.
 
     # provenance: which LLMs contributed lines/values ("llm:<model>" sources);
     # bare "llm" (pre-provenance caches) reports as "llm (model neînregistrat)"
