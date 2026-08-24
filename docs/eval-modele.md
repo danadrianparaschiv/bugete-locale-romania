@@ -102,6 +102,17 @@ gratuite). Faza 0 ≈ $2. Faza 3 opțională ≤ $30.
 
 ## Rezultate
 
+> **Corecție de facturare (24 aug 2026):** endpoint-ul compatibil OpenAI al
+> Gemini exclude tokenii de „thinking" din `completion_tokens`, deși Google
+> îi facturează ca output — facturile reale au ieșit ~3.4× peste costurile
+> din tabel pentru modelele Gemini (măsurat: $63.58 facturat vs. $18.48 în
+> registru, cumulat pe tot proiectul). Corectat în cod (costul se calculează
+> acum pe `total_tokens - prompt_tokens`). Recalibrat, gemini-3.6-flash
+> coboară de la ~843 la **~250 linii/$** — rămâne câștigătorul valorii, dar
+> cu marjă mai mică față de gpt-5-mini (229, ale cărui costuri includeau
+> deja reasoning-ul). Cifrele Anthropic/OpenAI/Mistral din tabel nu sunt
+> afectate.
+
 65 de rulări valide (5 orașe × 13 = baseline + 12 preseturi, plus o
 reluare qwen după un blocaj de rețea), $76.11 cost total de API. Metrica
 principală: **linii verificate câștigate față de baseline-ul `--llm off`,
