@@ -86,17 +86,23 @@ Recomandări din evaluarea pe corpus (5 orașe × 12 preseturi, 65 de
 rulări — [docs/eval-modele.md](docs/eval-modele.md)):
 
 - **`anthropic:claude-sonnet-5`** *(implicit)* — cele mai multe linii
-  verificate în absolut; alegerea când calitatea primează.
-- **`google:gemini-3.6-flash`** — 94% din randamentul implicitului la 8%
-  din cost; alegerea pentru conversii în masă.
+  verificate în absolut (~740 în evaluare); alegerea când calitatea
+  primează, ~$10 pe cele 5 orașe de test.
+- **`google:gemini-3.6-flash`** — aproape același randament (~700 linii)
+  la ~40% din cost; alegerea pentru conversii în masă.
+- **`openai:gpt-5-mini`** — cel mai bun raport linii/dolar (~230 față de
+  ~160 la flash și ~70 la implicit), dar recuperează mai puțin în
+  absolut; potrivit când bugetul, nu acoperirea, e constrângerea.
 - Modelele premium (fable-5, opus-5) merită doar cu plafoane generoase pe
   fișiere mici: la buget fix, costul lor per apel le lasă fără pagini.
 
-Notă de cost: unii furnizori (Gemini) facturează tokenii interni de
-„gândire" fără să-i afișeze în răspuns — registrul de costuri îi
-contorizează corect, iar preseturile economice limitează gândirea
-(`reasoning_effort: low`). Reconciliați periodic cu `bgconvertor costuri`
-și setați bugete de alertă la furnizor ca plasă independentă.
+Notă de cost — două capcane descoperite pe facturi reale: unii furnizori
+(Gemini) facturează tokenii interni de „gândire" fără să-i afișeze în
+răspuns (69% din outputul facturat, chiar cu `reasoning_effort: low`), iar
+prețurile de listă se schimbă. Registrul le contorizează acum corect, dar
+verificați prețul din `ledger.py` pe factura primei zile de rulare,
+reconciliați cu `bgconvertor costuri --csv` și setați bugete de alertă la
+furnizor ca plasă independentă.
 
 Poarta de acceptare aritmetică face alegerea sigură: un model mai slab
 repară mai puține grupuri, dar nu poate corupe datele — o corecție se
