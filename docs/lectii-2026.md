@@ -135,8 +135,13 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
 - **Contabilitatea tokenilor diferă între furnizori** — Gemini își exclude
   tokenii de „thinking" din `completion_tokens` pe endpoint-ul compatibil
   OpenAI, dar îi facturează: registrul nostru a subestimat costul real de
-  ~3.4× până la corecție. Reconciliați periodic registrul cu factura
+  ~4× până la corecție. Reconciliați periodic registrul cu factura
   furnizorului; un plafon de buget e atât de bun cât e contorul lui.
+  Reconcilierea din 24.08 a arătat două cauze suprapuse: gândirea
+  ascunsă (69% din outputul facturat pe apeluri reale) ȘI un preț de
+  listă de 2× față de estimarea noastră. **Un preț „de verificat" rămas
+  neverificat e o eroare de buget, nu o notă de subsol** — verificați
+  prețurile pe factura primei zile de rulare, nu la final.
 - **Prețurile și ID-urile modelelor sunt perisabile** — de verificat la
   zi înaintea oricărei campanii 2027; plafoanele conservatoare din
   `ledger.py` opresc devreme, niciodată târziu.

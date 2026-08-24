@@ -28,9 +28,11 @@ MODEL_PRICES: dict[str, tuple[float, float]] = {
     # OpenAI
     "gpt-5.1": (1.25, 10.00),
     "gpt-5-mini": (0.25, 2.00),
-    # Google
-    "gemini-3.1-pro-preview": (2.50, 15.00),  # verificați
-    "gemini-3.6-flash": (0.50, 3.00),  # verificați
+    # Google — calibrate din factura Google Cloud pe 22–23 aug 2026
+    # (plafoanele inițiale erau ~2x prea mici; confirmați la
+    # https://ai.google.dev/pricing înainte de campanii mari)
+    "gemini-3.1-pro-preview": (2.50, 15.00),
+    "gemini-3.6-flash": (1.00, 6.00),
     # Mistral
     "mistral-medium-latest": (0.40, 2.00),
     "mistral-small-latest": (0.10, 0.30),
