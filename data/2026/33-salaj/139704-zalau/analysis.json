@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 1000,
-    "pct_clean": 50.8,
-    "errors": 335,
-    "warnings": 441,
+    "lines": 1016,
+    "pct_clean": 48.1,
+    "errors": 402,
+    "warnings": 470,
     "documents": 2
   },
   "llm_models": [
@@ -14,5 +14,6 @@
     "cheltuieli": null
   },
   "top_capitole": [],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

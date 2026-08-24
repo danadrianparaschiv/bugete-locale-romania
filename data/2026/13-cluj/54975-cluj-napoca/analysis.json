@@ -1,15 +1,45 @@
 {
   "quality": {
-    "lines": 15993,
-    "pct_clean": 44.3,
-    "errors": 1341,
-    "warnings": 8533,
-    "documents": 46
+    "lines": 17619,
+    "pct_clean": 70.9,
+    "errors": 1509,
+    "warnings": 4661,
+    "documents": 96
   },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 66358000.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 31619000.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 2343000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 765000.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte bunuri si servicii pentru intretinere si functionare",
+      "total": 300000.0
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
