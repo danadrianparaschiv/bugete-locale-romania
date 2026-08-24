@@ -11,6 +11,8 @@ from pathlib import Path
 from bgconvertor.layouts import map_grid
 from bgconvertor.layouts.collapsed import try_map as collapsed_try
 from bgconvertor.layouts.collapsed_detail import try_map as collapsed_detail_try
+from bgconvertor.layouts.expense_chapter import try_map as expense_chapter_try
+from bgconvertor.layouts.investment import try_map as investment_try
 from bgconvertor.layouts.matrix import try_map as matrix_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
 
@@ -220,3 +222,93 @@ def test_collapsed_detail_mapper_fails_closed_on_count_or_fingerprint_change():
     grid = deepcopy(json.loads(source.read_text())["grid"])
     grid[-1][1] = "710130"
     assert collapsed_detail_try(grid) is None
+
+
+def test_expense_chapter_recovers_merged_and_stamp_contaminated_rows():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p151.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+
+    assert len(lines) == 40
+    assert [line["row_no"] for line in lines] == list(range(160, 200))
+    assert sum(len(line["values"]) for line in lines) == 80
+    assert not any(line.get("cell_issues") for line in lines)
+    idx = _by_code(lines)
+    assert idx["81.01.01"]["values"]["buget_2026"] == "0.00"
+    assert idx["81.02"]["values"]["buget_2026"] == "15231.00"
+    assert idx["56.16.02"]["name"] == "Finantarea externa nerambursabila"
+    assert idx["56.48"]["values"]["credite_restante"] == "2760.00"
+    assert idx["56.48"]["section"] == "SECTIUNEA DE DEZVOLTARE"
+
+
+def test_expense_chapter_mapper_fails_closed_on_count_or_fingerprint_change():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p151.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[21][3] += " 1,00"
+    assert expense_chapter_try(grid) is None
+
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[-1][2] = "59"
+    assert expense_chapter_try(grid) is None
+
+
+def test_investment_grid_preserves_percentages_and_objective_context():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p171.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+
+    assert len(lines) == 27
+    assert lines[0]["name"] == "Surse de finantare"
+    assert sum(len(line["values"]) for line in lines) == 62
+    assert not any(line.get("cell_issues") for line in lines)
+    skate = next(line for line in lines if "skate-parc" in line["name"])
+    assert skate["row_no"] == 43
+    assert skate["values"]["buget_local_pct"] == "100.00"
+    assert skate["values"]["credite_externe_pct"] == "0.00"
+    continuation = next(
+        line
+        for line in lines
+        if line["name"] == "- neetichetat" and line["row_no"] == 41
+    )
+    assert "Parc Strand" in continuation["section"]
+    assert any("Lunca Argesului" in line["name"] for line in lines)
+
+
+def test_investment_source_recovery_requires_the_exact_row_fingerprint():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p171.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[10][0] = "Modernizare zona skate-park - Parc Strand"
+    lines = investment_try(grid)
+    assert lines is not None
+    assert any("skate-park" in line["name"] for line in lines)
+    assert not any(line["row_no"] == 43 for line in lines)
+
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[0][4] = "Finantare necunoscuta"
+    assert investment_try(grid) is None
+
+
+def test_investment_mapper_supports_numbered_eleven_column_pages():
+    grid = [
+        ["Nr. crt. /", "", "", *(["Surse de finantare"] * 8)],
+        [
+            "Capitol bugetar",
+            "Denumire capitol / obiectiv / etichetare",
+            "Valoare an curent",
+            "Buget local (02A)",
+            "%",
+            "Credite externe (06B)",
+            "%",
+            "Credite interne (07C)",
+            "%",
+            "Buget FEN (08D)",
+            "%",
+        ],
+        ["38", "Obiectiv test", "10", "10", "100,00", "0", "0,00", "0", "0,00", "0", "0,00"],
+    ]
+    lines = investment_try(grid)
+    assert lines is not None
+    assert len(lines) == 2
+    assert lines[1]["row_no"] == 38
+    assert lines[1]["section"] == "38 Obiectiv test"
+    assert len(lines[1]["values"]) == 9

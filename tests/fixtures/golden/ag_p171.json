@@ -5,6 +5,7 @@
   "layout": "investment_list",
   "budget": "local",
   "source_type": "scanned",
+  "source_grid": "grids/ag_p171.json",
   "hazards": [
     "rotated_90_in_image",
     "stamp_overlap",
@@ -13,9 +14,13 @@
   "columns": [
     "valoare_an_curent",
     "buget_local",
+    "buget_local_pct",
     "credite_externe",
+    "credite_externe_pct",
     "credite_interne",
-    "buget_fen"
+    "credite_interne_pct",
+    "buget_fen",
+    "buget_fen_pct"
   ],
   "anchors": [
     {
@@ -43,5 +48,62 @@
     "Surse de finantare",
     "neetichetat"
   ],
-  "notes": "Investment objectives list ('program de investitii'), rotated 90 degrees inside the scan. Outside strict nomenclator scope — extracted best-effort to a side sheet. Rows carry green/maro/mixt/neutru tagging sub-rows."
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {"name_contains": "Sistem sonorizare si acustica Bazin Olimpic", "values": {"valoare_an_curent": "60", "buget_local": "60", "buget_local_pct": "100", "credite_externe": "0", "credite_externe_pct": "0", "credite_interne": "0", "credite_interne_pct": "0", "buget_fen": "0", "buget_fen_pct": "0"}},
+        {"name_contains": "Modernizare zona skate-parc", "values": {"valoare_an_curent": "70", "buget_local": "70", "buget_local_pct": "100", "credite_externe": "0", "credite_externe_pct": "0", "credite_interne": "0", "credite_interne_pct": "0", "buget_fen": "0", "buget_fen_pct": "0"}},
+        {"name_contains": "terenuri padel Parc Lunca Argesului", "values": {"valoare_an_curent": "50", "buget_local": "50", "buget_local_pct": "100", "credite_externe": "0", "credite_externe_pct": "0", "credite_interne": "0", "credite_interne_pct": "0", "buget_fen": "0", "buget_fen_pct": "0"}},
+        {"name_contains": "Modernizare loc de joaca - baza Trivale", "values": {"valoare_an_curent": "50", "buget_local": "50", "buget_local_pct": "100", "credite_externe": "0", "credite_externe_pct": "0", "credite_interne": "0", "credite_interne_pct": "0", "buget_fen": "0", "buget_fen_pct": "0"}}
+      ]
+    },
+    {
+      "context_contains": "41 Modernizare loc de joaca Parc Strand",
+      "rows": [
+        {"name_contains": "- mixt", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neutru", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neetichetat", "values": {"valoare_an_curent": "0"}}
+      ]
+    },
+    {
+      "context_contains": "42 Sistem sonorizare si acustica Bazin Olimpic",
+      "rows": [
+        {"name_contains": "- verde", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- maro", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- mixt", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neutru", "values": {"valoare_an_curent": "60", "buget_local": "60"}},
+        {"name_contains": "- neetichetat", "values": {"valoare_an_curent": "0"}}
+      ]
+    },
+    {
+      "context_contains": "43 Modernizare zona skate-parc",
+      "rows": [
+        {"name_contains": "- verde", "values": {"valoare_an_curent": "70", "buget_local": "70"}},
+        {"name_contains": "- maro", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- mixt", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neutru", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neetichetat", "values": {"valoare_an_curent": "0"}}
+      ]
+    },
+    {
+      "context_contains": "44 Amenajare terenuri padel Parc Lunca Argesului",
+      "rows": [
+        {"name_contains": "- verde", "values": {"valoare_an_curent": "50", "buget_local": "50"}},
+        {"name_contains": "- maro", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- mixt", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neutru", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neetichetat", "values": {"valoare_an_curent": "0"}}
+      ]
+    },
+    {
+      "context_contains": "45 Modernizare loc de joaca - baza Trivale",
+      "rows": [
+        {"name_contains": "- verde", "values": {"valoare_an_curent": "50", "buget_local": "50"}},
+        {"name_contains": "- maro", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- mixt", "values": {"valoare_an_curent": "0"}},
+        {"name_contains": "- neutru", "values": {"valoare_an_curent": "0"}}
+      ]
+    }
+  ],
+  "notes": "Investment objectives list ('program de investitii'), rotated 90 degrees inside the scan. The whole printed scope is inventoried: 26 logical rows and 62 numeric cells across value, four financing amounts, and their four percentage columns. The first three tag rows continue objective 41 from the preceding page; objectives 42-45 start here. The page is outside the strict budget nomenclator and is exported to a side sheet, but objective/tag context remains explicit for analytics."
 }

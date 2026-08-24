@@ -79,7 +79,7 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    extract_version: str = "38"  # source-audited recovery for collapsed annual/detail streams
+    extract_version: str = "40"  # investment financing columns + audited page recovery
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

@@ -8,6 +8,7 @@ import pytest
 
 from bgconvertor.assemble import assemble
 from bgconvertor.config import RunConfig
+from bgconvertor.export import _sheet_columns
 from bgconvertor.extract.scanned import map_payload
 from bgconvertor.model import ConversionResult
 from bgconvertor.nomenclator import load_registry
@@ -247,6 +248,73 @@ def test_collapsed_detail_grid_survives_assembly_and_validation(tmp_path, regist
     )
     assert str(line.values["total_2026"]) == "52.00"
     assert line.func_code == "68.02.05.02"
+
+
+def test_expense_chapter_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p151.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 151, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [151], registry),
+        pages_expected=333,
+        pages_selected=[151],
+        pages_processed=[151],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 80
+    assert stats["numeric_cells_strictly_verified"] == 80
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    line = next(
+        line
+        for doc in result.documents
+        for line in doc.lines
+        if line.raw_code == "56.48"
+    )
+    assert str(line.values["buget_2026"]) == "93474.00"
+    assert line.section == "SECTIUNEA DE DEZVOLTARE"
+
+
+def test_investment_grid_survives_assembly_validation_and_export(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p171.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 171, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [171], registry),
+        pages_expected=236,
+        pages_selected=[171],
+        pages_processed=[171],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 62
+    assert stats["numeric_cells_strictly_verified"] == 62
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    lines = [line for doc in result.documents for line in doc.lines]
+    assert all(line.kind == "annex" for line in lines if line.values)
+    columns = dict(_sheet_columns(lines))
+    assert columns["buget_local_pct"] == "% Buget local"
+    assert columns["credite_externe_pct"] == "% Credite externe"
+    assert columns["credite_interne_pct"] == "% Credite interne"
+    assert columns["buget_fen_pct"] == "% Buget FEN"
 
 
 def test_integration_ab_pdf_fully_clean(ab_pdf, reference_dir):

@@ -6,7 +6,7 @@
 uv sync
 uv run pytest        # trebuie să treacă, complet offline
 uv run bgconvertor eval  # ancore + etaloanele exhaustive disponibile
-uv run bgconvertor eval --require-cell-ground-truth 3 \
+uv run bgconvertor eval --require-cell-ground-truth 5 \
   --min-layout-cell-recall 90 --min-layout-cell-precision 99.5
 uv run bgconvertor corpus audit data --strict --require-modern \
   --json-out artifact-audit.json
@@ -70,13 +70,14 @@ Orice modificare trebuie să păstreze:
 
 CI-ul extrage familia digitală de referință de la zero și redă grilele OCR
 comise pentru familia instituțională, tabelul anual cu rânduri colapsate și
-tabelul de detaliu economic cu cinci coloane valorice. Cere minimum 75 de
-ancore, 10 aserțiuni text, cel puțin trei fixture-uri exhaustive, ≥90% recall
-numeric și ≥99,5% precizie pentru fiecare layout cu etalon exhaustiv. Celelalte
-fixture-uri scanate depind încă de cache-urile OCR locale din `runs/`; absența
-lor apare explicit în raport și nu este interpretată drept succes. Rulează
-evaluarea completă înainte de PR când ai aceste artefacte și trece acoperirea
-fixture-urilor, nu doar procentul ancorelor, în descriere.
+tabelul de detaliu economic cu cinci coloane valorice, plus capitolul de
+cheltuieli afectat de ștampilă și lista de investiții cu procente de finanțare.
+Cere minimum 94 de ancore, 13 aserțiuni text, cel puțin cinci fixture-uri
+exhaustive, ≥90% recall numeric și ≥99,5% precizie pentru fiecare layout cu
+etalon exhaustiv. Celelalte fixture-uri scanate depind încă de cache-urile OCR
+locale din `runs/`; absența lor apare explicit în raport și nu este interpretată
+drept succes. Rulează evaluarea completă înainte de PR când ai aceste artefacte
+și trece acoperirea fixture-urilor, nu doar procentul ancorelor, în descriere.
 
 Modificările care invalidează cache-ul (orice schimbă rezultatul
 extragerii) trebuie să incrementeze `extract_version` din `config.py` —

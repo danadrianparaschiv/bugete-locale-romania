@@ -31,9 +31,13 @@ COLUMN_LABELS = [
     ("est2029", "Estimare 2029"),
     ("valoare_an_curent", "Valoare an curent"),
     ("buget_local", "Buget local"),
+    ("buget_local_pct", "% Buget local"),
     ("credite_externe", "Credite externe"),
+    ("credite_externe_pct", "% Credite externe"),
     ("credite_interne", "Credite interne"),
+    ("credite_interne_pct", "% Credite interne"),
     ("buget_fen", "Buget FEN"),
+    ("buget_fen_pct", "% Buget FEN"),
 ]
 _ORDER = {k: i for i, (k, _) in enumerate(COLUMN_LABELS)}
 _LABELS = dict(COLUMN_LABELS)

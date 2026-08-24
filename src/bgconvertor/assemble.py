@@ -211,6 +211,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 raw, page, section, region,
                 "ocr" if is_scanned else "digital",
                 suppress_cell_issues=out_of_scope,
+                annex_data=out_of_scope,
             )
             # PDF-truncated combined codes: '5002.580103' prints as
             # '02.580103' (the generator clips the capitol). Only combined-
@@ -466,6 +467,7 @@ def _pick_payload(store: RunStore, page: int):
 def _to_line(
     raw: dict, page: int, section: str | None, region: str,
     default_source: str = "digital", suppress_cell_issues: bool = False,
+    annex_data: bool = False,
 ) -> BudgetLine:
     values: dict[str, Decimal] = {}
     x_markers: list[str] = []
@@ -499,7 +501,9 @@ def _to_line(
 
     code = raw.get("code")
     func_code = raw.get("func_code")
-    if code is None:
+    if annex_data and (values or x_markers):
+        kind = "annex"
+    elif code is None:
         kind = "heading"
     elif func_code:
         kind = "expense_economic"

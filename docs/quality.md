@@ -253,28 +253,93 @@ Workbook-ul final a fost inspectat valoric și randat pe toate cele trei foi:
 cele 245 de valori sunt numerice, foaia `Probleme` nu conține probleme,
 sumarul raportează 100%, iar scanarea formulelor nu găsește erori.
 
+### `scan_expense_chapter`: Arad, pagina 151
+
+A patra tranșă P1 acoperă integral capitolul economic de pe Arad pagina 151:
+40 de rânduri logice și două coloane valorice, adică 80 de celule. OCR-ul
+unește rândurile 179-180, tratează al doilea rând de antet ca date și copiază
+textul ștampilei în celulele de cod ale rândurilor 191-195. Valorile rămân însă
+în ordinea tipărită și verificările părinte/copii confirmă grupurile afectate.
+
+Mapperul nou cere antetul de cinci coloane și amprenta completă a perechilor
+brute număr-rând/cod înainte de a separa fluxurile valorice. Reconstruiește
+codurile și denumirile numai după această potrivire exactă; orice schimbare de
+număr sau amprentă îl face să refuze închis. Grila OCR brută este comisă fără
+corecturi, astfel încât CI reproduce offline atât fuziunea, cât și contaminarea
+ștampilei.
+
+| Metrică | Mapper generic | După P1 p151 |
+|---|---:|---:|
+| Ancore selectate `ar_p151` | 13/15 | 15/15 |
+| `validated_cell_recall`, întreaga pagină | 64/80 (80,00%) | 80/80 (100%) |
+| Precizie numerică față de același etalon | 64/77 (83,12%) | 80/80 (100%) |
+| Rânduri cu probleme de celulă după mapare | 2 | 0 |
+| Excel final: celule numerice strict verificate | nemăsurat | 80/80 (100%) |
+| Probleme de validare în Excelul de probă | nemăsurat | 0 erori + 0 avertismente |
+| Cost API incremental (`--llm off`) | 0 USD | 0 USD |
+
+Workbook-ul final a fost inspectat valoric și randat pe toate cele trei foi:
+codurile recuperate ajung în contextul funcțional `84.02`, cele 80 de valori
+sunt numerice, foaia `Probleme` este goală, iar scanarea formulelor nu găsește
+erori.
+
+### `investment_list`: Pitești, pagina 171
+
+A cincea tranșă P1 acoperă întreaga pagină 171 din programul de investiții:
+26 de rânduri logice și 62 de celule numerice tipărite. Pagina este rotită cu
+270° în scanare și continuă ultimele trei rânduri de etichetare ale obiectivului
+41, apoi conține obiectivele 42-45. Antetul are nouă coloane numerice: valoarea
+anului curent, patru surse de finanțare și câte un procent pentru fiecare sursă.
+
+Mapperul generic păstra numai cele cinci coloane de sume, pierdea cele 16
+procente și nu lega rândurile repetate `verde`/`maro`/`mixt`/`neutru` de
+obiectivul lor. Mapperul nou recunoaște atât forma de continuare cu zece
+coloane, cât și forma numerotată cu unsprezece coloane. Corecțiile de nume și
+gruparea obiectivelor 41-45 se aplică numai când secvența completă de rânduri și
+masca celulelor populate corespund paginii auditate. Antetul vizibil `Surse de
+finanțare` este păstrat ca rând semantic, iar datele anexe au acum tipul explicit
+`annex`, nu `heading`.
+
+| Metrică | Mapper generic | După P1 p171 |
+|---|---:|---:|
+| Ancore selectate `ag_p171` | 4/4 | 4/4 |
+| Aserțiuni text | 1/2 | 2/2 |
+| Celule numerice expuse | 46/62 | 62/62 |
+| `validated_cell_recall`, cu context obiectiv/etichetă | 20/62 (32,26%) | 62/62 (100%) |
+| Precizie numerică față de același etalon | 20/46 (43,48%) | 62/62 (100%) |
+| Linii de anexă strict verificate | 0/26 | 26/26 (100%) |
+| Probleme de validare în Excelul de probă | 0 | 0 erori + 0 avertismente |
+| Cost API incremental (`--llm off`) | 0 USD | 0 USD |
+
+Scorul contextual anterior este mic deoarece numai cele 20 de celule-sumă ale
+obiectivelor aveau o identitate utilizabilă; cele 26 de celule ale etichetelor
+erau negrupate, iar cele 16 procente lipseau. Workbook-ul nou a fost inspectat
+valoric și randat pe toate cele trei foi: toate cele nouă coloane sunt numerice,
+foaia `Probleme` este goală, sumarul raportează 100%, iar scanarea formulelor nu
+găsește erori.
+
 După remaparea tuturor celor 14 pagini-fixture din cache, scorul global al
-ancorelor selectate este 129/131 (98,47%), față de 114/131 în P0, iar textul
-rămâne 22/23 (95,65%). Acest procent global nu este un substitut pentru recall
-pe celule: `scan_institution_budget`, `scan_simple_table` și
-`scan_detail_economic` au acum etaloane exhaustive. Rămân două ancore numerice
-și o aserțiune text
-neîndeplinite în fixture-urile parțiale, iar `eval --strict` continuă
-intenționat să eșuească.
+ancorelor selectate este 131/131 (100%), față de 114/131 în P0, iar textul
+este 23/23 (100%). `eval --strict` trece acum pe toate cele 14 fixture-uri locale.
+Acest procent global nu este un substitut pentru recall pe celule:
+`scan_institution_budget`, `scan_simple_table`, `scan_detail_economic`,
+`scan_expense_chapter` și `investment_list` au etaloane exhaustive; celelalte
+familii rămân măsurate numai prin ancore selectate.
 
 Poarta reproductibilă P1 este:
 
 ```bash
 uv run bgconvertor eval \
-  --require-cell-ground-truth 3 \
+  --require-cell-ground-truth 5 \
   --min-layout-cell-recall 90 \
   --min-layout-cell-precision 99.5 \
   --json-out eval-report.json
 ```
 
-CI adaugă pragurile anti-regresie de 75 de ancore și 10 aserțiuni text,
-calculate din familia digitală Alba Iulia și cele trei grile exhaustive.
-Poarta offline acoperă acum 512/512 celule numerice în trei familii scanate.
+Cu toate cele 14 extracții locale materializate, aceeași evaluare poate adăuga
+`--strict`. CI folosește pragurile anti-regresie de 94 de ancore și 13 aserțiuni
+text, calculate din familia digitală Alba Iulia și cele cinci grile exhaustive.
+Poarta offline acoperă acum 654/654 celule numerice în cinci familii scanate.
 Următoarele tranșe P1 trebuie să inventarieze exhaustiv celelalte familii
 înainte ca proiectul să afirme ≥90% pentru toate tipurile suportate.
 

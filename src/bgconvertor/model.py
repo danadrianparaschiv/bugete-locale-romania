@@ -7,7 +7,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-Kind = Literal["revenue", "expense_functional", "expense_economic", "heading"]
+Kind = Literal["revenue", "expense_functional", "expense_economic", "annex", "heading"]
 Severity = Literal["error", "warning", "info"]
 
 QUALITY_SCHEMA_VERSION = 2

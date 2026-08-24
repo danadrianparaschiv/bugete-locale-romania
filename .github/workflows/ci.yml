@@ -31,12 +31,13 @@ jobs:
         # Alba Iulia is extracted from its PDF. Committed Arad/Pitesti OCR
         # grids exhaustively gate 51 institution cells, all 216 cells in a
         # stamp-collapsed annual table, and all 245 cells in a collapsed
-        # economic-detail table, fully offline.
+        # economic-detail table, plus all 80 cells in a stamp-damaged expense
+        # chapter and 62 investment-financing cells, fully offline.
         run: >-
           uv run bgconvertor eval
-          --min-anchors 75
-          --min-text-assertions 10
-          --require-cell-ground-truth 3
+          --min-anchors 94
+          --min-text-assertions 13
+          --require-cell-ground-truth 5
           --min-layout-cell-recall 90
           --min-layout-cell-precision 99.5
           --json-out eval-report.json
