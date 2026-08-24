@@ -191,7 +191,13 @@ class LLMClient:
                     )
                     choice = response.choices[0]
                     in_tok = response.usage.prompt_tokens
-                    out_tok = response.usage.completion_tokens
+                    # Gemini bills thinking tokens as output but hides them
+                    # from completion_tokens on the OpenAI-compat endpoint
+                    # (seen live: completion=3, total=175). Bill the ledger
+                    # on total-prompt so budgets track real invoices.
+                    total = getattr(response.usage, "total_tokens", None) or 0
+                    out_tok = max(response.usage.completion_tokens,
+                                  total - response.usage.prompt_tokens)
                     stop = ("max_tokens" if choice.finish_reason == "length"
                             else choice.finish_reason)
                     got_response = True
