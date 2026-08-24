@@ -1,24 +1,25 @@
 {% extends "base.html" %}
 {% block title %}{{ city.name }} — buget local {{ year }}{% endblock %}
+{% macro mii(v) %}{{ "{:,.0f}".format(v).replace(",", ".") }}{% endmacro %}
+{% macro ro_date(iso) %}{{ iso[8:10] }}.{{ iso[5:7] }}.{{ iso[0:4] }}{% endmacro %}
+{% macro capitole_bars(items, color) %}
+<div class="bars">
+  {% set maxv = items[0].val %}
+  {% for c in items[:12] %}
+  <div class="brow" style="cursor:default">
+    <span class="bt">{{ (c.nume or c.cod) | replace("CAP. ", "") }}</span>
+    <span class="bg2"><i style="background:{{ color }};width:{{ (c.val / maxv * 100) | round(1) }}%"></i></span>
+    <span class="bv">{{ mii(c.val / 1000) }} mil.</span>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
 {% block content %}
 <p><a href="{{ base }}/index.html">← toate municipiile</a></p>
 <h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
 
-<div class="cards">
-  {% if a.totals_mii_lei.venituri %}
-  <div class="card"><div class="k">Total venituri (mii lei)</div>
-    <div class="v">{{ "{:,.0f}".format(a.totals_mii_lei.venituri).replace(",", ".") }}</div></div>
-  {% endif %}
-  {% if a.totals_mii_lei.cheltuieli %}
-  <div class="card"><div class="k">Total cheltuieli (mii lei)</div>
-    <div class="v">{{ "{:,.0f}".format(a.totals_mii_lei.cheltuieli).replace(",", ".") }}</div></div>
-  {% endif %}
-  <div class="card"><div class="k">Linii de date / % verificate</div>
-    <div class="v">{{ a.quality.lines }} <span style="font-size:1rem;color:var(--dim)">/ {{ a.quality.pct_clean }}%</span></div></div>
-</div>
-
 <p class="sub">SIRUTA {{ city.siruta }}
-  {%- if city.populatie %} · {{ "{:,.0f}".format(city.populatie).replace(",", ".") }} locuitori (2021){% endif %}
+  {%- if city.populatie %} · {{ mii(city.populatie) }} locuitori (2021){% endif %}
   {%- if city.suprafata_km2 %} · {{ city.suprafata_km2 }} km²{% endif %}</p>
 
 {% if city.source_url %}
@@ -53,9 +54,9 @@
       <td>{% if r.year == year %}<strong>{{ r.year }}</strong>
           {%- elif r.href %}<a href="{{ r.href }}">{{ r.year }}</a>
           {%- else %}{{ r.year }}{% endif %}</td>
-      <td class="num">{% if r.venituri is not none %}{{ "{:,.0f}".format(r.venituri).replace(",", ".") }}{% else %}—{% endif %}</td>
+      <td class="num">{% if r.venituri is not none %}{{ mii(r.venituri) }}{% else %}—{% endif %}</td>
       <td class="num">{{ r.d_venituri or "—" }}</td>
-      <td class="num">{% if r.cheltuieli is not none %}{{ "{:,.0f}".format(r.cheltuieli).replace(",", ".") }}{% else %}—{% endif %}</td>
+      <td class="num">{% if r.cheltuieli is not none %}{{ mii(r.cheltuieli) }}{% else %}—{% endif %}</td>
       <td class="num">{{ r.d_cheltuieli or "—" }}</td>
     </tr>
   {% endfor %}
@@ -65,68 +66,191 @@
 liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
 {% endif %}
 
-{% if city.executie %}
+{# ---- planul aprobat și execuția, ca vizualizări separate ---- #}
 {% set ex = city.executie %}
-<h2 style="font-size:1.1rem;margin-top:1.5rem">Execuția bugetului · trimestrul {{ ex.trimestru }}</h2>
-<p class="note" style="border:none;padding:0;margin:0 0 .7rem">Cât s-a încasat și
-cât s-a plătit efectiv, cumulat de la 1 ianuarie până la
-{{ ex.la_data[8:10] }}.{{ ex.la_data[5:7] }}.{{ ex.la_data[0:4] }} — din raportul
-oficial Forexebug al Ministerului Finanțelor, nu din bugetul aprobat.</p>
+{% set by_q = {} %}
+{% if ex %}{% for t in ex.trimestre %}{% set _ = by_q.update({t.trimestru: t}) %}{% endfor %}{% endif %}
 
-<div class="cards">
-  {% if ex.venituri is not none %}
-  <div class="card"><div class="k">Venituri încasate (mii lei)</div>
-    <div class="v">{{ "{:,.0f}".format(ex.venituri).replace(",", ".") }}</div>
-    {% if ex.pct_venituri %}<div class="k">{{ ex.pct_venituri }}% din planul anual</div>{% endif %}</div>
-  {% endif %}
-  {% if ex.cheltuieli is not none %}
-  <div class="card"><div class="k">Plăți efectuate (mii lei)</div>
-    <div class="v">{{ "{:,.0f}".format(ex.cheltuieli).replace(",", ".") }}</div>
-    {% if ex.pct_cheltuieli %}<div class="k">{{ ex.pct_cheltuieli }}% din planul anual</div>{% endif %}</div>
-  {% endif %}
-  {% if ex.venituri is not none and ex.cheltuieli is not none %}
-  <div class="card"><div class="k">Excedent la data raportului</div>
-    <div class="v">{{ "{:,.0f}".format(ex.venituri - ex.cheltuieli).replace(",", ".") }}</div>
-    <div class="k">mii lei, încasări minus plăți</div></div>
-  {% endif %}
+<h2 style="font-size:1.1rem;margin-top:1.8rem">Bugetul și execuția lui</h2>
+<div class="tabs" role="tablist" aria-label="Buget și execuție">
+  <button role="tab" id="tab-buget" aria-controls="panel-buget" aria-selected="true" class="on">Buget</button>
+  {% for q in [1, 2, 3, 4] %}
+  <button role="tab" id="tab-t{{ q }}" aria-controls="panel-t{{ q }}" aria-selected="false"
+          {% if q not in by_q %}data-empty="1"{% endif %}>T{{ q }}</button>
+  {% endfor %}
+  <button role="tab" id="tab-an" aria-controls="panel-an" aria-selected="false"
+          {% if 4 not in by_q %}data-empty="1"{% endif %}>{{ year }}</button>
 </div>
 
-{% if ex.plan_incomplet %}
-<p class="note" style="border:none;padding:0;margin:.2rem 0 .7rem">Procentele față de
-plan nu sunt afișate: totalurile extrase din bugetul aprobat sunt parțiale pentru
-acest oraș, deci raportul ar fi înșelător. Cifrele de execuție rămân cele oficiale.</p>
-{% endif %}
+<section role="tabpanel" id="panel-buget" aria-labelledby="tab-buget">
+  <div class="cards">
+    {% if a.totals_mii_lei.venituri %}
+    <div class="card"><div class="k">Venituri planificate (mii lei)</div>
+      <div class="v">{{ mii(a.totals_mii_lei.venituri) }}</div></div>
+    {% endif %}
+    {% if a.totals_mii_lei.cheltuieli %}
+    <div class="card"><div class="k">Cheltuieli planificate (mii lei)</div>
+      <div class="v">{{ mii(a.totals_mii_lei.cheltuieli) }}</div></div>
+    {% endif %}
+    {% if a.infografic and a.infografic.sectiuni %}
+    <div class="card"><div class="k">Funcționare / dezvoltare</div>
+      <div class="v">{{ mii(a.infografic.sectiuni.functionare / 1000) }}
+        <span style="font-size:1rem;color:var(--dim)">/ {{ mii(a.infografic.sectiuni.dezvoltare / 1000) }} mil.</span></div></div>
+    {% endif %}
+  </div>
+  <p class="note" style="border:none;padding:0;margin:0 0 1rem">Bugetul aprobat prin
+  hotărâre de consiliu local — ce și-a propus orașul să încaseze și să cheltuiască.</p>
 
-{% if ex.trimestre|length > 1 %}
+  {% if a.infografic %}
+  {% if a.infografic.venituri %}
+  <div id="ig-sec-ven">
+    <h3 class="ig-h">De unde vin banii</h3>
+    <div class="ig-grid2">
+      <div class="ig-card"><div id="ig-ven"></div></div>
+      <div class="ig-card"><ul class="vlist" id="ig-ven-list"></ul></div>
+    </div>
+  </div>
+  {% endif %}
+
+  <h3 class="ig-h">Unde se duc banii</h3>
+  <div class="toolbar" id="ig-tabs">
+    <button data-mode="val" class="on">Total</button>
+    <button data-mode="func">Doar funcționare</button>
+    <button data-mode="dezv">Doar dezvoltare</button>
+  </div>
+  <div class="ig-card">
+    <div class="bars" id="ig-bars"></div>
+    <div class="detail" id="ig-detail"></div>
+  </div>
+
+  <div class="ig-card" style="margin-top:1rem">
+    <h3 class="ig-h" style="margin-top:0">Din fiecare 100 de lei planificați</h3>
+    <div class="hundred" id="ig-hundred"></div>
+    <div class="hlegend" id="ig-hundred-legend"></div>
+  </div>
+
+  {% if a.infografic.trim %}
+  <div id="ig-sec-trim">
+    <h3 class="ig-h">Ritmul planificat al anului</h3>
+    <div class="ig-card"><div id="ig-trim"></div>
+      <div class="hlegend"><span><i style="background:#1a7f37"></i>funcționare</span>
+        <span><i style="background:#b8860b"></i>dezvoltare</span>
+        <span><i style="background:#0b57d0"></i>venituri</span></div></div>
+  </div>
+  {% endif %}
+
+  {% if a.infografic.ani %}
+  <div id="ig-sec-ani">
+    <h3 class="ig-h">Estimările pentru 2027–2029</h3>
+    <div class="ig-card"><div id="ig-ani"></div>
+      <p class="note" style="border:none;padding:0;margin-top:.5rem" id="ig-ani-note"></p></div>
+  </div>
+  {% endif %}
+
+  <script>var IG = {{ a.infografic | tojson }};</script>
+  <script>{% include "infografic.js" %}</script>
+
+  {% elif a.top_capitole %}
+  <h3 class="ig-h">Cheltuieli planificate pe capitole (top {{ a.top_capitole|length }})</h3>
+  <table>
+    <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>
+    <tbody>
+    {% for cap in a.top_capitole %}
+      <tr><td>{{ cap.code }}</td><td>{{ cap.name }}</td>
+          <td class="num">{{ mii(cap.total) }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+
+{% for q in [1, 2, 3, 4] %}
+{% set t = by_q.get(q) %}
+<section role="tabpanel" id="panel-t{{ q }}" aria-labelledby="tab-t{{ q }}" hidden>
+  {% if t %}
+  <div class="cards">
+    <div class="card"><div class="k">Venituri încasate (mii lei)</div>
+      <div class="v">{{ mii(t.venituri) }}</div>
+      {% if t.pct_venituri %}<div class="k">{{ t.pct_venituri }}% din planul anual</div>{% endif %}</div>
+    <div class="card"><div class="k">Plăți efectuate (mii lei)</div>
+      <div class="v">{{ mii(t.cheltuieli) }}</div>
+      {% if t.pct_cheltuieli %}<div class="k">{{ t.pct_cheltuieli }}% din planul anual</div>{% endif %}</div>
+    <div class="card"><div class="k">Excedent la data raportului</div>
+      <div class="v">{{ mii(t.venituri - t.cheltuieli) }}</div>
+      <div class="k">mii lei, încasări minus plăți</div></div>
+  </div>
+  <p class="note" style="border:none;padding:0;margin:0 0 1rem">Cumulat de la 1 ianuarie
+  până la {{ ro_date(t.la_data) }}, din raportul oficial Forexebug
+  ({{ ex.sursa }}) al Ministerului Finanțelor — bani mișcați efectiv, nu planificați.
+  {% if ex.plan_incomplet %} Procentele față de plan nu se afișează: totalurile extrase
+  din bugetul aprobat sunt parțiale pentru acest oraș, deci raportul ar fi înșelător.{% endif %}</p>
+
+  {% if t.capitole %}
+  <h3 class="ig-h">Plăți pe capitole, cumulat</h3>
+  <div class="ig-card">{{ capitole_bars(t.capitole, "#1a7f37") }}</div>
+  {% endif %}
+  {% else %}
+  <div class="ig-card">
+    <p style="margin:0">Raportul de execuție pentru trimestrul {{ q }} nu este încă
+    publicat{% if ex %} — cel mai recent disponibil este trimestrul {{ ex.trimestru }},
+    la {{ ro_date(ex.la_data) }}{% endif %}.</p>
+    <p class="note" style="border:none;padding:0;margin:.5rem 0 0">Rapoartele Forexebug
+    apar după închiderea fiecărui trimestru; vezi
+    <a href="{{ base }}/procedura.html">procedura bugetară</a>.</p>
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+<section role="tabpanel" id="panel-an" aria-labelledby="tab-an" hidden>
+  {% set t4 = by_q.get(4) %}
+  {% if t4 %}
+  <div class="cards">
+    <div class="card"><div class="k">Venituri încasate în {{ year }} (mii lei)</div>
+      <div class="v">{{ mii(t4.venituri) }}</div>
+      {% if t4.pct_venituri %}<div class="k">{{ t4.pct_venituri }}% din plan</div>{% endif %}</div>
+    <div class="card"><div class="k">Plăți efectuate în {{ year }} (mii lei)</div>
+      <div class="v">{{ mii(t4.cheltuieli) }}</div>
+      {% if t4.pct_cheltuieli %}<div class="k">{{ t4.pct_cheltuieli }}% din plan</div>{% endif %}</div>
+    <div class="card"><div class="k">Rezultatul anului</div>
+      <div class="v">{{ mii(t4.venituri - t4.cheltuieli) }}</div>
+      <div class="k">mii lei, încasări minus plăți</div></div>
+  </div>
+  <p class="note" style="border:none;padding:0;margin:0 0 1rem">Execuția întregului an,
+  la {{ ro_date(t4.la_data) }}. Contul anual de execuție, aprobat de consiliul local
+  până la 31 mai anul următor, este documentul care confirmă aceste cifre.</p>
+  {% if t4.capitole %}
+  <h3 class="ig-h">Plăți pe capitole, tot anul</h3>
+  <div class="ig-card">{{ capitole_bars(t4.capitole, "#1a7f37") }}</div>
+  {% endif %}
+  {% else %}
+  <div class="ig-card">
+    <p style="margin:0">Anul {{ year }} nu este încheiat în datele noastre: execuția
+    anuală apare după raportul trimestrului IV{% if ex %}, iar cel mai recent disponibil
+    este trimestrul {{ ex.trimestru }}, la {{ ro_date(ex.la_data) }}{% endif %}.</p>
+    <p class="note" style="border:none;padding:0;margin:.5rem 0 0">Contul anual de
+    execuție se aprobă până la 31 mai anul următor — vezi
+    <a href="{{ base }}/procedura.html">procedura bugetară</a>.</p>
+  </div>
+  {% endif %}
+</section>
+
+{% if ex and ex.trimestre|length > 1 %}
+<h3 class="ig-h">Progresul execuției, trimestru cu trimestru</h3>
 <table>
   <thead><tr><th>Cumulat la</th>
     <th class="num">Venituri (mii lei)</th><th class="num">Plăți (mii lei)</th></tr></thead>
   <tbody>
   {% for t in ex.trimestre %}
-    <tr><td>trimestrul {{ t.trimestru }}{% if t.la_data %} · {{ t.la_data[8:10] }}.{{ t.la_data[5:7] }}.{{ t.la_data[0:4] }}{% endif %}</td>
-      <td class="num">{{ "{:,.0f}".format(t.venituri).replace(",", ".") }}</td>
-      <td class="num">{{ "{:,.0f}".format(t.cheltuieli).replace(",", ".") }}</td></tr>
+    <tr><td>trimestrul {{ t.trimestru }}{% if t.la_data %} · {{ ro_date(t.la_data) }}{% endif %}</td>
+      <td class="num">{{ mii(t.venituri) }}{% if t.pct_venituri %} <span class="sub" style="font-size:.8rem">({{ t.pct_venituri }}%)</span>{% endif %}</td>
+      <td class="num">{{ mii(t.cheltuieli) }}{% if t.pct_cheltuieli %} <span class="sub" style="font-size:.8rem">({{ t.pct_cheltuieli }}%)</span>{% endif %}</td></tr>
   {% endfor %}
   </tbody>
 </table>
 {% endif %}
 
-{% if ex.capitole %}
-<h3 class="ig-h">Plăți pe capitole, la zi</h3>
-<div class="ig-card"><div class="bars">
-  {% set maxcap = ex.capitole[0].val %}
-  {% for c in ex.capitole[:12] %}
-  <div class="brow" style="cursor:default">
-    <span class="bt">{{ c.nume | replace("CAP. ", "") or c.cod }}</span>
-    <span class="bg2"><i style="background:#1a7f37;width:{{ (c.val / maxcap * 100) | round(1) }}%"></i></span>
-    <span class="bv">{{ "{:,.0f}".format(c.val / 1000).replace(",", ".") }} mil.</span>
-  </div>
-  {% endfor %}
-</div></div>
-{% endif %}
-{% endif %}
-
-<h2 style="font-size:1.1rem;margin-top:1.5rem">Calitatea conversiei</h2>
+<h2 style="font-size:1.1rem;margin-top:1.8rem">Calitatea conversiei</h2>
 <table>
   <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
   <tr><td>Linii de date</td><td class="num">{{ a.quality.lines }}</td></tr>
@@ -137,80 +261,39 @@ acest oraș, deci raportul ar fi înșelător. Cifrele de execuție rămân cele
   <tr><td>Modele LLM folosite</td><td class="num">{{ a.llm_models | join(", ") }}</td></tr>
   {% endif %}
 </table>
+<p class="note" style="border:none;padding:0;margin-top:.5rem">Se referă la bugetul
+aprobat, extras din PDF. Cifrele de execuție vin structurate din Forexebug și nu trec
+prin conversie.</p>
 
 <p style="margin-top:1.25rem">
   {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
   {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
 </p>
 
-{% if a.infografic %}
-<h2 style="font-size:1.3rem;margin-top:2rem">Analiza bugetului</h2>
-<p class="note" style="border:none;padding:0;margin:0 0 1rem">Grafice generate automat
-din liniile verificate aritmetic ale bugetului local; sume în mii lei, afișate în milioane.</p>
-
-{% if a.infografic.venituri %}
-<div id="ig-sec-ven">
-  <h3 class="ig-h">De unde vin banii</h3>
-  <div class="ig-grid2">
-    <div class="ig-card"><div id="ig-ven"></div></div>
-    <div class="ig-card"><ul class="vlist" id="ig-ven-list"></ul></div>
-  </div>
-</div>
-{% endif %}
-
-<h3 class="ig-h">Unde se duc banii</h3>
-{% if a.infografic.sectiuni %}
-<p class="note" style="border:none;padding:0;margin:0 0 .6rem">
-  Funcționare {{ "{:,.0f}".format(a.infografic.sectiuni.functionare / 1000).replace(",", ".") }} mil. lei ·
-  dezvoltare {{ "{:,.0f}".format(a.infografic.sectiuni.dezvoltare / 1000).replace(",", ".") }} mil. lei</p>
-{% endif %}
-<div class="toolbar" id="ig-tabs">
-  <button data-mode="val" class="on">Total</button>
-  <button data-mode="func">Doar funcționare</button>
-  <button data-mode="dezv">Doar dezvoltare</button>
-</div>
-<div class="ig-card">
-  <div class="bars" id="ig-bars"></div>
-  <div class="detail" id="ig-detail"></div>
-</div>
-
-<div class="ig-card" style="margin-top:1rem">
-  <h3 class="ig-h" style="margin-top:0">Din fiecare 100 de lei cheltuiți</h3>
-  <div class="hundred" id="ig-hundred"></div>
-  <div class="hlegend" id="ig-hundred-legend"></div>
-</div>
-
-{% if a.infografic.trim %}
-<div id="ig-sec-trim">
-  <h3 class="ig-h">Ritmul anului, pe trimestre</h3>
-  <div class="ig-card"><div id="ig-trim"></div>
-    <div class="hlegend"><span><i style="background:#1a7f37"></i>funcționare</span>
-      <span><i style="background:#b8860b"></i>dezvoltare</span>
-      <span><i style="background:#0b57d0"></i>venituri</span></div></div>
-</div>
-{% endif %}
-
-{% if a.infografic.ani %}
-<div id="ig-sec-ani">
-  <h3 class="ig-h">Estimările pentru 2027–2029</h3>
-  <div class="ig-card"><div id="ig-ani"></div>
-    <p class="note" style="border:none;padding:0;margin-top:.5rem" id="ig-ani-note"></p></div>
-</div>
-{% endif %}
-
-<script>var IG = {{ a.infografic | tojson }};</script>
-<script>{% include "infografic.js" %}</script>
-
-{% elif a.top_capitole %}
-<h2 style="font-size:1.1rem">Cheltuieli pe capitole (top {{ a.top_capitole|length }})</h2>
-<table>
-  <thead><tr><th>Cod</th><th>Capitol</th><th class="num">mii lei</th></tr></thead>
-  <tbody>
-  {% for cap in a.top_capitole %}
-    <tr><td>{{ cap.code }}</td><td>{{ cap.name }}</td>
-        <td class="num">{{ "{:,.0f}".format(cap.total).replace(",", ".") }}</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
-{% endif %}
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  if (!tabs.length) return;
+  function show(tab) {
+    tabs.forEach(function (t) {
+      var panel = document.getElementById(t.getAttribute("aria-controls"));
+      var on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.className = on ? "on" : "";
+      if (panel) panel.hidden = !on;
+    });
+  }
+  tabs.forEach(function (tab, i) {
+    tab.onclick = function () { show(tab); };
+    tab.onkeydown = function (e) {
+      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      var next = tabs[(i + d + tabs.length) % tabs.length];
+      next.focus(); show(next);
+    };
+  });
+  show(tabs[0]);
+})();
+</script>
 {% endblock %}

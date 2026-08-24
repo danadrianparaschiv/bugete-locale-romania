@@ -226,45 +226,54 @@ def capitole(rep: ExecutionReport, kind: str = "expense_functional",
     return sorted(agg.values(), key=lambda c: -c["val"])
 
 
-def snapshot(reports: dict[int, ExecutionReport], registry: Registry | None = None) -> dict:
-    """Per-city execution block: newest quarter in full, plus a quarterly series.
-
-    Only the local budget (sources A–D) is reported, to match what the site
-    shows for the approved budget.
-    """
-    if not reports:
-        return {}
-    quarters = sorted(reports)
-    latest = reports[quarters[-1]]
-    caps = capitole(latest, budget="local")
+def _quarter_block(rep: ExecutionReport, quarter: int,
+                   registry: Registry | None = None) -> dict:
+    """One quarter in full: totals, capitole and its own validation state."""
+    caps = capitole(rep, budget="local")
     if registry is not None:
         for c in caps:
             if not c["nume"]:
                 e = registry.get("expense_functional", c["cod"])
                 if e:
                     c["nume"] = e.name
-    unknown = sum(1 for ln in latest.lines if not ln.known_code)
+    return {
+        "trimestru": quarter,
+        "la_data": rep.report_date,
+        "venituri": rep.total("revenue"),
+        "cheltuieli": rep.total("expense_functional"),
+        "capitole": caps,
+        "linii": len(rep.lines),
+        "coduri_neenumerate": sum(1 for ln in rep.lines if not ln.known_code),
+        "probleme": rep.issues,
+    }
+
+
+def snapshot(reports: dict[int, ExecutionReport], registry: Registry | None = None) -> dict:
+    """Per-city execution block: every reported quarter, in full.
+
+    Each quarter is cumulative from 1 January, so the site can show one view
+    per quarter. Only the local budget (sources A–D) is reported, to match
+    what the site shows for the approved budget.
+    """
+    if not reports:
+        return {}
+    quarters = sorted(reports)
+    latest_q = quarters[-1]
+    blocks = [_quarter_block(reports[q], q, registry) for q in quarters]
+    newest = blocks[-1]
     return {
         "unitate": "mii lei",
-        "sursa": latest.report_type,
-        "trimestru": quarters[-1],
-        "la_data": latest.report_date,
-        "cif": latest.entity_cif,
-        "venituri": latest.total("revenue"),
-        "cheltuieli": latest.total("expense_functional"),
-        "capitole": caps,
-        "trimestre": [
-            {
-                "trimestru": q,
-                "la_data": reports[q].report_date,
-                "venituri": reports[q].total("revenue"),
-                "cheltuieli": reports[q].total("expense_functional"),
-            }
-            for q in quarters
-        ],
-        "linii": len(latest.lines),
-        "coduri_neenumerate": unknown,
-        "probleme": latest.issues,
+        "sursa": reports[latest_q].report_type,
+        "cif": reports[latest_q].entity_cif,
+        "trimestru": latest_q,  # newest reported quarter
+        "la_data": newest["la_data"],
+        "venituri": newest["venituri"],
+        "cheltuieli": newest["cheltuieli"],
+        "capitole": newest["capitole"],
+        "trimestre": blocks,
+        "linii": newest["linii"],
+        "coduri_neenumerate": newest["coduri_neenumerate"],
+        "probleme": newest["probleme"],
         "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). "
                 "Raport oficial Forexebug; vezi DISCLAIMER.md.",
     }

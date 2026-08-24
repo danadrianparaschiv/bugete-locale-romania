@@ -155,6 +155,26 @@ def test_aggregate_links_execution_and_computes_share(tmp_path):
     assert e.plan_incomplet is False
 
 
+def test_city_page_has_one_tab_per_view(tmp_path):
+    """Buget + T1..T4 + the annual view; quarters without a report say so."""
+    from bgconvertor.site import build_all
+
+    data = _corpus_with_execution(tmp_path, plan_venituri=2000.0)  # only q2 exists
+    out = tmp_path / "site"
+    build_all(data, out, base_url="/repo")
+    page = (out / "city" / "1017.html").read_text()
+
+    for tab in ('id="tab-buget"', 'id="tab-t1"', 'id="tab-t2"',
+                'id="tab-t3"', 'id="tab-t4"', 'id="tab-an"'):
+        assert tab in page
+    # the reported quarter carries figures; the others explain the gap
+    assert "Venituri încasate" in page
+    assert page.count("nu este încă\n    publicat") == 3  # T1, T3, T4
+    assert "Anul 2026 nu este încheiat" in page
+    # empty quarters are dimmed, not hidden
+    assert page.count('data-empty="1"') == 4  # T1, T3, T4 and the annual view
+
+
 def test_partial_plan_suppresses_share(tmp_path):
     """A plan extracted from a bad scan can be a fraction of the real budget;
     the ratio would read as massive overspending, so it is withheld."""

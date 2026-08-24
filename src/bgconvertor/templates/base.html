@@ -44,6 +44,13 @@
   .vbar i { display:block; height:100%; }
   .tag { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; padding:.05rem .4rem;
          border:1px solid currentColor; border-radius:4px; white-space:nowrap; }
+  .tabs { display:flex; gap:.25rem; flex-wrap:wrap; margin:.6rem 0 1.1rem;
+          border-bottom:1px solid var(--line); }
+  .tabs button { font-size:.92rem; background:none; border:0; border-bottom:2px solid transparent;
+    color:var(--dim); padding:.5rem .85rem; cursor:pointer; margin-bottom:-1px; }
+  .tabs button:hover { color:var(--ink); }
+  .tabs button.on { color:var(--ink); font-weight:650; border-bottom-color:var(--ink); }
+  .tabs button[data-empty] { opacity:.45; }
   .toolbar { display:flex; gap:.4rem; flex-wrap:wrap; margin:.6rem 0 .8rem; }
   .toolbar button { font-size:.78rem; letter-spacing:.04em; background:#fff; color:var(--dim);
     border:1px solid var(--line); padding:.35rem .8rem; border-radius:999px; cursor:pointer; }
