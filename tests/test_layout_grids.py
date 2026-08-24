@@ -5,9 +5,11 @@ counterpart of the golden-fixture eval (which needs the sample PDFs).
 """
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 from bgconvertor.layouts import map_grid
+from bgconvertor.layouts.collapsed import try_map as collapsed_try
 from bgconvertor.layouts.matrix import try_map as matrix_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
 
@@ -142,3 +144,42 @@ def test_institution_budget_recovers_collapsed_code_value_streams():
         if line["raw_code"] in {"01", "20", "90", "93.01", "93.01.96"}
     )
     assert not any(line.get("cell_issues") for line in numeric)
+
+
+def test_annual_estimates_recovers_stamp_collapsed_ordered_streams():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+    idx = _by_code(lines)
+
+    assert len(lines) == 54
+    assert sum(len(line["values"]) for line in lines) == 216
+    assert idx["66025050"]["code"] == "66.02.50.50"
+    assert idx["65020401"]["values"]["total_2026"] == "10425.50"
+    assert idx["670205"]["values"]["est2027"] == "106575"
+    assert idx["680206"]["values"]["est2027"] == "1630"
+    assert idx["740205"]["values"]["total_2026"] == "58295"
+    assert idx["74020501"]["values"]["total_2026"] == "55553"
+    assert idx["74020502"]["values"]["total_2026"] == "2742"
+    assert idx["74020502"]["name"].startswith("Colectarea")
+    assert not any(line.get("cell_issues") for line in lines)
+
+
+def test_collapsed_annual_mapper_fails_closed_on_stream_count_mismatch():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[34][2] += " 999"
+
+    assert collapsed_try(grid) is None
+
+
+def test_source_audited_repairs_require_the_exact_page_fingerprint():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[-1][1] = "84020304"
+
+    lines = collapsed_try(grid)
+    assert lines is not None
+    idx = _by_code(lines)
+    assert idx["74020502"]["values"]["total_2026"] == "272"
+    assert "66025050" not in idx

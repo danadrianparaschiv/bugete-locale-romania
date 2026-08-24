@@ -62,15 +62,39 @@ class Anchor(BaseModel):
         return self
 
 
-class CellGroundTruthGroup(BaseModel):
-    """All expected numeric cells in one disambiguated page region."""
+class CellGroundTruthRow(BaseModel):
+    """Compact exhaustive row: one identity plus all expected value columns."""
 
-    context_contains: str
-    cells: list[Anchor]
+    raw_code: str | None = None
+    code: str | None = None
+    name_contains: str | None = None
+    row_year: int | None = None
+    values: dict[str, str]
+
+    @model_validator(mode="after")
+    def _check_row(self):
+        if not any([self.raw_code, self.code, self.name_contains]):
+            raise ValueError("ground-truth row needs raw_code, code or name_contains")
+        if not self.values:
+            raise ValueError("ground-truth row needs at least one numeric value")
+        for value in self.values.values():
+            try:
+                Decimal(value)
+            except InvalidOperation as exc:
+                raise ValueError("ground-truth row values must be numeric") from exc
+        return self
+
+
+class CellGroundTruthGroup(BaseModel):
+    """All expected numeric cells in one page or disambiguated page region."""
+
+    context_contains: str | None = None
+    cells: list[Anchor] = []
+    rows: list[CellGroundTruthRow] = []
 
     @model_validator(mode="after")
     def _check_cells(self):
-        if not self.cells:
+        if not self.cells and not self.rows:
             raise ValueError("cell ground-truth group cannot be empty")
         for cell in self.cells:
             if cell.column is None or cell.value is None:
@@ -221,17 +245,35 @@ def check_cell_ground_truth(
     matched = 0
 
     for group in groups:
-        line_indexes = [
-            index
-            for index, line in enumerate(lines)
-            if _fuzzy_contains(group.context_contains, line.get("section") or "")
-        ]
+        line_indexes = (
+            list(range(len(lines)))
+            if group.context_contains is None
+            else [
+                index
+                for index, line in enumerate(lines)
+                if _fuzzy_contains(group.context_contains, line.get("section") or "")
+            ]
+        )
         for index in line_indexes:
             for column, value in (lines[index].get("values") or {}).items():
                 if _numeric_value(value):
                     predicted.add((index, column))
 
-        for cell in group.cells:
+        cells = list(group.cells)
+        for row in group.rows:
+            cells.extend(
+                Anchor(
+                    raw_code=row.raw_code,
+                    code=row.code,
+                    name_contains=row.name_contains,
+                    row_year=row.row_year,
+                    column=column,
+                    value=value,
+                )
+                for column, value in row.values.items()
+            )
+
+        for cell in cells:
             expected += 1
             anchor = cell.model_copy(update={"context_contains": group.context_contains})
             match_key = next((
@@ -249,8 +291,9 @@ def check_cell_ground_truth(
                 consumed.add(match_key)
                 continue
             label = cell.raw_code or cell.code or cell.name_contains
+            scope = group.context_contains or "whole payload"
             misses.append(
-                f"cell missing in {group.context_contains}: {label} "
+                f"cell missing in {scope}: {label} "
                 f"{cell.column}={cell.value}"
             )
 

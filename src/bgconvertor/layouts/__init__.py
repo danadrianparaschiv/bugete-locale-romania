@@ -7,10 +7,11 @@ new layout family = one new module here + a registration line + fixtures.
 
 from __future__ import annotations
 
-from . import institution, matrix, table, transposed
+from . import collapsed, institution, matrix, table, transposed
 
 MAPPERS = [
     institution.try_map,
+    collapsed.try_map,
     transposed.try_map,
     matrix.try_map,
     table.map_grid,  # always succeeds

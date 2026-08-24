@@ -31,6 +31,13 @@ def test_all_committed_fixtures_are_valid():
     institution = next(f for f in fixtures if f.id == "ar_p301")
     assert sum(len(group.cells) for group in institution.cell_ground_truth) == 51
     assert institution.source_grid
+    pitesti = next(f for f in fixtures if f.id == "ag_p009")
+    assert sum(
+        len(row.values)
+        for group in pitesti.cell_ground_truth
+        for row in group.rows
+    ) == 216
+    assert pitesti.source_grid
     # hazard coverage for the hard cases
     all_hazards = {h for f in fixtures for h in f.hazards}
     assert "rotated_90_in_image" in all_hazards
@@ -185,6 +192,35 @@ def test_exhaustive_cells_measure_recall_precision_and_duplicates_once():
     report = ev.evaluation_report([empty_result])
     assert report["validated_cell_recall"]["pct"] == 0.0
     assert report["numeric_cell_precision_against_ground_truth"]["pct"] == 0.0
+
+
+def test_exhaustive_compact_rows_can_scope_the_whole_payload():
+    payload = {
+        "lines": [
+            {
+                "raw_code": "61.02", "code": "61.02", "name": "Ordine",
+                "section": None,
+                "values": {"total_2026": "10", "est2027": "11"},
+            },
+            {
+                "raw_code": "65.02", "code": "65.02", "name": "Invatamant",
+                "section": None,
+                "values": {"total_2026": "20", "est2027": "21"},
+            },
+        ]
+    }
+    group = ev.CellGroundTruthGroup(
+        rows=[
+            ev.CellGroundTruthRow(
+                raw_code="61.02", values={"total_2026": "10", "est2027": "11"}
+            ),
+            ev.CellGroundTruthRow(
+                raw_code="65.02", values={"total_2026": "20", "est2027": "21"}
+            ),
+        ]
+    )
+
+    assert ev.check_cell_ground_truth(payload, [group]) == (4, 4, 4, [])
 
 
 def test_evaluate_all_uses_committed_source_grid_without_pdf(tmp_path):

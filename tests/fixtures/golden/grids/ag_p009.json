@@ -1,0 +1,446 @@
+{
+  "text": "-mii lei-",
+  "rotation_applied": 0,
+  "grid": [
+    [
+      "DENUMIREA INDICATORILOR",
+      "Cod Indicator",
+      "Buget2026",
+      "Estimari",
+      "Estimari",
+      "Estimari"
+    ],
+    [
+      "DENUMIREA INDICATORILOR",
+      "Cod Indicator",
+      "PREVEDERI ANUALE TOT'AL",
+      "2027",
+      "2028",
+      "2029"
+    ],
+    [
+      "Ordine publica (cod 61.02.03.04)",
+      "610203",
+      "21303",
+      "21303",
+      "21303",
+      "21303"
+    ],
+    [
+      "Politie locaia",
+      "61020304",
+      "21303",
+      "21303",
+      "21303",
+      "21303"
+    ],
+    [
+      "Protectie civila si protectia contra incendilor (protectie civila nonm",
+      "610205",
+      "375",
+      "375",
+      "375",
+      "375"
+    ],
+    [
+      "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.1",
+      "6502",
+      "48152.87",
+      "30297",
+      "30878",
+      "31260"
+    ],
+    [
+      "Invatamant prescolar si primar (cod 65.02.03.01+65.02.03.02)",
+      "650203",
+      "4418,37",
+      "723",
+      "742",
+      "761"
+    ],
+    [
+      "Învatamânt prescolar",
+      "65020301",
+      "3943,37",
+      "476",
+      "488",
+      "500"
+    ],
+    [
+      "Invatamânt primar",
+      "65020302",
+      "475",
+      "247",
+      "254",
+      "261"
+    ],
+    [
+      "Invatamant secundar (cod 65 02.04.01 la 65.02.04 03)",
+      "650204",
+      "18677.50",
+      "7844",
+      "8058",
+      "8263"
+    ],
+    [
+      "Învatamânt secundar inferior",
+      "65020401",
+      "10426.50",
+      "4337",
+      "4471",
+      "4599"
+    ],
+    [
+      "Învatamânt secundar superior",
+      "65020402",
+      "8170",
+      "3427",
+      "3507",
+      "3584"
+    ],
+    [
+      "Invatamant profesional",
+      "65020403",
+      "82",
+      "80",
+      "80",
+      "80"
+    ],
+    [
+      "Servicii educationale complementare (cod 65.02.12 01)",
+      "650212",
+      "2700",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "Scoala dupa scoala",
+      "65021201",
+      "2700",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "Invatamant anteprescolar",
+      "650213",
+      "12357",
+      "11980",
+      "11980",
+      "11980"
+    ],
+    [
+      "Alte cheltuießi in domeniul învatamántuiui",
+      "650250",
+      "10000",
+      "9750",
+      "10098",
+      "10256"
+    ],
+    [
+      "Sanatate (cod 66.02.06+66.02.08+66.02.50)",
+      "6602",
+      "6619",
+      "12790",
+      "12790",
+      "12790"
+    ],
+    [
+      "Servicii de sanatate publica",
+      "660208",
+      "6287",
+      "12458",
+      "12458",
+      "12458"
+    ],
+    [
+      "Alte cheltuieli in domeniul sanatatii (cod 66.02.50.50)",
+      "660250",
+      "332",
+      "332",
+      "332",
+      "332"
+    ],
+    [
+      "Alte institutil si actiuni sanitare",
+      "68025050",
+      "332",
+      "332",
+      "332",
+      "332"
+    ],
+    [
+      "Cuttura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.0",
+      "6702",
+      "107855",
+      "119355",
+      "121855",
+      "123355"
+    ],
+    [
+      "Servicii culturale (cod 67.02.03.02 a 67 02.03.08+67.02.03.12+67",
+      "670203",
+      "11625",
+      "11625",
+      "11625",
+      "11625"
+    ],
+    [
+      "Institutii publice de spectacole si concerte",
+      "67020304",
+      "6625",
+      "6625",
+      "6625",
+      "6625"
+    ],
+    [
+      "Centre cuiturale",
+      "67020314",
+      "5000",
+      "5000",
+      "5000",
+      "5000"
+    ],
+    [
+      "Servicil recreative si sportive (cod 67.02.05.01 la 67.02.05.03)",
+      "670205",
+      "95075",
+      "108575",
+      "109075",
+      "110575"
+    ],
+    [
+      "Sport",
+      "67020501",
+      "37100",
+      "48600",
+      "48600",
+      "48600"
+    ],
+    [
+      "Tineret",
+      "67020502",
+      "40",
+      "40",
+      "40",
+      "40"
+    ],
+    [
+      "Intretinere gradini publice, parcuri, zone verzi, baze sportive si de",
+      "67020503",
+      "57935",
+      "57935",
+      "60435",
+      "61935"
+    ],
+    [
+      "Servicii religioase",
+      "670206",
+      "500",
+      "500",
+      "500",
+      "500"
+    ],
+    [
+      "Alte servicii în domenile culturii, recreerts si religiei",
+      "670250",
+      "655",
+      "655",
+      "655",
+      "655"
+    ],
+    [
+      "Asigurari si asistenta sociala (cod68 02.04+68.02.05+68.02 06+68",
+      "6802",
+      "104663",
+      "107286",
+      "109963",
+      "112530"
+    ],
+    [
+      "Asistenta acordata persoanelor in varsta",
+      "680204",
+      "3873",
+      "3735",
+      "3735",
+      "3735"
+    ],
+    [
+      "Asistenta sociala in caz de boli si invaliditati (cod 68.02.05.02)",
+      "680205",
+      "91115",
+      "93876",
+      "96553",
+      "99120"
+    ],
+    [
+      "Asistenta sociala in caz de invaliditate Asistenta sociala pentru familie si copii",
+      "68020502 680206",
+      "91115 1630",
+      "93876 1830",
+      "96553 1630",
+      "99120 1630"
+    ],
+    [
+      "Prevenirea excluderii sociale (cod 68.02.15.01+68.02.15.02)",
+      "",
+      "",
+      "66",
+      "66",
+      ""
+    ],
+    [
+      "",
+      "680215",
+      "66",
+      "66",
+      "",
+      "66"
+    ],
+    [
+      "Ajutor social Alte cheltuieli in domeniul asigurarilor si asistentei sociale (cod 68.",
+      "68021501",
+      "66",
+      "7979",
+      "66 7979",
+      "66 7979"
+    ],
+    [
+      "Alte cheltuieli in domeniul asistentei sociale",
+      "680250 68025050",
+      "7979 7979",
+      "7979",
+      "7979",
+      "7979"
+    ],
+    [
+      "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE,",
+      "6902",
+      "113190",
+      "112139",
+      "",
+      "116139"
+    ],
+    [
+      "Locuinte, servici si dezvoitare publica (cod 70.02.03+71.02.04+70",
+      "7002",
+      "53779",
+      "53728",
+      "114639 53728",
+      "53728"
+    ],
+    [
+      "llumínat public si electrificari rurale",
+      "700206",
+      "10480",
+      "10480",
+      "10480",
+      "10480"
+    ],
+    [
+      "Alte servici in domeniile locuinteior, serviciilor si dezvoitani comun",
+      "700250",
+      "",
+      "43248",
+      "43248",
+      "43248"
+    ],
+    [
+      "Protectia mediulul (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "7402",
+      "43299",
+      "",
+      "60911",
+      ""
+    ],
+    [
+      "Salubritate si gestiunea deseurilor (cod 74.02.05.01+74.02.05.02)",
+      "740205",
+      "59411",
+      "58411",
+      "59795",
+      "62411"
+    ],
+    [
+      "Salubritate",
+      "",
+      "58295 55553",
+      "57295 54553",
+      "57053",
+      "61295 58553"
+    ],
+    [
+      "Colectarea, tratarea si distrugerea deseurilor",
+      "74020501",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "74020502 740250",
+      "272",
+      "2742 1116",
+      "2742 1116",
+      "2742 1116"
+    ],
+    [
+      "Alte servicii în domeniul protectiei mediului Partea a V-a ACTIUNI ECONOMICE (cod 80.02+81.02+83 02+84",
+      "7902",
+      "1116 90140",
+      "107325",
+      "107000",
+      "111003"
+    ],
+    [
+      "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50)",
+      "8102",
+      "32328",
+      "35513",
+      "35318",
+      "37391"
+    ],
+    [
+      "Energie termica",
+      "810206",
+      "32328",
+      "35513",
+      "35318",
+      "37391"
+    ],
+    [
+      "Transporturi (cod 84.02.03+84.02.04+84.02.06+84.02.50)",
+      "8402",
+      "",
+      "71802",
+      "71672",
+      "73602"
+    ],
+    [
+      "Transport rutier (cod 84.02.03.01 la 84.02.03.03)",
+      "840203",
+      "57802 57802",
+      "71802",
+      "71672",
+      "73602"
+    ],
+    [
+      "Transport în comun",
+      "84020302",
+      "43629",
+      "47629",
+      "47499",
+      "49429"
+    ],
+    [
+      "Strazi",
+      "84020303",
+      "14173",
+      "24173",
+      "24173",
+      "24173"
+    ]
+  ]
+}

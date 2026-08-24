@@ -27,15 +27,15 @@ jobs:
         # LLM tests use fake clients/local cache — nothing here touches the
         # network or an API key; tests for PDFs not extracted above still skip
         run: uv run pytest -q
-      - name: golden-fixture eval — digital + exhaustive institution gates
-        # Alba Iulia is extracted from its PDF. The Arad institution family
-        # replays a committed OCR regression grid with all 51 named-block
-        # numeric cells inventoried, so scanned mapping is also gated offline.
+      - name: golden-fixture eval — digital + exhaustive scanned-layout gates
+        # Alba Iulia is extracted from its PDF. Committed Arad/Pitesti OCR
+        # grids exhaustively gate 51 institution cells and all 216 cells in a
+        # stamp-collapsed annual-estimate table, fully offline.
         run: >-
           uv run bgconvertor eval
-          --min-anchors 45
-          --min-text-assertions 7
-          --require-cell-ground-truth 1
+          --min-anchors 62
+          --min-text-assertions 9
+          --require-cell-ground-truth 2
           --min-layout-cell-recall 90
           --min-layout-cell-precision 99.5
           --json-out eval-report.json

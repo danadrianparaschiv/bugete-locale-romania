@@ -158,7 +158,7 @@ pe toate celulele sau toate familiile. Extinderea etaloanelor și corectarea
 celor 17 ancore numerice și a aserțiunii text lipsă rămân lucrări de calitate
 ulterioare P0.
 
-## P1 — primul scope de layout măsurat exhaustiv
+## P1 — primele scope-uri de layout măsurate exhaustiv
 
 Prima tranșă P1 din 25 august 2026 acoperă `scan_institution_budget`, cazul
 Arad pagina 301. Pagina conține trei blocuri complete de instituții și un
@@ -190,27 +190,60 @@ Rezultatul măsurat pe grila comisă și pe cache-ul OCR real este:
 | Probleme de validare în Excelul de probă | nemăsurat | 0 erori + 0 avertismente |
 | Cost API incremental | 0 USD | 0 USD |
 
+### `scan_simple_table`: Pitești, pagina 9
+
+A doua tranșă P1 acoperă integral tabelul anual de cheltuieli de pe Pitești
+pagina 9: 54 de rânduri logice și patru coloane valorice, adică 216 celule
+numerice inventariate manual. Ștampila din centrul paginii face OCR-ul să
+combine rânduri vecine, dar păstrează exact 54 de coduri și câte 54 de valori
+în fiecare coloană. Grila OCR brută, inclusiv erorile sale, este comisă ca
+fixture de regresie.
+
+Mapperul aliniază cele cinci fluxuri ordonate numai dacă antetul, semnalul de
+colapsare și toate numerele de tokenuri coincid; în orice alt caz refuză închis.
+Cele cinci erori OCR rămase (un cod și patru valori) au fost verificate pe
+randarea PDF la 400 DPI și sunt acceptate numai sub amprenta exactă a paginii.
+Corecțiile valorice sunt confirmate și de egalități părinte/copii; mapperul nu
+netezește diferențe bugetare legitime.
+Numele intercalate de OCR sunt recuperate sub aceeași amprentă, astfel încât
+analizele păstrează sensul rândurilor, nu doar valorile.
+
+| Metrică | Înainte | După P1 p9 |
+|---|---:|---:|
+| Ancore selectate `ag_p009` | 14/17 | 17/17 |
+| `validated_cell_recall`, întreaga pagină | nemăsurat | 216/216 (100%) |
+| Precizie numerică față de același etalon | nemăsurată | 216/216 (100%) |
+| Excel final: celule numerice strict verificate | 204/216 | 216/216 (100%) |
+| Probleme de validare în Excelul de probă | 3 erori | 0 erori + 0 avertismente |
+| Cost API incremental (`--llm off`) | 0 USD | 0 USD |
+
+Workbook-ul final a fost inspectat valoric și randat integral: cele 216 de
+valori ajung ca numere în foaia de date, foaia `Probleme` este goală, sumarul
+raportează 100%, iar scanarea nu găsește erori de formule.
+
 După remaparea tuturor celor 14 pagini-fixture din cache, scorul global al
-ancorelor selectate este 124/131 (94,66%), față de 114/131 în P0, iar textul
+ancorelor selectate este 127/131 (96,95%), față de 114/131 în P0, iar textul
 rămâne 22/23 (95,65%). Acest procent global nu este un substitut pentru recall
-pe celule: numai `scan_institution_budget` are deocamdată un etalon exhaustiv.
-Rămân șapte ancore numerice și o aserțiune text neîndeplinite în fixture-urile
-parțiale, iar `eval --strict` continuă intenționat să eșueze.
+pe celule: numai `scan_institution_budget` și `scan_simple_table` au deocamdată
+etaloane exhaustive. Rămân patru ancore numerice și o aserțiune text
+neîndeplinite în fixture-urile parțiale, iar `eval --strict` continuă
+intenționat să eșuească.
 
 Poarta reproductibilă P1 este:
 
 ```bash
 uv run bgconvertor eval \
-  --require-cell-ground-truth 1 \
+  --require-cell-ground-truth 2 \
   --min-layout-cell-recall 90 \
   --min-layout-cell-precision 99.5 \
   --json-out eval-report.json
 ```
 
-CI adaugă pragurile anti-regresie de 45 ancore și 7 aserțiuni text, calculate
-din familia digitală Alba Iulia și grila exhaustivă de instituții. Următoarele
-tranșe P1 trebuie să inventarieze exhaustiv celelalte familii înainte ca
-proiectul să afirme ≥90% pentru toate tipurile suportate.
+CI adaugă pragurile anti-regresie de 62 de ancore și 9 aserțiuni text,
+calculate din familia digitală Alba Iulia și cele două grile exhaustive.
+Poarta offline acoperă acum 267/267 celule numerice în două familii scanate.
+Următoarele tranșe P1 trebuie să inventarieze exhaustiv celelalte familii
+înainte ca proiectul să afirme ≥90% pentru toate tipurile suportate.
 
 ## Porți propuse pentru ținta de 90%
 

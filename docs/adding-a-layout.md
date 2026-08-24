@@ -105,10 +105,11 @@ de pagina PDF randată. Fixture-urile sunt JSON în `tests/fixtures/golden/`:
   ],
   "cell_ground_truth": [
     {
-      "context_contains": "Impozit pe teren",
-      "cells": [
-        {"raw_code": "070202", "column": "total", "value": "7145.00"},
-        {"raw_code": "070202", "column": "trim4", "value": "1386.00"}
+      "rows": [
+        {
+          "raw_code": "070202",
+          "values": {"total": "7145.00", "trim4": "1386.00"}
+        }
       ]
     }
   ]
@@ -122,16 +123,19 @@ acoperite de ștampile sau degradate cu `"hard": true`.
 
 `anchors` pot rămâne un eșantion mic pentru diagnostic. Pentru un layout
 declarat suportat, `cell_ground_truth` trebuie însă să inventarieze fiecare
-celulă numerică din scope-ul indicat; grupurile de context disambiguizează
-codurile repetate. O grilă OCR distilată în `source_grid` face mapperul
-reproductibil în CI fără PDF, OCR, rețea sau secrete. Nu include date din afara
-scope-ului exhaustiv în calculul preciziei.
+celulă numerică din scope-ul indicat. Forma compactă `rows` reutilizează
+identitatea rândului pentru toate valorile sale. `context_contains`
+disambiguizează codurile repetate și poate lipsi când scope-ul este întreaga
+pagină. Forma explicită `cells` rămâne disponibilă pentru regiuni neregulate.
+O grilă OCR distilată în `source_grid` face mapperul reproductibil în CI fără
+PDF, OCR, rețea sau secrete. Nu include date din afara scope-ului exhaustiv în
+calculul preciziei.
 
 ## 5. Validează cu eval, apoi cu suita de teste
 
 ```bash
 uv run bgconvertor eval        # your fixture green, nothing else regressed
-uv run bgconvertor eval --require-cell-ground-truth 1 \
+uv run bgconvertor eval --require-cell-ground-truth 2 \
   --min-layout-cell-recall 90 --min-layout-cell-precision 99.5
 uv run pytest                  # includes the ab-stays-100%-clean pin
 ```
