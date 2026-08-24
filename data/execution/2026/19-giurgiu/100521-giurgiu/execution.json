@@ -1,9 +1,9 @@
 {
   "unitate": "mii lei",
   "sursa": "FXB-EXB-901",
+  "cif": "4852455",
   "trimestru": 2,
   "la_data": "2026-06-30",
-  "cif": "4852455",
   "venituri": 173169.96417,
   "cheltuieli": 149766.5733,
   "capitole": [
@@ -78,13 +78,153 @@
       "trimestru": 1,
       "la_data": "2026-03-31",
       "venituri": 96319.46749,
-      "cheltuieli": 69001.47605
+      "cheltuieli": 69001.47605,
+      "capitole": [
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 17385.888259999996
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 15321.158950000003
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 13201.540169999998
+        },
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 7590.05162
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 4416.63744
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 3288.45524
+        },
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 2229.837
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 2001.6390900000001
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 1783.63133
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 1117.838
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 588.4003799999999
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 45.3658
+        },
+        {
+          "cod": "87.02",
+          "nume": "Alte actiuni economice",
+          "val": 31.032770000000003
+        }
+      ],
+      "linii": 232,
+      "coduri_neenumerate": 2,
+      "probleme": []
     },
     {
       "trimestru": 2,
       "la_data": "2026-06-30",
       "venituri": 173169.96417,
-      "cheltuieli": 149766.5733
+      "cheltuieli": 149766.5733,
+      "capitole": [
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 34586.070360000005
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 33815.30997000001
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 29681.819050000002
+        },
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 22195.906730000002
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 9236.627049999996
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 6017.41101
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 3934.9544300000002
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 3527.75842
+        },
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 2229.837
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 2219.4390000000003
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 1153.2520899999995
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 1038.4868
+        },
+        {
+          "cod": "87.02",
+          "nume": "Alte actiuni economice",
+          "val": 129.70139
+        }
+      ],
+      "linii": 283,
+      "coduri_neenumerate": 2,
+      "probleme": []
     }
   ],
   "linii": 283,

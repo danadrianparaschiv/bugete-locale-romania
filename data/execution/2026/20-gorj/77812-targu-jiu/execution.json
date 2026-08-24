@@ -1,9 +1,9 @@
 {
   "unitate": "mii lei",
   "sursa": "FXB-EXB-901",
+  "cif": "4956065",
   "trimestru": 2,
   "la_data": "2026-06-30",
-  "cif": "4956065",
   "venituri": 295742.24252,
   "cheltuieli": 237736.21503,
   "capitole": [
@@ -68,13 +68,128 @@
       "trimestru": 1,
       "la_data": "2026-03-31",
       "venituri": 131237.87831,
-      "cheltuieli": 96586.12123
+      "cheltuieli": 96586.12123,
+      "capitole": [
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 19676.036249999997
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 16311.094879999995
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 12633.557750000004
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 11696.064050000003
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 11106.73515
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 10555.162040000001
+        },
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 7543.91532
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 3759.1858799999995
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 2639.063099999999
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 665.30681
+        }
+      ],
+      "linii": 369,
+      "coduri_neenumerate": 0,
+      "probleme": []
     },
     {
       "trimestru": 2,
       "la_data": "2026-06-30",
       "venituri": 295742.24252,
-      "cheltuieli": 237736.21503
+      "cheltuieli": 237736.21503,
+      "capitole": [
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 64642.55302000001
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 43165.00936000001
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 33478.74995
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 25703.222409999995
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 22518.995079999993
+        },
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 18124.99292
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 16078.929950000002
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 7304.688140000001
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 5346.30462
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 1372.4659800000002
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 0.30360000000000004
+        }
+      ],
+      "linii": 447,
+      "coduri_neenumerate": 1,
+      "probleme": []
     }
   ],
   "linii": 447,

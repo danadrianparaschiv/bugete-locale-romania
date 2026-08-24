@@ -1,9 +1,9 @@
 {
   "unitate": "mii lei",
   "sursa": "FXB-EXB-901",
+  "cif": "3814810",
   "trimestru": 2,
   "la_data": "2026-06-30",
-  "cif": "3814810",
   "venituri": 745840.65624,
   "cheltuieli": 693842.40776,
   "capitole": [
@@ -83,13 +83,163 @@
       "trimestru": 1,
       "la_data": "2026-03-31",
       "venituri": 393579.5767,
-      "cheltuieli": 315662.40334
+      "cheltuieli": 315662.40334,
+      "capitole": [
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 62353.50874999999
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 46930.80240999998
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 43004.68277
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 38785.77297000001
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 35250.09077000001
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 21960.509299999998
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 18768.410030000003
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 14687.9878
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 14564.53587
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 14071.5473
+        },
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 3017.10764
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 1207.6017299999999
+        },
+        {
+          "cod": "87.02",
+          "nume": "Alte actiuni economice",
+          "val": 590.904
+        },
+        {
+          "cod": "80.02",
+          "nume": "Actiuni generale economice, comerciale si de munca",
+          "val": 468.942
+        }
+      ],
+      "linii": 652,
+      "coduri_neenumerate": 1,
+      "probleme": []
     },
     {
       "trimestru": 2,
       "la_data": "2026-06-30",
       "venituri": 745840.65624,
-      "cheltuieli": 693842.40776
+      "cheltuieli": 693842.40776,
+      "capitole": [
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 127238.39569999998
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 97271.32339999996
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 93888.61590999998
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 88538.57916999998
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 80545.48692999998
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 54656.34645
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 45944.881420000005
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 39878.514729999995
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 29867.45758
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 21373.00904
+        },
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 5963.85077
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 5789.58966
+        },
+        {
+          "cod": "87.02",
+          "nume": "Alte actiuni economice",
+          "val": 1888.877
+        },
+        {
+          "cod": "80.02",
+          "nume": "Actiuni generale economice, comerciale si de munca",
+          "val": 997.48
+        }
+      ],
+      "linii": 762,
+      "coduri_neenumerate": 1,
+      "probleme": []
     }
   ],
   "linii": 762,

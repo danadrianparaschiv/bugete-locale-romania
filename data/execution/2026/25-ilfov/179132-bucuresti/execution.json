@@ -1,9 +1,9 @@
 {
   "unitate": "mii lei",
   "sursa": "FXB-EXB-901",
+  "cif": "4267117",
   "trimestru": 2,
   "la_data": "2026-06-30",
-  "cif": "4267117",
   "venituri": 3958907.37664,
   "cheltuieli": 3844201.96102,
   "capitole": [
@@ -83,13 +83,163 @@
       "trimestru": 1,
       "la_data": "2026-03-31",
       "venituri": 1688828.3999800002,
-      "cheltuieli": 1581919.87234
+      "cheltuieli": 1581919.87234,
+      "capitole": [
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 522321.64783
+        },
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 491187.72680999985
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 136893.51759
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 112157.22234000002
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 96812.25178000002
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 70570.82672000003
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 57455.510879999994
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 31217.8705
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 23363.938729999998
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 16203.52381
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 16155.0
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 6782.633
+        },
+        {
+          "cod": "83.02",
+          "nume": "Agricultura, silvicultura, piscicultura si vanatoare",
+          "val": 793.08405
+        },
+        {
+          "cod": "60.02",
+          "nume": "Aparare",
+          "val": 5.1183000000000005
+        }
+      ],
+      "linii": 680,
+      "coduri_neenumerate": 5,
+      "probleme": []
     },
     {
       "trimestru": 2,
       "la_data": "2026-06-30",
       "venituri": 3958907.37664,
-      "cheltuieli": 3844201.96102
+      "cheltuieli": 3844201.96102,
+      "capitole": [
+        {
+          "cod": "84.02",
+          "nume": "Transporturi",
+          "val": 1219717.0701500003
+        },
+        {
+          "cod": "81.02",
+          "nume": "Combustibili si energie",
+          "val": 1070911.32681
+        },
+        {
+          "cod": "67.02",
+          "nume": "Cultura, recreere si religie",
+          "val": 316867.93123000016
+        },
+        {
+          "cod": "51.02",
+          "nume": "Autoritati publice si actiuni externe",
+          "val": 288288.29785
+        },
+        {
+          "cod": "66.02",
+          "nume": "Sanatate",
+          "val": 266011.8221500001
+        },
+        {
+          "cod": "55.02",
+          "nume": "Tranzactii privind datoria publica si imprumuturi",
+          "val": 215442.00952000002
+        },
+        {
+          "cod": "68.02",
+          "nume": "Asigurari si asistenta sociala",
+          "val": 196250.73797000002
+        },
+        {
+          "cod": "70.02",
+          "nume": "Locuinte, servicii si dezvoltare publica",
+          "val": 116182.51723000001
+        },
+        {
+          "cod": "74.02",
+          "nume": "Protectia mediului",
+          "val": 66094.24915999999
+        },
+        {
+          "cod": "61.02",
+          "nume": "Ordine publica si siguranta nationala",
+          "val": 35277.208309999995
+        },
+        {
+          "cod": "65.02",
+          "nume": "Invatamant",
+          "val": 29148.072640000006
+        },
+        {
+          "cod": "54.02",
+          "nume": "Alte servicii publice generale",
+          "val": 22371.986
+        },
+        {
+          "cod": "83.02",
+          "nume": "Agricultura, silvicultura, piscicultura si vanatoare",
+          "val": 1627.5225599999999
+        },
+        {
+          "cod": "60.02",
+          "nume": "Aparare",
+          "val": 11.20944
+        }
+      ],
+      "linii": 775,
+      "coduri_neenumerate": 7,
+      "probleme": []
     }
   ],
   "linii": 775,
