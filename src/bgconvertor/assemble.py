@@ -32,9 +32,6 @@ PMB_INST_RE = re.compile(
 )
 PMB_SOURCE = {"A": ("local", "02"), "G": ("own_revenue", "10"),
               "D": ("unknown", "08")}
-# annex number in the page header ("ANEXA 1.3", "ANEXA NR.3"): part of the
-# document identity — two annexes can share the same base title (Vaslui)
-ANEXA_ID_RE = re.compile(r"ANEXA\s+(?:NR\.?\s*)?([\d]+(?:\.[\d]+)*)", re.IGNORECASE)
 # per-ordonator pages name the institution before its fiscal code (Vaslui)
 COD_FISCAL_RE = re.compile(
     r"([A-ZĂÂÎȘȚ][A-ZĂÂÎȘȚ0-9 .,\-']{5,60}?)\s+COD\s+FISCAL\s+\d{6,9}"
@@ -160,9 +157,6 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             meta = (base, budget, suffix)
         if meta:
             title, budget, suffix = meta
-            an_m = ANEXA_ID_RE.search(text)
-            if an_m:
-                title = f"{title} — Anexa {an_m.group(1)}"
             if inst:
                 title = f"{title} — {inst}"
             # some vendors repeat the document title in every page header
