@@ -940,6 +940,93 @@ def execution_build(
                   + (f" [yellow]({problems} cu probleme)[/yellow]" if problems else ""))
 
 
+@exec_app.command("ingest")
+def execution_ingest(
+    exec_dir: Path = typer.Option(Path("data/execution/2026"), exists=True),
+    quarter: int | None = typer.Option(None, min=1, max=4,
+                                       help="Doar un trimestru (implicit: toate cele găsite pe disc)"),
+):
+    """Verifică rapoartele așezate pe disc și le scrie în manifest, apoi rebuild.
+
+    Fișierele se descarcă manual din portalul ANAF (căutarea cere CAPTCHA) și
+    se pun în structura existentă; comanda le verifică — identitatea entității,
+    data raportului, sumele de control — le înregistrează cu checksum și
+    regenerează instantaneele.
+    """
+    from .execution import ingest_quarter, quarters_on_disk
+    from .nomenclator import load_registry
+
+    registry = load_registry(_config().reference_dir)
+    quarters = [quarter] if quarter else quarters_on_disk(exec_dir)
+    if not quarters:
+        console.print(f"[yellow]niciun raport sub {exec_dir}/<județ>/<oraș>/q<N>/[/yellow]")
+        raise typer.Exit(1)
+
+    failed = 0
+    for q in quarters:
+        r = ingest_quarter(exec_dir, q, registry)
+        failed += r["failed"]
+        style = "green" if not r["failed"] else "yellow"
+        console.print(f"[bold {style}]T{q}: {r['verified']} verificate, "
+                      f"{r['failed']} cu probleme, {r['missing']} lipsă[/bold {style}]")
+        for e in r["entries"]:
+            if e["verification_status"] == "failed":
+                console.print(f"  [red]✗ {e['capital_name']}[/red]: {'; '.join(e['problems'])[:90]}")
+    if failed:
+        # a file that fails verification never reaches the snapshots
+        console.print(f"[red]✗ {failed} rapoarte nu au trecut verificarea — "
+                      "instantaneele NU au fost regenerate (vezi verification.json)[/red]")
+        raise typer.Exit(1)
+    execution_build(exec_dir=exec_dir, only=None)
+
+
+@exec_app.command("status")
+def execution_status(
+    exec_dir: Path = typer.Option(Path("data/execution/2026"), exists=True),
+    today: str | None = typer.Option(None, help="Data de referință (implicit: azi)"),
+    as_json: bool = typer.Option(False, "--json", help="Ieșire pentru automatizare"),
+):
+    """Ce trimestre sunt aduse și care ar trebui să fie deja publicate."""
+    import datetime as dt
+
+    from .execution import quarter_status
+
+    year = int(exec_dir.name)
+    ref = dt.date.fromisoformat(today) if today else dt.date.today()
+    st = quarter_status(exec_dir, year, ref)
+    if as_json:
+        print(json.dumps(st, ensure_ascii=False))
+        return
+    console.print(f"[bold]execuție {year}[/bold] (la {st['azi']})")
+    console.print(f"  complete: {st['trimestre_complete'] or '—'}")
+    console.print(f"  publicat de MFin până acum: T{st['trimestru_asteptat'] or '—'}")
+    if st["de_adus"]:
+        console.print(f"  [yellow]de adus: {st['de_adus']}[/yellow]"
+                      + (f" (fără manifest: {st['manifest_lipsa']})" if st["manifest_lipsa"] else ""))
+    else:
+        console.print("  [green]la zi[/green]")
+
+
+@exec_app.command("new-quarter")
+def execution_new_quarter(
+    quarter: int = typer.Argument(..., min=1, max=4),
+    exec_dir: Path = typer.Option(Path("data/execution/2026"), exists=True),
+):
+    """Pregătește manifestul unui trimestru nou, copiind entitățile din cel anterior.
+
+    URL-urile rămân goale: se obțin din căutarea de pe portalul ANAF, care
+    este protejată cu CAPTCHA și nu poate fi automatizată.
+    """
+    from .execution import scaffold_quarter
+
+    out = scaffold_quarter(exec_dir, quarter)
+    n = len(json.loads(out.read_text())["entries"])
+    console.print(f"[bold green]✓ {out}[/bold green] — {n} intrări, câmpul source_url gol")
+    console.print("[dim]Completează URL-urile din portalul ANAF, apoi:\n"
+                  f"  python3 {exec_dir}/download.py --quarter {quarter}\n"
+                  f"  uv run bgconvertor execution build --exec-dir {exec_dir}[/dim]")
+
+
 corpus_app = typer.Typer(no_args_is_help=True)
 app.add_typer(corpus_app, name="corpus", help="Set de date și raport la nivelul tuturor municipalităților")
 
