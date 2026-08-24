@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cum se face bugetul unui oraș — procedura, etapă cu etapă</title>
+<meta name="description" content="Infografic animat: procedura de gestionare a bugetelor locale în România, de la scrisoarea-cadru la contul de execuție, cu termenele din Legea 273/2006.">
+<style>
+  :root { --ink:#1a1d21; --dim:#6a7178; --line:#e3e6e9; --ok:#1a7f37; --warn:#b8860b;
+          --bad:#b02a37; --blue:#0b57d0; --bg:#ffffff; --card:#f6f8fa; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+         color:var(--ink); background:var(--bg); }
+  main { max-width:52rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
+  a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
+  h1 { font-size:1.9rem; line-height:1.15; margin:.4rem 0 .5rem; }
+  .sub { color:var(--dim); }
+  .lede { font-size:1.05rem; max-width:42rem; }
+
+  /* legend chips */
+  .chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:1.2rem 0 0; }
+  .chip { font-size:.8rem; font-variant-numeric:tabular-nums; padding:.25rem .7rem;
+          border-radius:999px; border:1px solid var(--line); background:var(--card);
+          color:var(--dim); opacity:0; transform:translateY(6px);
+          animation:pop .5s ease forwards; }
+  .chip b { color:var(--ink); }
+  @keyframes pop { to { opacity:1; transform:none; } }
+
+  /* timeline */
+  .tl { position:relative; margin:2.5rem 0; padding-left:2.1rem; }
+  .tl::before { content:""; position:absolute; left:.55rem; top:0; bottom:0;
+                width:2px; background:var(--line); }
+  .tl .fill { position:absolute; left:.55rem; top:0; width:2px; height:0;
+              background:var(--blue); transition:height .25s linear; }
+  .stage { position:relative; margin-bottom:2.2rem; opacity:0; transform:translateY(18px);
+           transition:opacity .6s ease, transform .6s ease; }
+  .stage.in { opacity:1; transform:none; }
+  .dot { position:absolute; left:-2.1rem; top:.2rem; width:1.15rem; height:1.15rem;
+         border-radius:50%; background:#fff; border:2px solid var(--line);
+         display:flex; align-items:center; justify-content:center;
+         font-size:.6rem; font-weight:700; color:var(--dim); transition:border-color .4s, color .4s; }
+  .stage.in .dot { border-color:var(--blue); color:var(--blue); }
+  .when { font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--warn);
+          font-weight:650; margin-bottom:.15rem; }
+  .stage h2 { font-size:1.15rem; margin:.1rem 0 .35rem; }
+  .stage p { margin:.35rem 0; max-width:40rem; }
+  .stage .who { font-size:.85rem; color:var(--dim); }
+  .term { display:inline-block; font-size:.78rem; font-variant-numeric:tabular-nums;
+          background:#fff8e6; border:1px solid #ecd9a0; color:#7a5d00;
+          border-radius:5px; padding:.1rem .45rem; margin:.15rem .2rem .15rem 0; white-space:nowrap; }
+  .term.red { background:#fbe9eb; border-color:#eec3c7; color:var(--bad); }
+  .term.green { background:#e6f4ea; border-color:#bfe2c8; color:var(--ok); }
+  .sanction { border-left:3px solid var(--bad); background:#fdf5f5; padding:.5rem .8rem;
+              border-radius:0 .4rem .4rem 0; font-size:.9rem; margin-top:.5rem; }
+  .art { font-size:.78rem; color:var(--dim); }
+
+  /* flow strip in hero */
+  .flow { display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; margin:1.4rem 0 0; }
+  .flow .node { background:var(--card); border:1px solid var(--line); border-radius:.5rem;
+                padding:.5rem .8rem; font-size:.85rem; text-align:center; }
+  .flow .node b { display:block; font-size:.95rem; }
+  .flow .arr { color:var(--dim); animation:nudge 1.6s ease-in-out infinite; }
+  @keyframes nudge { 50% { transform:translateX(4px); } }
+  @media (prefers-reduced-motion:reduce){
+    * { animation:none !important; transition:none !important; }
+    .stage { opacity:1; transform:none; }
+    .chip { opacity:1; transform:none; }
+  }
+
+  /* stats + footer */
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(12rem,1fr)); gap:1rem;
+           margin:1rem 0; }
+  .stat { background:var(--card); border-radius:.6rem; padding:1rem; }
+  .stat .v { font-size:1.4rem; font-weight:650; font-variant-numeric:tabular-nums; }
+  .stat .k { color:var(--dim); font-size:.85rem; margin-top:.2rem; }
+  .note { color:var(--dim); font-size:.85rem; margin-top:2.5rem; border-top:1px solid var(--line);
+          padding-top:1rem; }
+</style>
+</head>
+<body><main>
+
+<p><a href="{{ base }}/index.html">← bugetele locale {{ year }}</a></p>
+<h1>Cum se face bugetul unui oraș</h1>
+<p class="sub">Procedura de gestionare a bugetelor locale în România, etapă cu etapă ·
+termenele din Legea 273/2006</p>
+<p class="lede">Bugetul unui municipiu nu se scrie într-o zi și nu se scrie singur:
+e un lanț de termene legale care leagă Ministerul Finanțelor, primăria, cetățenii
+și consiliul local. Fiecare etapă de mai jos are un termen scris în lege — iar
+întârzierea uneia le mută pe toate.</p>
+
+<div class="flow" aria-hidden="true">
+  <span class="node"><b>Stat</b>scrisoare-cadru, cote, sume defalcate</span>
+  <span class="arr">→</span>
+  <span class="node"><b>Primărie</b>proiectul de buget</span>
+  <span class="arr">→</span>
+  <span class="node"><b>Cetățeni</b>contestații, dezbatere</span>
+  <span class="arr">→</span>
+  <span class="node"><b>Consiliul local</b>aprobare prin HCL</span>
+  <span class="arr">→</span>
+  <span class="node"><b>Execuție</b>plăți prin Trezorerie</span>
+</div>
+
+<div class="chips">
+  <span class="chip" style="animation-delay:.1s"><b>1 iunie</b> scrisoarea-cadru</span>
+  <span class="chip" style="animation-delay:.25s"><b>1 iulie</b> proiectul primăriei</span>
+  <span class="chip" style="animation-delay:.4s"><b>15 zile</b> publicare + contestații</span>
+  <span class="chip" style="animation-delay:.55s"><b>45 de zile</b> aprobarea</span>
+  <span class="chip" style="animation-delay:.7s"><b>31 mai</b> contul de execuție</span>
+</div>
+
+<div class="tl">
+  <div class="fill" id="tl-fill"></div>
+
+  <div class="stage"><span class="dot">1</span>
+    <div class="when">Anul anterior · până la 1 iunie</div>
+    <h2>Scrisoarea-cadru</h2>
+    <p>Ministerul Finanțelor trimite direcțiilor de finanțe și consiliilor județene
+    contextul macroeconomic, metodologia și <em>limitele</em> sumelor defalcate din
+    veniturile statului. E prima cifră din viitorul buget — și nu o scrie orașul.</p>
+    <p class="who">Cine: Ministerul Finanțelor · <span class="art">art. 37</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">2</span>
+    <div class="when">Anul anterior · până la 1 iulie</div>
+    <h2>Proiectul primăriei</h2>
+    <p>Primarul — „ordonatorul principal de credite" — depune la direcția de finanțe
+    proiectul de buget <em>echilibrat</em>: veniturile estimate trebuie să acopere
+    cheltuielile propuse. Proiectele se centralizează pe județ și ajung la minister
+    până la <span class="term">15 iulie</span>.</p>
+    <p class="who">Cine: primăria · <span class="art">art. 38</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">3</span>
+    <div class="when">Iarna · până apare legea bugetului de stat</div>
+    <h2>Așteptarea bugetului de stat</h2>
+    <p>Bugetul local depinde de cote din impozitul pe venit și de sume defalcate din
+    TVA — iar acestea se știu abia când Parlamentul adoptă legea bugetului de stat.
+    Dacă anul începe fără ea, orașul funcționează pe limită:
+    <span class="term red">1/12 pe lună</span> din bugetul anului trecut.</p>
+    <p class="who">Cine: Parlamentul · <span class="art">art. 40</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">4</span>
+    <div class="when">La 5 + 5 zile după legea bugetului de stat</div>
+    <h2>Sumele coboară în teritoriu</h2>
+    <p>În <span class="term">5 zile</span> ministerul transmite sumele defalcate
+    aprobate; în alte <span class="term">5 zile</span> direcțiile de finanțe și
+    consiliile județene le repartizează pe fiecare localitate. Abia acum primăria
+    știe exact cu ce lucrează.</p>
+    <p class="who">Cine: Ministerul Finanțelor → DGFP → UAT · <span class="art">art. 39</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">5</span>
+    <div class="when">15 zile de la legea bugetului de stat</div>
+    <h2>Definitivare și publicare</h2>
+    <p>Primăria își definitivează proiectul pe sumele reale și îl <em>publică</em> —
+    presa locală sau afișaj. Din acel moment locuitorii au
+    <span class="term green">15 zile</span> să depună contestații, iar proiectul trece
+    prin transparența decizională (Legea 52/2003), de regulă cu dezbatere publică.
+    Coloana „Pus în dezbatere" din tabelul nostru marchează exact această etapă.</p>
+    <p class="who">Cine: primăria + cetățenii · <span class="art">art. 39, L52/2003</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">6</span>
+    <div class="when">Maximum 45 de zile de la legea bugetului de stat</div>
+    <h2>Votul consiliului local</h2>
+    <p>Consiliul local dezbate contestațiile și votează bugetul pe capitole,
+    subcapitole și anexe — hotărârea (HCL) e documentul pe care îl convertim în
+    acest proiect. Termenul e ferm:</p>
+    <div class="sanction">Dacă cele <b>45 de zile</b> trec fără vot, direcția de
+    finanțe <b>sistează</b> alimentarea cu cote și sume defalcate — orașul rămâne
+    doar pe veniturile proprii până aprobă bugetul.</div>
+    <p class="who">Cine: consiliul local · <span class="art">art. 39</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">7</span>
+    <div class="when">Tot anul bugetar</div>
+    <h2>Execuția</h2>
+    <p>Bugetul aprobat se repartizează pe trimestre și se cheltuie în patru pași
+    obligatorii — angajare, lichidare, ordonanțare, plată — cu banii circulând
+    exclusiv prin Trezorerie. Anexele cu repartizarea trimestrială sunt sursa
+    coloanelor „Trim. I–IV" din datele noastre.</p>
+    <p class="who">Cine: ordonatorii de credite + Trezoreria · <span class="art">art. 49–54</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">8</span>
+    <div class="when">Pe parcurs, după rectificările bugetului de stat</div>
+    <h2>Rectificările</h2>
+    <p>Estimările se lovesc de realitate: bugetul se modifică prin hotărâri de
+    rectificare — obligatoriu cu păstrarea echilibrului. Un buget aprobat în aprilie
+    poate arăta sensibil diferit în decembrie; de aceea reținem și versiunea
+    inițială, și rectificările.</p>
+    <p class="who">Cine: consiliul local · <span class="art">art. 19</span></p>
+  </div>
+
+  <div class="stage"><span class="dot">9</span>
+    <div class="when">Anul următor · până la 31 mai</div>
+    <h2>Contul de execuție și controlul</h2>
+    <p>Primăria prezintă consiliului local <em>contul anual de execuție</em> — ce s-a
+    încasat și ce s-a cheltuit efectiv față de plan. Curtea de Conturi auditează.
+    Abia comparând bugetul aprobat cu execuția se vede dacă promisiunile au devenit
+    șantiere.</p>
+    <p class="who">Cine: primăria + consiliul local + Curtea de Conturi · <span class="art">art. 57</span></p>
+  </div>
+</div>
+
+{% if stats %}
+<h2 style="font-size:1.2rem">{{ stats.year }} în practică, în datele noastre</h2>
+<div class="stats">
+  <div class="stat"><div class="v">{{ stats.aprobate }}/{{ stats.total }}</div>
+    <div class="k">municipii reședință de județ cu bugetul aprobat</div></div>
+  {% if stats.prima %}
+  <div class="stat"><div class="v">{{ stats.prima }}</div>
+    <div class="k">prima aprobare din corpus</div></div>
+  <div class="stat"><div class="v">{{ stats.ultima }}</div>
+    <div class="k">ultima aprobare din corpus</div></div>
+  {% endif %}
+</div>
+<p class="sub" style="font-size:.9rem">Datele pe fiecare oraș — cu anunțul de dezbatere,
+hotărârea de aprobare și bugetul convertit în format analizabil — sunt în
+<a href="{{ base }}/index.html">tabelul principal</a>.</p>
+{% endif %}
+
+<p class="note">Termenele provin din Legea 273/2006 privind finanțele publice locale
+(art. 37–40, 49–57) și Legea 52/2003 privind transparența decizională. Acest
+infografic explică procedura generală; excepțiile și detaliile sunt în textul legii.
+Parte din <a href="https://github.com/danadrianparaschiv/bugete-locale-romania">bugete-locale-romania</a>.</p>
+
+<script>
+(function () {
+  var stages = document.querySelectorAll(".stage");
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.25 });
+    stages.forEach(function (s) { io.observe(s); });
+    setTimeout(function () { stages.forEach(function (s) { s.classList.add("in"); }); }, 5000);
+  } else {
+    stages.forEach(function (s) { s.classList.add("in"); });
+  }
+  var tl = document.querySelector(".tl"), fill = document.getElementById("tl-fill");
+  function grow() {
+    var r = tl.getBoundingClientRect();
+    var h = Math.min(Math.max(window.innerHeight * 0.6 - r.top, 0), r.height);
+    fill.style.height = h + "px";
+  }
+  window.addEventListener("scroll", grow, { passive: true });
+  grow();
+})();
+</script>
+</main></body></html>

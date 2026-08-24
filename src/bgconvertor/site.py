@@ -124,6 +124,25 @@ def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: s
     )
     (out / "index.html").write_text(index)
 
+    # the animated budget-procedure explainer, with live stats from the
+    # newest corpus year (the current budget cycle)
+    latest = corpus.years[0] if corpus.years else year
+    approved = sorted(
+        cy.timeline.approved_date
+        for _, cy in corpus.year_rows(latest) if cy.timeline.approved_date
+    )
+    stats = {
+        "year": latest,
+        "total": len(corpus.year_rows(latest)),
+        "aprobate": len(approved),
+        "prima": _ro_date(approved[0]) if approved else None,
+        "ultima": _ro_date(approved[-1]) if approved else None,
+    }
+    page = env.get_template("procedura.html").render(
+        base=base_url, year=year, stats=stats,
+    )
+    (out / "procedura.html").write_text(page)
+
     disclaimer = repo_root / "DISCLAIMER.md"
     if disclaimer.exists():
         shutil.copy(disclaimer, out / "DISCLAIMER.md")

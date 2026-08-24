@@ -90,6 +90,13 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert data["years"] == [2026, 2025]
     assert data["cities"][0]["years"]["2026"]["totals_mii_lei"]["cheltuieli"] == 120.0
 
+    # the animated procedure explainer, per edition, linked from the index
+    proc = (out / "procedura.html").read_text()
+    assert "45 de zile" in proc and "28.04.2026" in proc  # stats from newest year
+    assert (out / "2025" / "procedura.html").exists()
+    assert '/repo/procedura.html' in index
+    assert '/repo/2025/procedura.html' in index25
+
     # a single year with figures -> no year-over-year section
     assert "Evoluție an-la-an" not in (out / "city" / "1017.html").read_text()
 
