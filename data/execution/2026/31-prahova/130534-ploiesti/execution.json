@@ -1,0 +1,89 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "2844855",
+  "venituri": 549139.3729,
+  "cheltuieli": 528810.97871,
+  "capitole": [
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 86278.29571
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 85820.42435999999
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 72236.05771999998
+    },
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 69701.61710999999
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 49210.09662
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 45793.77077000002
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 35479.604110000015
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 30493.879750000004
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 21845.37652
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 13239.185560000004
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 9863.39947
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 8849.27101
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 378531.8091,
+      "cheltuieli": 276136.969
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 549139.3729,
+      "cheltuieli": 528810.97871
+    }
+  ],
+  "linii": 616,
+  "coduri_neenumerate": 4,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

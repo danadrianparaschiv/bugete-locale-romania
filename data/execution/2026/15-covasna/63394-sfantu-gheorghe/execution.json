@@ -1,0 +1,104 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "4404605",
+  "venituri": 252872.28277,
+  "cheltuieli": 237077.99354,
+  "capitole": [
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 57947.66756
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 50342.68445
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 41811.328040000015
+    },
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 27433.294909999997
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 23302.370160000002
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 11713.784570000002
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 8527.98385
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 5209.75313
+    },
+    {
+      "cod": "80.02",
+      "nume": "Actiuni generale economice, comerciale si de munca",
+      "val": 3970.82417
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 2721.4377899999995
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 2113.6985299999997
+    },
+    {
+      "cod": "83.02",
+      "nume": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "val": 1015.9150699999999
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 564.2983800000001
+    },
+    {
+      "cod": "87.02",
+      "nume": "Alte actiuni economice",
+      "val": 228.75
+    },
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 174.20292999999998
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 148728.99087,
+      "cheltuieli": 110085.3516
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 252872.28277,
+      "cheltuieli": 237077.99354
+    }
+  ],
+  "linii": 586,
+  "coduri_neenumerate": 5,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

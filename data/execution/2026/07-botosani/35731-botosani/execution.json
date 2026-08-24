@@ -1,0 +1,89 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "3372882",
+  "venituri": 362871.8694,
+  "cheltuieli": 310670.28833,
+  "capitole": [
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 107471.94473
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 46543.639159999984
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 34028.830429999995
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 26154.670939999996
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 25996.098679999996
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 22301.01676
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 17643.174779999998
+    },
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 14253.098759999999
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 5879.75
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 4333.169769999999
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 4167.994
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 1896.9003199999997
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 224052.1085,
+      "cheltuieli": 185250.64124
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 362871.8694,
+      "cheltuieli": 310670.28833
+    }
+  ],
+  "linii": 610,
+  "coduri_neenumerate": 1,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

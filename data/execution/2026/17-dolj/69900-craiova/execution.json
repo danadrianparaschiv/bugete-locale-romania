@@ -1,0 +1,94 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "4417214",
+  "venituri": 728130.42772,
+  "cheltuieli": 608928.47124,
+  "capitole": [
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 93705.71127999997
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 89463.78853
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 85737.58975
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 76718.56039
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 73503.18731
+    },
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 62858.54597000001
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 61974.942810000015
+    },
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 21271.09154
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 19992.940639999997
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 15008.5348
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 4565.28522
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 2272.8140000000003
+    },
+    {
+      "cod": "80.02",
+      "nume": "Actiuni generale economice, comerciale si de munca",
+      "val": 1855.479
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 431271.66022,
+      "cheltuieli": 297611.4142
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 728130.42772,
+      "cheltuieli": 608928.47124
+    }
+  ],
+  "linii": 576,
+  "coduri_neenumerate": 0,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

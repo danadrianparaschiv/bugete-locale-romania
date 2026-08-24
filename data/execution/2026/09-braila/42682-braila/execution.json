@@ -1,0 +1,89 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "4205670",
+  "venituri": 338737.56562,
+  "cheltuieli": 305092.97385,
+  "capitole": [
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 77000.42071999998
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 76382.49481999996
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 36713.10201000001
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 25534.66076999999
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 24546.245120000003
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 22909.693709999996
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 21414.25258
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 9585.50311
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 5916.150439999999
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 4791.42265
+    },
+    {
+      "cod": "80.02",
+      "nume": "Actiuni generale economice, comerciale si de munca",
+      "val": 199.403
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 99.62492
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 191975.97686,
+      "cheltuieli": 142871.85763
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 338737.56562,
+      "cheltuieli": 305092.97385
+    }
+  ],
+  "linii": 532,
+  "coduri_neenumerate": 0,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

@@ -1,0 +1,84 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "2540813",
+  "venituri": 373684.47002,
+  "cheltuieli": 320957.9904,
+  "capitole": [
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 110018.70036999999
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 57008.69983000003
+    },
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 38282.07701
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 33574.654270000014
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 29914.205480000008
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 18334.201149999994
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 12322.575149999997
+    },
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 7616.842049999999
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 5447.595350000001
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 5357.840239999999
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 3080.5995
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 176760.82349,
+      "cheltuieli": 114190.07239
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 373684.47002,
+      "cheltuieli": 320957.9904
+    }
+  ],
+  "linii": 498,
+  "coduri_neenumerate": 1,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}

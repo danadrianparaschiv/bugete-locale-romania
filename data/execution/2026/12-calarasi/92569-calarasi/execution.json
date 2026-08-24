@@ -1,0 +1,89 @@
+{
+  "unitate": "mii lei",
+  "sursa": "FXB-EXB-901",
+  "trimestru": 2,
+  "la_data": "2026-06-30",
+  "cif": "4445370",
+  "venituri": 140519.72505,
+  "cheltuieli": 118541.02708,
+  "capitole": [
+    {
+      "cod": "68.02",
+      "nume": "Asigurari si asistenta sociala",
+      "val": 28313.828110000002
+    },
+    {
+      "cod": "70.02",
+      "nume": "Locuinte, servicii si dezvoltare publica",
+      "val": 21311.94742
+    },
+    {
+      "cod": "84.02",
+      "nume": "Transporturi",
+      "val": 16742.62254
+    },
+    {
+      "cod": "74.02",
+      "nume": "Protectia mediului",
+      "val": 14647.36871
+    },
+    {
+      "cod": "51.02",
+      "nume": "Autoritati publice si actiuni externe",
+      "val": 12000.726769999997
+    },
+    {
+      "cod": "65.02",
+      "nume": "Invatamant",
+      "val": 11427.248520000001
+    },
+    {
+      "cod": "55.02",
+      "nume": "Tranzactii privind datoria publica si imprumuturi",
+      "val": 3774.48821
+    },
+    {
+      "cod": "67.02",
+      "nume": "Cultura, recreere si religie",
+      "val": 3602.13205
+    },
+    {
+      "cod": "61.02",
+      "nume": "Ordine publica si siguranta nationala",
+      "val": 3579.5901
+    },
+    {
+      "cod": "54.02",
+      "nume": "Alte servicii publice generale",
+      "val": 1688.2960799999998
+    },
+    {
+      "cod": "66.02",
+      "nume": "Sanatate",
+      "val": 1164.2430000000002
+    },
+    {
+      "cod": "81.02",
+      "nume": "Combustibili si energie",
+      "val": 288.53557
+    }
+  ],
+  "trimestre": [
+    {
+      "trimestru": 1,
+      "la_data": "2026-03-31",
+      "venituri": 85521.36197,
+      "cheltuieli": 56146.17919
+    },
+    {
+      "trimestru": 2,
+      "la_data": "2026-06-30",
+      "venituri": 140519.72505,
+      "cheltuieli": 118541.02708
+    }
+  ],
+  "linii": 437,
+  "coduri_neenumerate": 1,
+  "probleme": [],
+  "note": "Execuție cumulată de la 1 ianuarie, bugetul local (surse A–D). Raport oficial Forexebug; vezi DISCLAIMER.md."
+}
