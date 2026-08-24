@@ -1,28 +1,66 @@
 {
   "quality": {
-    "lines": 2387,
-    "pct_clean": 70.3,
-    "errors": 383,
-    "warnings": 494,
-    "documents": 9
+    "lines": 2267,
+    "pct_clean": 68.1,
+    "errors": 667,
+    "warnings": 386,
+    "documents": 8
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": 2311355.0
   },
   "top_capitole": [
     {
+      "code": "81.02",
+      "name": "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50) Din total cap",
+      "total": 624699.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi (cod 84.02.03+84.02.04+84.02.06+84.02.50) Din total capit",
+      "total": 272811.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "total": 222167.0
+    },
+    {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
       "total": 166876.0
     },
     {
-      "code": "54.02",
-      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
-      "total": 950.0
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala (cod68.02.04+68.02.05+68.02.06+68.02.10",
+      "total": 158868.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "total": 110116.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.12+65.02.",
+      "total": 105901.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50) Din total capitol:",
+      "total": 96847.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la 70.",
+      "total": 86800.0
+    },
+    {
+      "code": "61.02",
+      "name": "(rând derivat din formula tipărită)",
+      "total": 49930.0
     }
   ],
   "infografic": null,

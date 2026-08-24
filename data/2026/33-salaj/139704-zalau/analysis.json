@@ -1,19 +1,48 @@
 {
   "quality": {
     "lines": 1016,
-    "pct_clean": 48.1,
-    "errors": 402,
-    "warnings": 470,
+    "pct_clean": 46.9,
+    "errors": 543,
+    "warnings": 428,
     "documents": 2
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 453693.02,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "67.10",
+      "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
+      "total": 16838.5
+    },
+    {
+      "code": "55.10",
+      "name": "(rând derivat din formula tipărită)",
+      "total": 9255.65
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publica si siguranta nationala (cod 61.10.03+61.10.05+61.10.50)",
+      "total": 7330.0
+    },
+    {
+      "code": "65.10",
+      "name": "Invatamant (cod 65.10.03+65:10.04+65.10.05+65.10.07+65.10.11 +65.10.50",
+      "total": 6611.78
+    },
+    {
+      "code": "54.10",
+      "name": "Alte servicii publice generale (cod 54.10.10+54.10.50)",
+      "total": 6565.66
+    },
+    {
+      "code": "54.02",
+      "name": "Reparat si intretinut mobilier Parc Central",
+      "total": 1000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

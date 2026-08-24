@@ -3,15 +3,66 @@
     "lines": 346,
     "pct_clean": 79.8,
     "errors": 33,
-    "warnings": 43,
+    "warnings": 39,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 2388257760.0,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 198393080.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 178436680.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 176520450.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 176297000.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 154250000.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 124385320.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 77788470.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 44503620.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 28519260.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 27422900.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

@@ -1,21 +1,46 @@
 {
   "quality": {
     "lines": 4859,
-    "pct_clean": 63.9,
-    "errors": 2321,
-    "warnings": 1329,
-    "documents": 30
+    "pct_clean": 57.2,
+    "errors": 2221,
+    "warnings": 1300,
+    "documents": 14
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 428235.76,
-    "cheltuieli": 2551.48
+    "cheltuieli": null
   },
   "top_capitole": [
     {
       "code": "60.02",
-      "name": "A3. IMPOZITE SI TAXE PE PROPRIETATE(cOd 07.02)",
-      "total": 28179.25
+      "name": "CHELTUIELILE SECTIUNII DE DEZVOLTARE (5002+5902+6302+6902+7902",
+      "total": 246561.6
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 123238.54
+    },
+    {
+      "code": "65.02",
+      "name": "CAP. Invatamant",
+      "total": 112261.33
+    },
+    {
+      "code": "74.02",
+      "name": "CAP. Protectia mediului",
+      "total": 57043.88
+    },
+    {
+      "code": "68.02",
+      "name": "CAP. Asigurari si asistenta sociala",
+      "total": 50379.5
+    },
+    {
+      "code": "84.02",
+      "name": "CAP. Transporturi",
+      "total": 39889.05
     },
     {
       "code": "60.10",
@@ -23,39 +48,19 @@
       "total": 18048.28
     },
     {
+      "code": "61.02",
+      "name": "CAP. Ordine publica si siguranta nationala",
+      "total": 12751.79
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI",
+      "total": 11010.66
+    },
+    {
       "code": "66.02",
       "name": "CAP. Sanatate",
       "total": 5397.0
-    },
-    {
-      "code": "65.02",
-      "name": "CAP. Invatamant",
-      "total": 3591.01
-    },
-    {
-      "code": "65.10",
-      "name": "CAP. Invatamant",
-      "total": 1569.21
-    },
-    {
-      "code": "66.10",
-      "name": "CAP. Invatamant",
-      "total": 606.26
-    },
-    {
-      "code": "81.10",
-      "name": "DEFICIT",
-      "total": 197.59
-    },
-    {
-      "code": "01.10",
-      "name": "DEFICIT",
-      "total": 69.21
-    },
-    {
-      "code": "82.10",
-      "name": "TITLUL I CHELTUIELI DE PERSONAL",
-      "total": 24.03
     }
   ],
   "infografic": null,

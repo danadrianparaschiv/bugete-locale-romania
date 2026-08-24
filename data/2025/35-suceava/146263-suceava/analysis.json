@@ -1,19 +1,68 @@
 {
   "quality": {
     "lines": 1682,
-    "pct_clean": 92.0,
-    "errors": 17,
-    "warnings": 128,
+    "pct_clean": 90.7,
+    "errors": 42,
+    "warnings": 120,
     "documents": 1
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 762549390.0,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 67545130.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 62819000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 49289500.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 48795250.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 41547920.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 36464460.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 30557100.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 24522220.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 15361620.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 7590390.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

@@ -1,19 +1,68 @@
 {
   "quality": {
-    "lines": 1494,
-    "pct_clean": 64.2,
-    "errors": 437,
-    "warnings": 670,
+    "lines": 1470,
+    "pct_clean": 62.7,
+    "errors": 566,
+    "warnings": 390,
     "documents": 8
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 323301.94,
-    "cheltuieli": null
+    "venituri": 420908.27,
+    "cheltuieli": 471833.38
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 258718.27
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 116671.44
+    },
+    {
+      "code": "84.02",
+      "name": "",
+      "total": 103466.85
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 58849.2
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+      "total": 52664.23
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 39626.67
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 33490.18
+    },
+    {
+      "code": "67.10",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 23523.58
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 12924.54
+    },
+    {
+      "code": "65.10",
+      "name": "INVATAMANT",
+      "total": 5984.4
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

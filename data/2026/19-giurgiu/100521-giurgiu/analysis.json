@@ -1,19 +1,220 @@
 {
   "quality": {
-    "lines": 1143,
-    "pct_clean": 66.6,
-    "errors": 422,
-    "warnings": 498,
+    "lines": 1046,
+    "pct_clean": 65.8,
+    "errors": 597,
+    "warnings": 207,
     "documents": 2
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": 313815.0,
-    "cheltuieli": null
+    "cheltuieli": 321841.0
   },
-  "top_capitole": [],
-  "infografic": null,
+  "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 67734.83
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE. SERVICII SI DEZVOLTARE",
+      "total": 64729.8
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNIEXTERNE",
+      "total": 62833.0
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 45595.4
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 18977.0
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 13816.12
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICASISIGURANTA NATIONALA",
+      "total": 8546.75
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 4720.0
+    },
+    {
+      "code": "54.02",
+      "name": "ALTE SERVICII PUBLICE GENERALE",
+      "total": 2548.2
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA. RECREERE SI RELIGIE",
+      "total": 1793.0
+    }
+  ],
+  "infografic": {
+    "unitate": "mii lei",
+    "capitole": [
+      {
+        "cod": "68.02",
+        "nume": "ASIGURARI SI ASISTENTA SOCIALA",
+        "val": 67734.83,
+        "copii": [
+          {
+            "nume": "Cheltuieli personal, din care:",
+            "val": 15175.25
+          },
+          {
+            "nume": "Asistenta acordata persoanclor in arsta",
+            "val": 347.0
+          }
+        ]
+      },
+      {
+        "cod": "70.02",
+        "nume": "LOCUINTE. SERVICII SI DEZVOLTARE",
+        "val": 64729.8,
+        "copii": [
+          {
+            "nume": "Locunte",
+            "val": 202.8
+          },
+          {
+            "nume": "Ilumunat publc st clectrficar",
+            "val": 10.0
+          }
+        ]
+      },
+      {
+        "cod": "51.02",
+        "nume": "AUTORITATI PUBLICE SI ACTIUNIEXTERNE",
+        "val": 62833.0,
+        "copii": [
+          {
+            "nume": "Autortat executiv e si Iegislative",
+            "val": 62833.0
+          }
+        ]
+      },
+      {
+        "cod": "84.02",
+        "nume": "TRANSPORTURI",
+        "val": 45595.4,
+        "copii": []
+      },
+      {
+        "cod": "74.02",
+        "nume": "PROTECTIA MEDIULUI",
+        "val": 18977.0,
+        "copii": [
+          {
+            "nume": "Salubrtate st gestrunca descurilor",
+            "val": 8005.0
+          },
+          {
+            "nume": "Reduccrea si controlul poluarı",
+            "val": 1124.0
+          },
+          {
+            "nume": "Canalizarea si tratarca apelor rezıduale",
+            "val": 203.0
+          }
+        ]
+      },
+      {
+        "cod": "65.02",
+        "nume": "INVATAMANT",
+        "val": 13816.12,
+        "copii": []
+      },
+      {
+        "cod": "61.02",
+        "nume": "ORDINE PUBLICASISIGURANTA NATIONALA",
+        "val": 8546.75,
+        "copii": [
+          {
+            "nume": "Ordine publica",
+            "val": 8466.0
+          }
+        ]
+      },
+      {
+        "cod": "66.02",
+        "nume": "SANATATE",
+        "val": 4720.0,
+        "copii": [
+          {
+            "nume": "Sers icn de sanatate publica",
+            "val": 4720.0
+          }
+        ]
+      },
+      {
+        "cod": "54.02",
+        "nume": "ALTE SERVICII PUBLICE GENERALE",
+        "val": 2548.2,
+        "copii": [
+          {
+            "nume": "autoritatilor localc",
+            "val": 20.0
+          }
+        ]
+      },
+      {
+        "cod": "67.02",
+        "nume": "CULTURA. RECREERE SI RELIGIE",
+        "val": 1793.0,
+        "copii": [
+          {
+            "nume": "Ser icn culturale",
+            "val": 6528.3
+          }
+        ]
+      },
+      {
+        "cod": "87.02",
+        "nume": "ALTE ACTIUNIECONOMICE",
+        "val": 499.75,
+        "copii": [
+          {
+            "nume": "Alte actiuni economice",
+            "val": 447.0
+          }
+        ]
+      },
+      {
+        "cod": "81.02",
+        "nume": "COMBUSTIBILI SIENERGIE",
+        "val": 5.9,
+        "copii": []
+      }
+    ],
+    "total_cheltuieli": 321841.0,
+    "ani": {
+      "cheltuieli": [
+        321841.0,
+        214819.0,
+        229260.0,
+        222740.0
+      ],
+      "venituri": [
+        313815.0,
+        214819.0,
+        229260.0,
+        222740.0
+      ]
+    }
+  },
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

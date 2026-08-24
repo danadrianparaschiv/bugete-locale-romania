@@ -3,7 +3,7 @@
     "lines": 431,
     "pct_clean": 66.6,
     "errors": 34,
-    "warnings": 146,
+    "warnings": 136,
     "documents": 1
   },
   "llm_models": [],
@@ -18,9 +18,24 @@
       "total": 313831.85
     },
     {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 233092.44
+    },
+    {
       "code": "70.02",
       "name": "SERVICII SI DEZVOLTARE PUBLICÃ, LOCUINTE",
       "total": 203033.61
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RELIGIA, ALTE ACTIVITÄTI SPORTIVE SI DE TINERET",
+      "total": 128665.94
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 97980.0
     },
     {
       "code": "51.02",
@@ -36,6 +51,16 @@
       "code": "55.02",
       "name": "DOBÂNZI",
       "total": 2500.0
+    },
+    {
+      "code": "83.02",
+      "name": "AGRICULTURA, SILVICULTURA, PISCICULTURA SI VANATOARE",
+      "total": 1380.0
+    },
+    {
+      "code": "87.02",
+      "name": "ALTE ACTIUNI ECONOMICE",
+      "total": 1280.0
     }
   ],
   "infografic": null,

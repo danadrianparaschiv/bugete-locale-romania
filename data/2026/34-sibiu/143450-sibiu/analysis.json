@@ -1,17 +1,68 @@
 {
   "quality": {
-    "lines": 3363,
-    "pct_clean": 64.1,
-    "errors": 1496,
-    "warnings": 976,
-    "documents": 14
+    "lines": 3364,
+    "pct_clean": 63.4,
+    "errors": 1506,
+    "warnings": 999,
+    "documents": 10
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 3533.0,
-    "cheltuieli": 15000.0
+    "venituri": null,
+    "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 365243.8
+    },
+    {
+      "code": "65.02",
+      "name": "ÎNVÃTĂMÂNT",
+      "total": 313166.99
+    },
+    {
+      "code": "70.02",
+      "name": "SERVICII ŞI DEZVOLTARE PUBLICÃ, LOCUINTE",
+      "total": 260858.84
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RELIGIA, ALTE ACTIVITĂTI SPORTIVE ŞI DE TINERET",
+      "total": 134640.75
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 101901.0
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI EXECUTIVE",
+      "total": 75475.9
+    },
+    {
+      "code": "61.02",
+      "name": "APÃRARE,ORDINE PUBLICÃ,SIGURANTĂ NATIONALĂ",
+      "total": 15737.55
+    },
+    {
+      "code": "66.10",
+      "name": "CAP. Sanatate",
+      "total": 14242.35
+    },
+    {
+      "code": "54.10",
+      "name": "CAP. Alte servicii publice generale",
+      "total": 9380.0
+    },
+    {
+      "code": "66.02",
+      "name": "SÄNÄTATE",
+      "total": 5136.2
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

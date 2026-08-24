@@ -1,17 +1,48 @@
 {
   "quality": {
-    "lines": 5341,
-    "pct_clean": 77.7,
-    "errors": 1953,
-    "warnings": 522,
-    "documents": 82
+    "lines": 5346,
+    "pct_clean": 71.9,
+    "errors": 1936,
+    "warnings": 862,
+    "documents": 52
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "67.10",
+      "name": "Spitale generale Cultura, recreere si religie (cod 67.10.03 + 67.10.05",
+      "total": 27120.14
+    },
+    {
+      "code": "70.07",
+      "name": "Locuinte, servicii si dezvoltare publica Din total capitol:",
+      "total": 10662.34
+    },
+    {
+      "code": "61.10",
+      "name": "(rd+ )    d .50)",
+      "total": 9068.5
+    },
+    {
+      "code": "74.10",
+      "name": "Protectia mediului",
+      "total": 899.0
+    },
+    {
+      "code": "70.10",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 540.0
+    },
+    {
+      "code": "65.10",
+      "name": "Materiale si prestari de servicii cu caracter functional",
+      "total": 0.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

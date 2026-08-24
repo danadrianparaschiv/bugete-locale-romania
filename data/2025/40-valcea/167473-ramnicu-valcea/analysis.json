@@ -1,19 +1,68 @@
 {
   "quality": {
-    "lines": 327,
-    "pct_clean": 47.7,
-    "errors": 145,
-    "warnings": 157,
+    "lines": 290,
+    "pct_clean": 49.0,
+    "errors": 173,
+    "warnings": 118,
     "documents": 1
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 128973.2
+    },
+    {
+      "code": "65.02",
+      "name": "",
+      "total": 119359.33
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 88355.9
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 72987.5
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 70590.42
+    },
+    {
+      "code": "51.02",
+      "name": "",
+      "total": 54971.3
+    },
+    {
+      "code": "74.02",
+      "name": "comunale",
+      "total": 38983.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 12721.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 8780.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si împrumuturi",
+      "total": 6300.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

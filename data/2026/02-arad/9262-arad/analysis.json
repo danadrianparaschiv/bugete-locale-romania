@@ -8,10 +8,61 @@
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 1250646.5,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TOTAL CAPITOL 84.02 \"TRANSPORTURI\", din care pe titluri de cheltuieli,",
+      "total": 256221.36
+    },
+    {
+      "code": "67.02",
+      "name": "RELIGIE\", din care pe titluri de cheltuieli:",
+      "total": 166219.09
+    },
+    {
+      "code": "65.02",
+      "name": "TOTAL CAPITOL \"ÎNVĂTĂMÂNT\", din care:",
+      "total": 135662.41
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială {cod 68.02.04+68.02.05+68.02.06+68.0 2.",
+      "total": 102246.0
+    },
+    {
+      "code": "51.02",
+      "name": "TOTAL CAPITOL 51.02 \"AUTORITÄTI PUBLICE ŞI ACTIUNI EXTERNE\", din care ",
+      "total": 74945.12
+    },
+    {
+      "code": "81.07",
+      "name": "Combustibili si energie (cod 81.07.06+81.07.50) Din total capitol:",
+      "total": 60754.0
+    },
+    {
+      "code": "65.07",
+      "name": "Învățământ (cod 65.07.04)",
+      "total": 28185.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "total": 19883.0
+    },
+    {
+      "code": "70.02",
+      "name": "1344 MEDIU $I APE (cod 70.02+74.02) Locuințe, servicii și dezvoltare p",
+      "total": 16887.0
+    },
+    {
+      "code": "65.10",
+      "name": "",
+      "total": 14875.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

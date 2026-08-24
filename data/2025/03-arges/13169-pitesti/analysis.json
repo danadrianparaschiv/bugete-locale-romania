@@ -8,10 +8,61 @@
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
-    "cheltuieli": null
+    "venituri": 1052393.0,
+    "cheltuieli": 1052393.0
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 159744.0
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURĂRI ŞI ASISTENTÅ SOCIALÃ",
+      "total": 103918.0
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURÃ, RECREERE ŞI RELIGIE",
+      "total": 98548.0
+    },
+    {
+      "code": "65.02",
+      "name": "ÎNVÄTÄMÂNT",
+      "total": 66679.0
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII ŞI DEZVOLTARE PUBLICÃ",
+      "total": 57883.0
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITÅTI PUBLICE ŞI ACTIUNI EXTERNE",
+      "total": 51840.0
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA ŞI SIGURANTÃ NATIONALÅ",
+      "total": 25375.0
+    },
+    {
+      "code": "66.02",
+      "name": "SÄNÄTATE",
+      "total": 12750.0
+    },
+    {
+      "code": "54.02",
+      "name": "",
+      "total": 4839.0
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICÃ ŞI ÎMPRUMUTURI",
+      "total": 2000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

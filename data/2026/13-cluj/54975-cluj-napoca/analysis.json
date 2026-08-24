@@ -1,43 +1,66 @@
 {
   "quality": {
     "lines": 17619,
-    "pct_clean": 70.9,
-    "errors": 1509,
-    "warnings": 4661,
-    "documents": 96
+    "pct_clean": 54.1,
+    "errors": 1722,
+    "warnings": 7280,
+    "documents": 57
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 2905588744.0,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 66358000.0
+      "code": "84.02",
+      "name": "TLrati",
+      "total": 1343743341.0
     },
     {
       "code": "65.02",
       "name": "Invatamant",
-      "total": 31619000.0
+      "total": 543584202.0
     },
     {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 2343000.0
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 376972077.0
     },
     {
       "code": "68.02",
       "name": "Asigurari si asistenta sociala",
-      "total": 765000.0
+      "total": 329057262.0
     },
     {
-      "code": "54.02",
-      "name": "Alte bunuri si servicii pentru intretinere si functionare",
-      "total": 300000.0
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 227096310.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 215474000.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 155214000.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 118856888.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 85000000.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 61391400.0
     }
   ],
   "infografic": null,

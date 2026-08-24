@@ -1,17 +1,68 @@
 {
   "quality": {
-    "lines": 1867,
+    "lines": 1868,
     "pct_clean": 38.3,
-    "errors": 394,
+    "errors": 395,
     "warnings": 1070,
-    "documents": 9
+    "documents": 8
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
-    "cheltuieli": null
+    "venituri": 407948000.0,
+    "cheltuieli": 442655347.0
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "Locuințe, servicii și dezvoltare publică - din care titlurile:",
+      "total": 99887347.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi - din care titlurile:",
+      "total": 96503000.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învățământ - din care titlurile:",
+      "total": 56158000.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere și religie - din care titlurile:",
+      "total": 54640000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială - din care titlurile:",
+      "total": 50465000.0
+    },
+    {
+      "code": "00.01",
+      "name": "VENITURILE SECTIUNII DE FUNCTIONARE",
+      "total": 34128000.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice și acțiuni externe - din care titlurile:",
+      "total": 33209000.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protecția mediului - din care titlurile:",
+      "total": 29271000.0
+    },
+    {
+      "code": "00.17",
+      "name": "IV. SUBVENTII (cod 00.18)",
+      "total": 24229000.0
+    },
+    {
+      "code": "00.18",
+      "name": "SUBVENTII DE LA ALTE NIVELE ALE ADMINISTRATIEI PUBLICE (cOd 42.10+43.1",
+      "total": 24229000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

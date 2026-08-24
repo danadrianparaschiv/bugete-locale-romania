@@ -1,19 +1,43 @@
 {
   "quality": {
-    "lines": 1135,
-    "pct_clean": 41.1,
-    "errors": 275,
-    "warnings": 576,
+    "lines": 1155,
+    "pct_clean": 36.6,
+    "errors": 360,
+    "warnings": 550,
     "documents": 2
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "55.10",
+      "name": "(rând derivat din formula tipărită)",
+      "total": 26357.34
+    },
+    {
+      "code": "67.10",
+      "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
+      "total": 13242.69
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publica si siguranta nationala (cod 61.10.03+61.10.05+61.10.50)",
+      "total": 7487.0
+    },
+    {
+      "code": "54.10",
+      "name": "Alte servicii publice generale (cod 54.10.10+54.10.50)",
+      "total": 6228.58
+    },
+    {
+      "code": "65.10",
+      "name": "65.10.03+65.10.04+65.10.05+65.10.07+65.10.11 Invatamant ( cod +65.10.5",
+      "total": 5802.65
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

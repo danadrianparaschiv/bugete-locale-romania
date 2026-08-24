@@ -1,23 +1,66 @@
 {
   "quality": {
-    "lines": 6688,
-    "pct_clean": 71.6,
-    "errors": 1026,
-    "warnings": 1574,
-    "documents": 41
+    "lines": 6682,
+    "pct_clean": 66.1,
+    "errors": 1809,
+    "warnings": 1535,
+    "documents": 33
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 863892.19,
     "cheltuieli": null
   },
   "top_capitole": [
     {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 162637.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 86976.42
+    },
+    {
       "code": "65.02",
       "name": "Invatamant",
-      "total": 339.72
+      "total": 85656.04
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritatì publice si actiuni externe",
+      "total": 61277.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 57177.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servici si dezvoltare publica",
+      "total": 33750.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 12410.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 7150.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 800.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 250.0
     }
   ],
   "infografic": null,

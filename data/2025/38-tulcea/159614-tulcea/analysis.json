@@ -1,14 +1,12 @@
 {
   "quality": {
     "lines": 654,
-    "pct_clean": 81.7,
-    "errors": 147,
-    "warnings": 133,
+    "pct_clean": 78.9,
+    "errors": 212,
+    "warnings": 122,
     "documents": 5
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null

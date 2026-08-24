@@ -8,10 +8,31 @@
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 353906.64,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 8142.9
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 4680.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 3512.8
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 1200.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

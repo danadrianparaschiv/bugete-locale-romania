@@ -1,41 +1,66 @@
 {
   "quality": {
     "lines": 3564,
-    "pct_clean": 36.4,
+    "pct_clean": 36.3,
     "errors": 296,
-    "warnings": 2082,
-    "documents": 5
+    "warnings": 2083,
+    "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
-    "cheltuieli": null
+    "venituri": 890604.44,
+    "cheltuieli": 897236.48
   },
   "top_capitole": [
     {
-      "code": "68.02",
-      "name": "Asigurări și asistență socială a municipiului, din care:",
-      "total": 636.0
+      "code": "00.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 555940.15
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la",
+      "total": 338287.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi (cod 84.02.03+84.02.06+84.02.50)",
+      "total": 150613.94
+    },
+    {
+      "code": "00.01",
+      "name": "III. OPERATIUNI FINANCIARE (cod 41.07)",
+      "total": 100205.81
     },
     {
       "code": "51.02",
-      "name": "Autorități publice executive",
-      "total": 321.0
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "total": 68522.71
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala(cod 68.02.04 la 68.02.06+68.02.10 la",
+      "total": 66142.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06)",
+      "total": 48133.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "total": 41168.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.50)",
+      "total": 26849.76
     },
     {
       "code": "61.02",
-      "name": "Ordine publică și siguranța națională, din care:",
-      "total": 300.0
-    },
-    {
-      "code": "66.02",
-      "name": "Sănătate, din care:",
-      "total": 114.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale, din care:",
-      "total": 38.0
+      "name": "Ordine publica si siguranta nationala (cod 61.02.03+61.02.05+61.02.50)",
+      "total": 26780.0
     }
   ],
   "infografic": null,

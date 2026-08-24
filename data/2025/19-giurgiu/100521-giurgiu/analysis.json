@@ -1,19 +1,68 @@
 {
   "quality": {
-    "lines": 1199,
-    "pct_clean": 52.1,
-    "errors": 475,
-    "warnings": 745,
+    "lines": 942,
+    "pct_clean": 51.1,
+    "errors": 717,
+    "warnings": 281,
     "documents": 2
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": null
+    "cheltuieli": 271512.06
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 170505.4
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 62424.75
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITÅTI PUBLICE",
+      "total": 53568.04
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE. SERVICII SIDEZVOLTARE",
+      "total": 41187.12
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA. RECREERE SI RELIGIE",
+      "total": 28609.8
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 23517.0
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 15811.4
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 6165.75
+    },
+    {
+      "code": "81.02",
+      "name": "COMBUSTIBILI SI ENERGIE",
+      "total": 1357.0
+    },
+    {
+      "code": "87.02",
+      "name": "ALTE ACTIUNI ECONOMICE",
+      "total": 399.75
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

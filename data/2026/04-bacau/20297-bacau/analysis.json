@@ -1,15 +1,68 @@
 {
   "quality": {
-    "lines": 1893,
-    "pct_clean": 57.4,
-    "errors": 962,
-    "warnings": 497,
+    "lines": 1868,
+    "pct_clean": 42.7,
+    "errors": 848,
+    "warnings": 1013,
     "documents": 2
   },
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 114454.0
+    },
+    {
+      "code": "00.17",
+      "name": "IV. SUBVENTII",
+      "total": 83242.99
+    },
+    {
+      "code": "00.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 70353.7
+    },
+    {
+      "code": "74.10",
+      "name": "Protectia mediului",
+      "total": 28122.0
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 21141.74
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 20109.0
+    },
+    {
+      "code": "55.02",
+      "name": "Dobanzi",
+      "total": 19816.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 10886.0
+    },
+    {
+      "code": "70.10",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 1851.0
+    },
+    {
+      "code": "65.10",
+      "name": "INVATAMANT",
+      "total": 890.0
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

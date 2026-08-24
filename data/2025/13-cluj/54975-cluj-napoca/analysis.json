@@ -8,10 +8,61 @@
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 3919073291.0,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 782306026.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 444281004.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 320477000.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 154598000.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 104301000.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 92667141.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 73000000.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 50693000.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 47760000.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 15878000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
