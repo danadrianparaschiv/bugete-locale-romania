@@ -116,12 +116,12 @@ def test_reference_populates_city_meta(data_root, tmp_path):
     page = (out / "city" / "1017.html").read_text()
     assert "SIRUTA 1017" in page
     assert "64.227 locuitori (2021)" in page and "103.65 km²" in page
-    # ordered layout: identity and adoption first, then the tabbed budget /
-    # execution views, with conversion quality and downloads closing the page
+    # ordered layout: identity, adoption, conversion quality and downloads,
+    # then the tabbed budget / execution views closing the page
     assert page.index("SIRUTA 1017") < page.index("Adoptarea bugetului") \
+        < page.index("Calitatea conversiei") < page.index("Descarcă Excel") \
         < page.index("Bugetul și execuția lui") \
-        < page.index("Cheltuieli planificate pe capitole") \
-        < page.index("Calitatea conversiei") < page.index("Descarcă Excel")
+        < page.index("Cheltuieli planificate pe capitole")
 
 
 def test_city_page_year_over_year(tmp_path):
