@@ -2,6 +2,8 @@
 
 from decimal import Decimal
 
+import pytest
+
 from bgconvertor.analysis import city_analysis, infografic
 from bgconvertor.model import BudgetDocument, BudgetLine, ConversionResult
 
@@ -89,3 +91,66 @@ def test_infografic_absent_when_coverage_poor():
     r.documents[0].lines = [ln for ln in r.documents[0].lines
                             if ln.code in ("00.01", "50.02")]
     assert infografic(r) is None
+
+
+# ---- detecția totalurilor (faza 1) ----
+
+@pytest.mark.parametrize("raw,code,expected", [
+    ("000102", "00.01", True),    # cod compact, cum apare la Alba Iulia
+    ("00.01", "00.01", True),     # cod cu punct — varianta care era ignorată
+    ("0001", "00.01", True),
+    ("04.02", "04.02", False),    # un capitol de venit oarecare
+])
+def test_is_total_venituri_accepts_every_spelling(raw, code, expected):
+    from bgconvertor.analysis import _is_total_venituri
+    ln = BudgetLine(code=code, raw_code=raw, name="TOTAL VENITURI", kind="revenue", page=1)
+    assert _is_total_venituri(ln) is expected
+
+
+@pytest.mark.parametrize("section,expected", [
+    (None, True), ("TOTAL", True),
+    ("Varsaminte din sectiunea de functionare", True),  # antet parazit, nu secțiune
+    ("FUNCTIONARE", False), ("DEZVOLTARE", False), ("dezvoltare", False),
+])
+def test_section_field_is_trusted_only_when_it_names_a_section(section, expected):
+    from bgconvertor.analysis import _is_total_section
+    ln = BudgetLine(code="65.02", name="Invatamant", kind="expense_functional",
+                    page=1, section=section)
+    assert _is_total_section(ln) is expected
+
+
+def test_total_smaller_than_its_parts_is_rejected():
+    """Botoșani: rândul «TOTAL VENITURI» citit ca 950, cu capitole de 173.000."""
+    from bgconvertor.analysis import _plausible
+    assert _plausible(950.0, [173052.0, 90000.0]) is None
+    assert _plausible(400000.0, [173052.0, 90000.0]) == 400000.0
+    assert _plausible(None, [1.0]) is None
+    assert _plausible(5.0, []) == 5.0  # fără capitole nu există contradicție
+
+
+def test_totals_found_with_dotted_codes_and_stray_sections():
+    """Un document ca Slobozia: cod cu punct și secțiune plină de text parazit."""
+    lines = [
+        _ln("revenue", "00.01", "TOTAL VENITURI", "Varsaminte din sectiunea de functionare", 1000),
+        _ln("revenue", "04.02", "Cote defalcate", None, 600),
+        _ln("expense_functional", "65.02", "CAP. Invatamant", "Varsaminte din sectiunea", 650),
+        _ln("expense_functional", "84.02", "CAP. Transporturi", None, 350),
+    ]
+    lines[0].raw_code = "00.01"
+    doc = BudgetDocument(title="BUGET LOCAL", budget="local", suffix="02", pages=[1], lines=lines)
+    a = city_analysis(ConversionResult(pdf="x.pdf", documents=[doc]))
+    assert a["totals_mii_lei"]["venituri"] == 1000
+    assert [c["code"] for c in a["top_capitole"]] == ["65.02", "84.02"]
+
+
+def test_no_derived_expense_total_is_invented():
+    """Capitolele parțiale nu devin un total: mai bine absent decât greșit."""
+    lines = [
+        _ln("expense_functional", "65.02", "CAP. Invatamant", None, 650),
+        _ln("expense_functional", "84.02", "CAP. Transporturi", None, 350),
+        _ln("expense_functional", "67.02", "CAP. Cultura", None, 100),
+    ]
+    doc = BudgetDocument(title="BUGET", budget="local", suffix="02", pages=[1], lines=lines)
+    a = city_analysis(ConversionResult(pdf="x.pdf", documents=[doc]))
+    assert a["totals_mii_lei"]["cheltuieli"] is None
+    assert len(a["top_capitole"]) == 3
