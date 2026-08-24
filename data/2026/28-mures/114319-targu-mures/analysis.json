@@ -1,18 +1,50 @@
 {
   "quality": {
-    "lines": 2984,
-    "pct_clean": 84.3,
-    "errors": 43,
-    "warnings": 444,
+    "lines": 3090,
+    "pct_clean": 93.1,
+    "errors": 89,
+    "warnings": 152,
     "documents": 38
   },
   "llm_models": [
     "gemini-3.6-flash"
   ],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 805849000.0,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 13316000.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 13000000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 4257000.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 2975000.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 2505000.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 2000000.0
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

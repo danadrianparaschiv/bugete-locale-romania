@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 241,
-    "pct_clean": 73.0,
-    "errors": 36,
-    "warnings": 72,
+    "lines": 245,
+    "pct_clean": 71.8,
+    "errors": 37,
+    "warnings": 76,
     "documents": 3
   },
   "llm_models": [
@@ -13,6 +13,58 @@
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "80.02",
+      "name": "finantare complementara",
+      "total": 341.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 187.363
+    },
+    {
+      "code": "70.02",
+      "name": "finantare de baza",
+      "total": 150.0
+    },
+    {
+      "code": "68.02",
+      "name": "Cap. 68.02 Asigurari si asistenta sociala",
+      "total": 63.634
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 42.988
+    },
+    {
+      "code": "65.02",
+      "name": "nvǎţământ",
+      "total": 42.159
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice",
+      "total": 34.827
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere si religie",
+      "total": 30.91
+    },
+    {
+      "code": "55.02",
+      "name": "Dobanzi",
+      "total": 14.0
+    },
+    {
+      "code": "66.02",
+      "name": "Cap. 66.02 Sanatate",
+      "total": 11.992
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

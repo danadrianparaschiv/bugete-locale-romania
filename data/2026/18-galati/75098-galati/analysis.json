@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 223,
-    "pct_clean": 73.1,
-    "errors": 169,
-    "warnings": 71,
+    "lines": 268,
+    "pct_clean": 60.8,
+    "errors": 174,
+    "warnings": 143,
     "documents": 1
   },
   "llm_models": [
@@ -15,19 +15,9 @@
   },
   "top_capitole": [
     {
-      "code": "63.02",
-      "name": "Partea a III-a Cheltuieli Social - Culturale",
-      "total": 295328.0
-    },
-    {
       "code": "65.02",
       "name": "Invatamant",
       "total": 172333.0
-    },
-    {
-      "code": "50.02",
-      "name": "Partea I-a Servicii publice generale",
-      "total": 153782.7
     },
     {
       "code": "51.02",
@@ -63,7 +53,13 @@
       "code": "54.02",
       "name": "Alte servicii publice generale",
       "total": 4995.53
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 2724.0
     }
   ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

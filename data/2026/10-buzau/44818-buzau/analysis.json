@@ -1,15 +1,252 @@
 {
   "quality": {
-    "lines": 1290,
-    "pct_clean": 64.8,
-    "errors": 124,
-    "warnings": 447,
+    "lines": 1323,
+    "pct_clean": 26.0,
+    "errors": 47,
+    "warnings": 995,
     "documents": 1
   },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": null,
-    "cheltuieli": null
+    "venituri": 832952.64,
+    "cheltuieli": 853165.17
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "00.02",
+      "name": "TOTAL CHELTUIELI",
+      "total": 301335.29
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi (cod 84.02.03+84.02.06+84.02.50)",
+      "total": 139933.55
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.50)",
+      "total": 96419.75
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala(cod 68.02.04 la 68.02.06+68.02.10 la",
+      "total": 73061.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "total": 58530.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "total": 45378.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala (cod 61.02.03+61.02.05+61.02.50)",
+      "total": 21500.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi ()",
+      "total": 18776.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50)",
+      "total": 11076.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "total": 2523.0
+    }
+  ],
+  "infografic": {
+    "unitate": "mii lei",
+    "capitole": [
+      {
+        "cod": "00.02",
+        "nume": "TOTAL CHELTUIELI",
+        "val": 301335.29,
+        "copii": []
+      },
+      {
+        "cod": "84.02",
+        "nume": "Transporturi",
+        "val": 139933.55,
+        "copii": [
+          {
+            "nume": "Transport rutier",
+            "val": 139933.55
+          }
+        ]
+      },
+      {
+        "cod": "65.02",
+        "nume": "Invatamant",
+        "val": 96419.75,
+        "copii": [
+          {
+            "nume": "Invatamant secundar",
+            "val": 70862.41
+          },
+          {
+            "nume": "Invatamant prescolar si primar",
+            "val": 14978.54
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul invatamantului",
+            "val": 8715.0
+          },
+          {
+            "nume": "Servicii auxiliare pentru educatie",
+            "val": 1800.0
+          },
+          {
+            "nume": "Invatamant anteprescolar",
+            "val": 53.8
+          },
+          {
+            "nume": "Invatamant postliceal",
+            "val": 10.0
+          }
+        ]
+      },
+      {
+        "cod": "68.02",
+        "nume": "Asigurari si asistenta sociala",
+        "val": 73061.0,
+        "copii": [
+          {
+            "nume": "Asistenta sociala in caz de boli si invaliditati",
+            "val": 54422.0
+          },
+          {
+            "nume": "Asistenta acordata persoanelor in varsta",
+            "val": 8570.0
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul asigurarilor si asistentei sociale",
+            "val": 8191.0
+          },
+          {
+            "nume": "Prevenirea excluderii sociale",
+            "val": 1878.0
+          }
+        ]
+      },
+      {
+        "cod": "51.02",
+        "nume": "Autoritati publice si actiuni externe",
+        "val": 58530.0,
+        "copii": [
+          {
+            "nume": "Autoritati executive si legislative",
+            "val": 58530.0
+          }
+        ]
+      },
+      {
+        "cod": "67.02",
+        "nume": "Cultura, recreere si religie",
+        "val": 45378.0,
+        "copii": [
+          {
+            "nume": "Servicii recreative si sportive",
+            "val": 31150.0
+          },
+          {
+            "nume": "Servicii religioase",
+            "val": 3000.0
+          },
+          {
+            "nume": "Alte servicii in domeniile culturii, recreerii si religiei",
+            "val": 1986.0
+          }
+        ]
+      },
+      {
+        "cod": "61.02",
+        "nume": "Ordine publica si siguranta nationala",
+        "val": 21500.0,
+        "copii": [
+          {
+            "nume": "Ordine publica",
+            "val": 21225.0
+          },
+          {
+            "nume": "Protectie civila si protectia contra incendiilor (protectie civila non",
+            "val": 275.0
+          }
+        ]
+      },
+      {
+        "cod": "55.02",
+        "nume": "Tranzactii privind datoria publica si imprumuturi ()",
+        "val": 18776.0,
+        "copii": []
+      },
+      {
+        "cod": "81.02",
+        "nume": "Combustibili si energie",
+        "val": 11076.0,
+        "copii": [
+          {
+            "nume": "Energie termica",
+            "val": 10463.0
+          },
+          {
+            "nume": "Alte cheltuieli privind combustibili si energia",
+            "val": 613.0
+          }
+        ]
+      },
+      {
+        "cod": "54.02",
+        "nume": "Alte servicii publice generale",
+        "val": 2523.0,
+        "copii": [
+          {
+            "nume": "Servicii publice comunitare de evidenta a persoanelor",
+            "val": 2423.0
+          },
+          {
+            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
+            "val": 100.0
+          }
+        ]
+      },
+      {
+        "cod": "80.02",
+        "nume": "Actiuni generale economice, comerciale si de munca",
+        "val": 500.0,
+        "copii": [
+          {
+            "nume": "Actiuni generale economice si comerciale",
+            "val": 500.0
+          }
+        ]
+      }
+    ],
+    "total_cheltuieli": 853165.17,
+    "ani": {
+      "cheltuieli": [
+        853165.17,
+        472984.56,
+        437256.91,
+        381460.74
+      ],
+      "venituri": [
+        832952.64,
+        472984.56,
+        437256.91,
+        381460.74
+      ]
+    }
+  },
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

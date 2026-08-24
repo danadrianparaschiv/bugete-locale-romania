@@ -1,15 +1,28 @@
 {
   "quality": {
-    "lines": 1768,
-    "pct_clean": 96.8,
-    "errors": 81,
-    "warnings": 5,
+    "lines": 1751,
+    "pct_clean": 97.0,
+    "errors": 80,
+    "warnings": 6,
     "documents": 1
   },
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 1006716.06,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "61.02",
+      "name": "CAP. Ordine publica si siguranta nationala",
+      "total": 38534.5
+    },
+    {
+      "code": "87.02",
+      "name": "CAP. Alte actiuni economice",
+      "total": 16272.0
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }

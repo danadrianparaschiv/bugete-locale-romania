@@ -1,9 +1,9 @@
 {
   "quality": {
-    "lines": 613,
-    "pct_clean": 90.7,
-    "errors": 63,
-    "warnings": 43,
+    "lines": 643,
+    "pct_clean": 86.0,
+    "errors": 100,
+    "warnings": 101,
     "documents": 1
   },
   "llm_models": [
@@ -13,6 +13,58 @@
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "total": 47084.85
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala (cod 68.02.04+68.02.05+68.02.06+68.02.1",
+      "total": 28468.25
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la 70.",
+      "total": 9508.61
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "total": 6618.8
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50)",
+      "total": 4836.1
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01)",
+      "total": 1911.04
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "total": 1910.1
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50)",
+      "total": 1595.06
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice (cod 87.02.01+87.02.03 la 87.02.05+87.02.50)",
+      "total": 576.73
+    },
+    {
+      "code": "56.02",
+      "name": "(rând derivat din formula tipărită)",
+      "total": 250.54
+    }
+  ],
+  "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
