@@ -197,6 +197,157 @@ def test_budget_tab_explains_a_failed_conversion(tmp_path):
     assert "Venituri încasate" in page
 
 
+@pytest.mark.parametrize("today,expected", [
+    ("2026-03-31", None),   # T1 tocmai s-a închis, raportul nu e publicat
+    ("2026-05-24", None),   # nici la 54 de zile
+    ("2026-05-25", 1),      # abia după termenul de publicare
+    ("2026-08-24", 2),      # data auditului corpusului: T2 disponibil
+    ("2026-11-30", 3),
+    ("2027-03-01", 4),
+])
+def test_expected_quarter(today, expected):
+    from datetime import date
+    assert ex.expected_quarter(date.fromisoformat(today), 2026) == expected
+
+
+def test_quarter_status_flags_missing_quarter(tmp_path):
+    from datetime import date
+
+    root = tmp_path / "2026"
+    (root / "q1").mkdir(parents=True)
+    entry = {"county_code": "01", "capital_name": "Alba Iulia",
+             "path": "01-alba/1017-alba-iulia/q1/forexebug_execution.xlsx",
+             "source_url": "https://example.ro/a.xlsx", "entity_cif": "4562923"}
+    (root / "q1" / "manifest.json").write_text(json.dumps(
+        {"year": 2026, "quarter": 1, "report_date": "2026-03-31", "entries": [entry]}))
+    (root / entry["path"]).parent.mkdir(parents=True)
+    (root / entry["path"]).write_bytes(b"x")
+
+    st = ex.quarter_status(root, 2026, date(2026, 8, 24))
+    assert st["trimestre_complete"] == [1]
+    assert st["trimestru_asteptat"] == 2
+    assert st["urmatorul_de_adus"] == 2 and st["manifest_lipsa"] == [2]
+
+    # before T1 was even due, nothing is outstanding
+    assert ex.quarter_status(root, 2026, date(2026, 4, 1))["de_adus"] == []
+
+
+def _quarter_tree(tmp_path, quarter=2, url="https://static.anaf.ro/x.xlsx"):
+    """A corpus year with one entity and a manifest for `quarter`."""
+    root = tmp_path / "2026"
+    rel = f"01-alba/1017-alba-iulia/q{quarter}/forexebug_execution.xlsx"
+    entry = {"county_code": "01", "county_name": "Alba", "capital_siruta": "1017",
+             "capital_name": "Alba Iulia", "entity_cif": "4562923",
+             "entity_name": "MUNICIPIUL TEST", "path": rel,
+             "report_date": f"2026-{QUARTER_MONTH[quarter]}"}
+    if url:
+        entry["source_url"] = url
+    (root / f"q{quarter}").mkdir(parents=True)
+    (root / f"q{quarter}" / "manifest.json").write_text(json.dumps({
+        "schema_version": 1, "year": 2026, "quarter": quarter,
+        "report_date": f"2026-{QUARTER_MONTH[quarter]}", "entries": [entry],
+    }, ensure_ascii=False, indent=2) + "\n")
+    return root, rel
+
+
+QUARTER_MONTH = {1: "03-31", 2: "06-30", 3: "09-30", 4: "12-31"}
+
+
+def test_ingest_verifies_placed_files(tmp_path):
+    """Files dropped in by hand are checked, then recorded with a checksum."""
+    root, rel = _quarter_tree(tmp_path)
+    (root / rel).parent.mkdir(parents=True)
+    _workbook(root / rel)  # header says 30-JUN-26, CIF 4562923
+
+    r = ex.ingest_quarter(root, 2)
+    assert (r["verified"], r["failed"], r["missing"]) == (1, 0, 0)
+
+    v = json.loads((root / "q2" / "verification.json").read_text())["entries"][0]
+    assert v["verification_status"] == "verified"
+    assert v["sha256"] and v["bytes"] > 0 and v["lines"] == 6
+    assert (root / "q2" / "checksums.sha256").read_text().split()[1] == rel
+
+
+def test_ingest_rejects_a_report_from_another_quarter(tmp_path):
+    """The commonest hand-placement mistake: last quarter's file in the new folder."""
+    root, rel = _quarter_tree(tmp_path, quarter=3, url=None)
+    (root / rel).parent.mkdir(parents=True)
+    _workbook(root / rel)  # a Q2 report (30-JUN-26) placed under q3
+
+    r = ex.ingest_quarter(root, 3)
+    assert (r["verified"], r["failed"]) == (0, 1)
+    problems = r["entries"][0]["problems"]
+    assert any("2026-09-30" in p for p in problems)
+
+
+def test_ingest_rejects_a_foreign_entity(tmp_path):
+    root, rel = _quarter_tree(tmp_path)
+    (root / rel).parent.mkdir(parents=True)
+    _workbook(root / rel)
+    m = json.loads((root / "q2" / "manifest.json").read_text())
+    m["entries"][0]["entity_cif"] = "9999999"  # corpus expects a different city
+    (root / "q2" / "manifest.json").write_text(json.dumps(m))
+
+    r = ex.ingest_quarter(root, 2)
+    assert r["failed"] == 1
+    assert any("CIF" in p for p in r["entries"][0]["problems"])
+
+
+def test_ingest_is_idempotent(tmp_path):
+    """Re-running on an unchanged corpus must not rewrite anything."""
+    root, rel = _quarter_tree(tmp_path)
+    (root / rel).parent.mkdir(parents=True)
+    _workbook(root / rel)
+    ex.ingest_quarter(root, 2)
+
+    before = {p: p.read_bytes() for p in (root / "q2").iterdir()}
+    ex.ingest_quarter(root, 2)
+    assert {p: p.read_bytes() for p in (root / "q2").iterdir()} == before
+
+
+def test_quarters_on_disk(tmp_path):
+    root, rel = _quarter_tree(tmp_path)
+    (root / rel).parent.mkdir(parents=True)
+    _workbook(root / rel)
+    assert ex.quarters_on_disk(root) == [2]
+
+
+def test_scaffold_quarter_copies_entities_without_urls(tmp_path):
+    root = tmp_path / "2026"
+    (root / "q2").mkdir(parents=True)
+    (root / "q2" / "manifest.json").write_text(json.dumps({
+        "schema_version": 1, "year": 2026, "quarter": 2, "report_date": "2026-06-30",
+        "source_audited_on": "2026-08-24",
+        "entries": [
+            {"county_code": "01", "capital_name": "Alba Iulia", "entity_cif": "4562923",
+             "path": "01-alba/1017-alba-iulia/q2/forexebug_execution.xlsx",
+             "source_url": "https://static.anaf.ro/rapfxb/LOT724/x.xlsx",
+             "reporting_period": "2026-Q2", "report_date": "2026-06-30"},
+            {"county_code": "25", "capital_name": "București", "entity_cif": "4267117",
+             "path": "25-ilfov/179132-bucuresti/q2/forexebug_execution.xlsx",
+             "copy_from": "42-bucuresti/179132-bucuresti/q2/forexebug_execution.xlsx"},
+        ],
+    }, ensure_ascii=False))
+
+    out = ex.scaffold_quarter(root, 3)
+    m = json.loads(out.read_text())
+    assert m["quarter"] == 3 and m["report_date"] == "2026-09-30"
+    assert m["source_audited_on"] is None  # not audited until the URLs are filled
+    first, second = m["entries"]
+    assert first["path"].endswith("/q3/forexebug_execution.xlsx")
+    assert first["source_url"] is None  # the manual step
+    assert first["entity_cif"] == "4562923"  # identity carried over
+    assert first["reporting_period"] == "2026-Q3"
+    assert second["copy_from"].endswith("/q3/forexebug_execution.xlsx")  # aliases follow
+
+    # a scaffolded quarter is present but not complete: the URLs are missing
+    from datetime import date
+    st = ex.quarter_status(root, 2026, date(2026, 11, 30))
+    assert 3 in st["trimestre_prezente"] and 3 not in st["trimestre_complete"]
+    assert 3 not in st["manifest_lipsa"]  # manifest exists, only the URLs are pending
+    assert 3 in st["de_adus"]
+
+
 def test_partial_plan_suppresses_share(tmp_path):
     """A plan extracted from a bad scan can be a fraction of the real budget;
     the ratio would read as massive overspending, so it is withheld."""
