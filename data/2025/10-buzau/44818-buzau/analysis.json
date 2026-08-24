@@ -1,0 +1,43 @@
+{
+  "quality": {
+    "lines": 3564,
+    "pct_clean": 36.4,
+    "errors": 296,
+    "warnings": 2082,
+    "documents": 5
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială a municipiului, din care:",
+      "total": 636.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice executive",
+      "total": 321.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publică și siguranța națională, din care:",
+      "total": 300.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sănătate, din care:",
+      "total": 114.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale, din care:",
+      "total": 38.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

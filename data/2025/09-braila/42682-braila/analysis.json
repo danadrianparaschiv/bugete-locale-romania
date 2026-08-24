@@ -1,0 +1,23 @@
+{
+  "quality": {
+    "lines": 8695,
+    "pct_clean": 82.7,
+    "errors": 1650,
+    "warnings": 878,
+    "documents": 62
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 30.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

@@ -1,0 +1,23 @@
+{
+  "quality": {
+    "lines": 101,
+    "pct_clean": 3.0,
+    "errors": 16,
+    "warnings": 166,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "83.02",
+      "name": "Proiecte cu finantare din Fonduri externe nerambursabile și PNRR",
+      "total": 611551.76
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

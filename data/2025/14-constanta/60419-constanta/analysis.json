@@ -1,0 +1,30 @@
+{
+  "quality": {
+    "lines": 2387,
+    "pct_clean": 70.3,
+    "errors": 383,
+    "warnings": 494,
+    "documents": 9
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 2311355.0
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
+      "total": 166876.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "total": 950.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

@@ -1,0 +1,28 @@
+{
+  "quality": {
+    "lines": 286,
+    "pct_clean": 19.6,
+    "errors": 37,
+    "warnings": 309,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "INVATAMANT DE STAT (20 institutii)",
+      "total": 23509.0
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+      "total": 10600.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

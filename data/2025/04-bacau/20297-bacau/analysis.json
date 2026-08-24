@@ -1,0 +1,28 @@
+{
+  "quality": {
+    "lines": 1616,
+    "pct_clean": 81.3,
+    "errors": 225,
+    "warnings": 337,
+    "documents": 7
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 20117.6
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+      "total": 16247.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}
