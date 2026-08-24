@@ -92,6 +92,12 @@ rulări — [docs/eval-modele.md](docs/eval-modele.md)):
 - Modelele premium (fable-5, opus-5) merită doar cu plafoane generoase pe
   fișiere mici: la buget fix, costul lor per apel le lasă fără pagini.
 
+Notă de cost: unii furnizori (Gemini) facturează tokenii interni de
+„gândire" fără să-i afișeze în răspuns — registrul de costuri îi
+contorizează corect, iar preseturile economice limitează gândirea
+(`reasoning_effort: low`). Reconciliați periodic cu `bgconvertor costuri`
+și setați bugete de alertă la furnizor ca plasă independentă.
+
 Poarta de acceptare aritmetică face alegerea sigură: un model mai slab
 repară mai puține grupuri, dar nu poate corupe datele — o corecție se
 aplică doar dacă face sumele să se închidă. Cheile API per furnizor sunt

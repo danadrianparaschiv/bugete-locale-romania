@@ -39,6 +39,7 @@ class LLMClient:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self._client = None
         self._compat: dict[str, object] = {}  # base_url -> OpenAI-compat client
+        self._thinking_warned: set[str] = set()  # modele cu thinking ascuns semnalate
 
     def _api(self):
         if self._client is None:
@@ -149,7 +150,10 @@ class LLMClient:
             return cached
         image_bytes = _png_bytes(image) if image is not None else b""
 
-        self.ledger.check_budget()
+        # worst-case hold against the budget while the call is in flight —
+        # settled costs alone let concurrent big calls overshoot the cap
+        est_in = len(prompt) // 3 + (1600 if image is not None else 0)
+        reserved = self.ledger.reserve(model, est_in, max_tokens)
 
         content: list[dict] = []
         if image is not None:
@@ -164,21 +168,45 @@ class LLMClient:
         content.append({"type": "text", "text": prompt})
 
         t0 = time.time()
-        parsed: T | None = None
+        try:
+            parsed, in_tok, out_tok, visible_out = self._attempts(
+                purpose, prompt, output_model, model, content,
+                image_bytes, page, max_tokens, t0,
+            )
+        finally:
+            self.ledger.release(reserved)
+        if parsed is None:
+            raise RuntimeError(f"no structured output after retry ({purpose}, p{page})")
+
+        self.cache_store(
+            purpose, prompt, output_model, parsed,
+            in_tok, out_tok, model=model, image=image,
+        )
+        return parsed
+
+    def _attempts(self, purpose, prompt, output_model, model, content,
+                  image_bytes, page, max_tokens, t0):
+        parsed = None
         in_tok = out_tok = 0
+        visible_out: int | None = None
         stop: str | None = None
         for attempt in (1, 2):
             got_response = False
             try:
                 if not model.startswith("claude-"):
                     payload: list[dict] = []
-                    if image is not None:
+                    if image_bytes:
                         payload.append({
                             "type": "image_url",
                             "image_url": {"url": "data:image/png;base64,"
                                           + base64.standard_b64encode(image_bytes).decode()},
                         })
                     payload.append({"type": "text", "text": prompt})
+                    kwargs: dict = {}
+                    if self.config.llm.reasoning_effort:
+                        # transcrierea nu are nevoie de gândire — și gândirea
+                        # se facturează ca output (incidentul de 3.4x)
+                        kwargs["reasoning_effort"] = self.config.llm.reasoning_effort
                     response = self._api_compat(model).chat.completions.create(
                         model=model,
                         max_completion_tokens=max_tokens,
@@ -188,6 +216,7 @@ class LLMClient:
                             "strict": True,
                             "schema": _strict_schema(output_model, require_all=True),
                         }},
+                        **kwargs,
                     )
                     choice = response.choices[0]
                     in_tok = response.usage.prompt_tokens
@@ -195,9 +224,19 @@ class LLMClient:
                     # from completion_tokens on the OpenAI-compat endpoint
                     # (seen live: completion=3, total=175). Bill the ledger
                     # on total-prompt so budgets track real invoices.
-                    total = getattr(response.usage, "total_tokens", None) or 0
-                    out_tok = max(response.usage.completion_tokens,
-                                  total - response.usage.prompt_tokens)
+                    visible_out = response.usage.completion_tokens
+                    out_tok = _billed_output_tokens(
+                        response.usage.prompt_tokens, visible_out,
+                        getattr(response.usage, "total_tokens", None))
+                    hidden = out_tok - visible_out
+                    if hidden > 500 and model not in self._thinking_warned:
+                        self._thinking_warned.add(model)
+                        log.warning(
+                            "model %s facturează %d tokeni de gândire ascunși "
+                            "per apel (vizibili: %d) — cost real peste cel "
+                            "aparent; vezi llm.reasoning_effort", model, hidden,
+                            visible_out,
+                        )
                     stop = ("max_tokens" if choice.finish_reason == "length"
                             else choice.finish_reason)
                     got_response = True
@@ -246,7 +285,9 @@ class LLMClient:
                 cost = self.ledger.record(
                     purpose, model, in_tok, out_tok,
                     page=page, duration_ms=int((time.time() - t0) * 1000),
+                    visible_output_tokens=visible_out,
                 )
+                log.debug("%s call: %s p%s $%.4f", purpose, model, page, cost)
             if parsed is not None:
                 break
             log.warning("%s call p%s returned no structured output (attempt %d, "
@@ -255,15 +296,18 @@ class LLMClient:
             # the cap was too small for thinking + JSON — retry with room
             if stop == "max_tokens" or not got_response:
                 max_tokens = min(64000, max_tokens * 4)
-        if parsed is None:
-            raise RuntimeError(f"no structured output after retry ({purpose}, p{page})")
-        log.debug("%s call: %s p%s $%.4f", purpose, model, page, cost)
+        return parsed, in_tok, out_tok, visible_out
 
-        self.cache_store(
-            purpose, prompt, output_model, parsed,
-            in_tok, out_tok, model=model, image=image,
-        )
-        return parsed
+
+def _billed_output_tokens(prompt_tokens: int, completion_tokens: int,
+                          total_tokens: int | None) -> int:
+    """Output tokens as the vendor BILLS them, not as it displays them.
+
+    Gemini's OpenAI-compat endpoint hides thinking tokens from
+    completion_tokens while billing them (live: completion=3, total=175);
+    total-prompt is the honest figure. Falls back to completion_tokens when
+    total is absent or inconsistent."""
+    return max(completion_tokens, (total_tokens or 0) - prompt_tokens)
 
 
 def _lenient_validate(output_model, text: str):

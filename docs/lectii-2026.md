@@ -161,8 +161,11 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
 7. Planifică de la început a doua trecere: înlocuirea proiectelor cu
    anexele aprobate + reconvertirea țintită (proveniența per linie
    spune exact unde merită un model mai bun).
-8. Implementat înainte de campanie: rezervarea bugetului la lansarea
-   apelului; ordinea paginilor de fallback după randament.
+8. ~~Rezervarea bugetului la lansarea apelului~~ (implementat 24.08.2026,
+   după incidentul de facturare); rămâne: ordinea paginilor de fallback
+   după randament.
+9. Reconciliere factură↔registru după fiecare campanie: `bgconvertor
+   costuri --csv` lângă exportul de facturare al furnizorului.
 
 ---
 

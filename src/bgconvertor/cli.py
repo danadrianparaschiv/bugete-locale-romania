@@ -394,6 +394,63 @@ def models():
 
 
 @app.command()
+def costuri(
+    csv_out: Path | None = typer.Option(None, "--csv", help="Scrie agregatul și ca CSV"),
+):
+    """Agregă registrele LLM per furnizor/model/zi — pentru reconcilierea cu facturile."""
+    import csv as csv_mod
+    from collections import defaultdict
+
+    from .llm.presets import MODEL_ROUTES
+
+    agg: dict[tuple, dict] = defaultdict(lambda: {"calls": 0, "in": 0, "out": 0,
+                                                  "hidden": 0, "cost": 0.0})
+    config = _config()
+    for led in sorted(config.runs_dir.glob("*/llm_ledger.jsonl")):
+        for line in led.read_text().splitlines():
+            r = json.loads(line)
+            if r.get("cached"):
+                continue
+            model = r.get("model") or "?"
+            vendor = ("anthropic" if model.startswith("claude-")
+                      else (MODEL_ROUTES.get(model, ("?", "?"))[1] or "?")
+                      .split("//")[-1].split("/")[0])
+            day = (r.get("ts") or "")[:10]
+            a = agg[(vendor, model, day)]
+            a["calls"] += 1
+            a["in"] += r.get("input_tokens", 0)
+            a["out"] += r.get("output_tokens", 0)
+            a["hidden"] += max(0, r.get("output_tokens", 0)
+                               - r.get("visible_output_tokens", r.get("output_tokens", 0)))
+            a["cost"] += r.get("cost_usd", 0.0)
+    if not agg:
+        console.print("[dim]niciun registru LLM sub runs/[/dim]")
+        return
+    t = Table(title="costuri LLM din registre (comparați cu facturile furnizorilor)")
+    for col in ("furnizor", "model", "zi"):
+        t.add_column(col, no_wrap=True)
+    for col in ("apeluri", "tok. in", "tok. out", "din care gândire", "cost $"):
+        t.add_column(col, justify="right")
+    total = 0.0
+    for (vendor, model, day), a in sorted(agg.items()):
+        total += a["cost"]
+        t.add_row(vendor, model, day, str(a["calls"]), f"{a['in']:,}",
+                  f"{a['out']:,}", f"{a['hidden']:,}", f"{a['cost']:.2f}")
+    console.print(t)
+    console.print(f"[bold]total registre: ${total:.2f}[/bold] — atenție: apelurile "
+                  "dinaintea corecției de thinking (24.08.2026) subestimează costul Gemini")
+    if csv_out:
+        with csv_out.open("w", newline="") as f:
+            w = csv_mod.writer(f)
+            w.writerow(["furnizor", "model", "zi", "apeluri", "tok_in", "tok_out",
+                        "tok_gandire", "cost_usd"])
+            for (vendor, model, day), a in sorted(agg.items()):
+                w.writerow([vendor, model, day, a["calls"], a["in"], a["out"],
+                            a["hidden"], round(a["cost"], 4)])
+        console.print(f"[dim]scris {csv_out}[/dim]")
+
+
+@app.command()
 def triage(pdf: Path = typer.Argument(..., exists=True, readable=True)):
     """Verificare preliminară: clasifică fișierul, estimează costul/timpul, semnalează layout-urile necunoscute.
 

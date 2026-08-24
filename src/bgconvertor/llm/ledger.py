@@ -71,6 +71,7 @@ class Ledger:
         # budgets are per run: historic ledger spend is context, not quota
         self._run_cost_start = self._cost
         self._run_calls_start = self._calls
+        self._reserved = 0.0  # cost estimat al apelurilor în zbor
         self._lock = threading.Lock()
 
     @property
@@ -87,14 +88,38 @@ class Ledger:
 
     def check_budget(self) -> None:
         """Call before each LLM request. Aborts LLM passes, never the pipeline."""
-        if self.run_cost_usd >= self.max_cost_usd:
+        if self.run_cost_usd + self._reserved >= self.max_cost_usd:
             raise BudgetExceeded(
-                f"LLM budget reached this run: ${self.run_cost_usd:.2f} >= "
-                f"${self.max_cost_usd:.2f} (raise with --max-llm-cost)"
+                f"LLM budget reached this run: ${self.run_cost_usd:.2f} spent + "
+                f"${self._reserved:.2f} in flight >= ${self.max_cost_usd:.2f} "
+                "(raise with --max-llm-cost)"
             )
         run_calls = self._calls - self._run_calls_start
         if run_calls >= self.max_calls:
             raise BudgetExceeded(f"LLM call limit reached: {run_calls} >= {self.max_calls}")
+
+    def reserve(self, model: str, input_tokens_est: int, output_tokens_est: int,
+                batch: bool = False) -> float:
+        """Hold the worst-case cost of an in-flight call against the budget.
+
+        Concurrent large calls used to overshoot the cap by several dollars
+        (max seen: $7.29 on a $3 cap) because check_budget only saw settled
+        costs. Returns the reserved amount; pair with release() in finally."""
+        est = estimate_cost(model, input_tokens_est, output_tokens_est, batch)
+        with self._lock:
+            spent = self._cost - self._run_cost_start
+            if spent + self._reserved + est > self.max_cost_usd:
+                raise BudgetExceeded(
+                    f"LLM budget would be exceeded: ${spent:.2f} spent + "
+                    f"${self._reserved:.2f} in flight + ${est:.2f} estimated > "
+                    f"${self.max_cost_usd:.2f}"
+                )
+            self._reserved += est
+        return est
+
+    def release(self, reserved: float) -> None:
+        with self._lock:
+            self._reserved = max(0.0, self._reserved - reserved)
 
     def record(
         self,
@@ -106,6 +131,7 @@ class Ledger:
         duration_ms: int | None = None,
         batch: bool = False,
         cached: bool = False,
+        visible_output_tokens: int | None = None,
     ) -> float:
         cost = 0.0 if cached else estimate_cost(model, input_tokens, output_tokens, batch)
         rec = {
@@ -120,6 +146,9 @@ class Ledger:
             "batch": batch,
             "cached": cached,
         }
+        if visible_output_tokens is not None and visible_output_tokens != output_tokens:
+            # furnizor cu «thinking» ascuns: facturat != vizibil în răspuns
+            rec["visible_output_tokens"] = visible_output_tokens
         with self._lock:
             with self.path.open("a") as f:
                 f.write(json.dumps(rec) + "\n")

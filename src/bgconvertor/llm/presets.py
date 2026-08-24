@@ -25,6 +25,7 @@ class Preset:
     base_url: str | None  # None -> native Anthropic SDK
     description: str  # shown by `bgconvertor models` (user-facing, Romanian)
     fallback_model: str | None = None  # full-page transcription; None -> repair_model
+    reasoning: str | None = None  # compat: reasoning_effort — thinking-ul se facturează
 
 
 def _anthropic(repair: str, cell: str, desc: str) -> Preset:
@@ -69,7 +70,8 @@ PRESETS: dict[str, Preset] = {
         "google", "gemini-3.6-flash", "gemini-3.6-flash",
         "GEMINI_API_KEY",
         "https://generativelanguage.googleapis.com/v1beta/openai/",
-        "Google economic — OCR foarte bun la o fracțiune din preț"),
+        "Google economic — OCR foarte bun la o fracțiune din preț",
+        reasoning="low"),
     "mistral:mistral-medium-3": Preset(
         "mistral", "mistral-medium-latest", "mistral-small-latest",
         "MISTRAL_API_KEY", "https://api.mistral.ai/v1",
@@ -85,7 +87,7 @@ PRESETS: dict[str, Preset] = {
         "GEMINI_API_KEY",
         "https://generativelanguage.googleapis.com/v1beta/openai/",
         "mixt — reparare Gemini Flash + transcriere de pagină Sonnet 5",
-        fallback_model="claude-sonnet-5"),
+        fallback_model="claude-sonnet-5", reasoning="low"),
 }
 
 # model -> (api_key_env, base_url) pentru rutarea per apel; modelele claude-*
@@ -117,6 +119,7 @@ def apply(config, key: str) -> Preset:
     config.llm.cell_model = p.cell_model
     config.llm.classify_model = p.cell_model
     config.llm.fallback_model = p.fallback_model
+    config.llm.reasoning_effort = p.reasoning
     config.llm.api_key_env = p.api_key_env
     config.llm.base_url = p.base_url
     return p

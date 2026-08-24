@@ -38,6 +38,7 @@ class LLMConfig(BaseModel):
     repair_model: str = "claude-sonnet-5"
     cell_model: str = "claude-haiku-4-5"  # transcription-only cell recovery
     fallback_model: str | None = None  # full-page transcription; None -> repair_model
+    reasoning_effort: str | None = None  # compat vendors: cap hidden thinking (billed!)
     call_deadline_s: int = 1800  # hard per-call wait bound in worker pools
     batch: bool = False  # Batch API (-50%) for unattended repair/fallback runs
     classify_model: str = "claude-haiku-4-5"
