@@ -132,3 +132,16 @@ def test_source_letter_suffix_stripped():
     assert normalize_indicator_code("50.02A") == "50.02"
     # a bare pseudo-code letter still rejects
     assert normalize_indicator_code("01F") is None
+
+
+def test_collapsed_column_pair_is_refused_not_glued():
+    """Două valori într-o celulă nu devin un număr de 1e6 ori mai mare."""
+    import pytest
+
+    from bgconvertor.parsing import NumberParseError, parse_ro_number
+    for cell in ("57.199,00 39.768,00", "7.460,00 4.605,00", "-1.718,00 2.089,00"):
+        with pytest.raises(NumberParseError):
+            parse_ro_number(cell, ocr=True)
+    # numerele legitime cu spațiu ca separator de mii rămân valide
+    assert parse_ro_number("1 234 567,89") == Decimal("1234567.89")
+    assert parse_ro_number("38.000,00") == Decimal("38000.00")

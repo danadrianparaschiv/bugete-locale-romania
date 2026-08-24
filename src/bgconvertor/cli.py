@@ -1054,6 +1054,47 @@ def corpus_export(
                   "aritmetice si de nomenclator — stratul sigur pentru analiza[/dim]")
 
 
+@corpus_app.command("cross-check")
+def corpus_cross_check(
+    old_csv: Path = typer.Argument(..., exists=True, help="Export corpus al ediției vechi"),
+    new_csv: Path = typer.Argument(..., exists=True, help="Export corpus al ediției noi"),
+    out: Path = typer.Option(Path("cross-check.csv"), help="Lista de candidați pentru re-citire"),
+    top: int = typer.Option(10, help="Câte orașe se afișează în tabel"),
+):
+    """Compară două ediții și clasează liniile care merită re-citite.
+
+    Nu modifică nicio valoare: raportul e o listă de priorități pentru o
+    re-citire țintită. Referința fiecărui oraș e propria lui mediană, deci
+    creșterile reale de buget nu produc suspecți.
+    """
+    from . import crossyear
+
+    _stage_banner("Validare încrucișată an-la-an", f"{old_csv.name} vs {new_csv.name}")
+    reports = crossyear.compare(old_csv, new_csv)
+    if not reports:
+        console.print("[yellow]nicio pereche de orașe cu suprapunere suficientă[/yellow]")
+        raise typer.Exit(1)
+    t = Table(title="candidați pentru re-citire (fără nicio corecție automată)")
+    t.add_column("oraș", no_wrap=True)
+    for col in ("linii comune", "raport median", "suspecți", "din care cu cifră mutată"):
+        t.add_column(col, justify="right")
+    t.add_column("observație")
+    for rep in reports[:top]:
+        shifts = sum(1 for s in rep.suspects if s.signature == "decimal_shift")
+        note = ("[yellow]unități diferite între ediții[/yellow]" if rep.unit_shift
+                else "")
+        t.add_row(rep.city, str(rep.matched), f"{rep.median_ratio:.3g}",
+                  str(len(rep.suspects)), str(shifts), note)
+    console.print(t)
+    n = crossyear.write_csv(reports, out)
+    total = sum(len(r.suspects) for r in reports)
+    strong = sum(1 for r in reports for s in r.suspects
+                 if s.old_verified and not s.new_verified)
+    console.print(f"[bold green]✓ {n} candidați -> {out}[/bold green]")
+    console.print(f"[dim]{strong} din {total} au perechea veche verificată și cea nouă "
+                  "nu — cele mai bune ținte pentru re-citire[/dim]")
+
+
 @corpus_app.command("aggregate")
 def corpus_aggregate(
     data_dir: Path = typer.Option(Path("data"), exists=True, help="Rădăcina data/ cu toți anii"),

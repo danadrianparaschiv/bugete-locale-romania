@@ -17,6 +17,12 @@ from typing import Literal
 _MINUS_CHARS = "-−–—"  # -, −, –, —
 _SPACE_RE = re.compile(r"[\s   ]+")
 
+# two complete amounts, each with its own decimal part, separated by
+# whitespace — a collapsed column pair, not one number with space separators
+_TWO_AMOUNTS_RE = re.compile(
+    r"^-?[\d.\s\u00a0\u202f]*\d[,.]\d{1,2}[\s\u00a0\u202f]+-?[\d.\s\u00a0\u202f]*\d[,.]\d{1,2}\s*$"
+)
+
 ParsedCell = Decimal | Literal["X"] | None
 
 
@@ -37,6 +43,12 @@ def parse_ro_number(raw: str | None, ocr: bool = False) -> ParsedCell:
     """
     if raw is None:
         return None
+    # Two complete amounts in one cell mean the grid collapsed a column pair
+    # ("57.199,00 39.768,00"). Stripping the space would silently glue them
+    # into a 1e6-times-too-large number — the exact corruption year-over-year
+    # cross-validation surfaced. Refuse instead: the cell gets flagged.
+    if _TWO_AMOUNTS_RE.match(str(raw).strip()):
+        raise NumberParseError(f"două valori într-o singură celulă: {raw!r}")
     s = _SPACE_RE.sub("", str(raw))
     if s == "":
         return None
