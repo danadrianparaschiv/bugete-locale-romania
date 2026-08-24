@@ -7,6 +7,8 @@
 - [ ] `uv run pytest` trece (inclusiv `test_ab_stays_fully_clean`)
 - [ ] `uv run bgconvertor eval` nu regresează (lipiți scorul mai jos dacă
       s-a schimbat extracția)
+- [ ] layout-urile suportate noi au cel puțin un scope `cell_ground_truth`
+      exhaustiv și trec pragurile recall/precizie
 - [ ] dacă schimbă ieșiri publice: `bgconvertor corpus audit data --strict
       --require-modern` trece și raportul este atașat
 

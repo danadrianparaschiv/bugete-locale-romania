@@ -1,9 +1,10 @@
 """Golden-fixture evaluation harness.
 
-Fixtures live in tests/fixtures/golden/*.json: hand-verified anchor facts
-for selected pages covering known layout families and hazards in the corpus.
-`bgconvertor eval` reports selected-anchor recall per layout.  It is a
-regression signal, not full cell recall or a corpus-wide conversion score.
+Fixtures live in tests/fixtures/golden/*.json.  Selected anchors cover known
+layout families and hazards; exhaustive cell groups additionally measure
+numeric-cell recall and precision for the pages that have complete ground
+truth.  The report keeps these scopes separate and never promotes partial
+fixture coverage to a corpus-wide conversion score.
 
 This module also pins the EXTRACTION OUTPUT CONTRACT that every extractor
 (digital, docling, LLM fallback) must produce per page:
@@ -25,6 +26,7 @@ This module also pins the EXTRACTION OUTPUT CONTRACT that every extractor
 
 from __future__ import annotations
 
+import json
 import unicodedata
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -35,7 +37,7 @@ from .config import RunConfig
 from .runstore import RunStore
 
 DEFAULT_FIXTURES_DIR = Path("tests/fixtures/golden")
-EVAL_SCHEMA_VERSION = 1
+EVAL_SCHEMA_VERSION = 2
 EVAL_METRIC = "selected_anchor_recall"
 
 
@@ -60,6 +62,26 @@ class Anchor(BaseModel):
         return self
 
 
+class CellGroundTruthGroup(BaseModel):
+    """All expected numeric cells in one disambiguated page region."""
+
+    context_contains: str
+    cells: list[Anchor]
+
+    @model_validator(mode="after")
+    def _check_cells(self):
+        if not self.cells:
+            raise ValueError("cell ground-truth group cannot be empty")
+        for cell in self.cells:
+            if cell.column is None or cell.value is None:
+                raise ValueError("every ground-truth cell needs column and value")
+            try:
+                Decimal(cell.value)
+            except InvalidOperation as exc:
+                raise ValueError("ground-truth cells must be numeric") from exc
+        return self
+
+
 class Fixture(BaseModel):
     id: str
     pdf: str
@@ -71,6 +93,10 @@ class Fixture(BaseModel):
     columns: list[str] = []
     anchors: list[Anchor] = []
     text_contains: list[str] = []
+    cell_ground_truth: list[CellGroundTruthGroup] = []
+    # CI-safe OCR regression grid, relative to the golden fixture directory.
+    # Used only when the current run store has no extraction for this page.
+    source_grid: str | None = None
     notes: str = ""
 
 
@@ -90,6 +116,10 @@ class FixtureResult(BaseModel):
     hard_matched: int = 0
     text_total: int = 0
     text_matched: int = 0
+    cell_ground_truth: bool = False
+    cells_expected: int = 0
+    cells_matched: int = 0
+    cells_predicted: int = 0
     misses: list[str] = []
 
 
@@ -162,8 +192,86 @@ def check_anchor(payload: dict, anchor: Anchor) -> AnchorResult:
     )
 
 
+def _numeric_value(value: str) -> bool:
+    if value == "X":
+        return False
+    try:
+        Decimal(value)
+    except (InvalidOperation, TypeError):
+        return False
+    return True
+
+
+def check_cell_ground_truth(
+    payload: dict,
+    groups: list[CellGroundTruthGroup],
+) -> tuple[int, int, int, list[str]]:
+    """Return (matched, expected, predicted, details) with one-to-one matches.
+
+    Precision counts every numeric value emitted inside each exhaustive group.
+    A wrong value is therefore both one missing expected cell and one extra
+    predicted cell; duplicate output cannot satisfy the same expected cell
+    twice.
+    """
+    lines = payload.get("lines", [])
+    consumed: set[tuple[int, str]] = set()
+    predicted: set[tuple[int, str]] = set()
+    misses: list[str] = []
+    expected = 0
+    matched = 0
+
+    for group in groups:
+        line_indexes = [
+            index
+            for index, line in enumerate(lines)
+            if _fuzzy_contains(group.context_contains, line.get("section") or "")
+        ]
+        for index in line_indexes:
+            for column, value in (lines[index].get("values") or {}).items():
+                if _numeric_value(value):
+                    predicted.add((index, column))
+
+        for cell in group.cells:
+            expected += 1
+            anchor = cell.model_copy(update={"context_contains": group.context_contains})
+            match_key = next((
+                (index, anchor.column)
+                for index in line_indexes
+                if (index, anchor.column) not in consumed
+                and _line_matches(lines[index], anchor)
+                and _value_equal(
+                    (lines[index].get("values") or {}).get(anchor.column),
+                    anchor.value,
+                )
+            ), None)
+            if match_key is not None:
+                matched += 1
+                consumed.add(match_key)
+                continue
+            label = cell.raw_code or cell.code or cell.name_contains
+            misses.append(
+                f"cell missing in {group.context_contains}: {label} "
+                f"{cell.column}={cell.value}"
+            )
+
+    extras = sorted(predicted - consumed)
+    for index, column in extras[:10]:
+        line = lines[index]
+        label = line.get("raw_code") or line.get("name") or "unlabelled"
+        value = (line.get("values") or {}).get(column)
+        misses.append(f"unexpected cell: {label} {column}={value}")
+    if len(extras) > 10:
+        misses.append(f"unexpected cells: {len(extras) - 10} more")
+    return matched, expected, len(predicted), misses
+
+
 def evaluate_fixture(fixture: Fixture, payload: dict | None) -> FixtureResult:
-    r = FixtureResult(fixture_id=fixture.id, layout=fixture.layout, status="missing")
+    r = FixtureResult(
+        fixture_id=fixture.id,
+        layout=fixture.layout,
+        status="missing",
+        cell_ground_truth=bool(fixture.cell_ground_truth),
+    )
     if payload is None:
         return r
     r.status = "evaluated"
@@ -189,7 +297,35 @@ def evaluate_fixture(fixture: Fixture, payload: dict | None) -> FixtureResult:
             r.text_matched += 1
         else:
             r.misses.append(f"text missing: {needle!r}")
+
+    if fixture.cell_ground_truth:
+        matched, expected, predicted, misses = check_cell_ground_truth(
+            payload, fixture.cell_ground_truth
+        )
+        r.cells_matched = matched
+        r.cells_expected = expected
+        r.cells_predicted = predicted
+        r.misses.extend(misses)
     return r
+
+
+def _source_grid_payload(fixtures_dir: Path, fixture: Fixture) -> dict | None:
+    if fixture.source_grid is None:
+        return None
+    source_path = fixtures_dir / fixture.source_grid
+    source = json.loads(source_path.read_text())
+    grid = source.get("grid") if isinstance(source, dict) else source
+    if not isinstance(grid, list):
+        raise ValueError(f"invalid source grid in {source_path}")
+    from .extract.scanned import map_payload
+
+    return map_payload({
+        "tables_raw": [grid],
+        "text": source.get("text") if isinstance(source, dict) else None,
+        "rotation_applied": source.get("rotation_applied", 0)
+        if isinstance(source, dict) else 0,
+        "confidence_grade": "fixture",
+    })
 
 
 def evaluate_all(
@@ -211,6 +347,8 @@ def evaluate_all(
             if stage == "extract":
                 # same precedence as assembly: full-page LLM extraction wins
                 payload = store.get("llm_extract", fixture.page) or payload
+        if payload is None and stage == "extract":
+            payload = _source_grid_payload(fixtures_dir, fixture)
         results.append(evaluate_fixture(fixture, payload))
     return results
 
@@ -224,6 +362,10 @@ def summarize_by_layout(results: list[FixtureResult]) -> dict[str, dict]:
                 "fixtures": 0, "missing": 0,
                 "anchors_total": 0, "anchors_matched": 0,
                 "text_total": 0, "text_matched": 0,
+                "cell_ground_truth_fixtures": 0,
+                "cell_ground_truth_evaluated": 0,
+                "cells_expected": 0, "cells_matched": 0,
+                "cells_predicted": 0,
             },
         )
         agg["fixtures"] += 1
@@ -233,6 +375,23 @@ def summarize_by_layout(results: list[FixtureResult]) -> dict[str, dict]:
         agg["anchors_matched"] += r.anchors_matched
         agg["text_total"] += r.text_total
         agg["text_matched"] += r.text_matched
+        agg["cell_ground_truth_fixtures"] += int(r.cell_ground_truth)
+        agg["cell_ground_truth_evaluated"] += int(
+            r.cell_ground_truth and r.status == "evaluated"
+        )
+        agg["cells_expected"] += r.cells_expected
+        agg["cells_matched"] += r.cells_matched
+        agg["cells_predicted"] += r.cells_predicted
+    for agg in out.values():
+        expected = agg["cells_expected"]
+        predicted = agg["cells_predicted"]
+        agg["cell_recall_pct"] = (
+            round(100 * agg["cells_matched"] / expected, 2) if expected else None
+        )
+        agg["cell_precision_pct"] = (
+            round(100 * agg["cells_matched"] / predicted, 2)
+            if predicted else (0.0 if expected else None)
+        )
     return out
 
 
@@ -246,10 +405,15 @@ def evaluation_report(results: list[FixtureResult]) -> dict:
     text_matched = sum(r.text_matched for r in evaluated)
     hard_total = sum(r.hard_total for r in evaluated)
     hard_matched = sum(r.hard_matched for r in evaluated)
+    exhaustive = [r for r in evaluated if r.cell_ground_truth]
+    cells_expected = sum(r.cells_expected for r in exhaustive)
+    cells_matched = sum(r.cells_matched for r in exhaustive)
+    cells_predicted = sum(r.cells_predicted for r in exhaustive)
     return {
         "schema_version": EVAL_SCHEMA_VERSION,
         "metric": EVAL_METRIC,
         "full_cell_recall_measured": False,
+        "cell_metric_scope": "exhaustive groups on explicitly inventoried fixture pages",
         "fixtures": {
             "total": len(results),
             "evaluated": len(evaluated),
@@ -269,6 +433,19 @@ def evaluation_report(results: list[FixtureResult]) -> dict:
             "matched": text_matched,
             "total": text_total,
             "pct": round(100 * text_matched / text_total, 2) if text_total else 0.0,
+        },
+        "validated_cell_recall": {
+            "fixtures": len(exhaustive),
+            "matched": cells_matched,
+            "total": cells_expected,
+            "pct": round(100 * cells_matched / cells_expected, 2)
+            if cells_expected else None,
+        },
+        "numeric_cell_precision_against_ground_truth": {
+            "correct": cells_matched,
+            "predicted": cells_predicted,
+            "pct": round(100 * cells_matched / cells_predicted, 2)
+            if cells_predicted else (0.0 if cells_expected else None),
         },
         "by_layout": by_layout,
         "results": [result.model_dump(mode="json") for result in results],

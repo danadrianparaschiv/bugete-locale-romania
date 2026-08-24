@@ -216,6 +216,11 @@ def _guess_layout(lines: list[dict], text: str) -> str:
         if "hotarare" in t or "consiliul local" in t:
             return "hcl_prose"
         return "unknown"
+    if any(
+        re.search(r"\b(?:liceul|colegiul|scoala|gradinita)\b", fold(ln.get("section") or ""))
+        for ln in lines
+    ):
+        return "scan_institution_budget"
     if ALLOC_HINT.search(fold(text or "")):
         return "allocations_annex"
     if "total_general" in cols:

@@ -1,12 +1,14 @@
 """Unit tests for assembly and validation on synthetic payloads, plus an
 integration test over the real digital PDF (skipped when absent)."""
 
+import json
 from pathlib import Path
 
 import pytest
 
 from bgconvertor.assemble import assemble
 from bgconvertor.config import RunConfig
+from bgconvertor.extract.scanned import map_payload
 from bgconvertor.model import ConversionResult
 from bgconvertor.nomenclator import load_registry
 from bgconvertor.runstore import RunStore
@@ -146,6 +148,37 @@ def test_validate_v5_identity(tmp_path, registry):
     validate(result, registry)
     v5 = [i for i in result.all_issues() if i.check == "V5_identity"]
     assert any(i.code == "00.02" for i in v5)
+
+
+def test_institution_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p301.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 301, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [301], registry),
+        pages_expected=333,
+        pages_selected=[301],
+        pages_processed=[301],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert sum(len(line.values) for doc in result.documents for line in doc.lines) == 51
+    assert stats["numeric_cells"] == 51
+    assert stats["numeric_cells_strictly_verified"] == 51
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+    assert all(
+        line.kind == "heading"
+        for doc in result.documents for line in doc.lines
+        if line.raw_code == "96"
+    )
 
 
 def test_integration_ab_pdf_fully_clean(ab_pdf, reference_dir):

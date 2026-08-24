@@ -763,25 +763,46 @@ def eval_cmd(
     min_text_assertions: int = typer.Option(
         0, help="Iese cu cod 1 dacă aserțiunile text potrivite scad sub prag"
     ),
+    require_cell_ground_truth: int = typer.Option(
+        0, help="Număr minim de fixture-uri cu inventar numeric exhaustiv evaluate"
+    ),
+    min_layout_cell_recall: float = typer.Option(
+        0.0, min=0.0, max=100.0,
+        help="Recall numeric minim pentru fiecare layout cu etalon exhaustiv",
+    ),
+    min_layout_cell_precision: float = typer.Option(
+        0.0, min=0.0, max=100.0,
+        help="Precizie numerică minimă pentru fiecare layout cu etalon exhaustiv",
+    ),
     json_out: Path | None = typer.Option(None, help="Raport JSON machine-readable"),
 ):
-    """Recall pe ancore selectate manual; nu este recall complet pe celule."""
+    """Ancore selectate plus recall/precizie pe etaloanele exhaustive disponibile."""
     from . import eval_harness
 
     config = _config()
     results = eval_harness.evaluate_all(config, fixtures, Path.cwd(), stage=stage)
 
     table = Table(title=f"eval vs golden fixtures (stage: {stage})")
-    for col in ("fixture", "layout", "status", "anchors", "hard", "text"):
+    for col in (
+        "fixture", "layout", "status", "anchors", "hard", "text",
+        "cell recall", "cell precision",
+    ):
         table.add_column(col)
     for r in results:
         anchors = f"{r.anchors_matched}/{r.anchors_total}" if r.anchors_total else "-"
         hard = f"{r.hard_matched}/{r.hard_total}" if r.hard_total else "-"
         text = f"{r.text_matched}/{r.text_total}" if r.text_total else "-"
+        cell_recall = f"{r.cells_matched}/{r.cells_expected}" if r.cells_expected else "-"
+        cell_precision = (
+            f"{r.cells_matched}/{r.cells_predicted}" if r.cells_predicted else "-"
+        )
         style = "dim" if r.status == "missing" else (
             "green" if not r.misses else "yellow"
         )
-        table.add_row(r.fixture_id, r.layout, r.status, anchors, hard, text, style=style)
+        table.add_row(
+            r.fixture_id, r.layout, r.status, anchors, hard, text,
+            cell_recall, cell_precision, style=style,
+        )
     console.print(table)
 
     for r in results:
@@ -792,14 +813,23 @@ def eval_cmd(
     total = report["anchors"]["total"]
     matched = report["anchors"]["matched"]
     evaluated = report["fixtures"]["evaluated"]
+    cell_recall = report["validated_cell_recall"]
+    cell_precision = report["numeric_cell_precision_against_ground_truth"]
     console.print(
         f"\n[bold]{matched}/{total}[/bold] ancore selectate potrivite · "
         f"{report['text_assertions']['matched']}/{report['text_assertions']['total']} "
         f"asertiuni text · {evaluated}/{len(results)} fixture-uri evaluate"
     )
+    if cell_recall["fixtures"]:
+        console.print(
+            f"[bold]{cell_recall['matched']}/{cell_recall['total']}[/bold] celule "
+            f"exhaustive regăsite ({cell_recall['pct']}%) · "
+            f"[bold]{cell_precision['correct']}/{cell_precision['predicted']}[/bold] "
+            f"precizie față de etalon ({cell_precision['pct']}%)"
+        )
     console.print(
-        "[dim]metrica: selected_anchor_recall; nu măsoară celulele/rândurile "
-        "absente din fixture-uri[/dim]"
+        "[dim]selected_anchor_recall rămâne o poartă parțială; metricile pe celule "
+        "se aplică numai grupurilor inventariate exhaustiv, nu întregului corpus[/dim]"
     )
     if json_out is not None:
         json_out.parent.mkdir(parents=True, exist_ok=True)
@@ -809,6 +839,11 @@ def eval_cmd(
         matched < total
         or report["text_assertions"]["matched"] < report["text_assertions"]["total"]
         or evaluated < len(results)
+        or any(
+            r.cell_ground_truth
+            and (r.cells_matched < r.cells_expected or r.cells_matched < r.cells_predicted)
+            for r in results
+        )
     ):
         raise typer.Exit(1)
     if min_anchors and matched < min_anchors:
@@ -821,6 +856,30 @@ def eval_cmd(
             f"{min_text_assertions}[/red]"
         )
         raise typer.Exit(1)
+    cell_fixtures = cell_recall["fixtures"]
+    if require_cell_ground_truth and cell_fixtures < require_cell_ground_truth:
+        console.print(
+            f"[red]acoperire insuficientă: {cell_fixtures} fixture-uri exhaustive "
+            f"evaluate < pragul de {require_cell_ground_truth}[/red]"
+        )
+        raise typer.Exit(1)
+    for layout, metrics in report["by_layout"].items():
+        if not metrics["cell_ground_truth_evaluated"]:
+            continue
+        recall = metrics["cell_recall_pct"]
+        precision = metrics["cell_precision_pct"]
+        if min_layout_cell_recall and recall < min_layout_cell_recall:
+            console.print(
+                f"[red]recall numeric {layout}: {recall}% < "
+                f"{min_layout_cell_recall}%[/red]"
+            )
+            raise typer.Exit(1)
+        if min_layout_cell_precision and precision < min_layout_cell_precision:
+            console.print(
+                f"[red]precizie numerică {layout}: {precision}% < "
+                f"{min_layout_cell_precision}%[/red]"
+            )
+            raise typer.Exit(1)
 
 
 @app.command()

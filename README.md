@@ -158,7 +158,7 @@ cu `bgconvertor eval`. Ghidul complet este în
 
 ```bash
 uv run pytest            # suită de teste offline (testele LLM redau casete înregistrate)
-uv run bgconvertor eval  # recall pe ancore selectate, nu recall complet pe celule
+uv run bgconvertor eval  # ancore + recall/precizie în scope-urile exhaustive
 uv run bgconvertor corpus audit data --strict --require-modern  # poarta de release
 ```
 

@@ -4,6 +4,9 @@ These are distilled OCR text grids from real corpus pages — the CI-safe
 counterpart of the golden-fixture eval (which needs the sample PDFs).
 """
 
+import json
+from pathlib import Path
+
 from bgconvertor.layouts import map_grid
 from bgconvertor.layouts.matrix import try_map as matrix_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
@@ -114,3 +117,28 @@ def test_transposed_rejects_normal_tables():
     ]
     assert transposed_try(grid) is None
     assert matrix_try(grid) is None
+
+
+def test_institution_budget_recovers_collapsed_code_value_streams():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p301.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+    numeric = [line for line in lines if line["values"]]
+
+    assert len(numeric) == 51
+    assert len({line["section"].split(" — ")[0] for line in numeric}) == 3
+    assert next(
+        line for line in numeric
+        if "Stiinte Aplicate" in line["section"] and line["raw_code"] == "20.01"
+    )["values"]["buget_2026"] == "68.00"
+    assert next(
+        line for line in numeric
+        if "Francisc Neuman" in line["section"] and line["raw_code"] == "01"
+    )["values"]["buget_2026"] == "458.00"
+    assert all(line["code"] is None for line in numeric if line["raw_code"] == "96")
+    assert all(
+        line["func_code"] == "65.10"
+        for line in numeric
+        if line["raw_code"] in {"01", "20", "90", "93.01", "93.01.96"}
+    )
+    assert not any(line.get("cell_issues") for line in numeric)

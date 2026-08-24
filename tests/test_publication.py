@@ -70,6 +70,19 @@ def test_quality_metric_is_strict_and_does_not_claim_recall():
     assert stats["scope"]["complete_pdf"] is True
 
 
+def test_numeric_quality_counts_exported_values_on_marker_rows():
+    result = _result()
+    result.documents[0].lines.insert(0, BudgetLine(
+        raw_code="*", code=None, name="TOTAL VENITURI", kind="heading", page=1,
+        values={"total": Decimal("150")},
+    ))
+    stats = result.stats()
+    assert stats["quality_schema_version"] == 2
+    assert stats["lines"] == 2
+    assert stats["numeric_cells"] == 4
+    assert stats["numeric_cells_strictly_verified"] == 3
+
+
 def test_publish_writes_one_hashed_bundle_and_audit_accepts_it(tmp_path):
     data, pdf, manifest = _tree(tmp_path)
     workbook = pdf.with_suffix(".xlsx")

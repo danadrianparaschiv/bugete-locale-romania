@@ -15,14 +15,18 @@ fișier. Acest document separă ținta de ceea ce poate măsura astăzi pipeline
 2. **`selected_anchor_recall`** este procentul ancorelor alese manual din
    fixture-urile golden care au fost regăsite de extracție. Este o poartă de
    regresie pe cazuri cunoscute, nu recall complet pe pagină sau fișier.
-3. **`validated_cell_recall`** este metrica-țintă: celule numerice corecte și
-   suficient demonstrate / toate celulele numerice așteptate din etalon. Nu
-   poate fi calculată până când etaloanele nu inventariază toate rândurile și
-   celulele, nu doar ancore selectate.
+3. **`validated_cell_recall`** este metrica-țintă: celule numerice corecte /
+   toate celulele numerice așteptate dintr-un etalon exhaustiv. Schema 2 a
+   raportului `eval` o calculează numai pentru grupurile de pagină ale căror
+   celule au fost inventariate integral. Restul fixture-urilor rămân explicit
+   la nivel de ancore selectate; raportul nu extrapolează rezultatul la fișier
+   sau corpus.
 
 Prin urmare, o conversie cu `pct_lines_strictly_verified = 95` nu afirmă că
 95% din PDF a fost convertit. Rândurile, celulele sau paginile omise nu intră
-în acel procent. Câmpul machine-readable `recall_measured` rămâne `false`.
+în acel procent. Câmpul public machine-readable `recall_measured` și câmpul
+`full_cell_recall_measured` din eval rămân `false` până la acoperirea
+exhaustivă a întregului scope afirmat.
 
 `quality.scope` publică separat:
 
@@ -43,6 +47,11 @@ problemă de validare, indiferent de severitate. Coloanele
 Analizele implicite folosesc numai aceste linii strict verificate. Problemele
 de tip `info` (de exemplu o transcriere fără demonstrație independentă) nu mai
 sunt promovate drept verificate.
+
+Schema de calitate 2 numără la `numeric_cells` toate valorile numerice
+exportate, inclusiv totalurile și markerii de secțiune fără cod normalizat.
+Aceștia rămân `heading` pentru a nu fi confundați cu o clasificație în
+analize, dar nu mai dispar din numitorul de calitate al Excelului.
 
 ## Bundle public atomic și auditabil
 
@@ -148,6 +157,60 @@ Evaluarea locală disponibilă după migrare găsește 114/131 ancore numerice
 pe toate celulele sau toate familiile. Extinderea etaloanelor și corectarea
 celor 17 ancore numerice și a aserțiunii text lipsă rămân lucrări de calitate
 ulterioare P0.
+
+## P1 — primul scope de layout măsurat exhaustiv
+
+Prima tranșă P1 din 25 august 2026 acoperă `scan_institution_budget`, cazul
+Arad pagina 301. Pagina conține trei blocuri complete de instituții și un
+fragment al instituției precedente; etalonul declară explicit ca scope numai
+cele trei blocuri complete. Au fost inventariate manual toate cele 51 de
+celule numerice din acest scope și a fost comisă o grilă OCR de regresie care
+reproduce deplasările de rând și limitele de instituție. Astfel, familia poate
+fi verificată în CI fără PDF procesat, cache local, rețea sau cheie API.
+
+Mapperul determinist nou:
+
+- segmentează instituțiile și aliniază fluxurile ordonate cod/valoare numai
+  când numărul lor se potrivește exact; altfel refuză închis și lasă mapperul
+  generic să preia cazul;
+- păstrează codul tipărit `96` ca marker, nu îl transformă greșit în capitolul
+  `96.02`;
+- atașează codurile economice capitolului `65.10` și izolează semantic
+  blocul excedent/deficit, astfel încât analizele și verificarea ierarhică să
+  nu amestece deficitul cu totalul cheltuielilor.
+
+Rezultatul măsurat pe grila comisă și pe cache-ul OCR real este:
+
+| Metrică | Înainte | După P1 |
+|---|---:|---:|
+| Ancore selectate `ar_p301` | 5/15 | 15/15 |
+| `validated_cell_recall`, scope exhaustiv declarat | nemăsurat | 51/51 (100%) |
+| Precizie numerică față de același etalon | nemăsurată | 51/51 (100%) |
+| Excel final: celule numerice strict verificate | nemăsurat | 51/51 (100%) |
+| Probleme de validare în Excelul de probă | nemăsurat | 0 erori + 0 avertismente |
+| Cost API incremental | 0 USD | 0 USD |
+
+După remaparea tuturor celor 14 pagini-fixture din cache, scorul global al
+ancorelor selectate este 124/131 (94,66%), față de 114/131 în P0, iar textul
+rămâne 22/23 (95,65%). Acest procent global nu este un substitut pentru recall
+pe celule: numai `scan_institution_budget` are deocamdată un etalon exhaustiv.
+Rămân șapte ancore numerice și o aserțiune text neîndeplinite în fixture-urile
+parțiale, iar `eval --strict` continuă intenționat să eșueze.
+
+Poarta reproductibilă P1 este:
+
+```bash
+uv run bgconvertor eval \
+  --require-cell-ground-truth 1 \
+  --min-layout-cell-recall 90 \
+  --min-layout-cell-precision 99.5 \
+  --json-out eval-report.json
+```
+
+CI adaugă pragurile anti-regresie de 45 ancore și 7 aserțiuni text, calculate
+din familia digitală Alba Iulia și grila exhaustivă de instituții. Următoarele
+tranșe P1 trebuie să inventarieze exhaustiv celelalte familii înainte ca
+proiectul să afirme ≥90% pentru toate tipurile suportate.
 
 ## Porți propuse pentru ținta de 90%
 

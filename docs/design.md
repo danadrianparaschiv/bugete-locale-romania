@@ -108,6 +108,8 @@ atunci când sunt disponibile bounding box-uri.
   aur — OCR-ul citea deja prin ștampilele din corpus; livrat dezactivat
   implicit.
 
-Harness-ul de evaluare (ancore de aur verificate manual pentru fiecare
-familie de machete, `bgconvertor eval`) este ceea ce face astfel de decizii
-ieftine: ipotezele primesc cifre, nu opinii.
+Harness-ul de evaluare combină ancore de aur pentru toate familiile cu
+inventare exhaustive de celule pentru familiile migrate în P1
+(`bgconvertor eval`). Raportează separat recall și precizie numai în scope-urile
+inventariate integral; astfel ipotezele primesc cifre fără ca un eșantion să
+fie prezentat drept acoperire completă.
