@@ -66,7 +66,27 @@
 liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
 {% endif %}
 
-{# ---- planul aprobat și execuția, ca vizualizări separate ---- #}
+<h2 style="font-size:1.1rem;margin-top:1.8rem">Calitatea conversiei</h2>
+<table>
+  <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
+  <tr><td>Linii de date</td><td class="num">{{ a.quality.lines }}</td></tr>
+  <tr><td>Complet verificate</td><td class="num">{{ a.quality.pct_clean }}%</td></tr>
+  <tr><td>Erori marcate</td><td class="num">{{ a.quality.errors }}</td></tr>
+  <tr><td>Avertismente</td><td class="num">{{ a.quality.warnings }}</td></tr>
+  {% if a.llm_models %}
+  <tr><td>Modele LLM folosite</td><td class="num">{{ a.llm_models | join(", ") }}</td></tr>
+  {% endif %}
+</table>
+<p class="note" style="border:none;padding:0;margin-top:.5rem">Se referă la bugetul
+aprobat, extras din PDF. Cifrele de execuție vin structurate din Forexebug și nu trec
+prin conversie.</p>
+
+<p style="margin-top:1.25rem">
+  {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
+  {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
+</p>
+
+{# ---- planul aprobat și execuția, ca vizualizări separate; secțiunea finală ---- #}
 {% set ex = city.executie %}
 {% set by_q = {} %}
 {% if ex %}{% for t in ex.trimestre %}{% set _ = by_q.update({t.trimestru: t}) %}{% endfor %}{% endif %}
@@ -82,7 +102,11 @@ liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu da
           {% if 4 not in by_q %}data-empty="1"{% endif %}>{{ year }}</button>
 </div>
 
+{% set has_plan = a.totals_mii_lei.venituri or a.totals_mii_lei.cheltuieli
+                  or a.infografic or a.top_capitole %}
 <section role="tabpanel" id="panel-buget" aria-labelledby="tab-buget">
+  {% if a.totals_mii_lei.venituri or a.totals_mii_lei.cheltuieli
+        or (a.infografic and a.infografic.sectiuni) %}
   <div class="cards">
     {% if a.totals_mii_lei.venituri %}
     <div class="card"><div class="k">Venituri planificate (mii lei)</div>
@@ -98,8 +122,24 @@ liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu da
         <span style="font-size:1rem;color:var(--dim)">/ {{ mii(a.infografic.sectiuni.dezvoltare / 1000) }} mil.</span></div></div>
     {% endif %}
   </div>
+  {% endif %}
+
+  {% if has_plan %}
   <p class="note" style="border:none;padding:0;margin:0 0 1rem">Bugetul aprobat prin
   hotărâre de consiliu local — ce și-a propus orașul să încaseze și să cheltuiască.</p>
+  {% else %}
+  <div class="ig-card">
+    <p style="margin:0">Din bugetul aprobat al acestui oraș nu s-au putut extrage
+    totaluri și capitole verificabile: PDF-ul publicat de primărie este o scanare
+    din care doar {{ a.quality.pct_clean }}% dintre linii trec verificarea aritmetică
+    și de nomenclator. Cifre pe care nu le putem confirma nu se afișează.</p>
+    <p class="note" style="border:none;padding:0;margin:.6rem 0 0">Fișierul convertit
+    integral — cu tot ce s-a putut citi, marcat linie cu linie — este în
+    {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Excel-ul de mai sus</a>{% else %}fișierele de mai sus{% endif %}.
+    {% if ex %}Execuția bugetară, în celelalte vizualizări, vine structurată din
+    Forexebug și nu depinde de această conversie.{% endif %}</p>
+  </div>
+  {% endif %}
 
   {% if a.infografic %}
   {% if a.infografic.venituri %}
@@ -249,26 +289,6 @@ liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu da
   </tbody>
 </table>
 {% endif %}
-
-<h2 style="font-size:1.1rem;margin-top:1.8rem">Calitatea conversiei</h2>
-<table>
-  <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
-  <tr><td>Linii de date</td><td class="num">{{ a.quality.lines }}</td></tr>
-  <tr><td>Complet verificate</td><td class="num">{{ a.quality.pct_clean }}%</td></tr>
-  <tr><td>Erori marcate</td><td class="num">{{ a.quality.errors }}</td></tr>
-  <tr><td>Avertismente</td><td class="num">{{ a.quality.warnings }}</td></tr>
-  {% if a.llm_models %}
-  <tr><td>Modele LLM folosite</td><td class="num">{{ a.llm_models | join(", ") }}</td></tr>
-  {% endif %}
-</table>
-<p class="note" style="border:none;padding:0;margin-top:.5rem">Se referă la bugetul
-aprobat, extras din PDF. Cifrele de execuție vin structurate din Forexebug și nu trec
-prin conversie.</p>
-
-<p style="margin-top:1.25rem">
-  {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
-  {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
-</p>
 
 <script>
 (function () {

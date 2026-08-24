@@ -173,6 +173,28 @@ def test_city_page_has_one_tab_per_view(tmp_path):
     assert "Anul 2026 nu este încheiat" in page
     # empty quarters are dimmed, not hidden
     assert page.count('data-empty="1"') == 4  # T1, T3, T4 and the annual view
+    # the tabs close the page: nothing follows them inside the content block
+    assert page.index("Calitatea conversiei") < page.index("Bugetul și execuția lui")
+
+
+def test_budget_tab_explains_a_failed_conversion(tmp_path):
+    """No totals and no capitole: say why, instead of an empty panel."""
+    from bgconvertor.site import build_all
+
+    data = _corpus_with_execution(tmp_path, plan_venituri=None)
+    city = data / "2026" / "01-alba" / "1017-alba-iulia"
+    (city / "analysis.json").write_text(json.dumps({
+        "quality": {"lines": 500, "pct_clean": 57.3},
+        "totals_mii_lei": {"venituri": None, "cheltuieli": None},
+        "top_capitole": [],
+    }))
+    out = tmp_path / "site"
+    build_all(data, out, base_url="/repo")
+    page = (out / "city" / "1017.html").read_text()
+    assert "nu s-au putut extrage" in page and "57.3%" in page
+    assert "Execuția bugetară, în celelalte vizualizări" in page
+    # execution is unaffected by a poor PDF conversion
+    assert "Venituri încasate" in page
 
 
 def test_partial_plan_suppresses_share(tmp_path):
