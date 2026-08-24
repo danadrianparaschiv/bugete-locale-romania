@@ -1,0 +1,43 @@
+{
+  "quality": {
+    "lines": 431,
+    "pct_clean": 66.6,
+    "errors": 34,
+    "warnings": 146,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "ÎNVÃTĂMÂNT",
+      "total": 313831.85
+    },
+    {
+      "code": "70.02",
+      "name": "SERVICII SI DEZVOLTARE PUBLICÃ, LOCUINTE",
+      "total": 203033.61
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI EXECUTIVE",
+      "total": 83550.53
+    },
+    {
+      "code": "61.02",
+      "name": "APÄRARE,ORDINE PUBLICÃ,SIGURANTĂ NATIONALĂ",
+      "total": 17948.5
+    },
+    {
+      "code": "55.02",
+      "name": "DOBÂNZI",
+      "total": 2500.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

@@ -1,0 +1,19 @@
+{
+  "quality": {
+    "lines": 641,
+    "pct_clean": 42.9,
+    "errors": 403,
+    "warnings": 289,
+    "documents": 7
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

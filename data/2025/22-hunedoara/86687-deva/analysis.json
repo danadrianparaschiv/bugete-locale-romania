@@ -1,0 +1,63 @@
+{
+  "quality": {
+    "lines": 4859,
+    "pct_clean": 63.9,
+    "errors": 2321,
+    "warnings": 1329,
+    "documents": 30
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 428235.76,
+    "cheltuieli": 2551.48
+  },
+  "top_capitole": [
+    {
+      "code": "60.02",
+      "name": "A3. IMPOZITE SI TAXE PE PROPRIETATE(cOd 07.02)",
+      "total": 28179.25
+    },
+    {
+      "code": "60.10",
+      "name": "Subventii pentru instituti publice TOTAL CHELTUIELI (cod 50.10+59,10+6",
+      "total": 18048.28
+    },
+    {
+      "code": "66.02",
+      "name": "CAP. Sanatate",
+      "total": 5397.0
+    },
+    {
+      "code": "65.02",
+      "name": "CAP. Invatamant",
+      "total": 3591.01
+    },
+    {
+      "code": "65.10",
+      "name": "CAP. Invatamant",
+      "total": 1569.21
+    },
+    {
+      "code": "66.10",
+      "name": "CAP. Invatamant",
+      "total": 606.26
+    },
+    {
+      "code": "81.10",
+      "name": "DEFICIT",
+      "total": 197.59
+    },
+    {
+      "code": "01.10",
+      "name": "DEFICIT",
+      "total": 69.21
+    },
+    {
+      "code": "82.10",
+      "name": "TITLUL I CHELTUIELI DE PERSONAL",
+      "total": 24.03
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

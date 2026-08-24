@@ -1,0 +1,317 @@
+{
+  "quality": {
+    "lines": 829,
+    "pct_clean": 96.6,
+    "errors": 46,
+    "warnings": 58,
+    "documents": 1
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 358888.79
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 134383.9
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 92544.18
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 31049.41
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 30818.07
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+      "total": 18987.4
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 16359.72
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 14280.0
+    },
+    {
+      "code": "54.02",
+      "name": "ALTE SERVICII PUBLICE GENERALE",
+      "total": 7690.71
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 6130.0
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 4945.4
+    }
+  ],
+  "infografic": {
+    "unitate": "mii lei",
+    "capitole": [
+      {
+        "cod": "70.02",
+        "nume": "LOCUINTE, SERVICII SI DEZVOLTARE",
+        "val": 134383.9,
+        "copii": [
+          {
+            "nume": "Alte servicii in domeniile locuintelor, serviciilor si dezvoltarii com",
+            "val": 132093.9
+          },
+          {
+            "nume": "Iluminat public si electrificari",
+            "val": 2100.0
+          },
+          {
+            "nume": "Locuinte",
+            "val": 190.0
+          }
+        ],
+        "trim": [
+          25097.85,
+          39967.12,
+          37337.16,
+          31981.77
+        ]
+      },
+      {
+        "cod": "84.02",
+        "nume": "TRANSPORTURI",
+        "val": 92544.18,
+        "copii": [
+          {
+            "nume": "Transport rutier",
+            "val": 92544.18
+          }
+        ],
+        "trim": [
+          24940.57,
+          22806.28,
+          22656.28,
+          22141.05
+        ]
+      },
+      {
+        "cod": "68.02",
+        "nume": "ASIGURARI SI ASISTENTA SOCIALA",
+        "val": 31049.41,
+        "copii": [
+          {
+            "nume": "Asistenta sociala in caz de boli si invaliditati",
+            "val": 20652.0
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul asigurarilor si asistentei sociale",
+            "val": 5592.21
+          },
+          {
+            "nume": "Prevenirea excluderii sociale",
+            "val": 3220.8
+          },
+          {
+            "nume": "Asistenta sociala pentru familie si copii",
+            "val": 1584.4
+          }
+        ],
+        "trim": [
+          9907.05,
+          7925.39,
+          6937.89,
+          6279.08
+        ]
+      },
+      {
+        "cod": "65.02",
+        "nume": "INVATAMANT",
+        "val": 30818.07,
+        "copii": [
+          {
+            "nume": "Alte cheltuieli in domeniul invatamantului",
+            "val": 24509.96
+          },
+          {
+            "nume": "Invatamant secundar",
+            "val": 4447.4
+          },
+          {
+            "nume": "Invatamant prescolar si primar",
+            "val": 1048.21
+          },
+          {
+            "nume": "Servicii auxiliare pentru educatie",
+            "val": 576.0
+          },
+          {
+            "nume": "Invatamant anteprescolar",
+            "val": 122.5
+          },
+          {
+            "nume": "Invatamant postliceal",
+            "val": 114.0
+          }
+        ],
+        "trim": [
+          12164.47,
+          8485.84,
+          5674.92,
+          4492.84
+        ]
+      },
+      {
+        "cod": "51.02",
+        "nume": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+        "val": 18987.4,
+        "copii": [
+          {
+            "nume": "Autoritati executive si legislative",
+            "val": 18987.4
+          }
+        ],
+        "trim": [
+          5355.64,
+          5065.87,
+          4566.37,
+          3999.52
+        ]
+      },
+      {
+        "cod": "67.02",
+        "nume": "CULTURA, RECREERE SI RELIGIE",
+        "val": 16359.72,
+        "copii": [
+          {
+            "nume": "Servicii culturale",
+            "val": 2600.0
+          },
+          {
+            "nume": "Alte servicii in domenile culturii, recreeri si religiei",
+            "val": 1337.15
+          },
+          {
+            "nume": "Servicii religioase",
+            "val": 298.0
+          }
+        ],
+        "trim": [
+          5740.01,
+          6404.85,
+          2810.14,
+          1404.72
+        ]
+      },
+      {
+        "cod": "74.02",
+        "nume": "PROTECTIA MEDIULUI",
+        "val": 14280.0,
+        "copii": [
+          {
+            "nume": "Salubritate si gestiunea deseurilor",
+            "val": 14280.0
+          }
+        ],
+        "trim": [
+          4690.0,
+          3947.8,
+          3099.56,
+          2542.64
+        ]
+      },
+      {
+        "cod": "54.02",
+        "nume": "ALTE SERVICII PUBLICE GENERALE",
+        "val": 7690.71,
+        "copii": [
+          {
+            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
+            "val": 6330.11
+          },
+          {
+            "nume": "Servicii publice comunitare de evidenta a persoanelor",
+            "val": 1310.6
+          },
+          {
+            "nume": "Alte servicii publice generale",
+            "val": 50.0
+          }
+        ],
+        "trim": [
+          2556.5,
+          2596.3,
+          2250.31,
+          287.6
+        ]
+      },
+      {
+        "cod": "66.02",
+        "nume": "SANATATE",
+        "val": 6130.0,
+        "copii": [
+          {
+            "nume": "Servicii de sanatate publica",
+            "val": 6130.0
+          }
+        ],
+        "trim": [
+          1848.6,
+          1580.3,
+          1487.7,
+          1213.4
+        ]
+      },
+      {
+        "cod": "61.02",
+        "nume": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+        "val": 4945.4,
+        "copii": [
+          {
+            "nume": "Ordine publica",
+            "val": 4855.4
+          },
+          {
+            "nume": "Protectie civila si protectia contra incendiilor (protectie civila non",
+            "val": 90.0
+          }
+        ],
+        "trim": [
+          1406.53,
+          1329.5,
+          1172.9,
+          1036.47
+        ]
+      },
+      {
+        "cod": "55.02",
+        "nume": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+        "val": 1700.0,
+        "copii": [],
+        "trim": [
+          611.5,
+          492.5,
+          484.5,
+          111.5
+        ]
+      }
+    ],
+    "total_cheltuieli": 358888.79
+  },
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

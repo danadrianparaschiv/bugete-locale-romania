@@ -1,0 +1,25 @@
+{
+  "quality": {
+    "lines": 1181,
+    "pct_clean": 80.4,
+    "errors": 65,
+    "warnings": 277,
+    "documents": 2
+  },
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 575122.4
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
+      "total": 67622.9
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+}

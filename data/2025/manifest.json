@@ -385,7 +385,18 @@
       "path": "19-giurgiu/100521-giurgiu/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://primariagiurgiu.ro/storage/formidable/300/HCL-70-privind-aprobarea-Bugetului-local-de-venituri-si-cheltuieli-pe-anul-2025.pdf",
-      "record_url": "https://primariagiurgiu.ro/monitorul-oficial-local/documente-si-informatii-financiare/bugetul-din-toate-sursele-de-finantare/2025-bugetul-din-toate-sursele-de-finantare-hcl/"
+      "record_url": "https://primariagiurgiu.ro/monitorul-oficial-local/documente-si-informatii-financiare/bugetul-din-toate-sursele-de-finantare/2025-bugetul-din-toate-sursele-de-finantare-hcl/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T07:36:17",
+        "tool_version": "0.1.0",
+        "lines": 1199,
+        "pct_clean": 52.1,
+        "errors": 475,
+        "warnings": 745,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "20",
@@ -395,7 +406,18 @@
       "path": "20-gorj/77812-targu-jiu/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.targujiu.ro/dm_tgjiu/portal.nsf/atasament/F990F4AE8E0A54A6C2258C6E002D6E9C/$FILE/Buget%20initial.pdf",
-      "record_url": "https://www.targujiu.ro/"
+      "record_url": "https://www.targujiu.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T08:30:41",
+        "tool_version": "0.1.0",
+        "lines": 1494,
+        "pct_clean": 64.2,
+        "errors": 437,
+        "warnings": 670,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "21",
@@ -405,7 +427,12 @@
       "path": "21-harghita/83320-miercurea-ciuc/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://szereda.ro/files/documents/Hot%20nr%2074%20BVC.pdf",
-      "record_url": "https://szereda.ro/ro/buget"
+      "record_url": "https://szereda.ro/ro/buget",
+      "conversion": {
+        "status": "failed",
+        "error": "Loading weights: 100%|██████████| 770/770 [00:00<00:00, 8242.18it/s]",
+        "at": "2026-08-24T08:30:59"
+      }
     },
     {
       "county_code": "22",
@@ -415,7 +442,18 @@
       "path": "22-hunedoara/86687-deva/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariadeva.ro/images/uploads/documente/Buget_initial_2025.pdf",
-      "record_url": "https://www.primariadeva.ro/index.php/informatii_publice/buget"
+      "record_url": "https://www.primariadeva.ro/index.php/informatii_publice/buget",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T09:27:44",
+        "tool_version": "0.1.0",
+        "lines": 4859,
+        "pct_clean": 63.9,
+        "errors": 2321,
+        "warnings": 1329,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "23",
@@ -425,7 +463,18 @@
       "path": "23-ialomita/92658-slobozia/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://municipiulslobozia.ro/wp-content/uploads/documente/2025/buget/Anexa_2_RaportBuget_02A.pdf",
-      "record_url": "https://municipiulslobozia.ro/informatii-de-interes-public/surse-financiare-buget/"
+      "record_url": "https://municipiulslobozia.ro/informatii-de-interes-public/surse-financiare-buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T09:28:20",
+        "tool_version": "0.1.0",
+        "lines": 128,
+        "pct_clean": 81.2,
+        "errors": 18,
+        "warnings": 12,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "24",
@@ -436,7 +485,18 @@
       "document_status": "approved_initial",
       "source_url": "https://eportal.primaria-iasi.ro/dm_iasi/portal.nsf/atasament/8C0B5E21DAFDFFDBC2258C6D0031ED16/%24FILE/BUGET.pdf?Open=",
       "record_url": "https://www.primaria-iasi.ro/",
-      "notes": "Official publication containing the 2025 initial general and local budgets and the initial investment programme. Its cover carries an apparent 2023 clerical typo, while the package and budget tables explicitly identify 2025."
+      "notes": "Official publication containing the 2025 initial general and local budgets and the initial investment programme. Its cover carries an apparent 2023 clerical typo, while the package and budget tables explicitly identify 2025.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T10:06:42",
+        "tool_version": "0.1.0",
+        "lines": 1305,
+        "pct_clean": 74.9,
+        "errors": 220,
+        "warnings": 277,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "25",
@@ -446,7 +506,18 @@
       "path": "25-ilfov/179132-bucuresti/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://doc.pmb.ro/institutii/cgmb/buget/docs/2025/20251203/pdf/1.1.pdf",
-      "record_url": "https://www.pmb.ro/buget"
+      "record_url": "https://www.pmb.ro/buget",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T10:06:42",
+        "tool_version": "0.1.0",
+        "lines": 0,
+        "pct_clean": 0,
+        "errors": 0,
+        "warnings": 0,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "26",
@@ -456,7 +527,18 @@
       "path": "26-maramures/106318-baia-mare/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.baiamare.ro/Baiamare/Raportari%20financiare/An%202025/Bugetul_initial_local_cf_HCL_nr.84_din_24_martie_2025.pdf",
-      "record_url": "https://www.baiamare.ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2025/Bugetul-Municipiului-Baia-Mare-pe-anul-2025--aprobat-conform-HCL-84-din-24-martie-2025/"
+      "record_url": "https://www.baiamare.ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2025/Bugetul-Municipiului-Baia-Mare-pe-anul-2025--aprobat-conform-HCL-84-din-24-martie-2025/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T10:18:30",
+        "tool_version": "0.1.0",
+        "lines": 831,
+        "pct_clean": 78.9,
+        "errors": 93,
+        "warnings": 161,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "27",
@@ -480,7 +562,18 @@
       "path": "28-mures/114319-targu-mures/budget_file.pdf",
       "document_status": "official_proposal",
       "source_url": "https://www.tirgumures.ro/buget2025/Anexa%201%20Bugetul%20local%20-Venituri%20si%20cheltuieli.pdf",
-      "record_url": "https://www.tirgumures.ro/index.php?Itemid=585&id=9995&lang=ro&option=com_content&view=article"
+      "record_url": "https://www.tirgumures.ro/index.php?Itemid=585&id=9995&lang=ro&option=com_content&view=article",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T10:20:06",
+        "tool_version": "0.1.0",
+        "lines": 395,
+        "pct_clean": 99.2,
+        "errors": 2,
+        "warnings": 2,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "29",
@@ -490,7 +583,18 @@
       "path": "29-neamt/120726-piatra-neamt/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.primariapn.ro/documents/10179/5880209/buget_general_hcl_65_17_03_2025.pdf",
-      "record_url": "https://www.primariapn.ro/buget-local"
+      "record_url": "https://www.primariapn.ro/buget-local",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T10:30:49",
+        "tool_version": "0.1.0",
+        "lines": 1181,
+        "pct_clean": 80.4,
+        "errors": 65,
+        "warnings": 277,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "30",
@@ -501,7 +605,18 @@
       "document_status": "approved_initial",
       "source_url": "http://www.primariaslatina.ro/images/dispozitii/h_69_200325.pdf",
       "record_url": "https://www.primariaslatina.ro/hotarari_dispozitii_rezultate_repartizare_pag1.html",
-      "notes": "HCL 69/20.03.2025. The municipality currently serves this PDF over HTTP only."
+      "notes": "HCL 69/20.03.2025. The municipality currently serves this PDF over HTTP only.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T11:07:13",
+        "tool_version": "0.1.0",
+        "lines": 75,
+        "pct_clean": 89.3,
+        "errors": 10,
+        "warnings": 7,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "31",
@@ -511,7 +626,18 @@
       "path": "31-prahova/130534-ploiesti/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://ploiesti.ro/wp-content/uploads/hcl-pdf/HCL-2025-124-A.pdf",
-      "record_url": "https://ploiesti.ro/hotarari/hcl-124-2025/"
+      "record_url": "https://ploiesti.ro/hotarari/hcl-124-2025/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T11:45:39",
+        "tool_version": "0.1.0",
+        "lines": 641,
+        "pct_clean": 42.9,
+        "errors": 403,
+        "warnings": 289,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "32",
@@ -522,7 +648,12 @@
       "document_status": "official_presentation",
       "source_url": "https://www.primariasm.ro/storage/comunicare/ioana/raport/prezentare.pdf",
       "record_url": "https://www.primariasm.ro/hotararea-nr-6218032025",
-      "notes": "The adopted detailed annexes are published as spreadsheets; the official 2025 municipal budget presentation is used because this corpus is PDF-only."
+      "notes": "The adopted detailed annexes are published as spreadsheets; the official 2025 municipal budget presentation is used because this corpus is PDF-only.",
+      "conversion": {
+        "status": "failed",
+        "error": "no documents assembled — nothing to export",
+        "at": "2026-08-24T11:46:13"
+      }
     },
     {
       "county_code": "33",
@@ -532,7 +663,18 @@
       "path": "33-salaj/139704-zalau/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://www.zalausj.ro/ro/hotarari/2025/h107-2025.pdf",
-      "record_url": "https://www.zalausj.ro/ro/hotarari/2025/h107-2025.pdf"
+      "record_url": "https://www.zalausj.ro/ro/hotarari/2025/h107-2025.pdf",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T11:57:17",
+        "tool_version": "0.1.0",
+        "lines": 1135,
+        "pct_clean": 41.1,
+        "errors": 275,
+        "warnings": 576,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "34",
@@ -542,7 +684,18 @@
       "path": "34-sibiu/143450-sibiu/budget_file.pdf",
       "document_status": "approved_rectification",
       "source_url": "https://www.sibiu.ro/ro2/pdf/Bilant_executie/HCL_123_2025.pdf",
-      "record_url": "https://e-serviciielectronice.sibiu.ro/Registratura/DetaliuHCL?an=2025&nr=123"
+      "record_url": "https://e-serviciielectronice.sibiu.ro/Registratura/DetaliuHCL?an=2025&nr=123",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T11:59:36",
+        "tool_version": "0.1.0",
+        "lines": 431,
+        "pct_clean": 66.6,
+        "errors": 34,
+        "warnings": 146,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "35",
@@ -552,7 +705,18 @@
       "path": "35-suceava/146263-suceava/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://eportal.primariasv.ro/dm_suceava/site.nsf/CFD20831CE73724AC2258C850041EB4F/$FILE/Buget%20local%20HCL%20nr.%2091%20din%2030.04.2025.pdf",
-      "record_url": "https://www.primariasv.ro/dm_suceava/site.nsf/pagini/buget%2Blocal-000016E2"
+      "record_url": "https://www.primariasv.ro/dm_suceava/site.nsf/pagini/buget%2Blocal-000016E2",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:09:38",
+        "tool_version": "0.1.0",
+        "lines": 1682,
+        "pct_clean": 92,
+        "errors": 17,
+        "warnings": 128,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "36",
@@ -562,7 +726,18 @@
       "path": "36-teleorman/151790-alexandria/budget_file.pdf",
       "document_status": "approved_initial",
       "source_url": "https://alexandria.ro/storage/2025/04/buget-local-total.pdf",
-      "record_url": "https://alexandria.ro/buget-initial-2025/"
+      "record_url": "https://alexandria.ro/buget-initial-2025/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:10:36",
+        "tool_version": "0.1.0",
+        "lines": 829,
+        "pct_clean": 96.6,
+        "errors": 46,
+        "warnings": 58,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "37",
@@ -573,7 +748,18 @@
       "document_status": "approved_initial",
       "source_url": "https://assets.primariatm.ro/d37ffe33-fd52-469d-8a9e-d5043a9c9d90",
       "record_url": "https://www.primariatm.ro/hcl/2025/158",
-      "notes": "Anexa nr. 2 (buget local, sursa 02A) to HCL 158/2025."
+      "notes": "Anexa nr. 2 (buget local, sursa 02A) to HCL 158/2025.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "at": "2026-08-24T12:12:22",
+        "tool_version": "0.1.0",
+        "lines": 346,
+        "pct_clean": 79.8,
+        "errors": 33,
+        "warnings": 43,
+        "llm_preset": "google:gemini-3.6-flash"
+      }
     },
     {
       "county_code": "38",
