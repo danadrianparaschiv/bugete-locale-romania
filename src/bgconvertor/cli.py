@@ -897,6 +897,49 @@ def site_build(
         )
 
 
+exec_app = typer.Typer(no_args_is_help=True)
+app.add_typer(exec_app, name="execution", help="Execuția bugetară trimestrială (rapoarte Forexebug)")
+
+
+@exec_app.command("build")
+def execution_build(
+    exec_dir: Path = typer.Option(Path("data/execution/2026"), exists=True,
+                                  help="Rădăcina rapoartelor pentru un an"),
+    only: str | None = typer.Option(None, help="Filtrează după slug de oraș, ex. 1017-alba-iulia"),
+):
+    """Parsează rapoartele Forexebug și scrie execution.json lângă ele.
+
+    Valorile se normalizează în mii lei; totalurile tipărite în raport sunt
+    suma de control. Codurile pe care nomenclatorul nu le enumeră sunt
+    numărate, nu inventate.
+    """
+    from .execution import build_city, write_snapshot
+    from .nomenclator import load_registry
+
+    config = _config()
+    registry = load_registry(config.reference_dir)
+    counties = sorted(d for d in exec_dir.iterdir() if d.is_dir() and "-" in d.name)
+    written = problems = 0
+    for county in counties:
+        for city in sorted(d for d in county.iterdir() if d.is_dir()):
+            if only and only not in city.name:
+                continue
+            snap = build_city(exec_dir, county.name, city.name, registry)
+            if not snap:
+                continue
+            write_snapshot(snap, city / "execution.json")
+            written += 1
+            problems += bool(snap["probleme"])
+            console.print(
+                f"  {city.name:32s} T{snap['trimestru']} · "
+                f"ven {snap['venituri']:>11,.0f} · chelt {snap['cheltuieli']:>11,.0f}"
+                + (f" [yellow]⚠ {'; '.join(snap['probleme'])[:60]}[/yellow]"
+                   if snap["probleme"] else "")
+            )
+    console.print(f"[bold green]✓ execuție: {written} orase[/bold green]"
+                  + (f" [yellow]({problems} cu probleme)[/yellow]" if problems else ""))
+
+
 corpus_app = typer.Typer(no_args_is_help=True)
 app.add_typer(corpus_app, name="corpus", help="Set de date și raport la nivelul tuturor municipalităților")
 
