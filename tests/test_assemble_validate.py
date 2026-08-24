@@ -215,6 +215,40 @@ def test_collapsed_annual_grid_survives_assembly_and_validation(tmp_path, regist
     assert line.name.startswith("Colectarea")
 
 
+def test_collapsed_detail_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p041.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 41, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [41], registry),
+        pages_expected=236,
+        pages_selected=[41],
+        pages_processed=[41],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 245
+    assert stats["numeric_cells_strictly_verified"] == 245
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    line = next(
+        line
+        for doc in result.documents
+        for line in doc.lines
+        if line.raw_code == "200103"
+    )
+    assert str(line.values["total_2026"]) == "52.00"
+    assert line.func_code == "68.02.05.02"
+
+
 def test_integration_ab_pdf_fully_clean(ab_pdf, reference_dir):
     """The real digital file must stay 100% clean — the Phase 1 quality bar."""
     import pdfplumber

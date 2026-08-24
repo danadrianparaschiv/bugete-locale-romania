@@ -10,6 +10,7 @@ from pathlib import Path
 
 from bgconvertor.layouts import map_grid
 from bgconvertor.layouts.collapsed import try_map as collapsed_try
+from bgconvertor.layouts.collapsed_detail import try_map as collapsed_detail_try
 from bgconvertor.layouts.matrix import try_map as matrix_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
 
@@ -183,3 +184,39 @@ def test_source_audited_repairs_require_the_exact_page_fingerprint():
     idx = _by_code(lines)
     assert idx["74020502"]["values"]["total_2026"] == "272"
     assert "66025050" not in idx
+
+
+def test_economic_detail_recovers_stamp_collapsed_ordered_streams():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p041.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+
+    assert len(lines) == 50
+    assert sum(bool(line["values"]) for line in lines) == 49
+    assert sum(len(line["values"]) for line in lines) == 245
+    assert not any(line.get("cell_issues") for line in lines)
+    assert next(line for line in lines if line["raw_code"] == "200103")["values"][
+        "total_2026"
+    ] == "52.00"
+    assert next(line for line in lines if line["raw_code"] == "200108")["name"].startswith(
+        "Posta"
+    )
+    stamped = [line for line in lines if line["raw_code"] == "5940"]
+    assert len(stamped) == 2
+    assert "invaliditate" in stamped[1]["section"]
+    assert all(
+        line["code"] is None
+        for line in lines
+        if line["raw_code"] in {"D", "F", "01F"}
+    )
+
+
+def test_collapsed_detail_mapper_fails_closed_on_count_or_fingerprint_change():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p041.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[27][2] += " 1,00"
+    assert collapsed_detail_try(grid) is None
+
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[-1][1] = "710130"
+    assert collapsed_detail_try(grid) is None

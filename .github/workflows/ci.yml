@@ -29,13 +29,14 @@ jobs:
         run: uv run pytest -q
       - name: golden-fixture eval — digital + exhaustive scanned-layout gates
         # Alba Iulia is extracted from its PDF. Committed Arad/Pitesti OCR
-        # grids exhaustively gate 51 institution cells and all 216 cells in a
-        # stamp-collapsed annual-estimate table, fully offline.
+        # grids exhaustively gate 51 institution cells, all 216 cells in a
+        # stamp-collapsed annual table, and all 245 cells in a collapsed
+        # economic-detail table, fully offline.
         run: >-
           uv run bgconvertor eval
-          --min-anchors 62
-          --min-text-assertions 9
-          --require-cell-ground-truth 2
+          --min-anchors 75
+          --min-text-assertions 10
+          --require-cell-ground-truth 3
           --min-layout-cell-recall 90
           --min-layout-cell-precision 99.5
           --json-out eval-report.json

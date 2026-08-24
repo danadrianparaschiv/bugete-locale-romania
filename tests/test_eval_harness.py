@@ -38,6 +38,13 @@ def test_all_committed_fixtures_are_valid():
         for row in group.rows
     ) == 216
     assert pitesti.source_grid
+    pitesti_detail = next(f for f in fixtures if f.id == "ag_p041")
+    assert sum(
+        len(row.values)
+        for group in pitesti_detail.cell_ground_truth
+        for row in group.rows
+    ) == 245
+    assert pitesti_detail.source_grid
     # hazard coverage for the hard cases
     all_hazards = {h for f in fixtures for h in f.hazards}
     assert "rotated_90_in_image" in all_hazards

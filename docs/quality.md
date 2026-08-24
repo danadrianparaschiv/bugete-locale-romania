@@ -221,11 +221,44 @@ Workbook-ul final a fost inspectat valoric și randat integral: cele 216 de
 valori ajung ca numere în foaia de date, foaia `Probleme` este goală, sumarul
 raportează 100%, iar scanarea nu găsește erori de formule.
 
+### `scan_detail_economic`: Pitești, pagina 41
+
+A treia tranșă P1 acoperă integral tabelul de detaliu economic de pe Pitești
+pagina 41: 49 de rânduri numerice și cinci coloane valorice, adică 245 de
+celule inventariate manual. OCR-ul păstrează numărul exact de valori pe fiecare
+coloană, dar unește perechi de numere, deformează separatorii și pierde un rând
+logic din reprezentarea generică. Grila OCR brută este comisă ca fixture de
+regresie, astfel încât cazul se execută offline și reproductibil în CI.
+
+Mapperul determinist verifică antetul, numărul de rânduri și amprenta completă
+a fluxului de coduri înainte de a alinia cele cinci fluxuri valorice. Orice
+abatere de număr sau de amprentă îl face să refuze închis. Corecțiile celor două
+coduri degradate de OCR se aplică numai acestei amprente, după verificarea
+randării PDF la 400 DPI. Markerii tipăriți `D`, `F` și `01F` rămân markeri, iar
+rândurile de subtotal primesc denumiri canonice pentru analize și validarea
+ierarhică.
+
+| Metrică | Înainte | După P1 p41 |
+|---|---:|---:|
+| Ancore selectate `ag_p041` | 11/13 | 13/13 |
+| Celule numerice emise din cele 245 ale paginii | 207/245 | 245/245 (100%) |
+| Probleme de celulă rămase după mapare | 19 | 0 |
+| `validated_cell_recall`, întreaga pagină | nemăsurat | 245/245 (100%) |
+| Precizie numerică față de același etalon | nemăsurată | 245/245 (100%) |
+| Excel final: celule numerice strict verificate | nemăsurat | 245/245 (100%) |
+| Probleme de validare în Excelul de probă | nemăsurat | 0 erori + 0 avertismente |
+| Cost API incremental (`--llm off`) | 0 USD | 0 USD |
+
+Workbook-ul final a fost inspectat valoric și randat pe toate cele trei foi:
+cele 245 de valori sunt numerice, foaia `Probleme` nu conține probleme,
+sumarul raportează 100%, iar scanarea formulelor nu găsește erori.
+
 După remaparea tuturor celor 14 pagini-fixture din cache, scorul global al
-ancorelor selectate este 127/131 (96,95%), față de 114/131 în P0, iar textul
+ancorelor selectate este 129/131 (98,47%), față de 114/131 în P0, iar textul
 rămâne 22/23 (95,65%). Acest procent global nu este un substitut pentru recall
-pe celule: numai `scan_institution_budget` și `scan_simple_table` au deocamdată
-etaloane exhaustive. Rămân patru ancore numerice și o aserțiune text
+pe celule: `scan_institution_budget`, `scan_simple_table` și
+`scan_detail_economic` au acum etaloane exhaustive. Rămân două ancore numerice
+și o aserțiune text
 neîndeplinite în fixture-urile parțiale, iar `eval --strict` continuă
 intenționat să eșuească.
 
@@ -233,15 +266,15 @@ Poarta reproductibilă P1 este:
 
 ```bash
 uv run bgconvertor eval \
-  --require-cell-ground-truth 2 \
+  --require-cell-ground-truth 3 \
   --min-layout-cell-recall 90 \
   --min-layout-cell-precision 99.5 \
   --json-out eval-report.json
 ```
 
-CI adaugă pragurile anti-regresie de 62 de ancore și 9 aserțiuni text,
-calculate din familia digitală Alba Iulia și cele două grile exhaustive.
-Poarta offline acoperă acum 267/267 celule numerice în două familii scanate.
+CI adaugă pragurile anti-regresie de 75 de ancore și 10 aserțiuni text,
+calculate din familia digitală Alba Iulia și cele trei grile exhaustive.
+Poarta offline acoperă acum 512/512 celule numerice în trei familii scanate.
 Următoarele tranșe P1 trebuie să inventarieze exhaustiv celelalte familii
 înainte ca proiectul să afirme ≥90% pentru toate tipurile suportate.
 
