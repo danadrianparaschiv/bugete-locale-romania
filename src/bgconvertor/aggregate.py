@@ -168,21 +168,38 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
 
     cy.executie = _load_executie(repo_root, manifest.year, c.pdf)
     if cy.executie is not None:
-        # How far into the approved plan the year has run. The execution figure
-        # is an official report; the plan may be only partially extracted from
-        # a poor scan, so a ratio far above 100% means the plan is broken, not
-        # that the city overspent — suppress the ratio and say so.
-        for key, field in (("venituri", "pct_venituri"), ("cheltuieli", "pct_cheltuieli")):
-            plan = cy.totals_mii_lei.get(key)
-            done = getattr(cy.executie, key)
-            if not plan or done is None:
-                continue
-            pct = done / plan * 100
-            if pct > PLAN_RATIO_LIMIT:
-                cy.executie.plan_incomplet = True
-            else:
-                setattr(cy.executie, field, round(pct, 1))
+        _add_plan_share(cy.executie, cy.totals_mii_lei)
     return cy
+
+
+def _add_plan_share(e: Executie, plan: dict[str, float]) -> None:
+    """How far into the approved plan each reported quarter has run.
+
+    The execution figure is an official report; the plan may be only partially
+    extracted from a poor scan, so a ratio far above 100% means the plan is
+    broken, not that the city overspent — suppress the ratio and say so.
+    """
+    def get(block, key):
+        return block.get(key) if isinstance(block, dict) else getattr(block, key)
+
+    def put(block, key, value):
+        if isinstance(block, dict):
+            block[key] = value
+        else:
+            setattr(block, key, value)
+
+    blocks = [e, *e.trimestre]
+    for key in ("venituri", "cheltuieli"):
+        planned = plan.get(key)
+        if not planned:
+            continue
+        shares = [None if get(b, key) is None else get(b, key) / planned * 100 for b in blocks]
+        if any(s is not None and s > PLAN_RATIO_LIMIT for s in shares):
+            e.plan_incomplet = True  # one broken ratio discredits the plan total
+            continue
+        for block, share in zip(blocks, shares, strict=True):
+            if share is not None:
+                put(block, f"pct_{key}", round(share, 1))
 
 
 def _load_reference(repo_root: Path) -> dict:
