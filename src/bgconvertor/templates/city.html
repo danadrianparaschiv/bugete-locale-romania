@@ -65,6 +65,67 @@
 liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
 {% endif %}
 
+{% if city.executie %}
+{% set ex = city.executie %}
+<h2 style="font-size:1.1rem;margin-top:1.5rem">Execuția bugetului · trimestrul {{ ex.trimestru }}</h2>
+<p class="note" style="border:none;padding:0;margin:0 0 .7rem">Cât s-a încasat și
+cât s-a plătit efectiv, cumulat de la 1 ianuarie până la
+{{ ex.la_data[8:10] }}.{{ ex.la_data[5:7] }}.{{ ex.la_data[0:4] }} — din raportul
+oficial Forexebug al Ministerului Finanțelor, nu din bugetul aprobat.</p>
+
+<div class="cards">
+  {% if ex.venituri is not none %}
+  <div class="card"><div class="k">Venituri încasate (mii lei)</div>
+    <div class="v">{{ "{:,.0f}".format(ex.venituri).replace(",", ".") }}</div>
+    {% if ex.pct_venituri %}<div class="k">{{ ex.pct_venituri }}% din planul anual</div>{% endif %}</div>
+  {% endif %}
+  {% if ex.cheltuieli is not none %}
+  <div class="card"><div class="k">Plăți efectuate (mii lei)</div>
+    <div class="v">{{ "{:,.0f}".format(ex.cheltuieli).replace(",", ".") }}</div>
+    {% if ex.pct_cheltuieli %}<div class="k">{{ ex.pct_cheltuieli }}% din planul anual</div>{% endif %}</div>
+  {% endif %}
+  {% if ex.venituri is not none and ex.cheltuieli is not none %}
+  <div class="card"><div class="k">Excedent la data raportului</div>
+    <div class="v">{{ "{:,.0f}".format(ex.venituri - ex.cheltuieli).replace(",", ".") }}</div>
+    <div class="k">mii lei, încasări minus plăți</div></div>
+  {% endif %}
+</div>
+
+{% if ex.plan_incomplet %}
+<p class="note" style="border:none;padding:0;margin:.2rem 0 .7rem">Procentele față de
+plan nu sunt afișate: totalurile extrase din bugetul aprobat sunt parțiale pentru
+acest oraș, deci raportul ar fi înșelător. Cifrele de execuție rămân cele oficiale.</p>
+{% endif %}
+
+{% if ex.trimestre|length > 1 %}
+<table>
+  <thead><tr><th>Cumulat la</th>
+    <th class="num">Venituri (mii lei)</th><th class="num">Plăți (mii lei)</th></tr></thead>
+  <tbody>
+  {% for t in ex.trimestre %}
+    <tr><td>trimestrul {{ t.trimestru }}{% if t.la_data %} · {{ t.la_data[8:10] }}.{{ t.la_data[5:7] }}.{{ t.la_data[0:4] }}{% endif %}</td>
+      <td class="num">{{ "{:,.0f}".format(t.venituri).replace(",", ".") }}</td>
+      <td class="num">{{ "{:,.0f}".format(t.cheltuieli).replace(",", ".") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if ex.capitole %}
+<h3 class="ig-h">Plăți pe capitole, la zi</h3>
+<div class="ig-card"><div class="bars">
+  {% set maxcap = ex.capitole[0].val %}
+  {% for c in ex.capitole[:12] %}
+  <div class="brow" style="cursor:default">
+    <span class="bt">{{ c.nume | replace("CAP. ", "") or c.cod }}</span>
+    <span class="bg2"><i style="background:#1a7f37;width:{{ (c.val / maxcap * 100) | round(1) }}%"></i></span>
+    <span class="bv">{{ "{:,.0f}".format(c.val / 1000).replace(",", ".") }} mil.</span>
+  </div>
+  {% endfor %}
+</div></div>
+{% endif %}
+{% endif %}
+
 <h2 style="font-size:1.1rem;margin-top:1.5rem">Calitatea conversiei</h2>
 <table>
   <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>

@@ -26,6 +26,10 @@ log = logging.getLogger("bgc.aggregate")
 
 SCHEMA_VERSION = 1
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
+# execution above this share of the approved plan means the plan figure is
+# partial (bad scan), not that the city overspent — rectifications explain
+# some overshoot, an 8x ratio never does
+PLAN_RATIO_LIMIT = 130.0
 
 
 class Capitol(BaseModel):
@@ -57,6 +61,21 @@ class Files(BaseModel):
     source_url: str | None = None
 
 
+class Executie(BaseModel):
+    """Quarterly execution reported through Forexebug (see execution.py)."""
+
+    trimestru: int
+    la_data: str | None = None
+    venituri: float | None = None  # mii lei, cumulative
+    cheltuieli: float | None = None
+    capitole: list[dict] = Field(default_factory=list)
+    trimestre: list[dict] = Field(default_factory=list)
+    pct_venituri: float | None = None  # execution vs approved plan
+    pct_cheltuieli: float | None = None
+    plan_incomplet: bool = False  # plan extracted only partially -> no ratio shown
+    sursa: str | None = None
+
+
 class CityYear(BaseModel):
     status: str = "pending"
     has_analysis: bool = False  # analysis.json exists -> the site renders a city page
@@ -65,6 +84,7 @@ class CityYear(BaseModel):
     totals_mii_lei: dict[str, float] = Field(default_factory=dict)
     top_capitole: list[Capitol] = Field(default_factory=list)
     infografic: dict | None = None  # chart-ready block from analysis.json
+    executie: Executie | None = None  # Forexebug quarterly execution
     llm_models: list[str] = Field(default_factory=list)
     files: Files = Field(default_factory=Files)
 
@@ -98,6 +118,25 @@ def discover_years(data_root: Path) -> list[int]:
     )
 
 
+def _load_executie(repo_root: Path, year: int, pdf: Path) -> Executie | None:
+    """execution.json for the same city-year, if the quarter reports were built.
+
+    Execution lives in its own tree (data/execution/<year>/<county>/<city>/)
+    but uses the same county/city directory convention as the budget corpus.
+    """
+    try:
+        county_dir, city_dir = pdf.parent.parent.name, pdf.parent.name
+    except (AttributeError, IndexError):
+        return None
+    path = repo_root / "data" / "execution" / str(year) / county_dir / city_dir / "execution.json"
+    if not path.exists():
+        return None
+    d = json.loads(path.read_text())
+    if not d.get("trimestru"):
+        return None
+    return Executie(**{k: d.get(k) for k in Executie.model_fields if k in d})
+
+
 def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
     conv = c.entry.get("conversion") or {}
     repo_root = manifest.root.parent.parent
@@ -126,6 +165,23 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
         cy.llm_models = a.get("llm_models") or []
     elif conv:
         cy.quality = Quality(lines=conv.get("lines"), pct_clean=conv.get("pct_clean"))
+
+    cy.executie = _load_executie(repo_root, manifest.year, c.pdf)
+    if cy.executie is not None:
+        # How far into the approved plan the year has run. The execution figure
+        # is an official report; the plan may be only partially extracted from
+        # a poor scan, so a ratio far above 100% means the plan is broken, not
+        # that the city overspent — suppress the ratio and say so.
+        for key, field in (("venituri", "pct_venituri"), ("cheltuieli", "pct_cheltuieli")):
+            plan = cy.totals_mii_lei.get(key)
+            done = getattr(cy.executie, key)
+            if not plan or done is None:
+                continue
+            pct = done / plan * 100
+            if pct > PLAN_RATIO_LIMIT:
+                cy.executie.plan_incomplet = True
+            else:
+                setattr(cy.executie, field, round(pct, 1))
     return cy
 
 
