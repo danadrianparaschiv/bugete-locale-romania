@@ -1,9 +1,13 @@
-# Lecții învățate: procesarea bugetelor locale 2026
+# Lecții învățate: procesarea bugetelor locale 2025–2026
 
-Retrospectiva primului an al corpusului — ce am aflat convertind bugetele
-municipiilor reședință de județ pe 2026 și de ce să ținem cont când
-repetăm exercițiul pentru 2027. Toate cifrele provin din conversiile și
-evaluările efectuate (manifest, `evals/rezultate.csv`, istoricul git).
+Retrospectiva primelor două ediții ale corpusului — ce am aflat
+convertind bugetele municipiilor reședință de județ pe 2026 și 2025, și
+de ce să ținem cont când repetăm exercițiul pentru 2027. Toate cifrele
+provin din conversiile și evaluările efectuate (manifeste,
+`evals/rezultate.csv`, istoricul git).
+
+**Bilanț:** 2026 — 32/41 orașe, 75.407 linii, 66.3% verificate;
+2025 — 37/42 intrări, 45.649 linii, **74.0% verificate**.
 
 ## 1. Contextul anului: bugetul de stat întârziat comprimă totul
 
@@ -121,8 +125,12 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
   premium au transcris cel mai bine per pagină, dar și-au permis prea
   puține pagini; modele medii le-au bătut pe orașele grele.
 - **`gemini-3.6-flash` a livrat 94% din randamentul lui
-  `claude-sonnet-5` la 8% din cost** — batch-urile 2026 târzii au rulat
-  pe el la ~$0.15–0.35/oraș față de $3–8 în primele batch-uri.
+  `claude-sonnet-5` la ~40% din cost** (nu 8%, cum arătase evaluarea
+  înainte de corecția de facturare). Clasamentul corectat linii/$:
+  gpt-5-mini 228, gpt-5.1 161, gemini-3.6-flash 158, sonnet-4-5 129,
+  sonnet-5 69, gemini-3.1-pro 50 — **randamentul absolut nu s-a
+  schimbat** (sonnet-5 +737 linii, flash +696), doar prețul. Costul real
+  al evaluării: ~$120, nu $76.
 - **Sarcinile diferă**: repararea punctuală e accesibilă și modelelor
   ieftine; transcrierea integrală de pagină separă brutal capabilitatea
   (haiku: 0 linii verificate pe Galați). De aici slotul separat
@@ -146,7 +154,37 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
   zi înaintea oricărei campanii 2027; plafoanele conservatoare din
   `ledger.py` opresc devreme, niciodată târziu.
 
-## 6. Checklist pentru campania 2027
+## 6. Ce a adăugat ediția 2025: corpusul multi-an
+
+Conversia retroactivă a anului 2025 (batch pe `google:gemini-3.6-flash`,
+~$25–30 real) a confirmat lecțiile de mai sus și a adăugat trei:
+
+- **Calitatea documentului e o proprietate a ANULUI, nu a orașului.**
+  Aceleași primării publică radical diferit de la un an la altul:
+  Craiova 99.8% pe 2025 vs. 60.5% pe 2026, Pitești 76.4% vs. 44.7%,
+  Cluj-Napoca 95.4% (digital, 38 pagini) vs. 70.9% (scanare de 753 de
+  pagini) — dar și invers: București 0% pe 2025 (sinteză de 4 pagini)
+  vs. 81.8% pe 2026, Botoșani 0% vs. 72.8%, Arad 3% vs. 62.2%.
+  **Pentru 2027**: nu presupuneți nimic din experiența anului trecut cu
+  un oraș; triajul se reface de fiecare dată.
+- **Anul secundar acoperă golurile primului.** Șase orașe fără sursă
+  utilizabilă pe 2026 au fișiere bune pe 2025 (Iași 74.9%, Slatina
+  89.3%, Baia Mare 78.9%, Târgu Jiu 64.2%, Râmnicu Vâlcea 47.7%,
+  Ploiești 42.9%). Un corpus multi-an nu e doar istorie — e redundanță
+  de surse.
+- **Mapările se amortizează pe toate edițiile.** Fixurile deterministe
+  făcute pentru 2026 (grile dual-cod, separare pe instituții, sufixul-
+  literă de sursă, rânduri derivate din formule) au rulat gratuit pe
+  2025 și explică rata mai bună de verificare — 74.0% față de 66.3%.
+  Investiția în mapare bate investiția în tokeni.
+
+30 de orașe există în ambele ediții — baza pentru comparații an-la-an
+(deja pe paginile de oraș ale site-ului) și pentru validarea încrucișată
+propusă: o valoare 2026 nereparată a cărei pereche 2025 e verificată
+poate fi prioritizată pentru re-citire prin plauzibilitate (fără a fi
+vreodată corectată automat).
+
+## 7. Checklist pentru campania 2027
 
 1. Așteaptă legea bugetului de stat; pornește colectarea la 1–2
    săptămâni după — recolta e concentrată în ~3 săptămâni.
@@ -171,11 +209,15 @@ detalii în [eval-modele.md](eval-modele.md)) a răsturnat intuițiile:
    după randament.
 9. Reconciliere factură↔registru după fiecare campanie: `bgconvertor
    costuri --csv` lângă exportul de facturare al furnizorului.
+10. Triaj complet pentru fiecare an, chiar și la orașe „cunoscute" —
+    calitatea documentului variază de la an la an mai mult decât de la
+    oraș la oraș.
+11. Când un oraș lipsește pe anul curent, verificați edițiile anterioare
+    înainte de a-l declara indisponibil: aceeași primărie a publicat
+    adesea un fișier utilizabil în alt an.
 
 ---
 
-*Document viu — se actualizează pe măsură ce corpusul 2026 se închide și
-campania 2027 începe. Ultima actualizare: august 2026, la 26/41 de orașe
-convertite (batch-ul digital a adăugat încă două exemple la lecția
-«fișierul mic nu e anexa»: Ploiești publicase doar textul HCL, iar
-Baia Mare folosește layout-ul standard MF «Formular 11», încă nemapat).*
+*Document viu — se actualizează pe măsură ce corpusul crește. Ultima
+actualizare: august 2026, la 32/41 orașe pe 2026 și 37/42 pe 2025, după
+reconcilierea costurilor cu facturile furnizorilor.*
