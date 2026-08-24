@@ -242,12 +242,13 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 6681,
-        "pct_clean": 64.9,
-        "errors": 1655,
-        "warnings": 1616,
-        "at": "2026-08-22T11:04:23",
-        "tool_version": "0.1.0"
+        "lines": 6688,
+        "pct_clean": 71.6,
+        "errors": 1026,
+        "warnings": 1574,
+        "at": "2026-08-24T07:23:01",
+        "tool_version": "0.1.0",
+        "llm_preset": "google:gemini-3.6-flash"
       },
       "timeline": {
         "debate_date": "2026-04-09",

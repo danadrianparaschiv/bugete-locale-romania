@@ -1,17 +1,25 @@
 {
   "quality": {
-    "lines": 6682,
-    "pct_clean": 69.9,
-    "errors": 1812,
-    "warnings": 1263,
+    "lines": 6688,
+    "pct_clean": 71.6,
+    "errors": 1026,
+    "warnings": 1574,
     "documents": 41
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 339.72
+    }
+  ],
   "infografic": null,
   "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
 }
