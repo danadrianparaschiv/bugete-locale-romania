@@ -5,11 +5,12 @@ municipality analysis is a groupby away, with provenance and verification
 carried on every row:
 
     municipality, document, budget, suffix, section, kind, code, func_code,
-    name, column, value, source (digital|ocr|llm), verified, page
+    name, column, value, source (digital|ocr|llm), verified,
+    verification_status, validation_issues, page
 
-verified=True means the line passed every validator check (codes, names,
-row checksums, hierarchy sums) — the tier of data safe to analyze without
-looking back at the PDF.
+verified=True means no validator emitted an error, warning, or information
+issue for the line.  It is an observed consistency flag, not a recall claim:
+rows or cells absent from extraction are not present in the denominator.
 """
 
 from __future__ import annotations
@@ -29,7 +30,8 @@ log = logging.getLogger("bgc.corpus")
 COLUMNS = [
     "municipality", "siruta", "county_code", "county", "year",
     "document", "budget", "suffix", "section", "kind",
-    "code", "func_code", "name", "column", "value", "source", "verified", "page",
+    "code", "func_code", "name", "column", "value", "source", "verified",
+    "verification_status", "validation_issues", "page",
 ]
 
 
@@ -68,7 +70,11 @@ def build_result(config: RunConfig, pdf: Path) -> ConversionResult:
     store = RunStore(config, pdf)
     pages = list(range(1, len(PdfReader(pdf).pages) + 1))
     result = ConversionResult(
-        pdf=pdf.name, documents=assemble(store, pages, registry)
+        pdf=pdf.name,
+        documents=assemble(store, pages, registry),
+        pages_expected=len(pages),
+        pages_selected=pages,
+        pages_processed=[page for page in pages if store.get("extract", page) is not None],
     )
     return validate(result, registry)
 
@@ -81,7 +87,10 @@ def export_rows(config: RunConfig, pdf: Path):
         for ln in doc.lines:
             if ln.kind == "heading" or ln.code is None:
                 continue
-            verified = not any(i.severity == "error" for i in ln.issues)
+            verified = ln.strictly_verified
+            issue_summary = "; ".join(
+                f"{i.check}:{i.severity}" for i in ln.issues
+            )
             for column, value in ln.values.items():
                 yield {
                     **ident,
@@ -97,6 +106,8 @@ def export_rows(config: RunConfig, pdf: Path):
                     "value": str(value),
                     "source": ln.source,
                     "verified": verified,
+                    "verification_status": "strictly_verified" if verified else "flagged",
+                    "validation_issues": issue_summary,
                     "page": ln.page,
                 }
 

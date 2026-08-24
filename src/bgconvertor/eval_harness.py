@@ -1,9 +1,9 @@
 """Golden-fixture evaluation harness.
 
 Fixtures live in tests/fixtures/golden/*.json: hand-verified anchor facts
-for ~a dozen pages covering every layout family and hazard in the corpus.
-`bgconvertor eval` scores the extraction stage against them — cell-level,
-per layout family — so tuning is measured, never eyeballed.
+for selected pages covering known layout families and hazards in the corpus.
+`bgconvertor eval` reports selected-anchor recall per layout.  It is a
+regression signal, not full cell recall or a corpus-wide conversion score.
 
 This module also pins the EXTRACTION OUTPUT CONTRACT that every extractor
 (digital, docling, LLM fallback) must produce per page:
@@ -35,6 +35,8 @@ from .config import RunConfig
 from .runstore import RunStore
 
 DEFAULT_FIXTURES_DIR = Path("tests/fixtures/golden")
+EVAL_SCHEMA_VERSION = 1
+EVAL_METRIC = "selected_anchor_recall"
 
 
 class Anchor(BaseModel):
@@ -218,11 +220,56 @@ def summarize_by_layout(results: list[FixtureResult]) -> dict[str, dict]:
     for r in results:
         agg = out.setdefault(
             r.layout,
-            {"fixtures": 0, "missing": 0, "anchors_total": 0, "anchors_matched": 0},
+            {
+                "fixtures": 0, "missing": 0,
+                "anchors_total": 0, "anchors_matched": 0,
+                "text_total": 0, "text_matched": 0,
+            },
         )
         agg["fixtures"] += 1
         if r.status == "missing":
             agg["missing"] += 1
-        agg["anchors_total"] += r.anchors_total + r.text_total
-        agg["anchors_matched"] += r.anchors_matched + r.text_matched
+        agg["anchors_total"] += r.anchors_total
+        agg["anchors_matched"] += r.anchors_matched
+        agg["text_total"] += r.text_total
+        agg["text_matched"] += r.text_matched
     return out
+
+
+def evaluation_report(results: list[FixtureResult]) -> dict:
+    """Machine-readable report with an explicit, non-inflated metric name."""
+    by_layout = summarize_by_layout(results)
+    evaluated = [r for r in results if r.status == "evaluated"]
+    anchors_total = sum(r.anchors_total for r in evaluated)
+    anchors_matched = sum(r.anchors_matched for r in evaluated)
+    text_total = sum(r.text_total for r in evaluated)
+    text_matched = sum(r.text_matched for r in evaluated)
+    hard_total = sum(r.hard_total for r in evaluated)
+    hard_matched = sum(r.hard_matched for r in evaluated)
+    return {
+        "schema_version": EVAL_SCHEMA_VERSION,
+        "metric": EVAL_METRIC,
+        "full_cell_recall_measured": False,
+        "fixtures": {
+            "total": len(results),
+            "evaluated": len(evaluated),
+            "missing": len(results) - len(evaluated),
+        },
+        "anchors": {
+            "matched": anchors_matched,
+            "total": anchors_total,
+            "pct": round(100 * anchors_matched / anchors_total, 2) if anchors_total else 0.0,
+        },
+        "hard_anchors": {
+            "matched": hard_matched,
+            "total": hard_total,
+            "pct": round(100 * hard_matched / hard_total, 2) if hard_total else 0.0,
+        },
+        "text_assertions": {
+            "matched": text_matched,
+            "total": text_total,
+            "pct": round(100 * text_matched / text_total, 2) if text_total else 0.0,
+        },
+        "by_layout": by_layout,
+        "results": [result.model_dump(mode="json") for result in results],
+    }

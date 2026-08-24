@@ -1,17 +1,55 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 1046,
-    "pct_clean": 65.8,
-    "errors": 597,
-    "warnings": 207,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1143,
+    "lines_strictly_verified": 729,
+    "pct_lines_strictly_verified": 63.8,
+    "numeric_cells": 2756,
+    "numeric_cells_strictly_verified": 1780,
+    "pct_numeric_cells_strictly_verified": 64.6,
+    "scope": {
+      "pages_expected": 167,
+      "pages_selected": 167,
+      "pages_processed": 167,
+      "complete_pdf": true
+    },
+    "pct_clean": 63.8,
+    "errors": 593,
+    "warnings": 272,
+    "info": 0,
     "documents": 2
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 313815.0,
-    "cheltuieli": 321841.0
+    "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "67.02",
+      "name": "CULTURĂ, RECREERE ȘI RELIGIE TOTAL din care:",
+      "total": 4246800.0
+    },
+    {
+      "code": "74.02",
+      "name": "CAPITOL 74.02 PROTECȚIA MEDIULUI",
+      "total": 3207000.0
+    },
+    {
+      "code": "65.02",
+      "name": "CAP.65.02 ÎNVĂȚĂMÂNT",
+      "total": 1056600.0
+    },
+    {
+      "code": "84.02",
+      "name": "CAPITOL 84.02 TRANSPORTURI",
+      "total": 907800.0
+    },
     {
       "code": "68.02",
       "name": "ASIGURARI SI ASISTENTA SOCIALA",
@@ -28,193 +66,26 @@
       "total": 62833.0
     },
     {
-      "code": "84.02",
-      "name": "TRANSPORTURI",
-      "total": 45595.4
-    },
-    {
-      "code": "74.02",
-      "name": "PROTECTIA MEDIULUI",
-      "total": 18977.0
-    },
-    {
-      "code": "65.02",
-      "name": "INVATAMANT",
-      "total": 13816.12
-    },
-    {
       "code": "61.02",
       "name": "ORDINE PUBLICASISIGURANTA NATIONALA",
       "total": 8546.75
     },
     {
+      "code": "81.02",
+      "name": "CAPITOL 81.02 COMBUSTIBILI ȘI ENERGIE",
+      "total": 5900.0
+    },
+    {
       "code": "66.02",
       "name": "SANATATE",
       "total": 4720.0
-    },
-    {
-      "code": "54.02",
-      "name": "ALTE SERVICII PUBLICE GENERALE",
-      "total": 2548.2
-    },
-    {
-      "code": "67.02",
-      "name": "CULTURA. RECREERE SI RELIGIE",
-      "total": 1793.0
     }
   ],
-  "infografic": {
-    "unitate": "mii lei",
-    "capitole": [
-      {
-        "cod": "68.02",
-        "nume": "ASIGURARI SI ASISTENTA SOCIALA",
-        "val": 67734.83,
-        "copii": [
-          {
-            "nume": "Cheltuieli personal, din care:",
-            "val": 15175.25
-          },
-          {
-            "nume": "Asistenta acordata persoanclor in arsta",
-            "val": 347.0
-          }
-        ]
-      },
-      {
-        "cod": "70.02",
-        "nume": "LOCUINTE. SERVICII SI DEZVOLTARE",
-        "val": 64729.8,
-        "copii": [
-          {
-            "nume": "Locunte",
-            "val": 202.8
-          },
-          {
-            "nume": "Ilumunat publc st clectrficar",
-            "val": 10.0
-          }
-        ]
-      },
-      {
-        "cod": "51.02",
-        "nume": "AUTORITATI PUBLICE SI ACTIUNIEXTERNE",
-        "val": 62833.0,
-        "copii": [
-          {
-            "nume": "Autortat executiv e si Iegislative",
-            "val": 62833.0
-          }
-        ]
-      },
-      {
-        "cod": "84.02",
-        "nume": "TRANSPORTURI",
-        "val": 45595.4,
-        "copii": []
-      },
-      {
-        "cod": "74.02",
-        "nume": "PROTECTIA MEDIULUI",
-        "val": 18977.0,
-        "copii": [
-          {
-            "nume": "Salubrtate st gestrunca descurilor",
-            "val": 8005.0
-          },
-          {
-            "nume": "Reduccrea si controlul poluarı",
-            "val": 1124.0
-          },
-          {
-            "nume": "Canalizarea si tratarca apelor rezıduale",
-            "val": 203.0
-          }
-        ]
-      },
-      {
-        "cod": "65.02",
-        "nume": "INVATAMANT",
-        "val": 13816.12,
-        "copii": []
-      },
-      {
-        "cod": "61.02",
-        "nume": "ORDINE PUBLICASISIGURANTA NATIONALA",
-        "val": 8546.75,
-        "copii": [
-          {
-            "nume": "Ordine publica",
-            "val": 8466.0
-          }
-        ]
-      },
-      {
-        "cod": "66.02",
-        "nume": "SANATATE",
-        "val": 4720.0,
-        "copii": [
-          {
-            "nume": "Sers icn de sanatate publica",
-            "val": 4720.0
-          }
-        ]
-      },
-      {
-        "cod": "54.02",
-        "nume": "ALTE SERVICII PUBLICE GENERALE",
-        "val": 2548.2,
-        "copii": [
-          {
-            "nume": "autoritatilor localc",
-            "val": 20.0
-          }
-        ]
-      },
-      {
-        "cod": "67.02",
-        "nume": "CULTURA. RECREERE SI RELIGIE",
-        "val": 1793.0,
-        "copii": [
-          {
-            "nume": "Ser icn culturale",
-            "val": 6528.3
-          }
-        ]
-      },
-      {
-        "cod": "87.02",
-        "nume": "ALTE ACTIUNIECONOMICE",
-        "val": 499.75,
-        "copii": [
-          {
-            "nume": "Alte actiuni economice",
-            "val": 447.0
-          }
-        ]
-      },
-      {
-        "cod": "81.02",
-        "nume": "COMBUSTIBILI SIENERGIE",
-        "val": 5.9,
-        "copii": []
-      }
-    ],
-    "total_cheltuieli": 321841.0,
-    "ani": {
-      "cheltuieli": [
-        321841.0,
-        214819.0,
-        229260.0,
-        222740.0
-      ],
-      "venituri": [
-        313815.0,
-        214819.0,
-        229260.0,
-        222740.0
-      ]
-    }
-  },
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "3d08e1d80a7d22564857c44f",
+    "source_pdf_sha256": "67b39fa4155600c95617157768adfb75385f536396ac24949c53ba4079a3b056"
+  }
 }

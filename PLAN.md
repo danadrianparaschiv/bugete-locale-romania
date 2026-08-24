@@ -2,6 +2,10 @@
 
 Analiză și plan de dezvoltare · 2026-08-21
 
+> **Document istoric.** Procentele și numerele de teste de mai jos descriu
+> etapele la data lor și nu sunt baseline-ul public curent. Contractul P0
+> pentru metrici, bundle-uri și audit este în [docs/quality.md](docs/quality.md).
+
 > **Stadiu (la sfârșitul zilei de 2026-08-21): Fazele 0–4 implementate.** Toate cele trei PDF-uri
 > se convertesc cap-coadă (`bgconvertor convert <pdf> [--llm repair]`).
 > Alba Iulia (digital): 100% curat la validare. Pitești + Arad (scanate):

@@ -1,12 +1,30 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 3364,
-    "pct_clean": 63.4,
-    "errors": 1506,
-    "warnings": 999,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 4042,
+    "lines_strictly_verified": 2687,
+    "pct_lines_strictly_verified": 66.5,
+    "numeric_cells": 12561,
+    "numeric_cells_strictly_verified": 8226,
+    "pct_numeric_cells_strictly_verified": 65.5,
+    "scope": {
+      "pages_expected": 361,
+      "pages_selected": 361,
+      "pages_processed": 361,
+      "complete_pdf": true
+    },
+    "pct_clean": 66.5,
+    "errors": 1695,
+    "warnings": 1056,
+    "info": 16,
     "documents": 10
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
@@ -23,14 +41,14 @@
       "total": 313166.99
     },
     {
+      "code": "67.02",
+      "name": "CULTURA, RELIGIA, ALTE ACTIVITÄTI SPORTIVE SI DE TINERET",
+      "total": 263585.59
+    },
+    {
       "code": "70.02",
       "name": "SERVICII ŞI DEZVOLTARE PUBLICÃ, LOCUINTE",
       "total": 260858.84
-    },
-    {
-      "code": "67.02",
-      "name": "CULTURA, RELIGIA, ALTE ACTIVITĂTI SPORTIVE ŞI DE TINERET",
-      "total": 134640.75
     },
     {
       "code": "74.02",
@@ -43,26 +61,31 @@
       "total": 75475.9
     },
     {
+      "code": "66.02",
+      "name": "SÄNÄTATE",
+      "total": 22818.2
+    },
+    {
+      "code": "66.10",
+      "name": "CAP. Sanatate",
+      "total": 20674.29
+    },
+    {
       "code": "61.02",
       "name": "APÃRARE,ORDINE PUBLICÃ,SIGURANTĂ NATIONALĂ",
       "total": 15737.55
     },
     {
-      "code": "66.10",
-      "name": "CAP. Sanatate",
-      "total": 14242.35
-    },
-    {
-      "code": "54.10",
-      "name": "CAP. Alte servicii publice generale",
-      "total": 9380.0
-    },
-    {
-      "code": "66.02",
-      "name": "SÄNÄTATE",
-      "total": 5136.2
+      "code": "61.10",
+      "name": "CAP. Ordine publica si siguranta nationala",
+      "total": 15737.55
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "fb60137a13538817c2904ce5",
+    "source_pdf_sha256": "564679af6db5d66c39aa21559fc9cac2dcd41417e0ed9bc2360e8838e3632017"
+  }
 }

@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 3198,
-    "pct_clean": 39.8,
-    "errors": 539,
-    "warnings": 2009,
+    "lines_strictly_verified": 1369,
+    "pct_lines_strictly_verified": 42.8,
+    "numeric_cells": 14912,
+    "numeric_cells_strictly_verified": 6293,
+    "pct_numeric_cells_strictly_verified": 42.2,
+    "scope": {
+      "pages_expected": 236,
+      "pages_selected": 236,
+      "pages_processed": 236,
+      "complete_pdf": true
+    },
+    "pct_clean": 42.8,
+    "errors": 696,
+    "warnings": 1888,
+    "info": 20,
     "documents": 6
   },
   "llm_models": [],
@@ -43,11 +59,6 @@
       "total": 143278.0
     },
     {
-      "code": "84.02",
-      "name": "Transporturi (cod 84.02.03+84.02.06+84.02.50)",
-      "total": 120216.0
-    },
-    {
       "code": "74.02",
       "name": "Protectia mediuiui (cod 74.02.03+74.02.05+74.02.06+74 02.50)",
       "total": 108086.0
@@ -61,8 +72,18 @@
       "code": "67.07",
       "name": "Cultura. recreere si religie (cod 67.07.03+67.07.05+67.07.50)",
       "total": 72457.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "total": 51256.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "8580564c2fa1a5c3042976b4",
+    "source_pdf_sha256": "0a27814f40521408f3d54d23264675df228805fb102cb525e4d97833a5ab3d1d"
+  }
 }

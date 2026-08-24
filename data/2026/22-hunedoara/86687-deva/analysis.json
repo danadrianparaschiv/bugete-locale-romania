@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 664,
+    "lines_strictly_verified": 664,
+    "pct_lines_strictly_verified": 100.0,
+    "numeric_cells": 5976,
+    "numeric_cells_strictly_verified": 5976,
+    "pct_numeric_cells_strictly_verified": 100.0,
+    "scope": {
+      "pages_expected": 23,
+      "pages_selected": 23,
+      "pages_processed": 23,
+      "complete_pdf": true
+    },
     "pct_clean": 100.0,
     "errors": 0,
     "warnings": 0,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [],
@@ -12,21 +28,6 @@
     "cheltuieli": 457871.86
   },
   "top_capitole": [
-    {
-      "code": "50.02",
-      "name": "TOTAL CHELTUIELI",
-      "total": 457871.86
-    },
-    {
-      "code": "69.02",
-      "name": "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE, MEDIU SI APE",
-      "total": 183342.89
-    },
-    {
-      "code": "63.02",
-      "name": "Partea a III-a CHELTUIELI SOCIAL-CULTURALE",
-      "total": 173273.6
-    },
     {
       "code": "70.02",
       "name": "CAP. Locuinte, servicii si dezvoltare publica",
@@ -43,11 +44,6 @@
       "total": 54683.5
     },
     {
-      "code": "79.02",
-      "name": "Partea a V-a ACTIUNI ECONOMICE",
-      "total": 52021.84
-    },
-    {
       "code": "84.02",
       "name": "CAP. Transporturi",
       "total": 52021.84
@@ -61,7 +57,406 @@
       "code": "67.02",
       "name": "CAP. Cultura, recreere si religie © MINDSOFT-SICO - MUNICIPIUL DEVA",
       "total": 46533.2
+    },
+    {
+      "code": "51.02",
+      "name": "CAP. Autoritati publice si actiuni externe",
+      "total": 31980.1
+    },
+    {
+      "code": "61.02",
+      "name": "CAP. Ordine publica si siguranta nationala",
+      "total": 10813.63
+    },
+    {
+      "code": "66.02",
+      "name": "CAP. Sanatate",
+      "total": 5027.0
+    },
+    {
+      "code": "55.02",
+      "name": "CAP. Tranzactii privind datoria publica si imprumuturi",
+      "total": 4534.3
     }
   ],
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": {
+    "unitate": "mii lei",
+    "venituri": {
+      "total": 426162.82,
+      "surse": [
+        {
+          "cod": "04.02",
+          "nume": "Cote si sume defalcate din impozitul pe venit",
+          "grup": "proprii",
+          "val": 105683.0
+        },
+        {
+          "cod": "42.02",
+          "nume": "Subventii de la bugetul de stat",
+          "grup": "stat",
+          "val": 102028.51
+        },
+        {
+          "cod": "45.02",
+          "nume": "Sume primite de la UE/alti donatori in contul platilor efectuate si prefinantari",
+          "grup": "ue",
+          "val": 72012.36
+        },
+        {
+          "cod": "11.02",
+          "nume": "Sume defalcate din TVA",
+          "grup": "stat",
+          "val": 48604.4
+        },
+        {
+          "cod": "07.02",
+          "nume": "Impozite si taxe pe proprietate",
+          "grup": "proprii",
+          "val": 37914.0
+        },
+        {
+          "cod": "36.02",
+          "nume": "Diverse venituri",
+          "grup": "proprii",
+          "val": 22972.23
+        },
+        {
+          "cod": "30.02",
+          "nume": "Venituri din proprietate",
+          "grup": "proprii",
+          "val": 11403.44
+        },
+        {
+          "cod": "16.02",
+          "nume": "Taxe pe utilizarea bunurilor, autorizarea utilizarii bunurilor sau pe desfasurar",
+          "grup": "proprii",
+          "val": 10856.0
+        },
+        {
+          "cod": "43.02",
+          "nume": "Subventii de la alte administratii",
+          "grup": "stat",
+          "val": 9475.2
+        },
+        {
+          "cod": "35.02",
+          "nume": "Amenzi, penalitati si confiscari",
+          "grup": "proprii",
+          "val": 2565.47
+        },
+        {
+          "cod": "03.02",
+          "nume": "Impozit pe venit",
+          "grup": "proprii",
+          "val": 1874.14
+        },
+        {
+          "cod": "33.02",
+          "nume": "Venituri din prestari de servicii si alte activitati",
+          "grup": "proprii",
+          "val": 477.98
+        },
+        {
+          "cod": "12.02",
+          "nume": "Alte impozite si taxe generale pe bunuri si servicii",
+          "grup": "proprii",
+          "val": 166.38
+        },
+        {
+          "cod": "15.02",
+          "nume": "Taxe pe servicii specifice",
+          "grup": "proprii",
+          "val": 70.0
+        },
+        {
+          "cod": "39.02",
+          "nume": "Venituri din valorificarea unor bunuri",
+          "grup": "proprii",
+          "val": 53.28
+        },
+        {
+          "cod": "37.02",
+          "nume": "Transferuri voluntare, altele decat subventiile",
+          "grup": "proprii",
+          "val": 3.83
+        },
+        {
+          "cod": "34.02",
+          "nume": "Venituri din taxe administrative, eliberari permise",
+          "grup": "proprii",
+          "val": 2.6
+        }
+      ],
+      "acoperire_pct": 100.0
+    },
+    "capitole": [
+      {
+        "cod": "70.02",
+        "nume": "Locuinte, servicii si dezvoltare publica",
+        "val": 133965.72,
+        "copii": [
+          {
+            "nume": "Alte servicii In domeniile locuintelor, serviciilor si dezvoltarii com",
+            "val": 125965.72
+          },
+          {
+            "nume": "Iluminat public si electrificari",
+            "val": 8000.0
+          }
+        ],
+        "trim": [
+          133965.72,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "65.02",
+        "nume": "Invatamant",
+        "val": 67029.9,
+        "copii": [
+          {
+            "nume": "Servicii auxiliare pentru educatie",
+            "val": 46050.33
+          },
+          {
+            "nume": "Invatamant secundar",
+            "val": 18500.17
+          },
+          {
+            "nume": "Invatamant prescolar si primar © MINDSOFT-SICO - MUNICIPIUL DEVA",
+            "val": 2053.4
+          },
+          {
+            "nume": "Invatamant anteprescolar",
+            "val": 241.0
+          },
+          {
+            "nume": "Invatamant nedefinibil prin nivel",
+            "val": 185.0
+          }
+        ],
+        "trim": [
+          67029.9,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "68.02",
+        "nume": "Asigurari si asistenta sociala",
+        "val": 54683.5,
+        "copii": [
+          {
+            "nume": "Asistenta sociala in caz de boli si invaliditati",
+            "val": 35900.0
+          },
+          {
+            "nume": "Asistenta sociala pentru familie si copii",
+            "val": 17369.3
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul asigurarilor si asistentei sociale",
+            "val": 857.0
+          },
+          {
+            "nume": "Prevenirea excluderii sociale",
+            "val": 557.2
+          }
+        ],
+        "trim": [
+          54683.5,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "84.02",
+        "nume": "Transporturi",
+        "val": 52021.84,
+        "copii": [
+          {
+            "nume": "Transport rutier",
+            "val": 28896.92
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul transporturilor",
+            "val": 23124.92
+          }
+        ],
+        "trim": [
+          52021.84,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "74.02",
+        "nume": "Protectia mediului",
+        "val": 49377.17,
+        "copii": [
+          {
+            "nume": "Salubritate si gestiunea deseurilor",
+            "val": 39241.17
+          },
+          {
+            "nume": "Canalizarea si tratarea apelor reziduale",
+            "val": 9836.0
+          },
+          {
+            "nume": "Reducerea si controlul poluarii",
+            "val": 300.0
+          }
+        ],
+        "trim": [
+          49377.17,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "67.02",
+        "nume": "Cultura, recreere si religie © MINDSOFT-SICO - MUNICIPIUL DEVA",
+        "val": 46533.2,
+        "copii": [
+          {
+            "nume": "Servicii recreative si sportive",
+            "val": 36430.4
+          },
+          {
+            "nume": "Servicii culturale",
+            "val": 5474.5
+          },
+          {
+            "nume": "Servicii religioase",
+            "val": 4250.0
+          },
+          {
+            "nume": "Alte servicii in domeniile culturii, recreerii si religiei",
+            "val": 378.3
+          }
+        ],
+        "trim": [
+          46533.2,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "51.02",
+        "nume": "Autoritati publice si actiuni externe",
+        "val": 31980.1,
+        "copii": [
+          {
+            "nume": "Autoritati executive si legislative",
+            "val": 31980.1
+          }
+        ],
+        "trim": [
+          31980.1,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "61.02",
+        "nume": "Ordine publica si siguranta nationala",
+        "val": 10813.63,
+        "copii": [
+          {
+            "nume": "Ordine publica",
+            "val": 10349.13
+          },
+          {
+            "nume": "Protectie civila si protectia contra incendiilor (protectie civila non",
+            "val": 464.5
+          }
+        ],
+        "trim": [
+          10813.63,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "66.02",
+        "nume": "Sanatate",
+        "val": 5027.0,
+        "copii": [
+          {
+            "nume": "Servicii de sanatate publica",
+            "val": 5027.0
+          }
+        ],
+        "trim": [
+          5027.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "55.02",
+        "nume": "Tranzactii privind datoria publica si imprumuturi",
+        "val": 4534.3,
+        "copii": [],
+        "trim": [
+          4534.3,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "cod": "54.02",
+        "nume": "Alte servicii publice generale",
+        "val": 1905.5,
+        "copii": [
+          {
+            "nume": "Servicii publice comunitare de evidenta a persoanelor",
+            "val": 1855.5
+          },
+          {
+            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
+            "val": 50.0
+          }
+        ],
+        "trim": [
+          1905.5,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "total_cheltuieli": 457871.86,
+    "ani": {
+      "cheltuieli": [
+        457871.86,
+        192934.0,
+        142622.0,
+        144149.0
+      ],
+      "venituri": [
+        426162.82,
+        192934.0,
+        142622.0,
+        144149.0
+      ]
+    }
+  },
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "bd7b780fcd192ab819164ae4",
+    "source_pdf_sha256": "1cd4632d00c3c19ffafaa4d3db1fa859d212a945eb0bf6906aa0a07f22635b2f"
+  }
 }

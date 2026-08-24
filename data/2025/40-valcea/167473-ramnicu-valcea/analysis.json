@@ -1,12 +1,30 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 290,
-    "pct_clean": 49.0,
-    "errors": 173,
-    "warnings": 118,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 327,
+    "lines_strictly_verified": 146,
+    "pct_lines_strictly_verified": 44.6,
+    "numeric_cells": 664,
+    "numeric_cells_strictly_verified": 240,
+    "pct_numeric_cells_strictly_verified": 36.1,
+    "scope": {
+      "pages_expected": 68,
+      "pages_selected": 68,
+      "pages_processed": 68,
+      "complete_pdf": true
+    },
+    "pct_clean": 44.6,
+    "errors": 184,
+    "warnings": 140,
+    "info": 0,
     "documents": 1
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
@@ -16,11 +34,6 @@
       "code": "84.02",
       "name": "Transporturi",
       "total": 128973.2
-    },
-    {
-      "code": "65.02",
-      "name": "",
-      "total": 119359.33
     },
     {
       "code": "70.02",
@@ -39,13 +52,13 @@
     },
     {
       "code": "51.02",
-      "name": "",
-      "total": 54971.3
+      "name": "Autoritati publice si actiuni externe",
+      "total": 63477.6
     },
     {
-      "code": "74.02",
-      "name": "comunale",
-      "total": 38983.0
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 47811.0
     },
     {
       "code": "66.02",
@@ -61,8 +74,18 @@
       "code": "55.02",
       "name": "Tranzactii privind datoria publica si împrumuturi",
       "total": 6300.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 220.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "694e5e430ce8db0518cf4144",
+    "source_pdf_sha256": "3b431e59a1588c1f3cccfda628ae0f1442fc6c157965cb86873c2c1a4d4736d1"
+  }
 }

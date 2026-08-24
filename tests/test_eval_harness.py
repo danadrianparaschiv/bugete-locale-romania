@@ -127,3 +127,9 @@ def test_evaluate_all_against_run_store(tmp_path):
 
     summary = ev.summarize_by_layout(results)
     assert summary["scan_simple_table"]["anchors_matched"] == 1
+
+    report = ev.evaluation_report(results)
+    assert report["metric"] == "selected_anchor_recall"
+    assert report["full_cell_recall_measured"] is False
+    assert report["fixtures"] == {"total": 1, "evaluated": 1, "missing": 0}
+    assert report["anchors"] == {"matched": 1, "total": 1, "pct": 100.0}

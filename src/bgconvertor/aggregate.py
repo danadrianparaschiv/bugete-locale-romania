@@ -24,7 +24,7 @@ from .manifest import CityEntry, Manifest
 
 log = logging.getLogger("bgc.aggregate")
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
 # execution above this share of the approved plan means the plan figure is
 # partial (bad scan), not that the city overspent — rectifications explain
@@ -47,10 +47,20 @@ class Capitol(BaseModel):
 
 
 class Quality(BaseModel):
+    schema_version: int | None = None
+    metric: str | None = None
+    recall_measured: bool | None = None
     lines: int | None = None
+    lines_strictly_verified: int | None = None
+    pct_lines_strictly_verified: float | None = None
+    numeric_cells: int | None = None
+    numeric_cells_strictly_verified: int | None = None
+    pct_numeric_cells_strictly_verified: float | None = None
+    scope: dict = Field(default_factory=dict)
     pct_clean: float | None = None
     errors: int | None = None
     warnings: int | None = None
+    info: int | None = None
     documents: int | None = None
 
 
@@ -86,6 +96,8 @@ class Executie(BaseModel):
 
 class CityYear(BaseModel):
     status: str = "pending"
+    artifact_status: str | None = None
+    artifact_issues: list[dict] = Field(default_factory=list)
     has_analysis: bool = False  # analysis.json exists -> the site renders a city page
     timeline: Timeline = Field(default_factory=Timeline)
     quality: Quality | None = None
@@ -147,6 +159,8 @@ def _load_executie(repo_root: Path, year: int, pdf: Path) -> Executie | None:
 
 
 def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
+    from .publication import audit_city
+
     conv = c.entry.get("conversion") or {}
     repo_root = manifest.root.parent.parent
     tl = c.entry.get("timeline") or {}
@@ -154,16 +168,27 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
     files = Files(source_url=c.entry.get("source_url"))
     if c.pdf.exists() and c.pdf.stat().st_size <= GITHUB_FILE_LIMIT:
         files.pdf = str(c.pdf.relative_to(repo_root))
-    xlsx = c.pdf.with_suffix(".xlsx")
-    if xlsx.exists():
-        files.xlsx = str(xlsx.relative_to(repo_root))
-
     cy = CityYear(
         status=conv.get("status") or "pending",
         timeline=Timeline(**{k: tl.get(k) for k in Timeline.model_fields}),
         files=files,
     )
     apath = c.pdf.with_name("analysis.json")
+    if cy.status == "converted":
+        audit = audit_city(manifest, c)
+        cy.artifact_status = audit.status
+        cy.artifact_issues = [
+            {"severity": issue.severity, "code": issue.code, "message": issue.message}
+            for issue in audit.issues
+        ]
+        if not audit.trusted:
+            # Never mix figures from one conversion with a workbook or manifest
+            # from another.  The official PDF/source link remains public.
+            cy.status = "artifact_mismatch"
+        else:
+            xlsx = c.pdf.with_name(conv.get("workbook") or c.pdf.with_suffix(".xlsx").name)
+            if xlsx.exists():
+                files.xlsx = str(xlsx.relative_to(repo_root))
     if cy.status == "converted" and apath.exists():
         a = json.loads(apath.read_text())
         cy.has_analysis = True

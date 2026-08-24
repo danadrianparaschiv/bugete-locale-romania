@@ -1,24 +1,33 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 1323,
-    "pct_clean": 26.0,
-    "errors": 47,
-    "warnings": 995,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1295,
+    "lines_strictly_verified": 331,
+    "pct_lines_strictly_verified": 25.6,
+    "numeric_cells": 5310,
+    "numeric_cells_strictly_verified": 1308,
+    "pct_numeric_cells_strictly_verified": 24.6,
+    "scope": {
+      "pages_expected": 47,
+      "pages_selected": 47,
+      "pages_processed": 47,
+      "complete_pdf": true
+    },
+    "pct_clean": 25.6,
+    "errors": 73,
+    "warnings": 947,
+    "info": 5,
     "documents": 1
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": 832952.64,
     "cheltuieli": 853165.17
   },
   "top_capitole": [
-    {
-      "code": "00.02",
-      "name": "TOTAL CHELTUIELI",
-      "total": 301335.29
-    },
     {
       "code": "84.02",
       "name": "Transporturi (cod 84.02.03+84.02.06+84.02.50)",
@@ -63,190 +72,18 @@
       "code": "54.02",
       "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
       "total": 2523.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01)",
+      "total": 500.0
     }
   ],
-  "infografic": {
-    "unitate": "mii lei",
-    "capitole": [
-      {
-        "cod": "00.02",
-        "nume": "TOTAL CHELTUIELI",
-        "val": 301335.29,
-        "copii": []
-      },
-      {
-        "cod": "84.02",
-        "nume": "Transporturi",
-        "val": 139933.55,
-        "copii": [
-          {
-            "nume": "Transport rutier",
-            "val": 139933.55
-          }
-        ]
-      },
-      {
-        "cod": "65.02",
-        "nume": "Invatamant",
-        "val": 96419.75,
-        "copii": [
-          {
-            "nume": "Invatamant secundar",
-            "val": 70862.41
-          },
-          {
-            "nume": "Invatamant prescolar si primar",
-            "val": 14978.54
-          },
-          {
-            "nume": "Alte cheltuieli in domeniul invatamantului",
-            "val": 8715.0
-          },
-          {
-            "nume": "Servicii auxiliare pentru educatie",
-            "val": 1800.0
-          },
-          {
-            "nume": "Invatamant anteprescolar",
-            "val": 53.8
-          },
-          {
-            "nume": "Invatamant postliceal",
-            "val": 10.0
-          }
-        ]
-      },
-      {
-        "cod": "68.02",
-        "nume": "Asigurari si asistenta sociala",
-        "val": 73061.0,
-        "copii": [
-          {
-            "nume": "Asistenta sociala in caz de boli si invaliditati",
-            "val": 54422.0
-          },
-          {
-            "nume": "Asistenta acordata persoanelor in varsta",
-            "val": 8570.0
-          },
-          {
-            "nume": "Alte cheltuieli in domeniul asigurarilor si asistentei sociale",
-            "val": 8191.0
-          },
-          {
-            "nume": "Prevenirea excluderii sociale",
-            "val": 1878.0
-          }
-        ]
-      },
-      {
-        "cod": "51.02",
-        "nume": "Autoritati publice si actiuni externe",
-        "val": 58530.0,
-        "copii": [
-          {
-            "nume": "Autoritati executive si legislative",
-            "val": 58530.0
-          }
-        ]
-      },
-      {
-        "cod": "67.02",
-        "nume": "Cultura, recreere si religie",
-        "val": 45378.0,
-        "copii": [
-          {
-            "nume": "Servicii recreative si sportive",
-            "val": 31150.0
-          },
-          {
-            "nume": "Servicii religioase",
-            "val": 3000.0
-          },
-          {
-            "nume": "Alte servicii in domeniile culturii, recreerii si religiei",
-            "val": 1986.0
-          }
-        ]
-      },
-      {
-        "cod": "61.02",
-        "nume": "Ordine publica si siguranta nationala",
-        "val": 21500.0,
-        "copii": [
-          {
-            "nume": "Ordine publica",
-            "val": 21225.0
-          },
-          {
-            "nume": "Protectie civila si protectia contra incendiilor (protectie civila non",
-            "val": 275.0
-          }
-        ]
-      },
-      {
-        "cod": "55.02",
-        "nume": "Tranzactii privind datoria publica si imprumuturi ()",
-        "val": 18776.0,
-        "copii": []
-      },
-      {
-        "cod": "81.02",
-        "nume": "Combustibili si energie",
-        "val": 11076.0,
-        "copii": [
-          {
-            "nume": "Energie termica",
-            "val": 10463.0
-          },
-          {
-            "nume": "Alte cheltuieli privind combustibili si energia",
-            "val": 613.0
-          }
-        ]
-      },
-      {
-        "cod": "54.02",
-        "nume": "Alte servicii publice generale",
-        "val": 2523.0,
-        "copii": [
-          {
-            "nume": "Servicii publice comunitare de evidenta a persoanelor",
-            "val": 2423.0
-          },
-          {
-            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
-            "val": 100.0
-          }
-        ]
-      },
-      {
-        "cod": "80.02",
-        "nume": "Actiuni generale economice, comerciale si de munca",
-        "val": 500.0,
-        "copii": [
-          {
-            "nume": "Actiuni generale economice si comerciale",
-            "val": 500.0
-          }
-        ]
-      }
-    ],
-    "total_cheltuieli": 853165.17,
-    "ani": {
-      "cheltuieli": [
-        853165.17,
-        472984.56,
-        437256.91,
-        381460.74
-      ],
-      "venituri": [
-        832952.64,
-        472984.56,
-        437256.91,
-        381460.74
-      ]
-    }
-  },
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "86c75d8db8bdcdd08f59a0fc",
+    "source_pdf_sha256": "a21df7960b1d449f1bfb364dcc14faa577515c6c8bbc6d55f22bf786651427de"
+  }
 }

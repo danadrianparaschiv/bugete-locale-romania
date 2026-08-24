@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 5346,
-    "pct_clean": 71.9,
-    "errors": 1936,
-    "warnings": 862,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 5343,
+    "lines_strictly_verified": 3711,
+    "pct_lines_strictly_verified": 69.5,
+    "numeric_cells": 13073,
+    "numeric_cells_strictly_verified": 9158,
+    "pct_numeric_cells_strictly_verified": 70.1,
+    "scope": {
+      "pages_expected": 268,
+      "pages_selected": 268,
+      "pages_processed": 268,
+      "complete_pdf": true
+    },
+    "pct_clean": 69.5,
+    "errors": 2847,
+    "warnings": 858,
+    "info": 30,
     "documents": 52
   },
   "llm_models": [],
@@ -23,11 +39,6 @@
       "total": 10662.34
     },
     {
-      "code": "61.10",
-      "name": "(rd+ )    d .50)",
-      "total": 9068.5
-    },
-    {
       "code": "74.10",
       "name": "Protectia mediului",
       "total": 899.0
@@ -36,13 +47,13 @@
       "code": "70.10",
       "name": "Locuinte, servicii si dezvoltare publica",
       "total": 540.0
-    },
-    {
-      "code": "65.10",
-      "name": "Materiale si prestari de servicii cu caracter functional",
-      "total": 0.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "ff38daf0ad1a9ba156a85f73",
+    "source_pdf_sha256": "719a96d92e00c1729fceb8cfb2f30a372d19eb5adb8e44ba73e13c08570a14a0"
+  }
 }

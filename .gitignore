@@ -18,6 +18,9 @@ runs/
 /corpus.csv
 /corpus.parquet
 /corpus.json
+/artifact-audit.json
+/eval-report.json
+/bundle-migration.json
 
 # OS noise
 .DS_Store

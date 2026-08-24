@@ -1,26 +1,37 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 1752,
+    "lines_strictly_verified": 1607,
+    "pct_lines_strictly_verified": 91.7,
+    "numeric_cells": 1747,
+    "numeric_cells_strictly_verified": 1606,
+    "pct_numeric_cells_strictly_verified": 91.9,
+    "scope": {
+      "pages_expected": 41,
+      "pages_selected": 41,
+      "pages_processed": 41,
+      "complete_pdf": true
+    },
     "pct_clean": 91.7,
-    "errors": 61,
+    "errors": 62,
     "warnings": 95,
+    "info": 9,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": 232894100.0
+    "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "65.02",
-      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.12+65.02.",
-      "total": 59864100.0
-    },
-    {
-      "code": "68.02",
-      "name": "Aslgurari sl aslstenta soclala (cod 68.02.04+68.02.05+68.02.06+68.02.1",
-      "total": 39506040.0
+      "code": "84.02",
+      "name": "Transporturi (cod 84.02.03+84.02.04+84.02.06+84.02.50)",
+      "total": 72143520.0
     },
     {
       "code": "67.02",
@@ -33,19 +44,14 @@
       "total": 22290000.0
     },
     {
-      "code": "87.02",
-      "name": "(rând derivat din formula tipărită)",
-      "total": 19395700.0
+      "code": "65.02",
+      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.12+65.02.",
+      "total": 21670500.0
     },
     {
       "code": "55.02",
       "name": "Tranzactil privind datorla publica si 1mprumuturl",
       "total": 12250000.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica(cod 70.02.03+70.02.05 la 70.0",
-      "total": 9805640.0
     },
     {
       "code": "74.02",
@@ -61,8 +67,23 @@
       "code": "80.02",
       "name": "Actiuni generale economice, comerclale si de munca (cod 80.02.01+80.02",
       "total": 4685450.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala(cod 61.02.03+61.02.05+61.02.50)",
+      "total": 4460000.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "total": 1706000.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "ef6b1f4774d85f31d354b3e1",
+    "source_pdf_sha256": "71ca1b3eeff73fc5dd5092a000783a7db1f2b5a33690f4eefe68a536c4f704b6"
+  }
 }

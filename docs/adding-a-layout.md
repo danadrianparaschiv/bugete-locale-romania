@@ -130,4 +130,5 @@ cache-ul ieftin de mapare, nu OCR-ul cel scump) și rulează din nou
   țintă, plus scorul de eval neschimbat pentru tot restul.
 
 Asta e întreaga buclă. Bistrița a trecut de la 31 de linii extrase la 163
-(79% verificate) exact prin acești pași.
+(79% pe metrica legacy a liniilor extrase) exact prin acești pași; acest
+procent nu reprezintă recall complet, vezi [quality.md](quality.md).

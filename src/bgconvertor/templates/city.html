@@ -63,23 +63,30 @@
   </tbody>
 </table>
 <p class="note" style="border:none;padding:0;margin-top:.5rem">Valori nominale, din
-liniile verificate aritmetic ale fiecărui an; Δ față de precedentul an cu date.</p>
+liniile fără probleme de validare ale fiecărui an; Δ față de precedentul an cu date.</p>
 {% endif %}
 
 <h2 style="font-size:1.1rem;margin-top:1.8rem">Calitatea conversiei</h2>
+{% set strict_pct = a.quality.pct_lines_strictly_verified
+                    if a.quality.pct_lines_strictly_verified is not none
+                    else a.quality.pct_clean %}
 <table>
   <tr><td>Documente bugetare</td><td class="num">{{ a.quality.documents }}</td></tr>
   <tr><td>Linii de date</td><td class="num">{{ a.quality.lines }}</td></tr>
-  <tr><td>Complet verificate</td><td class="num">{{ a.quality.pct_clean }}%</td></tr>
+  <tr><td>Linii strict verificate</td><td class="num">{{ strict_pct }}%</td></tr>
   <tr><td>Erori marcate</td><td class="num">{{ a.quality.errors }}</td></tr>
   <tr><td>Avertismente</td><td class="num">{{ a.quality.warnings }}</td></tr>
   {% if a.llm_models %}
   <tr><td>Modele LLM folosite</td><td class="num">{{ a.llm_models | join(", ") }}</td></tr>
   {% endif %}
 </table>
-<p class="note" style="border:none;padding:0;margin-top:.5rem">Se referă la bugetul
-aprobat, extras din PDF. Cifrele de execuție vin structurate din Forexebug și nu trec
-prin conversie.</p>
+<p class="note" style="border:none;padding:0;margin-top:.5rem">Procentul are ca
+numitor numai liniile extrase și nu este recall-ul PDF-ului. Cifrele de execuție vin
+structurate din Forexebug și nu trec prin conversie.</p>
+{% if city.artifact_status == 'legacy_consistent' %}
+<p class="note">Artefacte legacy coerente între ele, dar fără bundle ID și hash-uri
+de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
+{% endif %}
 
 <p style="margin-top:1.25rem">
   {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}

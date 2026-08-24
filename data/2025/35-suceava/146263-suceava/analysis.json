@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 1682,
+    "lines_strictly_verified": 1526,
+    "pct_lines_strictly_verified": 90.7,
+    "numeric_cells": 3105,
+    "numeric_cells_strictly_verified": 2849,
+    "pct_numeric_cells_strictly_verified": 91.8,
+    "scope": {
+      "pages_expected": 71,
+      "pages_selected": 71,
+      "pages_processed": 71,
+      "complete_pdf": true
+    },
     "pct_clean": 90.7,
     "errors": 42,
     "warnings": 120,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [],
@@ -13,56 +29,46 @@
   },
   "top_capitole": [
     {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 67545130.0
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 7590390.0
     },
     {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 62819000.0
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 7331500.0
     },
     {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 49289500.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 48795250.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 41547920.0
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 5545950.0
     },
     {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe",
-      "total": 36464460.0
+      "total": 1344200.0
     },
     {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 30557100.0
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 681620.0
     },
     {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 24522220.0
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 295630.0
     },
     {
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
-      "total": 15361620.0
-    },
-    {
-      "code": "66.02",
-      "name": "Sanatate",
-      "total": 7590390.0
+      "total": 260000.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "e8a8d15e4dbb221d7a8320b2",
+    "source_pdf_sha256": "2fc8ecbdc365901d2e7e338fc1241fdbe692363ad8f0c55a62d8878e70d9c6aa"
+  }
 }

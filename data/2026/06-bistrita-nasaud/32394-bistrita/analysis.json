@@ -1,35 +1,37 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 149,
-    "pct_clean": 74.5,
-    "errors": 43,
-    "warnings": 24,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 88,
+    "lines_strictly_verified": 40,
+    "pct_lines_strictly_verified": 45.5,
+    "numeric_cells": 499,
+    "numeric_cells_strictly_verified": 232,
+    "pct_numeric_cells_strictly_verified": 46.5,
+    "scope": {
+      "pages_expected": 18,
+      "pages_selected": 18,
+      "pages_processed": 18,
+      "complete_pdf": true
+    },
+    "pct_clean": 45.5,
+    "errors": 140,
+    "warnings": 27,
+    "info": 1,
     "documents": 2
   },
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "63.02",
-      "name": "nonmilitara) Partea a III-a CHELTUIELI SOCIAL-CULTURALE (cod65.02+66.0",
-      "total": 193437.8
-    },
-    {
-      "code": "50.02",
-      "name": "Partea l-a SERVICII PUBLICE GENERALE (cod 51.02+54.02+55.02+56.02)",
-      "total": 89213.0
-    },
-    {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
       "total": 70318.0
-    },
-    {
-      "code": "59.02",
-      "name": "Partea a II-a APARARE, ORDINE PUBLICA SI SIGURANTA",
-      "total": 14781.0
     },
     {
       "code": "61.02",
@@ -47,5 +49,11 @@
       "total": 5050.0
     }
   ],
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "a571a17609497a175ea966df",
+    "source_pdf_sha256": "c2a3e38efd5d6d186f05fa22205b03199ef65f4a881c73eb6bf292692bb11b46"
+  }
 }

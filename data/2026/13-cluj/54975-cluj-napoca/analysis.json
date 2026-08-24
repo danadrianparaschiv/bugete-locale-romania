@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 17619,
+    "lines_strictly_verified": 9532,
+    "pct_lines_strictly_verified": 54.1,
+    "numeric_cells": 17875,
+    "numeric_cells_strictly_verified": 9559,
+    "pct_numeric_cells_strictly_verified": 53.5,
+    "scope": {
+      "pages_expected": 753,
+      "pages_selected": 753,
+      "pages_processed": 753,
+      "complete_pdf": true
+    },
     "pct_clean": 54.1,
-    "errors": 1722,
+    "errors": 1763,
     "warnings": 7280,
+    "info": 1,
     "documents": 57
   },
   "llm_models": [],
@@ -43,11 +59,6 @@
       "total": 215474000.0
     },
     {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 155214000.0
-    },
-    {
       "code": "70.02",
       "name": "Locuinte, servicii si dezvoltare publica",
       "total": 118856888.0
@@ -61,8 +72,18 @@
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
       "total": 61391400.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 35300629.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "966d9448edb68a613684521f",
+    "source_pdf_sha256": "3e8719cc77b7071e79fbf93c0c95d9b4b915c9e08411f854043129d42ad2e4db"
+  }
 }

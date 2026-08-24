@@ -1,7 +1,7 @@
 # Bugete locale România
 
 Bugetele locale ale municipiilor reședință de județ, extrase din PDF-urile
-oficiale în format analizabil — cu verificare aritmetică a fiecărei linii.
+oficiale în Excel și format analizabil — cu proveniență și verificări explicite.
 
 Acest depozit conține un corpus deschis al bugetelor locale din România
 (PDF-uri oficiale + fișiere Excel/seturi de date validate, codificate
@@ -20,6 +20,11 @@ capitole, identități între secțiuni). Ce nu poate fi verificat este
 reședință de județ (codificate SIRUTA, cu sursa fiecărui fișier) alături
 de fișierele Excel convertite; site-ul generat publică o pagină de analiză
 pentru fiecare buget convertit.
+
+Datele augmentate (populație, suprafață, execuție bugetară și viitoare surse
+de referință) se leagă prin SIRUTA + an și rămân separate de faptele extrase
+din PDF. Nu suprascriu valori din document; analizele implicite folosesc doar
+linii strict verificate și afișează acoperirea disponibilă.
 
 ## Cum funcționează — trei straturi
 
@@ -65,11 +70,16 @@ uv run bgconvertor eval
 # un set de date normalizat pentru toate fișierele convertite
 uv run bgconvertor corpus export corpus.csv
 uv run bgconvertor corpus report
+
+# coerența Excel + analysis.json + manifest (și hash-urile bundle-urilor noi)
+uv run bgconvertor corpus audit data --json-out artifact-audit.json
 ```
 
 Fișierul Excel rezultat conține foi de date pentru fiecare document
 bugetar și secțiune, o foaie „Probleme" care localizează fiecare problemă
-(pagină + cod + coloană) și un scor de calitate în „Sumar calitate".
+(pagină + cod + coloană) și un scor de calitate în „Sumar calitate". Pentru
+fișierele corpusului, Excelul, analiza și manifestul sunt publicate ca un
+singur bundle cu ID comun și hash-uri SHA-256.
 
 ## Alegerea modelelor LLM
 
@@ -109,18 +119,21 @@ repară mai puține grupuri, dar nu poate corupe datele — o corecție se
 aplică doar dacă face sumele să se închidă. Cheile API per furnizor sunt
 în `.env.example`.
 
-## La ce să vă așteptați
+## Calitate, țintă și cost
 
-| Tip de fișier | Rezultat tipic | Cost LLM |
-|---|---|---|
-| Digital, cu grilă liniată | 94–100% linii verificate | 0 $ |
-| Scanare bună, formate cunoscute | 60–80% verificate | 1–4 $ |
-| Scanare dificilă (ștampile, rotiri, OCR de copiator) | 55–70% verificate | 3–8 $ |
+| Tip de fișier | Țintă API | Regula de publicare |
+|---|---:|---|
+| Digital, format suportat | 0 $ | toate paginile procesate, bundle auditat |
+| Scanare, format suportat | mediană ≤3 $ | LLM numai țintit |
+| Scanare dificilă | plafon dur ≤5 $ | ce nu poate fi demonstrat rămâne marcat |
 
-„Verificat" înseamnă că linia a trecut toate verificările de nomenclator
-și aritmetice — stratul sigur de analizat fără a deschide PDF-ul. Restul
-rămâne și el în rezultat, marcat cu motivul. Vezi
-[DISCLAIMER.md](DISCLAIMER.md).
+Scorul curent este `observed_strict_line_rate`: procentul liniilor **deja
+extrase** fără nicio problemă (`error`, `warning` sau `info`). El nu măsoară
+rândurile/celulele omise și nu trebuie citit ca recall al conversiei. Ținta de
+produs este ≥90% `validated_cell_recall` pentru fiecare familie suportată,
+după construirea unor etaloane exhaustive. Definițiile, porțile și auditul
+baseline sunt în [docs/quality.md](docs/quality.md); limitările de utilizare,
+în [DISCLAIMER.md](DISCLAIMER.md).
 
 ## Corpusul
 
@@ -145,13 +158,15 @@ cu `bgconvertor eval`. Ghidul complet este în
 
 ```bash
 uv run pytest            # suită de teste offline (testele LLM redau casete înregistrate)
-uv run bgconvertor eval  # scor la nivel de celulă față de fixture-uri etalon verificate manual
+uv run bgconvertor eval  # recall pe ancore selectate, nu recall complet pe celule
+uv run bgconvertor corpus audit data --strict --require-modern  # poarta de release
 ```
 
-Două porți obligatorii pentru orice modificare: suita de teste trece, iar
+Trei porți obligatorii pentru orice modificare: suita de teste trece,
 evaluarea pe ancora etalon nu regresează (fișierul digital de referință
-trebuie să rămână 100% curat — este fixat printr-un test). Vezi
-[CONTRIBUTING.md](CONTRIBUTING.md) și [docs/design.md](docs/design.md).
+trebuie să rămână 100% curat — este fixat printr-un test), iar auditul strict
+al bundle-urilor publice trece. Vezi [CONTRIBUTING.md](CONTRIBUTING.md) și
+[docs/design.md](docs/design.md).
 
 ## Licență
 

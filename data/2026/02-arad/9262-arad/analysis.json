@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 5749,
-    "pct_clean": 57.3,
-    "errors": 1483,
-    "warnings": 2469,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 5732,
+    "lines_strictly_verified": 3333,
+    "pct_lines_strictly_verified": 58.1,
+    "numeric_cells": 12089,
+    "numeric_cells_strictly_verified": 7720,
+    "pct_numeric_cells_strictly_verified": 63.9,
+    "scope": {
+      "pages_expected": 333,
+      "pages_selected": 333,
+      "pages_processed": 333,
+      "complete_pdf": true
+    },
+    "pct_clean": 58.1,
+    "errors": 2261,
+    "warnings": 2284,
+    "info": 6,
     "documents": 7
   },
   "llm_models": [],
@@ -12,26 +28,6 @@
     "cheltuieli": null
   },
   "top_capitole": [
-    {
-      "code": "84.02",
-      "name": "TOTAL CAPITOL 84.02 \"TRANSPORTURI\", din care pe titluri de cheltuieli,",
-      "total": 256221.36
-    },
-    {
-      "code": "67.02",
-      "name": "RELIGIE\", din care pe titluri de cheltuieli:",
-      "total": 166219.09
-    },
-    {
-      "code": "65.02",
-      "name": "TOTAL CAPITOL \"ÎNVĂTĂMÂNT\", din care:",
-      "total": 135662.41
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurări și asistență socială {cod 68.02.04+68.02.05+68.02.06+68.0 2.",
-      "total": 102246.0
-    },
     {
       "code": "51.02",
       "name": "TOTAL CAPITOL 51.02 \"AUTORITÄTI PUBLICE ŞI ACTIUNI EXTERNE\", din care ",
@@ -58,11 +54,36 @@
       "total": 16887.0
     },
     {
+      "code": "54.02",
+      "name": "TOTAL CAPITOL 54.02 \"ALTE SERVICII PUBLICE GENERALE\", din care pe titl",
+      "total": 9036.02
+    },
+    {
+      "code": "84.07",
+      "name": "Transporturi (cod 84.07.03+84.07.06+84.07.50)",
+      "total": 7035.0
+    },
+    {
       "code": "65.10",
-      "name": "",
-      "total": 14875.0
+      "name": "TOTAL CHELTUIELI",
+      "total": 5681.0
+    },
+    {
+      "code": "01.10",
+      "name": "TITLUL I CHELTUIELI DE PERSONAL",
+      "total": 86.0
+    },
+    {
+      "code": "60.02",
+      "name": "Apărare (cod 60.02.02)",
+      "total": 0.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "2bb0ac24fd93e1d93762afb5",
+    "source_pdf_sha256": "d9554c184a3821bc00735387857b6228dfe46d582e0b5e5be40adcc546418698"
+  }
 }

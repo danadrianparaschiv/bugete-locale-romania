@@ -1,12 +1,30 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 8869,
-    "pct_clean": 82.6,
-    "errors": 1756,
-    "warnings": 850,
-    "documents": 289
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 9279,
+    "lines_strictly_verified": 7454,
+    "pct_lines_strictly_verified": 80.3,
+    "numeric_cells": 16633,
+    "numeric_cells_strictly_verified": 13542,
+    "pct_numeric_cells_strictly_verified": 81.4,
+    "scope": {
+      "pages_expected": 551,
+      "pages_selected": 551,
+      "pages_processed": 551,
+      "complete_pdf": true
+    },
+    "pct_clean": 80.3,
+    "errors": 1361,
+    "warnings": 1063,
+    "info": 3,
+    "documents": 286
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 8593888.15,
     "cheltuieli": null
@@ -14,7 +32,7 @@
   "top_capitole": [
     {
       "code": "54.02",
-      "name": "Alte servicii publice generale",
+      "name": "Alte servicii publice generale Servicii publice comunitare de evidenta",
       "total": 5247749.0
     },
     {
@@ -64,5 +82,10 @@
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "9b9a7cfec0ac7ffaf595708e",
+    "source_pdf_sha256": "11587b75564d341840099bfc28de10dd54aafaa050a2535a577951a53ced4c38"
+  }
 }

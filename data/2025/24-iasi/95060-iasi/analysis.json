@@ -1,12 +1,30 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 1277,
-    "pct_clean": 74.9,
-    "errors": 215,
-    "warnings": 219,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1287,
+    "lines_strictly_verified": 954,
+    "pct_lines_strictly_verified": 74.1,
+    "numeric_cells": 3621,
+    "numeric_cells_strictly_verified": 2681,
+    "pct_numeric_cells_strictly_verified": 74.0,
+    "scope": {
+      "pages_expected": 246,
+      "pages_selected": 246,
+      "pages_processed": 246,
+      "complete_pdf": true
+    },
+    "pct_clean": 74.1,
+    "errors": 279,
+    "warnings": 211,
+    "info": 0,
     "documents": 3
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 2090266.36,
     "cheltuieli": null
@@ -18,39 +36,9 @@
       "total": 372752.67
     },
     {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 320637.24
-    },
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 303418.88
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 98034.19
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 97586.3
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 96529.24
-    },
-    {
       "code": "67.10",
       "name": "Cultura, recreere si religie",
       "total": 80515.37
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 55407.81
     },
     {
       "code": "61.02",
@@ -61,8 +49,38 @@
       "code": "61.10",
       "name": "siguranta nationala",
       "total": 46500.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 41953.05
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 33643.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 970.0
+    },
+    {
+      "code": "54.10",
+      "name": "generale Alte servicii publice",
+      "total": 380.0
+    },
+    {
+      "code": "68.10",
+      "name": "Asigurari si asistenta sociala",
+      "total": 30.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "ceb9fb0e2d0a29c9e3a80a8d",
+    "source_pdf_sha256": "8dd751e532427b1a05525301f4601c653c4500710897c3f8c2ad4a236c515966"
+  }
 }

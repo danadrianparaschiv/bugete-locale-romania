@@ -3,9 +3,22 @@
 import json
 
 import pytest
+from openpyxl import Workbook
 
 from bgconvertor import aggregate as agg
 from bgconvertor.site import build_all
+
+
+def _quality_workbook(path, lines=100, pct=95.0, errors=0, warnings=5):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sumar calitate"
+    for row in (
+        ("Linii de date", lines), ("% curat", pct),
+        ("Erori", errors), ("Avertismente", warnings),
+    ):
+        ws.append(row)
+    wb.save(path)
 
 
 def _write_year(data_root, year, converted, totals=(123.4, 120.0)):
@@ -20,10 +33,13 @@ def _write_year(data_root, year, converted, totals=(123.4, 120.0)):
         "source_url": f"https://example.ro/{year}.pdf",
     }
     if converted:
-        entry["conversion"] = {"status": "converted", "lines": 100, "pct_clean": 95.0}
+        entry["conversion"] = {
+            "status": "converted", "lines": 100, "pct_clean": 95.0,
+            "errors": 0, "warnings": 5,
+        }
         entry["timeline"] = {"debate_date": f"{year}-04-01", "approved_date": f"{year}-04-28",
                              "hcl": f"HCL 1/{year}"}
-        (city / "budget_file.xlsx").write_bytes(b"xlsx")
+        _quality_workbook(city / "budget_file.xlsx")
         (city / "analysis.json").write_text(json.dumps({
             "quality": {"lines": 100, "pct_clean": 95.0, "errors": 0, "warnings": 5, "documents": 1},
             "totals_mii_lei": {"venituri": totals[0], "cheltuieli": totals[1]},
@@ -86,7 +102,7 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert not (out / "2025" / "city" / "1017.html").exists()
 
     data = json.loads((out / "data" / "corpus.json").read_text())
-    assert data["schema_version"] == agg.SCHEMA_VERSION
+    assert data["schema_version"] == agg.SCHEMA_VERSION == 2
     assert data["years"] == [2026, 2025]
     assert data["cities"][0]["years"]["2026"]["totals_mii_lei"]["cheltuieli"] == 120.0
 

@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 1868,
+    "lines_strictly_verified": 798,
+    "pct_lines_strictly_verified": 42.7,
+    "numeric_cells": 8253,
+    "numeric_cells_strictly_verified": 4615,
+    "pct_numeric_cells_strictly_verified": 55.9,
+    "scope": {
+      "pages_expected": 173,
+      "pages_selected": 173,
+      "pages_processed": 173,
+      "complete_pdf": true
+    },
     "pct_clean": 42.7,
     "errors": 848,
     "warnings": 1013,
+    "info": 0,
     "documents": 2
   },
   "llm_models": [],
@@ -23,11 +39,6 @@
       "total": 83242.99
     },
     {
-      "code": "00.02",
-      "name": "TOTAL CHELTUIELI",
-      "total": 70353.7
-    },
-    {
       "code": "74.10",
       "name": "Protectia mediului",
       "total": 28122.0
@@ -41,11 +52,6 @@
       "code": "66.02",
       "name": "Sanatate",
       "total": 20109.0
-    },
-    {
-      "code": "55.02",
-      "name": "Dobanzi",
-      "total": 19816.0
     },
     {
       "code": "54.02",
@@ -64,5 +70,10 @@
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "c656799e06275aa6489d63e3",
+    "source_pdf_sha256": "59b7177b568fe520ce8a77a0476ca3aa0857ee357821d12a215a6d703357a72a"
+  }
 }

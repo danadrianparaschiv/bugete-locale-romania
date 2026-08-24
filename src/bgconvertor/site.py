@@ -45,7 +45,13 @@ def _row(city: City, cy: CityYear) -> dict:
         "suprafata_km2": city.suprafata_km2,
         "executie": cy.executie,
         "status": cy.status,
-        "pct_clean": cy.quality.pct_clean if cy.quality else None,
+        "artifact_status": cy.artifact_status,
+        "artifact_issues": cy.artifact_issues,
+        "pct_clean": (
+            cy.quality.pct_lines_strictly_verified
+            if cy.quality and cy.quality.pct_lines_strictly_verified is not None
+            else cy.quality.pct_clean if cy.quality else None
+        ),
         "lines": cy.quality.lines if cy.quality else None,
         "analysis": cy.has_analysis,
         "source_url": cy.files.source_url,

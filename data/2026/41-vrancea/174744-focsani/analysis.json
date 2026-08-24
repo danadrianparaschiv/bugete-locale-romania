@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 245,
+    "lines_strictly_verified": 176,
+    "pct_lines_strictly_verified": 71.8,
+    "numeric_cells": 204,
+    "numeric_cells_strictly_verified": 145,
+    "pct_numeric_cells_strictly_verified": 71.1,
+    "scope": {
+      "pages_expected": 33,
+      "pages_selected": 33,
+      "pages_processed": 33,
+      "complete_pdf": true
+    },
     "pct_clean": 71.8,
-    "errors": 37,
-    "warnings": 76,
+    "errors": 46,
+    "warnings": 67,
+    "info": 0,
     "documents": 3
   },
   "llm_models": [
@@ -15,19 +31,9 @@
   },
   "top_capitole": [
     {
-      "code": "80.02",
-      "name": "finantare complementara",
-      "total": 341.0
-    },
-    {
       "code": "84.02",
       "name": "Transporturi",
       "total": 187.363
-    },
-    {
-      "code": "70.02",
-      "name": "finantare de baza",
-      "total": 150.0
     },
     {
       "code": "68.02",
@@ -55,16 +61,26 @@
       "total": 30.91
     },
     {
-      "code": "55.02",
-      "name": "Dobanzi",
-      "total": 14.0
-    },
-    {
       "code": "66.02",
       "name": "Cap. 66.02 Sanatate",
       "total": 11.992
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni gen.economice, comerciale",
+      "total": 9.78
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 8.145
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "4d4df771e01847d72b86711f",
+    "source_pdf_sha256": "6564117f742e92ef18443ff0eb166013f511b2b26e8c0ad79d8783549bc3f0de"
+  }
 }

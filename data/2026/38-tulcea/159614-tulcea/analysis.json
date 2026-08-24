@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 720,
-    "pct_clean": 71.7,
-    "errors": 251,
-    "warnings": 189,
+    "lines_strictly_verified": 482,
+    "pct_lines_strictly_verified": 66.9,
+    "numeric_cells": 885,
+    "numeric_cells_strictly_verified": 571,
+    "pct_numeric_cells_strictly_verified": 64.5,
+    "scope": {
+      "pages_expected": 58,
+      "pages_selected": 58,
+      "pages_processed": 58,
+      "complete_pdf": true
+    },
+    "pct_clean": 66.9,
+    "errors": 296,
+    "warnings": 185,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [
@@ -15,24 +31,19 @@
   },
   "top_capitole": [
     {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 45620.1
+    },
+    {
       "code": "65.02",
       "name": "Invatamant",
-      "total": 98797.85
+      "total": 45271.0
     },
     {
       "code": "70.02",
       "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 86886.5
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 59752.1
-    },
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 58260.0
+      "total": 39827.0
     },
     {
       "code": "51.02",
@@ -42,17 +53,22 @@
     {
       "code": "74.02",
       "name": "Protectia mediului",
-      "total": 27756.0
+      "total": 22844.0
     },
     {
       "code": "67.02",
       "name": "Cultura, recreere si religie",
-      "total": 24621.0
+      "total": 20411.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 19562.0
     },
     {
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
-      "total": 9956.0
+      "total": 9450.0
     },
     {
       "code": "55.02",
@@ -66,5 +82,10 @@
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "5a2681604e1605cf72646b4e",
+    "source_pdf_sha256": "cc943daf2757091d1ed492066c0d8baaf728c7929175729efd7e8249547f4d35"
+  }
 }

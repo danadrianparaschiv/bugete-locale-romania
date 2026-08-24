@@ -8,11 +8,15 @@ All figures are drawn from VERIFIED lines only and are in mii lei.
 from __future__ import annotations
 
 import json
+import os
 import re
+import tempfile
 from decimal import Decimal
 from pathlib import Path
 
 from .model import ConversionResult
+
+ANALYSIS_SCHEMA_VERSION = 2
 
 TOTAL_COLS = ("total", "total_2026", "buget_2026")
 TRIM_COLS = ("trim1", "trim2", "trim3", "trim4")
@@ -103,7 +107,7 @@ def infografic(result: ConversionResult) -> dict | None:
     docs = [d for d in result.documents if d.suffix == "02"]
     verified = [
         ln for d in docs for ln in d.lines
-        if ln.kind != "heading" and ln.code and not any(i.severity == "error" for i in ln.issues)
+        if ln.kind != "heading" and ln.code and ln.strictly_verified
     ]
     if not verified:
         return None
@@ -230,7 +234,7 @@ def city_analysis(result: ConversionResult) -> dict:
         ln
         for doc in result.documents
         for ln in doc.lines
-        if ln.kind != "heading" and ln.code and not any(i.severity == "error" for i in ln.issues)
+        if ln.kind != "heading" and ln.code and ln.strictly_verified
     ]
 
     def first_total(pred) -> float | None:
@@ -288,11 +292,25 @@ def city_analysis(result: ConversionResult) -> dict:
     })
 
     return {
+        "schema_version": ANALYSIS_SCHEMA_VERSION,
         "quality": {
+            "schema_version": stats["quality_schema_version"],
+            "metric": stats["metric"],
+            "recall_measured": stats["recall_measured"],
             "lines": stats["lines"],
+            "lines_strictly_verified": stats["lines_strictly_verified"],
+            "pct_lines_strictly_verified": stats["pct_lines_strictly_verified"],
+            "numeric_cells": stats["numeric_cells"],
+            "numeric_cells_strictly_verified": stats["numeric_cells_strictly_verified"],
+            "pct_numeric_cells_strictly_verified": stats[
+                "pct_numeric_cells_strictly_verified"
+            ],
+            "scope": stats["scope"],
+            # Kept while downstream consumers migrate to the explicit name.
             "pct_clean": stats["pct_clean"],
             "errors": stats["issues"]["error"],
             "warnings": stats["issues"]["warning"],
+            "info": stats["issues"]["info"],
             "documents": stats["documents"],
         },
         "llm_models": llm_models,
@@ -302,10 +320,32 @@ def city_analysis(result: ConversionResult) -> dict:
         },
         "top_capitole": top_capitole,
         "infografic": infografic(result),
-        "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md.",
+        "note": (
+            "Figuri numai din linii fără erori, avertismente sau note de validare; "
+            "mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md."
+        ),
     }
 
 
-def write_analysis(result: ConversionResult, out: Path) -> Path:
-    out.write_text(json.dumps(city_analysis(result), ensure_ascii=False, indent=2))
+def write_analysis(
+    result: ConversionResult,
+    out: Path,
+    publication: dict | None = None,
+) -> Path:
+    payload = city_analysis(result)
+    if publication is not None:
+        payload["publication"] = publication
+    out.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{out.name}.", suffix=".tmp", dir=out.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        os.replace(tmp_name, out)
+    except BaseException:
+        try:
+            os.unlink(tmp_name)
+        except FileNotFoundError:
+            pass
+        raise
     return out
