@@ -118,6 +118,51 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert "Evoluție an-la-an" not in (out / "city" / "1017.html").read_text()
 
 
+def test_city_page_uses_mii_lei_for_every_absolute_budget_value(tmp_path):
+    data_root = tmp_path / "data"
+    _write_year(data_root, 2026, converted=True, totals=(1_000_000, 1_000_000))
+    analysis_path = data_root / "2026" / "01-alba" / "1017-alba-iulia" / "analysis.json"
+    payload = json.loads(analysis_path.read_text())
+    payload["infografic"] = {
+        "unitate": "mii lei",
+        "total_cheltuieli": 1_000_000,
+        "venituri": {
+            "total": 1_000_000,
+            "surse": [
+                {"cod": "04.02", "nume": "Venituri proprii", "grup": "proprii", "val": 1_000_000},
+            ],
+            "acoperire_pct": 100.0,
+        },
+        "capitole": [{
+            "cod": "65.02", "nume": "Învățământ", "val": 1_000_000,
+            "func": 700_000, "dezv": 300_000,
+            "copii": [{"nume": "Învățământ preșcolar", "val": 400_000}],
+        }],
+        "sectiuni": {"functionare": 700_000, "dezvoltare": 300_000},
+        "trim": {
+            "functionare": [175_000] * 4,
+            "dezvoltare": [75_000] * 4,
+            "venituri": [250_000] * 4,
+        },
+        "ani": {
+            "cheltuieli": [1_000_000, 1_100_000, 1_200_000, 1_300_000],
+            "venituri": [1_000_000, 1_100_000, 1_200_000, 1_300_000],
+        },
+    }
+    analysis_path.write_text(json.dumps(payload))
+
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+    page = (out / "city" / "1017.html").read_text()
+
+    assert "Funcționare / dezvoltare (mii lei)" in page
+    assert '<div class="v">700.000' in page and "/ 300.000" in page
+    assert "mii lei venituri" in page
+    assert "mil. lei" not in page
+    assert "milioane lei" not in page
+    assert "/ 1000" not in page
+
+
 def test_reference_populates_city_meta(data_root, tmp_path):
     ref = tmp_path / "reference"
     ref.mkdir()
