@@ -21,9 +21,10 @@
 
 <h2>Cheltuieli planificate pe locuitor</h2>
 {% if plan_rankings %}
-<table>
-  <thead><tr><th class="num">Loc</th><th>Municipiu</th><th>Județ</th>
-    <th class="num">lei/locuitor</th><th class="num">total (mii lei)</th></tr></thead>
+<table class="sortable">
+  <thead><tr><th class="num" data-sort-type="number">Loc</th><th>Municipiu</th><th>Județ</th>
+    <th class="num" data-sort-type="number">lei/locuitor</th>
+    <th class="num" data-sort-type="number">total (mii lei)</th></tr></thead>
   <tbody>
   {% for row in plan_rankings %}
     <tr><td class="num">{{ row.plan_expense_per_capita_rank }}</td>
@@ -38,9 +39,10 @@
 
 <h2>Plăți efectuate pe locuitor</h2>
 {% if execution_rankings %}
-<table>
-  <thead><tr><th class="num">Loc</th><th>Municipiu</th><th>Județ</th>
-    <th>Raport</th><th class="num">lei/locuitor</th><th class="num">total (mii lei)</th></tr></thead>
+<table class="sortable">
+  <thead><tr><th class="num" data-sort-type="number">Loc</th><th>Municipiu</th><th>Județ</th>
+    <th>Raport</th><th class="num" data-sort-type="number">lei/locuitor</th>
+    <th class="num" data-sort-type="number">total (mii lei)</th></tr></thead>
   <tbody>
   {% for row in execution_rankings %}
     <tr><td class="num">{{ row.execution_expense_per_capita_rank }}</td>

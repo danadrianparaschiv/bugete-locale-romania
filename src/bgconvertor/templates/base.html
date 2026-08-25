@@ -19,6 +19,15 @@
   th { color: var(--dim); font-weight: 600; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   td.date { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sort-button { width:100%; display:inline-flex; align-items:center; gap:.35rem;
+    justify-content:flex-start; padding:0; border:0; background:none; color:inherit;
+    font:inherit; font-weight:inherit; text-align:inherit; cursor:pointer; }
+  th.num .sort-button { justify-content:flex-end; }
+  .sort-button::after { content:"↕"; opacity:.45; font-size:.8rem; }
+  th[aria-sort="ascending"] .sort-button::after { content:"↑"; opacity:1; }
+  th[aria-sort="descending"] .sort-button::after { content:"↓"; opacity:1; }
+  .sort-button:hover { color:var(--ink); }
+  .sort-button:focus-visible { outline:2px solid #0b57d0; outline-offset:3px; border-radius:2px; }
   .badge { display:inline-block; padding:.1rem .5rem; border-radius:999px; font-size:.8rem; }
   .b-ok { background:#e6f4ea; color:var(--ok); }
   .b-mid { background:#fcf3d7; color:var(--warn); }
@@ -75,4 +84,5 @@
 liniile extrase fără probleme de validare. Procentul nu măsoară rândurile lipsă.
 Nu sunt cifre oficiale — vezi <a href="{{ base }}/DISCLAIMER.md">DISCLAIMER</a>.
 Generat de <a href="https://github.com/danadrianparaschiv/bugete-locale-romania">bugete-locale-romania</a> (bgconvertor).</p>
+<script>{% include "table-sort.js" %}</script>
 </main></body></html>

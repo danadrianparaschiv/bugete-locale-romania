@@ -37,11 +37,13 @@
   <a href="{{ data_base }}/analytics.xlsx">Excel</a>.</p>
 </section>
 
-<table>
+<table class="sortable">
   <thead><tr>
     <th>Județ</th><th>Municipiu</th>
-    <th>Pus în dezbatere</th><th>Aprobat</th><th>Status</th>
-    <th class="num">Linii</th><th class="num">% linii strict</th><th>Fișiere</th>
+    <th data-sort-type="date">Pus în dezbatere</th>
+    <th data-sort-type="date">Aprobat</th><th>Status</th>
+    <th class="num" data-sort-type="number">Linii</th>
+    <th class="num" data-sort-type="number">% linii strict</th><th>Fișiere</th>
   </tr></thead>
   <tbody>
   {% for c in cities %}

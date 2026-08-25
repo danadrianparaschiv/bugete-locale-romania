@@ -118,6 +118,34 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert "Evoluție an-la-an" not in (out / "city" / "1017.html").read_text()
 
 
+def test_every_site_table_has_accessible_sort_controls(tmp_path):
+    data_root = tmp_path / "sortable-data"
+    _write_year(data_root, 2026, converted=True)
+    _write_year(data_root, 2025, converted=True)
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+
+    pages = [
+        out / "index.html",
+        out / "comparatii.html",
+        out / "city" / "1017.html",
+    ]
+    for path in pages:
+        page = path.read_text()
+        assert page.count("<table") == page.count('<table class="sortable">')
+        assert page.count("<table") == page.count("<thead>")
+        assert page.count("<table") == page.count("<tbody>")
+        assert 'document.querySelectorAll("table.sortable")' in page
+        assert 'header.setAttribute("aria-sort", direction)' in page
+
+    city = (out / "city" / "1017.html").read_text()
+    assert "<th>Etapă</th>" in city
+    assert "<th>Indicator</th><th>Valoare</th>" in city
+    index = (out / "index.html").read_text()
+    assert '<th data-sort-type="date">Aprobat</th>' in index
+    assert '<th class="num" data-sort-type="number">Linii</th>' in index
+
+
 def test_city_page_uses_mii_lei_for_every_absolute_budget_value(tmp_path):
     data_root = tmp_path / "data"
     _write_year(data_root, 2026, converted=True, totals=(1_000_000, 1_000_000))
