@@ -167,22 +167,22 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
   {% if a.infografic.venituri %}
   <div id="ig-sec-ven">
     <h3 class="ig-h">De unde vin banii</h3>
-    <div class="ig-grid2">
-      <div class="ig-card"><div id="ig-ven"></div></div>
-      <div class="ig-card"><ul class="vlist" id="ig-ven-list"></ul></div>
+    <div class="ig-card">
+      <div class="bars" id="ig-ven-bars"></div>
+      <div class="detail" id="ig-ven-detail" aria-live="polite"></div>
     </div>
   </div>
   {% endif %}
 
   <h3 class="ig-h">Unde se duc banii</h3>
   <div class="toolbar" id="ig-tabs">
-    <button data-mode="val" class="on">Total</button>
-    <button data-mode="func">Doar funcționare</button>
-    <button data-mode="dezv">Doar dezvoltare</button>
+    <button data-mode="val" class="on" aria-pressed="true">Total</button>
+    <button data-mode="func" aria-pressed="false">Doar funcționare</button>
+    <button data-mode="dezv" aria-pressed="false">Doar dezvoltare</button>
   </div>
   <div class="ig-card">
     <div class="bars" id="ig-bars"></div>
-    <div class="detail" id="ig-detail"></div>
+    <div class="detail" id="ig-detail" aria-live="polite"></div>
   </div>
 
   <div class="ig-card" style="margin-top:1rem">

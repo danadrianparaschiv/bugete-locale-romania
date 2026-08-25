@@ -33,15 +33,7 @@
   /* infografic */
   .ig-h { font-size:1.05rem; margin:1.6rem 0 .6rem; }
   .ig-card { background:var(--card); border:1px solid var(--line); border-radius:.6rem; padding:1rem 1.1rem; }
-  .ig-grid2 { display:grid; grid-template-columns:1.05fr .95fr; gap:1rem; }
-  @media (max-width:800px){ .ig-grid2 { grid-template-columns:1fr; } }
   svg { display:block; width:100%; height:auto; }
-  .vlist { list-style:none; margin:0; padding:0; }
-  .vlist li { padding:.5rem 0; border-bottom:1px dashed var(--line); } .vlist li:last-child { border:0; }
-  .vrow { display:flex; justify-content:space-between; gap:.8rem; align-items:baseline; font-size:.9rem; }
-  .vrow .a { font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--dim); font-size:.85rem; }
-  .vbar { height:5px; border-radius:3px; margin-top:.35rem; background:#e8ebee; overflow:hidden; }
-  .vbar i { display:block; height:100%; }
   .tag { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; padding:.05rem .4rem;
          border:1px solid currentColor; border-radius:4px; white-space:nowrap; }
   .tabs { display:flex; gap:.25rem; flex-wrap:wrap; margin:.6rem 0 1.1rem;
@@ -59,6 +51,7 @@
   .brow { display:grid; grid-template-columns:minmax(120px,220px) 1fr auto; gap:.8rem; align-items:center;
           cursor:pointer; border-radius:4px; }
   .brow.sel .bt { font-weight:650; }
+  .brow:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
   .bt { font-size:.88rem; line-height:1.25; }
   .bg2 { background:#e8ebee; border-radius:4px; height:16px; overflow:hidden; display:flex; }
   .bg2 i { display:block; height:100%; }

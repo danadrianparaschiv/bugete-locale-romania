@@ -17,88 +17,104 @@
   }
   function mii(v) { return nf(v, 0); }
   function amount(v) { return mii(v) + " mii lei"; }
-  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function el(id) { return document.getElementById(id); }
   function put(id, html) { var e = el(id); if (e) e.innerHTML = html; }
   function hide(id) { var e = el(id); if (e) e.style.display = "none"; }
 
-  /* ---- venituri: donut + listă ---- */
-  if (IG.venituri) {
-    var ven = IG.venituri.surse, TV = IG.venituri.total;
-    var W = 640, H = 400, cx = 300, cy = 190, R = 112, r = 72, a = -Math.PI / 2, arcs = [], labels = [];
-    ven.forEach(function (s, i) {
-      var ang = s.val / TV * Math.PI * 2, b = a + ang, mid = (a + b) / 2, big = ang > Math.PI ? 1 : 0;
-      var x0 = cx + R * Math.cos(a), y0 = cy + R * Math.sin(a), x1 = cx + R * Math.cos(b), y1 = cy + R * Math.sin(b);
-      var x2 = cx + r * Math.cos(b), y2 = cy + r * Math.sin(b), x3 = cx + r * Math.cos(a), y3 = cy + r * Math.sin(a);
-      arcs.push('<path d="M' + x0.toFixed(1) + " " + y0.toFixed(1) + "A" + R + " " + R + " 0 " + big + " 1 " + x1.toFixed(1) + " " + y1.toFixed(1) +
-        "L" + x2.toFixed(1) + " " + y2.toFixed(1) + "A" + r + " " + r + " 0 " + big + " 0 " + x3.toFixed(1) + " " + y3.toFixed(1) +
-        'Z" fill="' + GRUP[s.grup] + '" stroke="#fff" stroke-width="2" opacity="' + Math.max(1 - i * 0.05, 0.55).toFixed(2) +
-        '"><title>' + esc(s.nume) + ": " + amount(s.val) + " (" + nf(s.val / TV * 100, 1) + "%)</title></path>");
-      if (s.val / TV >= 0.06) {
-        var right = Math.cos(mid) >= 0, ex = cx + (R + 28) * Math.cos(mid), ey = cy + (R + 28) * Math.sin(mid), tx = right ? ex + 6 : ex - 6;
-        labels.push('<polyline points="' + (cx + (R + 2) * Math.cos(mid)).toFixed(1) + "," + (cy + (R + 2) * Math.sin(mid)).toFixed(1) + " " +
-          ex.toFixed(1) + "," + ey.toFixed(1) + '" fill="none" stroke="' + C.grid + '" stroke-width="1"/>' +
-          '<text x="' + tx.toFixed(1) + '" y="' + ey.toFixed(1) + '" fill="' + C.ink + '" font-size="12.5" text-anchor="' + (right ? "start" : "end") + '">' +
-          esc(s.nume.length > 30 ? s.nume.slice(0, 28) + "…" : s.nume) + '</text>' +
-          '<text x="' + tx.toFixed(1) + '" y="' + (ey + 15).toFixed(1) + '" fill="' + C.dim + '" font-size="11.5" text-anchor="' + (right ? "start" : "end") + '">' +
-          amount(s.val) + " · " + nf(s.val / TV * 100, 1) + "%</text>");
-      }
-      a = b;
+  function selectBar(id, key) {
+    Array.prototype.forEach.call(document.querySelectorAll("#" + id + " .brow"), function (row) {
+      var on = row.getAttribute("data-key") === key;
+      row.className = "brow" + (on ? " sel" : "");
+      row.setAttribute("aria-pressed", on ? "true" : "false");
     });
-    put("ig-ven", '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Structura veniturilor">' + arcs.join("") + labels.join("") +
-      '<text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" fill="' + C.ink + '" font-size="24" font-weight="700">' + mii(TV) + "</text>" +
-      '<text x="' + cx + '" y="' + (cy + 18) + '" text-anchor="middle" fill="' + C.dim + '" font-size="12">mii lei venituri</text></svg>');
-    put("ig-ven-list", ven.map(function (s) {
-      return '<li><div class="vrow"><span>' + esc(s.nume) + ' <span class="tag" style="color:' + GRUP[s.grup] + '">' + GRUP_L[s.grup] + "</span></span>" +
-        '<span class="a">' + amount(s.val) + " · " + nf(s.val / TV * 100, 1) + "%</span></div>" +
-        '<div class="vbar"><i style="background:' + GRUP[s.grup] + ";width:" + Math.max(s.val / ven[0].val * 100, 1).toFixed(1) + '%"></i></div></li>';
+  }
+
+  function renderBarRows(id, rows, valueOf, colorOf, selected, onSelect) {
+    var max = Math.max.apply(null, rows.map(valueOf));
+    put(id, rows.map(function (row) {
+      var key = row.cod, value = valueOf(row), on = key === selected;
+      return '<div class="brow' + (on ? " sel" : "") + '" data-key="' + esc(key) +
+        '" tabindex="0" role="button" aria-pressed="' + (on ? "true" : "false") + '">' +
+        '<span class="bt">' + esc(row.nume.replace(/^CAP\.\s*/i, "")) + "</span>" +
+        '<span class="bg2"><i style="background:' + colorOf(row) + ";width:" +
+        (value / max * 100).toFixed(1) + '%"></i></span>' +
+        '<span class="bv">' + amount(value) + "</span></div>";
     }).join(""));
+    Array.prototype.forEach.call(document.querySelectorAll("#" + id + " .brow"), function (row) {
+      var activate = function () { onSelect(row.getAttribute("data-key")); };
+      row.onclick = activate;
+      row.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
+      };
+    });
+  }
+
+  /* ---- venituri: bare interactive + detaliu ---- */
+  if (IG.venituri) {
+    var ven = IG.venituri.surse, TV = IG.venituri.total, venSel = ven[0].cod;
+    function revenueDetail(cod) {
+      venSel = cod;
+      var source = null;
+      ven.forEach(function (item) { if (item.cod === cod) source = item; });
+      if (!source) return;
+      selectBar("ig-ven-bars", cod);
+      put("ig-ven-detail", '<div class="ttl"><h3>' + esc(source.nume) +
+        '</h3><span class="amt">' + amount(source.val) + " · " +
+        nf(source.val / TV * 100, 1) + "% din veniturile planificate</span></div>" +
+        '<p class="hint">Cod bugetar ' + esc(source.cod) + ' · <span class="tag" style="color:' +
+        (GRUP[source.grup] || C.dim) + '">' +
+        esc(GRUP_L[source.grup] || "sursă neclasificată") + "</span></p>");
+    }
+    renderBarRows("ig-ven-bars", ven, function (s) { return s.val; },
+      function (s) { return GRUP[s.grup] || C.blue; }, venSel, revenueDetail);
+    revenueDetail(venSel);
   } else { hide("ig-sec-ven"); }
 
   /* ---- capitole: bare interactive + detaliu ---- */
   var mode = "val", sel = IG.capitole[0].cod;
   function capVal(c) { return mode === "func" ? (c.func || 0) : mode === "dezv" ? (c.dezv || 0) : c.val; }
-  function drawBars() {
+  function drawExpenseBars() {
     var rows = IG.capitole.filter(function (c) { return capVal(c) > 0; })
       .sort(function (a, b) { return capVal(b) - capVal(a); });
     if (!rows.length) { put("ig-bars", '<p class="note">Fără date pe această secțiune.</p>'); put("ig-detail", ""); return; }
-    var max = capVal(rows[0]), col = mode === "func" ? C.ok : mode === "dezv" ? C.warn : C.blue;
-    put("ig-bars", rows.map(function (c) {
-      return '<div class="brow' + (c.cod === sel ? " sel" : "") + '" data-cod="' + c.cod + '" tabindex="0" role="button">' +
-        '<span class="bt">' + esc(c.nume.replace(/^CAP\.\s*/i, "")) + "</span>" +
-        '<span class="bg2"><i style="background:' + col + ";width:" + (capVal(c) / max * 100).toFixed(1) + '%"></i></span>' +
-        '<span class="bv">' + amount(capVal(c)) + "</span></div>";
-    }).join(""));
-    Array.prototype.forEach.call(document.querySelectorAll("#ig-bars .brow"), function (row) {
-      row.onclick = function () { detail(row.getAttribute("data-cod")); };
-      row.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); detail(row.getAttribute("data-cod")); } };
-    });
+    if (!rows.some(function (c) { return c.cod === sel; })) sel = rows[0].cod;
+    var col = mode === "func" ? C.ok : mode === "dezv" ? C.warn : C.blue;
+    renderBarRows("ig-bars", rows, capVal, function () { return col; }, sel, expenseDetail);
+    expenseDetail(sel);
   }
-  function detail(cod) {
+  function expenseDetail(cod) {
     sel = cod;
     var c = null;
     IG.capitole.forEach(function (k) { if (k.cod === cod) c = k; });
     if (!c) return;
-    Array.prototype.forEach.call(document.querySelectorAll("#ig-bars .brow"), function (row) {
-      row.className = "brow" + (row.getAttribute("data-cod") === cod ? " sel" : "");
-    });
-    var fd = (c.func != null && c.dezv != null)
+    selectBar("ig-bars", cod);
+    var value = capVal(c);
+    var denominator = mode === "func" ? IG.sectiuni.functionare :
+      mode === "dezv" ? IG.sectiuni.dezvoltare : TOT;
+    var shareLabel = mode === "func" ? "% din secțiunea de funcționare" :
+      mode === "dezv" ? "% din secțiunea de dezvoltare" : "% din buget";
+    var children = mode === "val" ? c.copii : [];
+    var fd = (mode === "val" && c.func != null && c.dezv != null)
       ? "Funcționare " + amount(c.func) + " · dezvoltare " + amount(c.dezv) : "";
-    var mx = c.copii.length ? c.copii[0].val : 1;
+    var mx = children.length ? children[0].val : 1;
     put("ig-detail", '<div class="ttl"><h3>' + esc(c.nume.replace(/^CAP\.\s*/i, "")) + '</h3><span class="amt">' +
-      amount(c.val) + " · " + nf(c.val / TOT * 100, 1) + "% din buget</span></div>" +
-      (fd ? '<p class="hint">' + fd + (c.copii.length ? " — principalele subcapitole:" : "") + "</p>" : "") +
-      '<div class="bars">' + c.copii.map(function (k) {
+      amount(value) + " · " + nf(value / denominator * 100, 1) + shareLabel + "</span></div>" +
+      (fd ? '<p class="hint">' + fd + (children.length ? " — principalele subcapitole:" : "") + "</p>" : "") +
+      '<div class="bars">' + children.map(function (k) {
         return '<div class="brow" style="cursor:default"><span class="bt">' + esc(k.nume) + "</span>" +
           '<span class="bg2"><i style="background:' + C.dim + ";opacity:.55;width:" + (k.val / mx * 100).toFixed(1) + '%"></i></span>' +
           '<span class="bv">' + amount(k.val) + "</span></div>";
       }).join("") + "</div>");
   }
-  drawBars(); detail(sel);
+  drawExpenseBars();
   Array.prototype.forEach.call(document.querySelectorAll("#ig-tabs button"), function (b) {
     b.onclick = function () {
-      Array.prototype.forEach.call(document.querySelectorAll("#ig-tabs button"), function (k) { k.className = ""; });
-      b.className = "on"; mode = b.getAttribute("data-mode"); drawBars();
+      Array.prototype.forEach.call(document.querySelectorAll("#ig-tabs button"), function (k) {
+        k.className = ""; k.setAttribute("aria-pressed", "false");
+      });
+      b.className = "on"; b.setAttribute("aria-pressed", "true");
+      mode = b.getAttribute("data-mode"); drawExpenseBars();
     };
   });
   if (!IG.sectiuni) hide("ig-tabs");
