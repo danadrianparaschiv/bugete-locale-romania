@@ -6,6 +6,8 @@ sheet listing every Issue, and a 'Sumar calitate' scorecard.
 
 from __future__ import annotations
 
+import os
+import tempfile
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -62,7 +64,19 @@ SECTION_FONT = Font(bold=True)
 DOC_PREFIX = {"local": "BL", "own_revenue": "VP", "general": "BG", "unknown": "DOC"}
 
 
-def export(result: ConversionResult, out_path: Path) -> Path:
+def _append_values(ws, values) -> None:
+    """Append literal values without interpreting PDF text as Excel formulas."""
+    ws.append(values)
+    for cell in ws[ws.max_row]:
+        if cell.data_type == "f" and isinstance(cell.value, str):
+            cell.data_type = "s"
+
+
+def export(
+    result: ConversionResult,
+    out_path: Path,
+    publication: dict | None = None,
+) -> Path:
     wb = Workbook()
     wb.remove(wb.active)
 
@@ -86,10 +100,22 @@ def export(result: ConversionResult, out_path: Path) -> Path:
             _data_sheet(wb, f"{prefix} Date", doc, rest)
 
     _issues_sheet(wb, result)
-    _summary_sheet(wb, result)
+    _summary_sheet(wb, result, publication=publication)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    fd, tmp_name = tempfile.mkstemp(
+        prefix=f".{out_path.stem}.", suffix=out_path.suffix or ".xlsx", dir=out_path.parent
+    )
+    os.close(fd)
+    try:
+        wb.save(tmp_name)
+        os.replace(tmp_name, out_path)
+    except BaseException:
+        try:
+            os.unlink(tmp_name)
+        except FileNotFoundError:
+            pass
+        raise
     return out_path
 
 
@@ -99,7 +125,7 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
     headers = ["Cod", "Cod functional", "Denumire", "Rand", "Pag.", "Tip"] + [
         h for _, h in value_columns
     ] + ["Sursa", "Probleme"]
-    ws.append(headers)
+    _append_values(ws, headers)
     for cell in ws[1]:
         cell.fill = HEADER_FILL
         cell.font = HEADER_FONT
@@ -121,7 +147,7 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
                 row.append(float(v) if v is not None else None)
         row.append(ln.source)
         row.append("; ".join(i.message for i in ln.issues) or None)
-        ws.append(row)
+        _append_values(ws, row)
 
         excel_row = ws.max_row
         if ln.kind == "heading":
@@ -143,12 +169,15 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
 
 def _issues_sheet(wb: Workbook, result: ConversionResult) -> None:
     ws = wb.create_sheet("Probleme")
-    ws.append(["Verificare", "Severitate", "Pagina", "Cod", "Coloana", "Mesaj"])
+    _append_values(ws, ["Verificare", "Severitate", "Pagina", "Cod", "Coloana", "Mesaj"])
     for cell in ws[1]:
         cell.fill = HEADER_FILL
         cell.font = HEADER_FONT
     for issue in result.all_issues():
-        ws.append([issue.check, issue.severity, issue.page, issue.code, issue.column, issue.message])
+        _append_values(
+            ws,
+            [issue.check, issue.severity, issue.page, issue.code, issue.column, issue.message],
+        )
         if issue.severity == "error":
             ws.cell(row=ws.max_row, column=2).fill = ERROR_FILL
     for i, w in enumerate([16, 10, 8, 14, 12, 100], 1):
@@ -156,18 +185,42 @@ def _issues_sheet(wb: Workbook, result: ConversionResult) -> None:
     ws.freeze_panes = "A2"
 
 
-def _summary_sheet(wb: Workbook, result: ConversionResult) -> None:
+def _summary_sheet(
+    wb: Workbook,
+    result: ConversionResult,
+    publication: dict | None = None,
+) -> None:
     ws = wb.create_sheet("Sumar calitate")
     stats = result.stats()
     rows = [
         ("Fisier", result.pdf),
+        ("Schema calitate", stats["quality_schema_version"]),
+        ("Metrica de calitate", stats["metric"]),
+        ("Recall masurat", "da" if stats["recall_measured"] else "nu"),
         ("Documente", stats["documents"]),
         ("Linii de date", stats["lines"]),
+        ("Linii strict verificate", stats["lines_strictly_verified"]),
+        ("% linii strict verificate", stats["pct_lines_strictly_verified"]),
+        ("Celule numerice", stats["numeric_cells"]),
+        ("Celule numerice strict verificate", stats["numeric_cells_strictly_verified"]),
+        ("% celule numerice strict verificate", stats["pct_numeric_cells_strictly_verified"]),
+        ("Pagini asteptate", stats["scope"]["pages_expected"]),
+        ("Pagini selectate", stats["scope"]["pages_selected"]),
+        ("Pagini procesate", stats["scope"]["pages_processed"]),
+        ("PDF complet", "da" if stats["scope"]["complete_pdf"] else "nu"),
+        # Legacy labels retained for older readers.
         ("Linii fara probleme", stats["lines_clean"]),
         ("% curat", stats["pct_clean"]),
         ("Erori", stats["issues"]["error"]),
         ("Avertismente", stats["issues"]["warning"]),
+        ("Informatii", stats["issues"]["info"]),
     ]
+    if publication:
+        rows.extend([
+            ("Schema publicare", publication.get("schema_version")),
+            ("Bundle conversie", publication.get("bundle_id")),
+            ("SHA-256 PDF sursa", publication.get("source_pdf_sha256")),
+        ])
     llm_models = sorted({
         ln.source.split(":", 1)[1] if ":" in ln.source else "model neînregistrat"
         for doc in result.documents for ln in doc.lines
@@ -178,7 +231,7 @@ def _summary_sheet(wb: Workbook, result: ConversionResult) -> None:
     for doc in result.documents:
         rows.append((f"— {doc.title[:60]}", f"{doc.budget}, pag. {doc.pages[0]}-{doc.pages[-1]}, {len(doc.lines)} linii"))
     for label, value in rows:
-        ws.append([label, value])
+        _append_values(ws, [label, value])
         ws.cell(row=ws.max_row, column=1).font = Font(bold=True)
     ws.column_dimensions["A"].width = 40
     ws.column_dimensions["B"].width = 60

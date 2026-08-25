@@ -17,18 +17,29 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --dev
-      - run: uv run ruff check src tests
+      - run: uv run ruff check src tests scripts
       - name: materialize digital reference extraction (Alba Iulia)
         # ~25s, fully offline (digital PDF, no OCR, no LLM). Populates runs/
         # so the anchor test (test_ab_stays_fully_clean) and the digital
         # golden fixtures actually run instead of skipping.
         run: uv run bgconvertor convert data/2026/01-alba/1017-alba-iulia/budget_file.pdf
       - name: offline test suite
-        # LLM tests replay cassettes — nothing here touches the network or
-        # an API key; tests for PDFs not extracted above still skip
+        # LLM tests use fake clients/local cache — nothing here touches the
+        # network or an API key; tests for PDFs not extracted above still skip
         run: uv run pytest -q
       - name: golden-fixture eval — digital family gate
-        # The 4 Alba Iulia fixtures (35 anchors) are computable in CI;
+        # The 4 Alba Iulia fixtures (30 value anchors + 5 text assertions) are computable in CI;
         # scanned-layout fixtures need local OCR caches and stay a local
         # gate (see CONTRIBUTING). Regression below the floor fails CI.
-        run: uv run bgconvertor eval --min-anchors 35
+        run: uv run bgconvertor eval --min-anchors 30 --min-text-assertions 5 --json-out eval-report.json
+      - name: audit public artifact consistency
+        # Every converted entry must remain a modern, hashed, internally
+        # consistent bundle. Entries not yet converted remain out of scope.
+        run: uv run bgconvertor corpus audit data --strict --require-modern --json-out artifact-audit.json
+      - name: publish machine-readable quality reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports-py${{ matrix.python-version }}
+          path: |
+            eval-report.json
+            artifact-audit.json

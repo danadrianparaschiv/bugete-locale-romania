@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 643,
-    "pct_clean": 86.0,
-    "errors": 100,
-    "warnings": 101,
+    "lines_strictly_verified": 538,
+    "pct_lines_strictly_verified": 83.7,
+    "numeric_cells": 3151,
+    "numeric_cells_strictly_verified": 2690,
+    "pct_numeric_cells_strictly_verified": 85.4,
+    "scope": {
+      "pages_expected": 34,
+      "pages_selected": 34,
+      "pages_processed": 34,
+      "complete_pdf": true
+    },
+    "pct_clean": 83.7,
+    "errors": 196,
+    "warnings": 75,
+    "info": 5,
     "documents": 1
   },
   "llm_models": [
@@ -13,58 +29,12 @@
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
-      "total": 47084.85
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala (cod 68.02.04+68.02.05+68.02.06+68.02.1",
-      "total": 28468.25
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la 70.",
-      "total": 9508.61
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
-      "total": 6618.8
-    },
-    {
-      "code": "66.02",
-      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50)",
-      "total": 4836.1
-    },
-    {
-      "code": "80.02",
-      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01)",
-      "total": 1911.04
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
-      "total": 1910.1
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50)",
-      "total": 1595.06
-    },
-    {
-      "code": "87.02",
-      "name": "Alte actiuni economice (cod 87.02.01+87.02.03 la 87.02.05+87.02.50)",
-      "total": 576.73
-    },
-    {
-      "code": "56.02",
-      "name": "(rând derivat din formula tipărită)",
-      "total": 250.54
-    }
-  ],
+  "top_capitole": [],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "457021626e74e336129580a1",
+    "source_pdf_sha256": "a31c3022c165f7ea68e623c4d2e2382517a8eb0559907404a095ba69a0780b34"
+  }
 }

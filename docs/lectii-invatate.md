@@ -6,8 +6,21 @@ de ce să ținem cont când repetăm exercițiul pentru 2027. Toate cifrele
 provin din conversiile și evaluările efectuate (manifeste,
 `evals/rezultate.csv`, istoricul git).
 
-**Bilanț:** 2026 — 32/41 orașe, 75.407 linii, 66.3% verificate;
-2025 — 37/42 intrări, 45.649 linii, **74.0% verificate**.
+> **Notă P0 (24.08.2026):** bilanțurile de linii/procente de mai jos sunt
+> instantanee istorice, produse înaintea contractului de bundle. Auditul
+> reproductibil a găsit 69 intrări marcate convertite: numai 11 au valori
+> legacy coerente între Excel, `analysis.json` și manifest, iar 58 diferă.
+> Migrarea rapidă din aceeași zi le-a republicat pe toate: 69 bundle-uri
+> moderne verificate, 0 inconsistente, în 5,6 minute și cu 0 USD cost API.
+> Un control vizual ulterior a găsit și corectat etichete de secțiune
+> interpretate ca formule; republicarea finală a durat încă 4,4 minute, tot cu
+> 0 USD, pentru aproximativ 10 minute end-to-end.
+> Nici rezultatul migrării nu măsoară recall. Vezi [quality.md](quality.md) și
+> rulează `bgconvertor corpus audit data --strict --require-modern`.
+
+**Bilanț istoric (neautoritativ):** documentația veche raporta pentru 2026
+32/41 orașe, 75.407 linii și 66,3%, iar pentru 2025 37/42 intrări, 45.649
+linii și 74,0%. Cifrele se păstrează doar pentru contextul retrospectiv.
 
 ## 1. Contextul anului: bugetul de stat întârziat comprimă totul
 
@@ -58,7 +71,7 @@ după ea, când apar simultan aproape toate proiectele.
 
 ## 3. Calitatea documentelor: un spectru, nu o dihotomie
 
-Distribuția reală pe 2026, măsurată:
+Distribuția istorică raportată pe 2026 (înaintea auditului de bundle):
 
 | Clasă | Exemple | Rezultat tipic |
 |---|---|---|
@@ -90,17 +103,17 @@ Lecții concrete:
 ## 4. Adaptarea procesului de conversie
 
 - **Poarta aritmetică e fundația.** O corecție LLM se aplică doar dacă
-  face sumele să se închidă — de aceea am putut amesteca liber modele
-  ieftine și scumpe fără risc pe date. Nicio decizie din 2026 nu a
+  face sumele să se închidă — aceasta reduce puternic riscul, dar nu
+  demonstrează celulele fără constrângeri și nu măsoară ce lipsește. Nicio decizie din 2026 nu a
   slăbit această regulă și nici în 2027 nu trebuie s-o facă vreuna.
 - **Cache + reluare gratuită au plătit chirie de multe ori**: blocaje,
   chei expirate, plafoane atinse — toate reluate la $0. Promovarea celor
   3 orașe din evaluare direct în corpus (cache integral) a făcut un
   batch aproape gratuit.
-- **Plafonul de buget se poate depăși** cu apeluri mari concurente
+- **Plafonul de buget s-a putut depăși** cu apeluri mari concurente
   (maxim observat: $7.29 la plafon $3 — apeluri de transcriere de ~$1+
-  lansate în paralel). Remediere rămasă pentru 2027: rezervarea costului
-  estimat la lansarea apelului.
+  lansate în paralel). Remediat la 24.08.2026: costul estimat este rezervat
+  înaintea lansării apelului.
 - **Rulările lungi au nevoie de watchdog**: un request agățat spre un
   furnizor a înghețat o rulare 1.5 ore fără nicio eroare. Acum există
   deadline per apel și abandon la lipsă de progres — obligatorii pentru
@@ -175,7 +188,7 @@ Conversia retroactivă a anului 2025 (batch pe `google:gemini-3.6-flash`,
 - **Mapările se amortizează pe toate edițiile.** Fixurile deterministe
   făcute pentru 2026 (grile dual-cod, separare pe instituții, sufixul-
   literă de sursă, rânduri derivate din formule) au rulat gratuit pe
-  2025 și explică rata mai bună de verificare — 74.0% față de 66.3%.
+  2025 și explică scorurile legacy raportate atunci — 74,0% față de 66,3%.
   Investiția în mapare bate investiția în tokeni.
 
 30 de orașe există în ambele ediții — baza pentru comparații an-la-an
@@ -219,8 +232,8 @@ vreodată corectată automat).
 ---
 
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
-actualizare: august 2026, la 32/41 orașe pe 2026 și 37/42 pe 2025, după
-reconcilierea costurilor cu facturile furnizorilor și recuperarea
+actualizare: 24 august 2026, la 32/41 orașe pe 2026 și 37/42 pe 2025, după
+reconcilierea costurilor, auditul P0 al artefactelor publice și recuperarea
 machetelor MF «Formular 11» (Baia Mare: 0 → 691 linii extrase). Lecția
 «fișierul mic nu e anexa» a mai primit două exemple: Ploiești publicase
 doar textul HCL, iar Satu Mare un comunicat de presă — în ambele cazuri

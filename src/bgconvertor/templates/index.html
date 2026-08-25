@@ -20,7 +20,7 @@
   <p>→ <a href="{{ base }}/procedura.html"><strong>Cum se face bugetul unui
   oraș</strong> — procedura, etapă cu etapă, într-un infografic animat</a></p>
   <p><strong>Ce face.</strong> <a href="https://github.com/danadrianparaschiv/bugete-locale-romania">bgconvertor</a>
-  extrage automat tabelele din PDF-urile oficiale și verifică fiecare linie
+  extrage automat tabelele din PDF-urile oficiale și verifică liniile recuperate
   față de clasificația bugetară (Ordinul MFP 1954/2005) și față de aritmetica
   bugetului (sume trimestriale, capitol = Σ subcapitole, identități între
   secțiuni). Ce nu trece verificarea este marcat, niciodată ghicit.</p>
@@ -36,7 +36,7 @@
   <thead><tr>
     <th>Județ</th><th>Municipiu</th>
     <th>Pus în dezbatere</th><th>Aprobat</th><th>Status</th>
-    <th class="num">Linii</th><th class="num">% verificat</th><th>Fișiere</th>
+    <th class="num">Linii</th><th class="num">% linii strict</th><th>Fișiere</th>
   </tr></thead>
   <tbody>
   {% for c in cities %}
@@ -57,7 +57,11 @@
       <td>
         {% if c.status == 'converted' %}
           {% set pc = c.pct_clean or 0 %}
-          <span class="badge {% if pc >= 90 %}b-ok{% elif pc >= 60 %}b-mid{% else %}b-low{% endif %}">convertit</span>
+          <span class="badge {% if c.artifact_status == 'legacy_consistent' %}b-mid{% elif pc >= 90 %}b-ok{% elif pc >= 60 %}b-mid{% else %}b-low{% endif %}">
+            {% if c.artifact_status == 'legacy_consistent' %}legacy coerent{% else %}convertit{% endif %}
+          </span>
+        {% elif c.status == 'artifact_mismatch' %}
+          <span class="badge b-low" title="Excel, analysis.json și manifestul nu descriu aceeași conversie">artefacte neconcordante</span>
         {% else %}<span class="badge b-pending">{{ c.status }}</span>{% endif %}
       </td>
       <td class="num">{{ c.lines or '—' }}</td>

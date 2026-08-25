@@ -1,17 +1,40 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 942,
-    "pct_clean": 51.1,
-    "errors": 717,
-    "warnings": 281,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1199,
+    "lines_strictly_verified": 589,
+    "pct_lines_strictly_verified": 49.1,
+    "numeric_cells": 2985,
+    "numeric_cells_strictly_verified": 1521,
+    "pct_numeric_cells_strictly_verified": 51.0,
+    "scope": {
+      "pages_expected": 89,
+      "pages_selected": 89,
+      "pages_processed": 89,
+      "complete_pdf": true
+    },
+    "pct_clean": 49.1,
+    "errors": 828,
+    "warnings": 393,
+    "info": 0,
     "documents": 2
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": null,
-    "cheltuieli": 271512.06
+    "venituri": 438312.0,
+    "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "CAPITOL 70.00 Locuințe, servicii și dezvoltare publică",
+      "total": 34353136.82
+    },
     {
       "code": "84.02",
       "name": "TRANSPORTURI",
@@ -26,11 +49,6 @@
       "code": "51.02",
       "name": "AUTORITÅTI PUBLICE",
       "total": 53568.04
-    },
-    {
-      "code": "70.02",
-      "name": "LOCUINTE. SERVICII SIDEZVOLTARE",
-      "total": 41187.12
     },
     {
       "code": "67.02",
@@ -64,5 +82,10 @@
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "f32387beee6fcb42eacb20f5",
+    "source_pdf_sha256": "1892b5f33adfb28d50c127178951a3a3796d767fe430882509222076c866e3c7"
+  }
 }

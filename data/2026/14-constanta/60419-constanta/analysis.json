@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 3690,
+    "lines_strictly_verified": 2706,
+    "pct_lines_strictly_verified": 73.3,
+    "numeric_cells": 4046,
+    "numeric_cells_strictly_verified": 2162,
+    "pct_numeric_cells_strictly_verified": 53.4,
+    "scope": {
+      "pages_expected": 405,
+      "pages_selected": 405,
+      "pages_processed": 405,
+      "complete_pdf": true
+    },
     "pct_clean": 73.3,
     "errors": 846,
     "warnings": 486,
+    "info": 16,
     "documents": 14
   },
   "llm_models": [],
@@ -28,29 +44,9 @@
       "total": 302489.0
     },
     {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala (cod68.02.04+68.02.05+68.02.06+68.02.09",
-      "total": 164590.0
-    },
-    {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
       "total": 161577.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
-      "total": 129939.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.06+65.02.07+65.02.11+65.02.",
-      "total": 121058.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica (cod 70.02.03+70.02.05 la 70.",
-      "total": 78709.0
     },
     {
       "code": "66.02",
@@ -61,8 +57,33 @@
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala (cod 61.02.03+61.02.05+61.02.50)",
       "total": 58915.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice (cod 87.02.01+87.02.03 la 87.02.05+87.02.50) Di",
+      "total": 8090.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "total": 1435.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01+80.02",
+      "total": 643.0
+    },
+    {
+      "code": "56.02",
+      "name": "Transferuri cu caracter general intre diferite nivele ale administrati",
+      "total": 0.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "657e2d7ffc0f622d06282160",
+    "source_pdf_sha256": "fd1ebad83c5d829363cac4880e7719d90c901c832bd7dd124d2710cde22fae5b"
+  }
 }

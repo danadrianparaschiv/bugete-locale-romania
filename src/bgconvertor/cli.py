@@ -522,7 +522,9 @@ def convert(
     pages: str | None = typer.Option(None, "--pages"),
     out: Path | None = typer.Option(None, help="Fișierul .xlsx de ieșire (implicit: <pdf>.xlsx)"),
     llm: str | None = typer.Option(None, help="off | repair (implicit din configurație)"),
-    max_llm_cost: float | None = typer.Option(None, help="Buget strict în USD pentru repararea LLM"),
+    max_llm_cost: float | None = typer.Option(
+        None, min=0.0, max=5.0, help="Buget strict în USD pentru repararea LLM (maxim public: $5)"
+    ),
     model_preset: str | None = typer.Option(
         None, "--model-preset",
         help="Preset de modele «furnizor:model» — lista: `bgconvertor models`"),
@@ -562,6 +564,23 @@ def convert(
     store = RunStore(config, pdf)
     n_pages = len(PdfReader(pdf).pages)
     selected = parse_pages(pages, n_pages)
+    out_path = out or pdf.with_suffix(".xlsx")
+    from .manifest import find_manifest
+
+    governing_manifest = find_manifest(pdf.parent)
+    corpus_target = (
+        governing_manifest is not None
+        and out_path.resolve() == pdf.with_suffix(".xlsx").resolve()
+    )
+    if corpus_target and selected != list(range(1, n_pages + 1)):
+        console.print(
+            "[red]o conversie partiala nu poate suprascrie artefactele publice ale "
+            "corpusului; foloseste --out cu un alt nume[/red]"
+        )
+        raise typer.Exit(2)
+    if corpus_target and config.llm.mode != "off" and config.llm.max_cost_usd > 5.0:
+        console.print("[red]plafonul LLM pentru un artefact public este $5.00/PDF[/red]")
+        raise typer.Exit(2)
 
     size_mb = pdf.stat().st_size / 1e6
     llm_desc = (
@@ -637,12 +656,18 @@ def convert(
     if not documents:
         console.print("[red]no documents assembled — nothing to export[/red]")
         raise typer.Exit(1)
-    result = ConversionResult(pdf=pdf.name, documents=documents)
+    result = ConversionResult(
+        pdf=pdf.name,
+        documents=documents,
+        pages_expected=n_pages,
+        pages_selected=selected,
+        pages_processed=[p for p in selected if store.get("extract", p) is not None],
+    )
     run_validate(result, registry)
     pre = result.stats()
     console.print(
         f"  {pre['documents']} documente, {pre['lines']} linii — inainte de reparare: "
-        f"{pre['pct_clean']}% curate, {pre['issues']['error']} erori"
+        f"{pre['pct_clean']}% strict verificate, {pre['issues']['error']} erori"
     )
 
     if config.llm.mode == "repair" and client is not None:
@@ -684,14 +709,31 @@ def convert(
             result.issues.extend(repair_unparseable(doc, client, page_image))
         console.print(ledger.summary())
 
-    out_path = out or pdf.with_suffix(".xlsx")
-    export_mod.export(result, out_path)
+    publication_record = None
+    if corpus_target:
+        from .publication import publish_corpus_result
+
+        try:
+            publication_record = publish_corpus_result(
+                result,
+                pdf,
+                out_path,
+                governing_manifest,
+                llm_preset=model_preset,
+                llm_cost_usd=ledger.run_cost_usd if ledger is not None else 0.0,
+                llm_lifetime_cost_usd=ledger.total_cost_usd if ledger is not None else 0.0,
+            )
+        except ValueError as exc:
+            console.print(f"[red]artefactele publice nu au fost inlocuite: {exc}[/red]")
+            raise typer.Exit(1) from None
+    else:
+        export_mod.export(result, out_path)
 
     stats = result.stats()
     console.print(f"\n[bold green]✓ scris {out_path}[/bold green]")
     console.print(
         f"{stats['documents']} documente · {stats['lines']} linii de date · "
-        f"[bold]{stats['pct_clean']}% complet curate[/bold] · "
+        f"[bold]{stats['pct_clean']}% strict verificate[/bold] · "
         f"{stats['issues']['error']} erori · {stats['issues']['warning']} avertismente"
     )
     if stats["issues"]["error"]:
@@ -704,16 +746,11 @@ def convert(
             "[dim]hint: reluarea cu --max-llm-cost mai mare continua repararea de unde "
             "a ramas (apelurile facute se refolosesc gratuit din cache)[/dim]"
         )
-    # corpus-tree files also get an analysis.json (feeds the static site) —
-    # but only when the workbook lands in its default place beside the PDF;
-    # an explicit --out elsewhere is an experiment and must not touch corpus
-    from .manifest import find_manifest
-
-    if out_path == pdf.with_suffix(".xlsx") and find_manifest(pdf.parent) is not None:
-        from .analysis import write_analysis
-
-        apath = write_analysis(result, pdf.with_name("analysis.json"))
-        console.print(f"[dim]analysis: {apath}[/dim]")
+    if publication_record is not None:
+        console.print(
+            f"[dim]analysis: {publication_record['analysis']} · "
+            f"bundle: {publication_record['artifacts']['bundle_id']}[/dim]"
+        )
     console.print(f"[dim]detalii oricand: `bgconvertor report {pdf.name}`[/dim]")
 
 
@@ -723,8 +760,12 @@ def eval_cmd(
     fixtures: Path = typer.Option(Path("tests/fixtures/golden"), help="Directorul fixture-urilor golden"),
     strict: bool = typer.Option(False, help="Iese cu cod 1 dacă nu se potrivesc toate ancorele"),
     min_anchors: int = typer.Option(0, help="Iese cu cod 1 dacă ancorele potrivite scad sub prag (poartă anti-regresie)"),
+    min_text_assertions: int = typer.Option(
+        0, help="Iese cu cod 1 dacă aserțiunile text potrivite scad sub prag"
+    ),
+    json_out: Path | None = typer.Option(None, help="Raport JSON machine-readable"),
 ):
-    """Evaluează etapa de extracție față de fixture-urile golden verificate manual."""
+    """Recall pe ancore selectate manual; nu este recall complet pe celule."""
     from . import eval_harness
 
     config = _config()
@@ -747,18 +788,38 @@ def eval_cmd(
         for miss in r.misses:
             console.print(f"  [yellow]{r.fixture_id}[/yellow] {miss}")
 
-    by_layout = eval_harness.summarize_by_layout(results)
-    total = sum(a["anchors_total"] for a in by_layout.values())
-    matched = sum(a["anchors_matched"] for a in by_layout.values())
-    evaluated = [r for r in results if r.status == "evaluated"]
+    report = eval_harness.evaluation_report(results)
+    total = report["anchors"]["total"]
+    matched = report["anchors"]["matched"]
+    evaluated = report["fixtures"]["evaluated"]
     console.print(
-        f"\n[bold]{matched}/{total}[/bold] anchors matched across "
-        f"{len(evaluated)}/{len(results)} evaluated fixtures"
+        f"\n[bold]{matched}/{total}[/bold] ancore selectate potrivite · "
+        f"{report['text_assertions']['matched']}/{report['text_assertions']['total']} "
+        f"asertiuni text · {evaluated}/{len(results)} fixture-uri evaluate"
     )
-    if strict and (matched < total or len(evaluated) < len(results)):
+    console.print(
+        "[dim]metrica: selected_anchor_recall; nu măsoară celulele/rândurile "
+        "absente din fixture-uri[/dim]"
+    )
+    if json_out is not None:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+        console.print(f"[dim]raport: {json_out}[/dim]")
+    if strict and (
+        matched < total
+        or report["text_assertions"]["matched"] < report["text_assertions"]["total"]
+        or evaluated < len(results)
+    ):
         raise typer.Exit(1)
     if min_anchors and matched < min_anchors:
         console.print(f"[red]regresie: {matched} ancore potrivite < pragul de {min_anchors}[/red]")
+        raise typer.Exit(1)
+    text_matched = report["text_assertions"]["matched"]
+    if min_text_assertions and text_matched < min_text_assertions:
+        console.print(
+            f"[red]regresie: {text_matched} aserțiuni text potrivite < pragul de "
+            f"{min_text_assertions}[/red]"
+        )
         raise typer.Exit(1)
 
 
@@ -768,7 +829,9 @@ def batch(
     group: int = typer.Option(5, min=1, help="Orașe per grup de checkpoint"),
     workers: int = typer.Option(4, min=1, max=8),
     llm: str = typer.Option("repair", help="off | repair"),
-    max_llm_cost: float = typer.Option(3.00, help="Buget USD per oraș"),
+    max_llm_cost: float = typer.Option(
+        3.00, min=0.0, max=5.0, help="Buget USD per oraș (plafon public $5)"
+    ),
     model_preset: str | None = typer.Option(
         None, "--model-preset",
         help="Preset «furnizor:model» pentru fiecare oraș — lista: `bgconvertor models`"),
@@ -825,47 +888,39 @@ def batch(
             proc = subprocess.run(cmd, capture_output=True, text=True)
             if proc.returncode != 0:
                 tail = (proc.stdout + proc.stderr)[-400:]
-                manifest.set_status(
-                    city, status="failed",
-                    error=tail.splitlines()[-1] if tail else f"exit {proc.returncode}",
-                    at=dt.datetime.now().isoformat(timespec="seconds"),
-                )
+                error = tail.splitlines()[-1] if tail else f"exit {proc.returncode}"
+                previous = (city.entry.get("conversion") or {}).get("status")
+                if previous == "converted":
+                    # A failed refresh must not unpublish the last audited bundle.
+                    manifest.set_status(
+                        city,
+                        last_attempt_status="failed",
+                        last_attempt_error=error,
+                        last_attempt_at=dt.datetime.now().isoformat(timespec="seconds"),
+                    )
+                else:
+                    manifest.set_status(
+                        city, status="failed", error=error,
+                        at=dt.datetime.now().isoformat(timespec="seconds"),
+                    )
                 console.print(f"  [red]✗ {city.name} a esuat[/red]")
                 continue
-            stats = _workbook_stats(out_xlsx)
-            if llm != "off" and model_preset:
-                stats["llm_preset"] = model_preset
-            manifest.set_status(
-                city, status="converted", workbook=out_xlsx.name,
-                at=dt.datetime.now().isoformat(timespec="seconds"),
-                tool_version="0.1.0", **stats,
-            )
+            fresh = Manifest(data_dir / "manifest.json")
+            published = fresh.find(city.siruta)
+            conv = (published.entry.get("conversion") or {}) if published else {}
+            if conv.get("status") != "converted" or not conv.get("artifacts"):
+                console.print(
+                    f"  [red]✗ {city.name}: procesul s-a terminat fără un bundle publicat[/red]"
+                )
+                continue
+            quality = conv.get("quality") or {}
             done += 1
             console.print(
-                f"  [green]✓ {city.name}[/green]: {stats.get('lines', '?')} linii, "
-                f"{stats.get('pct_clean', '?')}% curate"
+                f"  [green]✓ {city.name}[/green]: {quality.get('lines', '?')} linii, "
+                f"{quality.get('pct_lines_strictly_verified', '?')}% strict verificate"
             )
         console.print(f"[dim]checkpoint: {done}/{len(todo)} convertite — "
                       "moment bun pentru un commit al data/[/dim]")
-
-
-def _workbook_stats(xlsx: Path) -> dict:
-    try:
-        import openpyxl
-
-        wb = openpyxl.load_workbook(xlsx, read_only=True)
-        rows = {str(r[0]): r[1] for r in wb["Sumar calitate"].iter_rows(values_only=True)
-                if r and r[0]}
-        wb.close()
-        return {
-            "lines": rows.get("Linii de date"),
-            "pct_clean": rows.get("% curat"),
-            "errors": rows.get("Erori"),
-            "warnings": rows.get("Avertismente"),
-        }
-    except Exception:  # noqa: BLE001 - stats are best-effort
-        return {}
-
 
 site_app = typer.Typer(no_args_is_help=True)
 app.add_typer(site_app, name="site", help="Site static GitHub Pages pentru corpus")
@@ -1031,6 +1086,185 @@ corpus_app = typer.Typer(no_args_is_help=True)
 app.add_typer(corpus_app, name="corpus", help="Set de date și raport la nivelul tuturor municipalităților")
 
 
+@corpus_app.command("audit")
+def corpus_audit(
+    data_dir: Path = typer.Argument(Path("data"), exists=True),
+    json_out: Path | None = typer.Option(None, help="Raport JSON machine-readable"),
+    strict: bool = typer.Option(False, help="Eșuează dacă există artefacte inconsistente"),
+    require_modern: bool = typer.Option(
+        False, help="Eșuează și pentru bundle-uri legacy fără hash-uri"
+    ),
+    details: bool = typer.Option(False, help="Afișează toate avertismentele și mesajele"),
+):
+    """Compară Excel, analysis.json și manifestul; verifică bundle id + SHA-256."""
+    from .publication import audit_data, audit_report
+
+    results = audit_data(data_dir)
+    report = audit_report(results)
+    summary = report["summary"]
+    table = Table(title="audit artefacte publice")
+    table.add_column("an")
+    table.add_column("municipiu")
+    table.add_column("stare")
+    table.add_column("probleme", overflow="fold")
+    for result in results:
+        if result.status in {"verified", "not_converted"}:
+            continue
+        if result.status == "legacy_consistent" and not details:
+            continue
+        selected_issues = result.issues if details else [
+            issue for issue in result.issues if issue.severity == "error"
+        ][:1]
+        messages = "; ".join(f"{issue.code}: {issue.message}" for issue in selected_issues)
+        remaining = len(result.issues) - len(selected_issues)
+        if remaining:
+            messages += f" (+{remaining} în raportul JSON)"
+        style = "red" if result.status == "inconsistent" else "yellow"
+        table.add_row(str(result.year or "?"), result.municipality, result.status,
+                      messages, style=style)
+    console.print(table)
+    console.print(
+        f"[bold]{summary['trusted']}/{summary['converted']}[/bold] conversii coerente · "
+        f"[red]{summary['inconsistent']} inconsistente[/red] · "
+        f"{summary['entries'] - summary['converted']} neconvertite · "
+        f"stări: {summary['by_status']}"
+    )
+    if json_out is not None:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+        console.print(f"[dim]raport: {json_out}[/dim]")
+    not_modern = sum(
+        result.status not in {"verified", "not_converted"} for result in results
+    )
+    if (strict and summary["inconsistent"]) or (require_modern and not_modern):
+        raise typer.Exit(1)
+
+
+@corpus_app.command("migrate-bundles")
+def corpus_migrate_bundles(
+    data_dir: Path = typer.Argument(Path("data"), exists=True),
+    workers: int = typer.Option(4, min=1, max=8),
+    limit: int = typer.Option(0, min=0, help="Procesează cel mult N intrări (0 = toate)"),
+    dry_run: bool = typer.Option(False, help="Arată planul fără să modifice artefacte"),
+    force: bool = typer.Option(
+        False, help="Republică și bundle-urile moderne care trec deja auditul"
+    ),
+    json_out: Path | None = typer.Option(None, help="Raport JSON al migrării"),
+):
+    """Republică conversiile legacy ca bundle-uri moderne, fără apeluri LLM."""
+    import datetime as dt
+    import subprocess
+    import sys
+    import time
+    from collections import Counter
+
+    from .manifest import Manifest
+    from .publication import audit_city, migration_candidates
+
+    candidates = migration_candidates(data_dir, include_verified=force)
+    if limit:
+        candidates = candidates[:limit]
+    if not candidates:
+        console.print("[green]toate conversiile sunt deja bundle-uri moderne verificate[/green]")
+        return
+
+    by_year = Counter(candidate.year for candidate in candidates)
+    by_preset = Counter(candidate.preset or "neînregistrat" for candidate in candidates)
+    console.print(
+        f"[bold]{len(candidates)} conversii de migrat[/bold] · "
+        f"ani: {dict(sorted(by_year.items()))} · LLM: [bold green]off ($0)[/bold green]"
+    )
+    console.print(f"[dim]preseturi pentru replay cache: {dict(by_preset)}[/dim]")
+    if dry_run:
+        for candidate in candidates:
+            console.print(
+                f"  {candidate.year} · {candidate.municipality} · "
+                f"{candidate.previous_artifact_status} · {candidate.preset or 'fără preset'}"
+            )
+        return
+
+    config = _config()
+    started = dt.datetime.now(dt.UTC)
+    records = []
+    for index, candidate in enumerate(candidates, 1):
+        file_started = time.monotonic()
+        console.print(
+            f"[{index}/{len(candidates)}] [bold]{candidate.year} · "
+            f"{candidate.municipality}[/bold] …",
+            end=" ",
+        )
+        if not candidate.pdf.exists():
+            records.append({
+                "year": candidate.year, "siruta": candidate.siruta,
+                "municipality": candidate.municipality, "status": "failed",
+                "seconds": 0.0, "error": "source PDF missing",
+            })
+            console.print("[red]PDF lipsă[/red]")
+            continue
+
+        command = [
+            sys.executable, "-m", "bgconvertor.cli",
+            "--runs-dir", str(config.runs_dir),
+            "convert", str(candidate.pdf),
+            "--workers", str(workers),
+            "--llm", "off",
+            "--out", str(candidate.pdf.with_suffix(".xlsx")),
+        ]
+        if candidate.preset:
+            command.extend(["--model-preset", candidate.preset])
+        proc = subprocess.run(command, capture_output=True, text=True)
+        elapsed = round(time.monotonic() - file_started, 2)
+        status = "failed"
+        error = None
+        bundle_id = None
+        if proc.returncode == 0:
+            fresh_manifest = Manifest(candidate.manifest_path)
+            fresh_city = fresh_manifest.by_pdf(candidate.pdf)
+            audit = audit_city(fresh_manifest, fresh_city) if fresh_city else None
+            if audit is not None and audit.status == "verified":
+                status = "verified"
+                bundle_id = (
+                    fresh_city.entry.get("conversion") or {}
+                ).get("artifacts", {}).get("bundle_id")
+            else:
+                error = f"post-publication audit: {audit.status if audit else 'entry missing'}"
+        else:
+            output = (proc.stdout + proc.stderr).strip().splitlines()
+            error = output[-1][-500:] if output else f"exit {proc.returncode}"
+        records.append({
+            "year": candidate.year, "siruta": candidate.siruta,
+            "municipality": candidate.municipality, "status": status,
+            "seconds": elapsed, "bundle_id": bundle_id, "error": error,
+        })
+        if status == "verified":
+            console.print(f"[green]✓ {elapsed:.1f}s[/green]")
+        else:
+            console.print(f"[red]✗ {error} ({elapsed:.1f}s)[/red]")
+
+    finished = dt.datetime.now(dt.UTC)
+    succeeded = sum(record["status"] == "verified" for record in records)
+    failed = len(records) - succeeded
+    report = {
+        "schema_version": 1,
+        "mode": "llm_off",
+        "external_api_cost_usd": 0.0,
+        "started_at": started.isoformat(timespec="seconds"),
+        "finished_at": finished.isoformat(timespec="seconds"),
+        "seconds": round((finished - started).total_seconds(), 2),
+        "summary": {"attempted": len(records), "verified": succeeded, "failed": failed},
+        "files": records,
+    }
+    if json_out is not None:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    console.print(
+        f"[bold]{succeeded}/{len(records)}[/bold] bundle-uri moderne verificate · "
+        f"{failed} eșuate · {report['seconds'] / 60:.1f} min · $0 API"
+    )
+    if failed:
+        raise typer.Exit(1)
+
+
 @corpus_app.command("export")
 def corpus_export(
     out: Path = typer.Argument(Path("corpus.csv")),
@@ -1050,8 +1284,49 @@ def corpus_export(
         console.print(f"  {muni}: {n} randuri")
     console.print(f"[bold green]✓ {r['rows']} randuri -> {out}[/bold green]"
                   + (f" + {r['parquet']}" if r["parquet"] else ""))
-    console.print("[dim]coloana 'verified' = liniile care au trecut toate verificarile "
-                  "aritmetice si de nomenclator — stratul sigur pentru analiza[/dim]")
+    console.print("[dim]verified=true = linie fără error/warning/info; metrica nu "
+                  "include rândurile sau celulele omise din extracție[/dim]")
+
+
+@corpus_app.command("cross-check")
+def corpus_cross_check(
+    old_csv: Path = typer.Argument(..., exists=True, help="Export corpus al ediției vechi"),
+    new_csv: Path = typer.Argument(..., exists=True, help="Export corpus al ediției noi"),
+    out: Path = typer.Option(Path("cross-check.csv"), help="Lista de candidați pentru re-citire"),
+    top: int = typer.Option(10, help="Câte orașe se afișează în tabel"),
+):
+    """Compară două ediții și clasează liniile care merită re-citite.
+
+    Nu modifică nicio valoare: raportul e o listă de priorități pentru o
+    re-citire țintită. Referința fiecărui oraș e propria lui mediană, deci
+    creșterile reale de buget nu produc suspecți.
+    """
+    from . import crossyear
+
+    _stage_banner("Validare încrucișată an-la-an", f"{old_csv.name} vs {new_csv.name}")
+    reports = crossyear.compare(old_csv, new_csv)
+    if not reports:
+        console.print("[yellow]nicio pereche de orașe cu suprapunere suficientă[/yellow]")
+        raise typer.Exit(1)
+    t = Table(title="candidați pentru re-citire (fără nicio corecție automată)")
+    t.add_column("oraș", no_wrap=True)
+    for col in ("linii comune", "raport median", "suspecți", "din care cu cifră mutată"):
+        t.add_column(col, justify="right")
+    t.add_column("observație")
+    for rep in reports[:top]:
+        shifts = sum(1 for s in rep.suspects if s.signature == "decimal_shift")
+        note = ("[yellow]unități diferite între ediții[/yellow]" if rep.unit_shift
+                else "")
+        t.add_row(rep.city, str(rep.matched), f"{rep.median_ratio:.3g}",
+                  str(len(rep.suspects)), str(shifts), note)
+    console.print(t)
+    n = crossyear.write_csv(reports, out)
+    total = sum(len(r.suspects) for r in reports)
+    strong = sum(1 for r in reports for s in r.suspects
+                 if s.old_verified and not s.new_verified)
+    console.print(f"[bold green]✓ {n} candidați -> {out}[/bold green]")
+    console.print(f"[dim]{strong} din {total} au perechea veche verificată și cea nouă "
+                  "nu — cele mai bune ținte pentru re-citire[/dim]")
 
 
 @corpus_app.command("aggregate")
@@ -1085,7 +1360,7 @@ def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
         raise typer.Exit(1)
     rows = corpus.report(config, files)
     table = Table(title="corpus: calitate si cost pe municipalitate")
-    for col in ("municipiu", "pagini", "doc", "linii", "% curat", "erori", "avert.", "apeluri LLM", "cost LLM"):
+    for col in ("municipiu", "pagini", "doc", "linii", "% strict", "erori", "avert.", "apeluri LLM", "cost LLM"):
         table.add_column(col, justify="right")
     for r in rows:
         table.add_row(

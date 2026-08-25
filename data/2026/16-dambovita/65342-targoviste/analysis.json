@@ -1,61 +1,44 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 161,
+    "lines_strictly_verified": 161,
+    "pct_lines_strictly_verified": 100.0,
+    "numeric_cells": 1449,
+    "numeric_cells_strictly_verified": 1449,
+    "pct_numeric_cells_strictly_verified": 100.0,
+    "scope": {
+      "pages_expected": 7,
+      "pages_selected": 7,
+      "pages_processed": 7,
+      "complete_pdf": true
+    },
     "pct_clean": 100.0,
     "errors": 0,
     "warnings": 0,
+    "info": 0,
     "documents": 1
   },
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": 5885.0,
     "cheltuieli": 6724.0
   },
   "top_capitole": [
     {
-      "code": "50.10",
-      "name": "TOTAL CHELTUIELI (cod 50.10+59.10+63.10+70.10+79.10)",
-      "total": 6724.0
-    },
-    {
-      "code": "63.10",
-      "name": "Partea a III-a CHELTUIELI SOCIAL-CULTURALE",
-      "total": 6724.0
-    },
-    {
       "code": "65.10",
       "name": "CAP. Invatamant",
       "total": 6724.0
-    },
-    {
-      "code": "99.10",
-      "name": "DEFICIT",
-      "total": 839.0
-    },
-    {
-      "code": "59.10",
-      "name": "Partea a II-a APARARE,ORDINE PUBLICA SI SIGURANTA NATIONALA",
-      "total": 0.0
-    },
-    {
-      "code": "69.10",
-      "name": "Partea a IV-a SERVICII SI DEZVOLTARE PUBLICA, LOCUINTE, MEDIU SI APE",
-      "total": 0.0
-    },
-    {
-      "code": "79.10",
-      "name": "Partea a V-a ACTIUNI ECONOMICE",
-      "total": 0.0
-    },
-    {
-      "code": "98.10",
-      "name": "EXCEDENT",
-      "total": 0.0
-    },
-    {
-      "code": "96.10",
-      "name": "Partea a VII-a REZERVE, EXCEDENT / DEFICIT",
-      "total": -839.0
     }
   ],
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "78974f4d836b8355688bbe16",
+    "source_pdf_sha256": "45af06141e71b8e07e2c4201b0aeebccf14ef60f9c42506902951b241e290122"
+  }
 }

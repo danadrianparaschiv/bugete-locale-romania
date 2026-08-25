@@ -79,7 +79,8 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    extract_version: str = "32"  # + machetele MF «Formular 11» și de rectificare
+    # v32: source-letter codes/inverse name wraps + Formular 11/rectification layouts.
+    extract_version: str = "32"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

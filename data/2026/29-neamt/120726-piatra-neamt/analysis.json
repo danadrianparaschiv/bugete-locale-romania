@@ -1,22 +1,33 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 133,
+    "lines_strictly_verified": 102,
+    "pct_lines_strictly_verified": 76.7,
+    "numeric_cells": 122,
+    "numeric_cells_strictly_verified": 94,
+    "pct_numeric_cells_strictly_verified": 77.0,
+    "scope": {
+      "pages_expected": 4,
+      "pages_selected": 4,
+      "pages_processed": 4,
+      "complete_pdf": true
+    },
     "pct_clean": 76.7,
-    "errors": 10,
-    "warnings": 28,
+    "errors": 12,
+    "warnings": 22,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": 493008.7
+    "cheltuieli": null
   },
   "top_capitole": [
-    {
-      "code": "50.02",
-      "name": "CHELTUIELI - TOTAL (cod 51.02 + 54.02 + 55.02 + 61.02 + 65.02 + 66.02 ",
-      "total": 493008.7
-    },
     {
       "code": "65.02",
       "name": "INVATAMANT",
@@ -46,12 +57,13 @@
       "code": "80.02",
       "name": "ACTIUNI GENERALE ECONOMICE, COMERCIALE SI DE MUNCA",
       "total": 1510.0
-    },
-    {
-      "code": "96.02",
-      "name": "",
-      "total": -1202.43
     }
   ],
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "fd5cdbde2e0077d9091cceb6",
+    "source_pdf_sha256": "42167e06fc08ab248cb200ee268bf29ba0a02f0dd490d40d9615340eded9e7bd"
+  }
 }

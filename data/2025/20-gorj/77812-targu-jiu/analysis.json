@@ -1,12 +1,30 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 1470,
-    "pct_clean": 62.7,
-    "errors": 566,
-    "warnings": 390,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1494,
+    "lines_strictly_verified": 945,
+    "pct_lines_strictly_verified": 63.3,
+    "numeric_cells": 3663,
+    "numeric_cells_strictly_verified": 2392,
+    "pct_numeric_cells_strictly_verified": 65.3,
+    "scope": {
+      "pages_expected": 136,
+      "pages_selected": 136,
+      "pages_processed": 136,
+      "complete_pdf": true
+    },
+    "pct_clean": 63.3,
+    "errors": 580,
+    "warnings": 385,
+    "info": 0,
     "documents": 8
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 420908.27,
     "cheltuieli": 471833.38
@@ -24,7 +42,7 @@
     },
     {
       "code": "84.02",
-      "name": "",
+      "name": "TRANSPORTURI",
       "total": 103466.85
     },
     {
@@ -64,5 +82,10 @@
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "1fe55518d6989355aab8e5d0",
+    "source_pdf_sha256": "aefbb2cdeb7c964bf7a204be63ba871ef88551f4938088008a8908f28be711dc"
+  }
 }

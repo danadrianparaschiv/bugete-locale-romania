@@ -10,6 +10,9 @@ from pydantic import BaseModel, Field
 Kind = Literal["revenue", "expense_functional", "expense_economic", "heading"]
 Severity = Literal["error", "warning", "info"]
 
+QUALITY_SCHEMA_VERSION = 1
+QUALITY_METRIC = "observed_strict_line_rate"
+
 
 class Issue(BaseModel):
     check: str  # V1_code | V2_name | V3_row_checksum | V4_hierarchy | V5_identity | V7_hygiene
@@ -34,6 +37,11 @@ class BudgetLine(BaseModel):
     source: str = "digital"  # digital | ocr | llm
     issues: list[Issue] = Field(default_factory=list)
 
+    @property
+    def strictly_verified(self) -> bool:
+        """True only when no validator emitted an error, warning, or info issue."""
+        return not self.issues
+
 
 class BudgetDocument(BaseModel):
     title: str
@@ -50,6 +58,12 @@ class ConversionResult(BaseModel):
     pdf: str
     documents: list[BudgetDocument]
     issues: list[Issue] = Field(default_factory=list)  # document-level issues
+    # Scope is recorded by the pipeline when known.  It makes partial runs
+    # distinguishable from complete-PDF conversions, without pretending that
+    # validator cleanliness measures rows which were never extracted.
+    pages_expected: int | None = None
+    pages_selected: list[int] = Field(default_factory=list)
+    pages_processed: list[int] = Field(default_factory=list)
 
     def all_issues(self) -> list[Issue]:
         out = list(self.issues)
@@ -62,11 +76,43 @@ class ConversionResult(BaseModel):
         lines = [ln for d in self.documents for ln in d.lines if ln.kind != "heading"]
         issues = self.all_issues()
         by_sev = {s: sum(1 for i in issues if i.severity == s) for s in ("error", "warning", "info")}
-        clean = sum(1 for ln in lines if not ln.issues)
+        strict = [ln for ln in lines if not ln.issues]
+        numeric_cells = sum(len(ln.values) for ln in lines)
+        strict_numeric_cells = sum(len(ln.values) for ln in strict)
+        selected = sorted(set(self.pages_selected))
+        processed = sorted(set(self.pages_processed))
+        scope_complete = (
+            self.pages_expected is not None
+            and selected == list(range(1, self.pages_expected + 1))
+            and processed == selected
+        )
         return {
+            "quality_schema_version": QUALITY_SCHEMA_VERSION,
+            "metric": QUALITY_METRIC,
+            # This is deliberately false.  The validators can measure
+            # consistency of extracted lines, not recall of absent rows/cells.
+            "recall_measured": False,
             "documents": len(self.documents),
             "lines": len(lines),
-            "lines_clean": clean,
-            "pct_clean": round(100 * clean / len(lines), 1) if lines else 0.0,
+            "lines_strictly_verified": len(strict),
+            "pct_lines_strictly_verified": (
+                round(100 * len(strict) / len(lines), 1) if lines else 0.0
+            ),
+            "numeric_cells": numeric_cells,
+            "numeric_cells_strictly_verified": strict_numeric_cells,
+            "pct_numeric_cells_strictly_verified": (
+                round(100 * strict_numeric_cells / numeric_cells, 1)
+                if numeric_cells else 0.0
+            ),
+            "scope": {
+                "pages_expected": self.pages_expected,
+                "pages_selected": len(selected),
+                "pages_processed": len(processed),
+                "complete_pdf": scope_complete,
+            },
             "issues": by_sev,
+            # Backward-compatible aliases for existing consumers.  New public
+            # artifacts also carry the explicit metric name above.
+            "lines_clean": len(strict),
+            "pct_clean": round(100 * len(strict) / len(lines), 1) if lines else 0.0,
         }

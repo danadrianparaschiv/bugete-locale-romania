@@ -128,14 +128,18 @@ def _corpus_with_execution(tmp_path, plan_venituri, plan_cheltuieli=2000.0):
     city = data / "2026" / "01-alba" / "1017-alba-iulia"
     city.mkdir(parents=True)
     (city / "budget_file.pdf").write_bytes(b"%PDF-fake")
+    _budget_quality_workbook(city / "budget_file.xlsx", lines=10, pct=100.0)
     (city / "analysis.json").write_text(json.dumps({
-        "quality": {"lines": 10, "pct_clean": 100.0},
+        "quality": {"lines": 10, "pct_clean": 100.0, "errors": 0, "warnings": 0},
         "totals_mii_lei": {"venituri": plan_venituri, "cheltuieli": plan_cheltuieli},
     }))
     (data / "2026" / "manifest.json").write_text(json.dumps({"year": 2026, "entries": [{
         "county_code": "01", "county_name": "Alba", "capital_siruta": "1017",
         "capital_name": "Alba Iulia", "path": "01-alba/1017-alba-iulia/budget_file.pdf",
-        "conversion": {"status": "converted", "lines": 10, "pct_clean": 100.0},
+        "conversion": {
+            "status": "converted", "lines": 10, "pct_clean": 100.0,
+            "errors": 0, "warnings": 0,
+        },
     }]}))
     ex_city = data / "execution" / "2026" / "01-alba" / "1017-alba-iulia"
     (ex_city / "q2").mkdir(parents=True)
@@ -143,6 +147,18 @@ def _corpus_with_execution(tmp_path, plan_venituri, plan_cheltuieli=2000.0):
     snap = ex.build_city(data / "execution" / "2026", "01-alba", "1017-alba-iulia")
     ex.write_snapshot(snap, ex_city / "execution.json")
     return data
+
+
+def _budget_quality_workbook(path, lines, pct, errors=0, warnings=0):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sumar calitate"
+    for row in (
+        ("Linii de date", lines), ("% curat", pct),
+        ("Erori", errors), ("Avertismente", warnings),
+    ):
+        ws.append(row)
+    wb.save(path)
 
 
 def test_aggregate_links_execution_and_computes_share(tmp_path):
@@ -183,11 +199,16 @@ def test_budget_tab_explains_a_failed_conversion(tmp_path):
 
     data = _corpus_with_execution(tmp_path, plan_venituri=None)
     city = data / "2026" / "01-alba" / "1017-alba-iulia"
+    _budget_quality_workbook(city / "budget_file.xlsx", lines=500, pct=57.3)
     (city / "analysis.json").write_text(json.dumps({
-        "quality": {"lines": 500, "pct_clean": 57.3},
+        "quality": {"lines": 500, "pct_clean": 57.3, "errors": 0, "warnings": 0},
         "totals_mii_lei": {"venituri": None, "cheltuieli": None},
         "top_capitole": [],
     }))
+    manifest_path = data / "2026" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["entries"][0]["conversion"].update({"lines": 500, "pct_clean": 57.3})
+    manifest_path.write_text(json.dumps(manifest))
     out = tmp_path / "site"
     build_all(data, out, base_url="/repo")
     page = (out / "city" / "1017.html").read_text()

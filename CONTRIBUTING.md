@@ -5,12 +5,14 @@
 ```bash
 uv sync
 uv run pytest        # trebuie să treacă, complet offline
-uv run bgconvertor eval
+uv run bgconvertor eval  # recall pe ancorele disponibile local
+uv run bgconvertor corpus audit data --strict --require-modern \
+  --json-out artifact-audit.json
 ```
 
 Straturile LLM au nevoie de `ANTHROPIC_API_KEY` (vezi `.env.example`), dar
 nimic din suita de teste nu atinge rețeaua: testele LLM redau răspunsuri
-înregistrate, iar testele care depind de PDF-uri se omit singure când
+din cache sau folosesc clienți falși, iar testele care depind de PDF-uri se omit singure când
 fișierele-eșantion lipsesc. Poți dezvolta și testa complet fără vreo
 cheie API.
 
@@ -27,7 +29,7 @@ Modificările de **cod** intră prin fork și pull request:
 
    Blob-urile se descarcă la checkout, doar cele atinse.
 
-2. **Branch + cele două porți** (secțiunea următoare) trecute local,
+2. **Branch + cele trei porți** (secțiunea următoare) trecute local,
    plus `ruff check` / `ruff format`.
 
 3. **Pull request spre `main`.** CI-ul rulează automat pe PR (ruff,
@@ -44,7 +46,7 @@ deschide un issue cu URL-ul documentului oficial în loc de PR:
 proveniența fiecărui fișier trebuie verificată de mainteneri înainte să
 intre în corpus.
 
-## Cele două porți
+## Porțile de calitate
 
 Orice modificare trebuie să păstreze:
 
@@ -54,14 +56,21 @@ Orice modificare trebuie să păstreze:
    puțin o linie.
 2. **`uv run bgconvertor eval` fără regresii** — fixture-urile etalon din
    `tests/fixtures/golden/` conțin ancore de celule verificate manual
-   pentru fiecare familie de formate. Reglajele se măsoară, nu se apreciază
-   din ochi.
+   pentru familiile cunoscute. Metrica este `selected_anchor_recall`: nu
+   reprezintă recall complet pe celule sau fișiere.
+3. **Toate conversiile publice sunt bundle-uri moderne coerente.**
+   `bgconvertor corpus audit data --strict --require-modern` compară Excelul,
+   `analysis.json` și manifestul, inclusiv ID-urile, hash-urile și costul
+   declarat. CI blochează orice PR care introduce o neconcordanță sau revine
+   la metadate legacy.
 
 CI-ul aplică automat poarta pentru familia digitală (extrage fișierul de
-referință de la zero și cere `eval --min-anchors 35`); fixture-urile
-pentru scanări au nevoie de cache-urile OCR din `runs/` și rămân o
-poartă locală — rulează evaluarea completă înainte de PR și treci
-scorul în descriere.
+referință de la zero și cere 30 de ancore numerice + 5 aserțiuni text).
+Fixture-urile pentru
+scanări depind încă de cache-urile OCR locale din `runs/`; absența lor apare
+explicit în raport și nu este interpretată drept succes. Rulează evaluarea
+completă înainte de PR când ai aceste artefacte și trece acoperirea
+fixture-urilor, nu doar procentul ancorelor, în descriere.
 
 Modificările care invalidează cache-ul (orice schimbă rezultatul
 extragerii) trebuie să incrementeze `extract_version` din `config.py` —

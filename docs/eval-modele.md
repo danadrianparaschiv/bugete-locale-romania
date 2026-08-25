@@ -1,6 +1,9 @@
 # Evaluare: compararea preseturilor de modele
 
-> **Stare: EXECUTAT** (august 2026) — 65 de rulări valide, $76 cost total.
+> **Stare: EXPERIMENT ISTORIC** (august 2026) — 65 de rulări valide. După
+> reconcilierea facturilor, costul a fost aproximativ $120, nu cei $76
+> raportați inițial de ledger. Scorurile sunt pe metrica legacy și nu reprezintă
+> `validated_cell_recall`; vezi [quality.md](quality.md).
 > Rezultatele complete sunt în [Rezultate](#rezultate) și în
 > `evals/rezultate.csv`; planul original urmează mai jos.
 
@@ -11,8 +14,8 @@ preseturi `furnizor:model` (vezi `bgconvertor models`), pe două întrebări:
 2. **Fiabilitate de integrare** — respectă fiecare furnizor schema JSON
    strictă, limitele de rată, formatul de imagine?
 
-Poarta de acceptare aritmetică garantează că niciun model nu poate corupe
-datele — comparăm exclusiv *câte* grupuri repară și *cât costă*.
+Poarta de acceptare aritmetică reduce riscul unei corecții greșite; nu este o
+garanție de recall sau de corectitudine pentru celulele fără constrângeri.
 
 ## Orașele selectate (5)
 
@@ -108,28 +111,27 @@ gratuite). Faza 0 ≈ $2. Faza 3 opțională ≤ $30.
 > din tabel pentru modelele Gemini (măsurat: $63.58 facturat vs. $18.48 în
 > registru, cumulat pe tot proiectul). Corectat în cod (costul se calculează
 > acum pe `total_tokens - prompt_tokens`). Recalibrat, gemini-3.6-flash
-> coboară de la ~843 la **~250 linii/$** — rămâne câștigătorul valorii, dar
-> cu marjă mai mică față de gpt-5-mini (229, ale cărui costuri includeau
-> deja reasoning-ul). Cifrele Anthropic/OpenAI/Mistral din tabel nu sunt
-> afectate.
+> coboară de la ~843 la **~158 linii/$** — sub gpt-5-mini (229) și foarte
+> aproape de gpt-5.1 (161), ale căror costuri includeau deja reasoning-ul.
+> Cifrele Anthropic/OpenAI/Mistral nu sunt afectate.
 
 65 de rulări valide (5 orașe × 13 = baseline + 12 preseturi, plus o
-reluare qwen după un blocaj de rețea), $76.11 cost total de API. Metrica
+reluare qwen după un blocaj de rețea), aproximativ $120 cost real de API. Metrica
 principală: **linii verificate câștigate față de baseline-ul `--llm off`,
 per dolar**, agregat pe toate orașele; plafonul a fost $3/rulare.
 
 | # | Preset | Δ linii verif. | Cost | Linii/$ | Verdict |
 |---|---|---:|---:|---:|---|
-| 1 | google:gemini-3.6-flash | +696 | $0.83 | **843** | **câștigătorul valorii**: 94% din randamentul referinței la 8% din cost, zero erori de integrare — alegerea pentru conversii în masă |
-| 2 | openai:gpt-5-mini | +292 | $1.28 | 229 | ține pasul la reparare, slab la transcriere de pagină |
-| 3 | openai:gpt-5.1 | +341 | $2.12 | 161 | corect, niciodată remarcabil; sub gpt-5-mini la reparare pe fișiere ușoare |
-| 4 | google:gemini-3.1-pro | +672 | $5.15 | 131 | calitate de clasa Opus la un sfert din preț |
-| 5 | anthropic:claude-sonnet-4-5 | +527 | $4.07 | 130 | surpriza: cel mai bun scor pe orașul cu fallback masiv (90.7%) — își permite toate paginile |
-| 6 | mistral:mistral-medium-3 | +42 | $0.47 | 90 | **descalificat pe integrare**: 192 erori de schemă pe paginile grele |
-| 7 | anthropic:claude-opus-4-5 | +602 | $7.01 | 86 | solid, dar fără nișă proprie |
-| 8 | anthropic:claude-sonnet-5 | **+737** | $10.62 | 69 | **campionul absolut** — cele mai multe linii verificate; rămâne presetul implicit |
-| 9 | qwen:qwen3-vl-30b | +132 | $2.00 | 66 | funcțional dar nepractic: un blocaj de rețea, durate de 10–40× peste rest |
-| 10 | anthropic:claude-haiku-4-5 | +72 | $1.30 | 55 | bun la reparare, se prăbușește total la transcriere de pagină |
+| 1 | openai:gpt-5-mini | +292 | $1.28 | **229** | ține pasul la reparare, slab la transcriere de pagină |
+| 2 | openai:gpt-5.1 | +341 | $2.12 | 161 | corect, niciodată remarcabil; sub gpt-5-mini la reparare pe fișiere ușoare |
+| 3 | google:gemini-3.6-flash | +696 | ~$4.41 | **~158** | 94% din randamentul referinței la ~41% din cost, zero erori de integrare |
+| 4 | anthropic:claude-sonnet-4-5 | +527 | $4.07 | 130 | surpriza: cel mai bun scor pe orașul cu fallback masiv (90.7%) — își permite toate paginile |
+| 5 | mistral:mistral-medium-3 | +42 | $0.47 | 90 | **descalificat pe integrare**: 192 erori de schemă pe paginile grele |
+| 6 | anthropic:claude-opus-4-5 | +602 | $7.01 | 86 | solid, dar fără nișă proprie |
+| 7 | anthropic:claude-sonnet-5 | **+737** | $10.62 | 69 | **campionul absolut** — cele mai multe linii verificate; rămâne presetul implicit |
+| 8 | qwen:qwen3-vl-30b | +132 | $2.00 | 66 | funcțional dar nepractic: un blocaj de rețea, durate de 10–40× peste rest |
+| 9 | anthropic:claude-haiku-4-5 | +72 | $1.30 | 55 | bun la reparare, se prăbușește total la transcriere de pagină |
+| 10 | google:gemini-3.1-pro | +672 | ~$13.44 | ~50 | calitate mare, dar costul facturat reduce drastic eficiența |
 | 11 | anthropic:claude-opus-5 | +357 | $17.45 | 20 | strangulat de plafon pe orașele grele |
 | 12 | anthropic:claude-fable-5 | +222 | $22.54 | 10 | idem — transcrierea per pagină e excelentă, dar la ~$1/apel acoperă prea puține pagini |
 
@@ -145,10 +147,9 @@ per dolar**, agregat pe toate orașele; plafonul a fost $3/rulare.
 3. **Recomandări practice**: implicit `anthropic:claude-sonnet-5`
    (calitate maximă); `google:gemini-3.6-flash` pentru conversii în masă;
    premium-urile doar cu plafoane generoase pe fișiere mici.
-4. **Defect descoperit**: plafonul de buget se poate depăși cu apeluri
+4. **Defect descoperit și remediat**: plafonul de buget se putea depăși cu apeluri
    mari concurente (max. observat: $7.29 la plafon $3, fable-5 pe
-   Galați) — de remediat prin rezervarea costului estimat la lansarea
-   apelului, nu doar la finalizare.
+   Galați); ledgerul rezervă acum costul estimat înaintea lansării apelului.
 
 Datele brute per rulare (log complet, felia de ledger, rezumat JSON) sunt
 în `evals/logs/<oraș>/<preset>.*` (negit-uite); agregatul în

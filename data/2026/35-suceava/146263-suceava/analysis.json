@@ -1,70 +1,49 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 775,
-    "pct_clean": 95.9,
-    "errors": 8,
-    "warnings": 29,
+    "lines_strictly_verified": 729,
+    "pct_lines_strictly_verified": 94.1,
+    "numeric_cells": 775,
+    "numeric_cells_strictly_verified": 729,
+    "pct_numeric_cells_strictly_verified": 94.1,
+    "scope": {
+      "pages_expected": 29,
+      "pages_selected": 29,
+      "pages_processed": 29,
+      "complete_pdf": true
+    },
+    "pct_clean": 94.1,
+    "errors": 22,
+    "warnings": 25,
+    "info": 0,
     "documents": 1
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": 756734810.0,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 185675880.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 162716630.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 106184010.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 77707510.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 72851870.0
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 50847240.0
-    },
-    {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe",
-      "total": 37001100.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 21464230.0
-    },
-    {
-      "code": "61.02",
-      "name": "Ordine publica si siguranta nationala",
-      "total": 16148960.0
-    },
-    {
       "code": "55.02",
       "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 12702500.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 572840.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "4a266d5e2a76355b46127fd0",
+    "source_pdf_sha256": "f965a34a536602ccad08a33d81b91f238308f1690a906777f4fd6baf9503e67e"
+  }
 }

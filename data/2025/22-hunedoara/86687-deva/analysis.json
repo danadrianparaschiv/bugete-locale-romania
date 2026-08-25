@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
-    "lines": 4859,
-    "pct_clean": 57.2,
-    "errors": 2221,
-    "warnings": 1300,
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 4849,
+    "lines_strictly_verified": 2883,
+    "pct_lines_strictly_verified": 59.5,
+    "numeric_cells": 17234,
+    "numeric_cells_strictly_verified": 10570,
+    "pct_numeric_cells_strictly_verified": 61.3,
+    "scope": {
+      "pages_expected": 266,
+      "pages_selected": 266,
+      "pages_processed": 266,
+      "complete_pdf": true
+    },
+    "pct_clean": 59.5,
+    "errors": 2666,
+    "warnings": 1101,
+    "info": 19,
     "documents": 14
   },
   "llm_models": [],
@@ -13,19 +29,9 @@
   },
   "top_capitole": [
     {
-      "code": "60.02",
-      "name": "CHELTUIELILE SECTIUNII DE DEZVOLTARE (5002+5902+6302+6902+7902",
-      "total": 246561.6
-    },
-    {
       "code": "70.02",
       "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
       "total": 123238.54
-    },
-    {
-      "code": "65.02",
-      "name": "CAP. Invatamant",
-      "total": 112261.33
     },
     {
       "code": "74.02",
@@ -43,9 +49,9 @@
       "total": 39889.05
     },
     {
-      "code": "60.10",
-      "name": "Subventii pentru instituti publice TOTAL CHELTUIELI (cod 50.10+59,10+6",
-      "total": 18048.28
+      "code": "65.02",
+      "name": "CAP. Invatamant",
+      "total": 18128.04
     },
     {
       "code": "61.02",
@@ -58,11 +64,26 @@
       "total": 11010.66
     },
     {
-      "code": "66.02",
-      "name": "CAP. Sanatate",
-      "total": 5397.0
+      "code": "54.02",
+      "name": "CAP. Alte servicii publice generale",
+      "total": 1749.2
+    },
+    {
+      "code": "67.02",
+      "name": "CAP. Cultura, recreere si religie",
+      "total": 1584.5
+    },
+    {
+      "code": "01.10",
+      "name": "DEFICIT",
+      "total": 69.21
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "3842f71e95130791b7ed903a",
+    "source_pdf_sha256": "63d03df23babb9f3e91f8a11360fcbb779483050cfa4b990df3476debda17c53"
+  }
 }

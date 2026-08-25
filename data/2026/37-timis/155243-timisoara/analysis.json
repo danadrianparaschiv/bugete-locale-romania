@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 340,
+    "lines_strictly_verified": 269,
+    "pct_lines_strictly_verified": 79.1,
+    "numeric_cells": 340,
+    "numeric_cells_strictly_verified": 269,
+    "pct_numeric_cells_strictly_verified": 79.1,
+    "scope": {
+      "pages_expected": 17,
+      "pages_selected": 17,
+      "pages_processed": 17,
+      "complete_pdf": true
+    },
     "pct_clean": 79.1,
     "errors": 26,
     "warnings": 47,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [],
@@ -12,11 +28,6 @@
     "cheltuieli": null
   },
   "top_capitole": [
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 615807860.0
-    },
     {
       "code": "65.02",
       "name": "Invatamant",
@@ -33,9 +44,9 @@
       "total": 202019570.0
     },
     {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 155083430.0
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 175987310.0
     },
     {
       "code": "81.02",
@@ -48,11 +59,6 @@
       "total": 112075100.0
     },
     {
-      "code": "66.02",
-      "name": "Sanatate",
-      "total": 107559260.0
-    },
-    {
       "code": "74.02",
       "name": "Protectia mediului",
       "total": 68065910.0
@@ -61,8 +67,23 @@
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
       "total": 39220010.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 31041810.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 26115960.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "e69fe8c0cbcc1ff2d59fe96c",
+    "source_pdf_sha256": "b254e8d7de2abc3d9ed143e2363e7b96cc80bcc13b8f40eb2996a1b68a77e85e"
+  }
 }

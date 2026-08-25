@@ -70,9 +70,22 @@ instituții condusă de antetele paginilor.
 
 Problemele sunt tipizate (`V1` validitatea codului … `V7` igienă), cu
 severități, iar fiecare linie poartă proveniența: pagina, sursa
-(`digital`/`ocr`/`llm`) și un indicator `verified` = a trecut toate
-verificările. Exportul de corpus expune exact aceste informații, astfel
-încât analiza din aval își poate alege singură nivelul de risc.
+(`digital`/`ocr`/`llm`). În export, `verified=true` înseamnă că linia nu
+poartă nicio problemă, inclusiv `warning` sau `info`. Metrica agregată
+`observed_strict_line_rate` are ca numitor numai liniile extrase și declară
+explicit `recall_measured=false`; nu poate demonstra rândurile absente.
+Contractul complet este în [quality.md](quality.md).
+
+## Publicarea artefactelor
+
+În corpus, Excelul, `analysis.json` și blocul `conversion` din manifest sunt
+un singur bundle versionat. Excelul și analiza sunt produse în fișiere
+temporare cu același ID; manifestul, scris atomic ultimul, înregistrează
+SHA-256-ul sursei și al ambelor artefacte. Un eșec restaurează versiunea
+anterioară. `bgconvertor corpus audit` recalculează hash-urile și compară
+metricile din toate cele trei locuri; agregatul refuză orice bundle
+inconsistent. Conversiile cu `--pages` sunt experimente și nu pot înlocui
+ieșirile publice.
 
 ## Garduri de siguranță pentru LLM
 

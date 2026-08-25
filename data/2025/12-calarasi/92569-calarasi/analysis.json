@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 286,
+    "lines_strictly_verified": 56,
+    "pct_lines_strictly_verified": 19.6,
+    "numeric_cells": 847,
+    "numeric_cells_strictly_verified": 168,
+    "pct_numeric_cells_strictly_verified": 19.8,
+    "scope": {
+      "pages_expected": 17,
+      "pages_selected": 17,
+      "pages_processed": 17,
+      "complete_pdf": true
+    },
     "pct_clean": 19.6,
     "errors": 37,
     "warnings": 309,
+    "info": 0,
     "documents": 1
   },
   "llm_models": [],
@@ -21,18 +37,13 @@
       "code": "55.02",
       "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
       "total": 10600.0
-    },
-    {
-      "code": "68.02",
-      "name": "Spor de putere scoala nr. 11 Tudor Vladimirescu",
-      "total": 68.0
-    },
-    {
-      "code": "67.02",
-      "name": "Lucrări de înregistrare sistematică pe sectoare în extravilan și intra",
-      "total": 67.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "ca749df4b0c8b905e1861a25",
+    "source_pdf_sha256": "9f45afdfc5a5b68a5f39d4ceff59d1e4a92587b714bfdfef299a2a8e8d0ea2ec"
+  }
 }

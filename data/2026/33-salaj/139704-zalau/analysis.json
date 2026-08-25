@@ -1,9 +1,25 @@
 {
+  "schema_version": 2,
   "quality": {
+    "schema_version": 1,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
     "lines": 1016,
-    "pct_clean": 46.9,
-    "errors": 543,
-    "warnings": 428,
+    "lines_strictly_verified": 475,
+    "pct_lines_strictly_verified": 46.8,
+    "numeric_cells": 1651,
+    "numeric_cells_strictly_verified": 904,
+    "pct_numeric_cells_strictly_verified": 54.8,
+    "scope": {
+      "pages_expected": 79,
+      "pages_selected": 79,
+      "pages_processed": 79,
+      "complete_pdf": true
+    },
+    "pct_clean": 46.8,
+    "errors": 559,
+    "warnings": 427,
+    "info": 11,
     "documents": 2
   },
   "llm_models": [],
@@ -16,11 +32,6 @@
       "code": "67.10",
       "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
       "total": 16838.5
-    },
-    {
-      "code": "55.10",
-      "name": "(rând derivat din formula tipărită)",
-      "total": 9255.65
     },
     {
       "code": "61.10",
@@ -36,13 +47,13 @@
       "code": "54.10",
       "name": "Alte servicii publice generale (cod 54.10.10+54.10.50)",
       "total": 6565.66
-    },
-    {
-      "code": "54.02",
-      "name": "Reparat si intretinut mobilier Parc Central",
-      "total": 1000.0
     }
   ],
   "infografic": null,
-  "note": "Figuri din liniile verificate aritmetic; mii lei. Vezi DISCLAIMER.md."
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "b3843833462dbbb41ca5d5f1",
+    "source_pdf_sha256": "81f62ff7c3dd59bf7811a71aa4be8feefe316cc6c37ab7827a6ac17f104082fb"
+  }
 }
