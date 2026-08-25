@@ -37,6 +37,12 @@ este 0 USD. Produce:
 `bgconvertor site build` publică aceleași trei fișiere sub `site/data/` și o
 pagină `comparatii.html` pentru fiecare ediție.
 
+În paginile municipiilor, compoziția veniturilor și cea a cheltuielilor folosesc
+aceeași vizualizare cu bare interactive. Selectarea unui capitol arată codul,
+valoarea și ponderea lui în total; pentru venituri se păstrează și eticheta
+sursei locale, de la stat sau din fonduri UE. Nu se afișează niveluri de detaliu
+care nu există în liniile verificate ale documentului.
+
 ## Contractul de eligibilitate
 
 Un plan intră în clasamentul cheltuielilor pe locuitor numai când toate sunt

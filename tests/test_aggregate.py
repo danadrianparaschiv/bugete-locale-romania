@@ -157,7 +157,16 @@ def test_city_page_uses_mii_lei_for_every_absolute_budget_value(tmp_path):
 
     assert "Funcționare / dezvoltare (mii lei)" in page
     assert '<div class="v">700.000' in page and "/ 300.000" in page
-    assert "mii lei venituri" in page
+    assert '<div class="bars" id="ig-ven-bars"></div>' in page
+    assert 'id="ig-ven-detail" aria-live="polite"' in page
+    assert 'id="ig-detail" aria-live="polite"' in page
+    assert 'id="ig-ven"' not in page
+    assert 'id="ig-ven-list"' not in page
+    assert "ig-grid2" not in page
+    assert "% din veniturile planificate" in page
+    assert "% din secțiunea de funcționare" in page
+    assert "% din secțiunea de dezvoltare" in page
+    assert 'aria-pressed="true"' in page
     assert "mil. lei" not in page
     assert "milioane lei" not in page
     assert "/ 1000" not in page
