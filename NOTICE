@@ -21,3 +21,11 @@ Date ale terților incluse în acest depozit:
 
 3. Codurile teritoriale SIRUTA — Institutul Național de Statistică,
    https://data.gov.ro/dataset/siruta-2025
+
+4. Populația rezidentă la 1 decembrie 2021 — Recensământul Populației și
+   Locuințelor 2021, Institutul Național de Statistică, tabelul 1.22,
+   https://www.recensamantromania.ro/rezultate-rpl-2021/rezultate-definitive/
+   Valorile sunt asociate municipiilor prin codul SIRUTA.
+
+5. Suprafața municipiilor — Wikidata (CC0), interogată prin codul SIRUTA;
+   excepțiile și data interogării sunt descrise în reference/municipii.json.

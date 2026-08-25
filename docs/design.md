@@ -128,3 +128,17 @@ inventare exhaustive de celule pentru familiile migrate în P1
 (`bgconvertor eval`). Raportează separat recall și precizie numai în scope-urile
 inventariate integral; astfel ipotezele primesc cifre fără ca un eșantion să
 fie prezentat drept acoperire completă.
+
+## Analitice și augmentare
+
+Analiza transversală este o proiecție separată a agregatului public, nu o
+extensie a `analysis.json`. `analytics.py` leagă populația, suprafața și
+execuția prin SIRUTA + an, calculează indicatorii derivați și publică pentru
+fiecare rând eligibilitatea și motivul excluderii. Rangurile se calculează
+numai pentru totaluri publice coerente și publică dimensiunea cohortei.
+
+Site-ul și exporturile JSON/CSV/Excel sunt construite din același obiect
+`AnalyticsDataset`; astfel pagina nu poate afișa un clasament diferit de
+fișierul descărcabil. Proveniența augmentărilor este propagată din
+`reference/municipii.json`, în timp ce faptele extrase rămân în bundle-ul
+PDF/Excel/analysis. Contractul complet este în [analytics.md](analytics.md).

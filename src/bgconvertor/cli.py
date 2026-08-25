@@ -1588,6 +1588,29 @@ def corpus_aggregate(
     console.print(f"[bold green]✓ agregat: {len(corpus.cities)} orase ({per_year}) -> {out}[/bold green]")
 
 
+@corpus_app.command("analytics")
+def corpus_analytics(
+    data_dir: Path = typer.Option(Path("data"), exists=True, help="Rădăcina data/ cu toți anii"),
+    out_dir: Path = typer.Option(Path("analytics"), help="Directorul pentru JSON, CSV și Excel"),
+):
+    """Construiește indicatori comparabili și un Excel analitic cu surse explicite.
+
+    Valorile extrase, augmentările (populație/suprafață) și formulele derivate
+    rămân straturi distincte. Intrările neeligibile apar în date cu motivul
+    excluderii, dar nu intră în clasamente.
+    """
+    from .analytics import build_from_data, write_outputs
+
+    dataset = build_from_data(data_dir)
+    outputs = write_outputs(dataset, out_dir)
+    eligible = sum(row.plan_comparison_eligible for row in dataset.rows)
+    console.print(
+        f"[bold green]✓ analitice: {len(dataset.rows)} municipiu-ani, "
+        f"{eligible} eligibile pentru comparații[/bold green]"
+    )
+    console.print(" · ".join(f"{kind}: {path}" for kind, path in outputs.items()))
+
+
 @corpus_app.command("report")
 def corpus_report(pdfs: list[Path] | None = typer.Argument(None)):
     """Calitate și cost, una lângă alta, pentru fiecare municipalitate convertită."""

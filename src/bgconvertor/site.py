@@ -15,6 +15,7 @@ from pathlib import Path
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from .aggregate import City, CityYear, Corpus, aggregate_manifests, build_aggregate, write_aggregate
+from .analytics import AnalyticsDataset, AnalyticsRow, build_analytics, write_outputs
 from .manifest import Manifest
 
 log = logging.getLogger("bgc.site")
@@ -34,7 +35,7 @@ def _ro_date(iso: str | None) -> str | None:
 REPO_RAW = "https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main"
 
 
-def _row(city: City, cy: CityYear) -> dict:
+def _row(city: City, cy: CityYear, analytics: AnalyticsRow) -> dict:
     """Flatten one city-year of the aggregate into what templates expect."""
     return {
         "siruta": city.siruta,
@@ -42,7 +43,15 @@ def _row(city: City, cy: CityYear) -> dict:
         "county": city.county,
         "county_code": city.county_code,
         "populatie": city.populatie,
+        "populatie_data": _ro_date(city.populatie_data),
         "suprafata_km2": city.suprafata_km2,
+        "density_per_km2": analytics.density_per_km2,
+        "plan_comparison_eligible": analytics.plan_comparison_eligible,
+        "plan_exclusion_reason": analytics.plan_exclusion_reason,
+        "planned_revenue_lei_per_capita": analytics.planned_revenue_lei_per_capita,
+        "planned_expense_lei_per_capita": analytics.planned_expense_lei_per_capita,
+        "plan_expense_per_capita_rank": analytics.plan_expense_per_capita_rank,
+        "plan_expense_rank_cohort": analytics.plan_expense_rank_cohort,
         "executie": cy.executie,
         "status": cy.status,
         "artifact_status": cy.artifact_status,
@@ -103,8 +112,9 @@ def _evolution(city: City, editions: list[dict]) -> list[dict] | None:
     return rows
 
 
-def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: str,
-                editions: list[dict], repo_root: Path) -> dict:
+def _build_year(corpus: Corpus, analytics: AnalyticsDataset, year: int, out: Path,
+                base_url: str, raw_base: str, editions: list[dict], repo_root: Path,
+                data_base: str) -> dict:
     env = Environment(
         loader=PackageLoader("bgconvertor", "templates"),
         autoescape=select_autoescape(["html"]),
@@ -114,8 +124,9 @@ def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: s
 
     rows = []
     n_converted = 0
+    analytics_by_siruta = {row.siruta: row for row in analytics.year_rows(year)}
     for city, cy in corpus.year_rows(year):
-        row = _row(city, cy)
+        row = _row(city, cy, analytics_by_siruta[city.siruta])
         rows.append(row)
         if cy.has_analysis:
             n_converted += 1
@@ -127,9 +138,28 @@ def _build_year(corpus: Corpus, year: int, out: Path, base_url: str, raw_base: s
 
     index = env.get_template("index.html").render(
         cities=rows, year=year, n_converted=n_converted,
-        base=base_url, raw=raw_base, editions=editions,
+        base=base_url, raw=raw_base, editions=editions, data_base=data_base,
     )
     (out / "index.html").write_text(index)
+
+    year_analytics = analytics.year_rows(year)
+    plan_rankings = sorted(
+        (row for row in year_analytics if row.plan_comparison_eligible),
+        key=lambda row: row.planned_expense_lei_per_capita or 0,
+        reverse=True,
+    )
+    execution_rankings = sorted(
+        (row for row in year_analytics if row.execution_comparison_eligible),
+        key=lambda row: row.actual_expense_lei_per_capita or 0,
+        reverse=True,
+    )
+    page = env.get_template("comparatii.html").render(
+        year=year, base=base_url, data_base=data_base,
+        coverage=analytics.coverage.get(str(year), {}),
+        plan_rankings=plan_rankings, execution_rankings=execution_rankings,
+        sources=analytics.sources,
+    )
+    (out / "comparatii.html").write_text(page)
 
     # the animated budget-procedure explainer, with live stats from the
     # newest corpus year (the current budget cycle)
@@ -160,16 +190,18 @@ def build_all(data_root: Path, out: Path, base_url: str = "", raw_base: str = RE
     """One site for every corpus year: newest at out/, older at out/<year>/."""
     corpus = build_aggregate(data_root)
     write_aggregate(corpus, out / "data" / "corpus.json")
+    analytics = build_analytics(corpus)
+    write_outputs(analytics, out / "data")
     editions = [
         {"year": y, "href": f"{base_url}/" if i == 0 else f"{base_url}/{y}/"}
         for i, y in enumerate(corpus.years)
     ]
     return [
         _build_year(
-            corpus, y,
+            corpus, analytics, y,
             out if i == 0 else out / str(y),
             base_url if i == 0 else f"{base_url}/{y}",
-            raw_base, editions, data_root.parent,
+            raw_base, editions, data_root.parent, f"{base_url}/data",
         )
         for i, y in enumerate(corpus.years)
     ]
@@ -179,7 +211,9 @@ def build(manifest: Manifest, out: Path, base_url: str = "", raw_base: str = REP
           editions: list[dict] | None = None) -> dict:
     """Single-year build straight from one manifest (no edition links)."""
     corpus = aggregate_manifests([manifest])
+    analytics = build_analytics(corpus)
+    write_outputs(analytics, out / "data")
     return _build_year(
-        corpus, manifest.year, out, base_url, raw_base,
-        editions or [], manifest.root.parent.parent,
+        corpus, analytics, manifest.year, out, base_url, raw_base,
+        editions or [], manifest.root.parent.parent, f"{base_url}/data",
     )

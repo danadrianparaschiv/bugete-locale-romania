@@ -72,6 +72,9 @@ uv run bgconvertor eval
 uv run bgconvertor corpus export corpus.csv
 uv run bgconvertor corpus report
 
+# indicatori comparabili + proveniență: JSON, CSV și Excel
+uv run bgconvertor corpus analytics --data-dir data --out-dir analytics
+
 # coerența Excel + analysis.json + manifest (și hash-urile bundle-urilor noi)
 uv run bgconvertor corpus audit data --json-out artifact-audit.json
 ```
@@ -141,6 +144,13 @@ golden: 1.355/1.355 celule regăsite și corecte în scope-urile exhaustive.
 Aceasta este acoperire pe pagini reprezentative, nu recall măsurat pentru
 fiecare PDF complet. P2 prioritizează recuperarea LLM sub același plafon
 public de 5 USD/PDF și publică planul de cheltuire în run store.
+
+P3 publică un set analitic separat (`analytics.json`, `.csv`, `.xlsx`) și
+comparații pe site. Fiecare municipiu-an păstrează intrările extrase,
+augmentările și indicatorii derivați în câmpuri distincte; intrările
+necomparabile rămân vizibile cu motivul excluderii. Populația folosită drept
+numitor este cohorta unică RPL2021 INS, asociată prin SIRUTA. Contractul și
+limitele sunt în [docs/analytics.md](docs/analytics.md).
 
 ## Corpusul
 

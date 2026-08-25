@@ -24,7 +24,7 @@ from .manifest import CityEntry, Manifest
 
 log = logging.getLogger("bgc.aggregate")
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
 # execution above this share of the approved plan means the plan figure is
 # partial (bad scan), not that the city overspent — rectifications explain
@@ -116,6 +116,7 @@ class City(BaseModel):
     county: str
     county_code: str
     populatie: int | None = None  # RPL2021; reference/municipii.json
+    populatie_data: str | None = None
     suprafata_km2: float | None = None
     years: dict[str, CityYear] = Field(default_factory=dict)  # keyed by str(year)
 
@@ -123,6 +124,7 @@ class City(BaseModel):
 class Corpus(BaseModel):
     schema_version: int = SCHEMA_VERSION
     years: list[int] = Field(default_factory=list)  # newest first
+    augmentation_sources: dict = Field(default_factory=dict)
     cities: list[City] = Field(default_factory=list)
 
     def year_rows(self, year: int) -> list[tuple[City, CityYear]]:
@@ -266,18 +268,25 @@ def _add_plan_share(e: Executie, plan: dict[str, float]) -> None:
                 put(block, f"pct_{key}", round(share, 1))
 
 
-def _load_reference(repo_root: Path) -> dict:
-    """SIRUTA -> {populatie, suprafata_km2, ...} from reference/municipii.json."""
+def _load_reference(repo_root: Path) -> tuple[dict, dict]:
+    """Return (SIRUTA municipality values, source metadata).
+
+    Augmentation is deliberately loaded as a separate reference layer.  The
+    source block is preserved in the public aggregate so downstream analytics
+    can identify the denominator without treating it as a fact extracted from
+    a budget PDF.
+    """
     path = repo_root / "reference" / "municipii.json"
     if not path.exists():
-        return {}
-    return json.loads(path.read_text()).get("municipii", {})
+        return {}, {}
+    payload = json.loads(path.read_text())
+    return payload.get("municipii", {}), payload.get("sursa", {})
 
 
 def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
     """Merge per-year manifests into one city-keyed corpus, newest year first."""
     ordered = sorted(manifests, key=lambda m: m.year, reverse=True)
-    reference = _load_reference(ordered[0].root.parent.parent)
+    reference, reference_sources = _load_reference(ordered[0].root.parent.parent)
     cities: dict[str, City] = {}
     for m in ordered:
         for c in m.cities():
@@ -286,6 +295,7 @@ def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
                 siruta=c.siruta, name=c.name,
                 county=c.county_name, county_code=c.county_code,
                 populatie=ref.get("populatie"),
+                populatie_data=ref.get("populatie_data"),
                 suprafata_km2=ref.get("suprafata_km2"),
             ))
             cy = city_year(m, c)
@@ -296,6 +306,7 @@ def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
             city.years[str(m.year)] = cy
     return Corpus(
         years=[m.year for m in ordered],
+        augmentation_sources=reference_sources,
         cities=sorted(cities.values(), key=lambda c: (c.county_code, c.name)),
     )
 

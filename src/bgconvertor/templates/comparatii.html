@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Comparații între municipii — {{ year }}{% endblock %}
+{% macro num(v) %}{{ "{:,.0f}".format(v).replace(",", ".") }}{% endmacro %}
+{% block content %}
+<p><a href="{{ base }}/index.html">← toate municipiile</a></p>
+<h1>Comparații între municipii · {{ year }}</h1>
+<p class="sub">Clasamente cu cohortă explicită; valorile absente sau neeligibile nu sunt tratate ca zero.</p>
+
+<section class="about">
+  <p><strong>Regula.</strong> Planul intră în comparație numai dacă bundle-ul public
+  este coerent, există un total verificabil de cheltuieli și populație RPL2021,
+  iar confruntarea cu execuția nu indică un plan extras parțial.</p>
+  <p><strong>Acoperire.</strong> {{ coverage.plan_comparison_eligible or 0 }} din
+  {{ coverage.municipalities or 0 }} municipii sunt eligibile pentru plan;
+  {{ coverage.execution_comparison_eligible or 0 }} au execuție comparabilă.</p>
+  <p>Descarcă datele, inclusiv motivele de excludere:
+  <a href="{{ data_base }}/analytics.csv">CSV</a> ·
+  <a href="{{ data_base }}/analytics.json">JSON</a> ·
+  <a href="{{ data_base }}/analytics.xlsx">Excel analitic</a>.</p>
+</section>
+
+<h2>Cheltuieli planificate pe locuitor</h2>
+{% if plan_rankings %}
+<table>
+  <thead><tr><th class="num">Loc</th><th>Municipiu</th><th>Județ</th>
+    <th class="num">lei/locuitor</th><th class="num">total (mii lei)</th></tr></thead>
+  <tbody>
+  {% for row in plan_rankings %}
+    <tr><td class="num">{{ row.plan_expense_per_capita_rank }}</td>
+      <td><a href="{{ base }}/city/{{ row.siruta }}.html">{{ row.municipality }}</a></td>
+      <td>{{ row.county }}</td>
+      <td class="num">{{ num(row.planned_expense_lei_per_capita) }}</td>
+      <td class="num">{{ num(row.planned_expense_mii_lei) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>Nu există încă suficiente planuri eligibile pentru acest an.</p>{% endif %}
+
+<h2>Plăți efectuate pe locuitor</h2>
+{% if execution_rankings %}
+<table>
+  <thead><tr><th class="num">Loc</th><th>Municipiu</th><th>Județ</th>
+    <th>Raport</th><th class="num">lei/locuitor</th><th class="num">total (mii lei)</th></tr></thead>
+  <tbody>
+  {% for row in execution_rankings %}
+    <tr><td class="num">{{ row.execution_expense_per_capita_rank }}</td>
+      <td>{% if row.status == "converted" %}<a href="{{ base }}/city/{{ row.siruta }}.html">{{ row.municipality }}</a>{% else %}{{ row.municipality }}{% endif %}</td>
+      <td>{{ row.county }}</td><td>T{{ row.execution_quarter }} · {{ row.execution_date }}</td>
+      <td class="num">{{ num(row.actual_expense_lei_per_capita) }}</td>
+      <td class="num">{{ num(row.actual_expense_mii_lei) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>Nu există încă rapoarte de execuție eligibile pentru acest an.</p>{% endif %}
+
+<p class="note"><strong>Surse.</strong> Populația este populația rezidentă la
+1 decembrie 2021 din RPL2021 INS, tabelul 1.22, asociată prin SIRUTA.
+Planurile provin din PDF-urile bugetare convertite și auditate; execuția este un
+strat separat din Forexebug. Valorile sunt nominale și nu sunt ajustate cu inflația.</p>
+{% endblock %}

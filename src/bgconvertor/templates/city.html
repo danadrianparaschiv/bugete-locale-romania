@@ -19,8 +19,23 @@
 <h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
 
 <p class="sub">SIRUTA {{ city.siruta }}
-  {%- if city.populatie %} · {{ mii(city.populatie) }} locuitori (2021){% endif %}
+  {%- if city.populatie %} · {{ mii(city.populatie) }} locuitori{% if city.populatie_data %} ({{ city.populatie_data }}){% endif %}{% endif %}
   {%- if city.suprafata_km2 %} · {{ city.suprafata_km2 }} km²{% endif %}</p>
+
+{% if city.plan_comparison_eligible %}
+<div class="cards">
+  {% if city.planned_revenue_lei_per_capita is not none %}
+  <div class="card"><div class="k">Venituri planificate / locuitor</div>
+    <div class="v">{{ mii(city.planned_revenue_lei_per_capita) }} lei</div></div>
+  {% endif %}
+  <div class="card"><div class="k">Cheltuieli planificate / locuitor</div>
+    <div class="v">{{ mii(city.planned_expense_lei_per_capita) }} lei</div>
+    {% if city.plan_expense_per_capita_rank %}<div class="k">locul {{ city.plan_expense_per_capita_rank }} din {{ city.plan_expense_rank_cohort }} municipii comparabile</div>{% endif %}</div>
+</div>
+<p class="note" style="border:none;padding:0;margin-top:-.5rem">Indicatori derivați din
+totalurile publicate și populația rezidentă RPL2021; vezi
+<a href="{{ base }}/comparatii.html">metodologia și cohorta de comparație</a>.</p>
+{% endif %}
 
 {% if city.source_url %}
 <p style="word-break:break-all">Sursa bugetului:
