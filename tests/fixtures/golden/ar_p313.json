@@ -1,0 +1,33 @@
+{
+  "id": "ar_p313",
+  "pdf": "data/2026/02-arad/9262-arad/budget_file.pdf",
+  "page": 313,
+  "layout": "scan_simple_table",
+  "budget": "own_revenue",
+  "source_type": "scanned",
+  "hazards": [
+    "program_ordinals_look_like_bare_capitol_codes"
+  ],
+  "columns": [],
+  "anchors": [
+    {
+      "raw_code": "10",
+      "code": "10",
+      "name_contains": "World Music Meeting"
+    },
+    {
+      "raw_code": "16",
+      "code": "16",
+      "name_contains": "Festivalul Underground"
+    },
+    {
+      "raw_code": "18",
+      "code": "18",
+      "name_contains": "Festivalul de circ"
+    }
+  ],
+  "text_contains": [
+    "Programul actiunilor culturale"
+  ],
+  "notes": "Anexa 2G Arad (HUB Cultural mARTA): program de actiuni culturale cu 'Nr. crt.' 1-21. Ordinalele doua-cifre ('10', '16', '18') arata ca titluri economice sau capitole fara sursa, dar raman ordinale — asamblarea nu are voie sa le completeze ('18' -> '18.10' era o rescriere din regresia v30). Ancore de prezenta, verificate manual din PDF p313; valorile raman neancorate (coloana de buget e inca mapata sub alt nume)."
+}

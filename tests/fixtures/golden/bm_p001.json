@@ -1,0 +1,93 @@
+{
+  "id": "bm_p001",
+  "pdf": "data/2026/26-maramures/106318-baia-mare/budget_file.pdf",
+  "page": 1,
+  "layout": "scan_general_matrix",
+  "budget": "general",
+  "source_type": "scanned",
+  "hazards": [
+    "no_ruling_lines_despite_text_layer",
+    "wrapped_multirow_headers",
+    "us_locale_numbers"
+  ],
+  "columns": [
+    "bugetul_local",
+    "inst_venituri_proprii_subventii",
+    "inst_integral_venituri_proprii",
+    "imprumuturi_externe",
+    "imprumuturi_interne",
+    "fonduri_externe",
+    "total",
+    "transferuri",
+    "total_general"
+  ],
+  "anchors": [
+    {
+      "raw_code": "01",
+      "name_contains": "VENITURI TOTAL",
+      "column": "bugetul_local",
+      "value": "1205961.00"
+    },
+    {
+      "raw_code": "01",
+      "column": "inst_venituri_proprii_subventii",
+      "value": "176878.69"
+    },
+    {
+      "raw_code": "01",
+      "column": "imprumuturi_interne",
+      "value": "47522.00"
+    },
+    {
+      "raw_code": "01",
+      "column": "fonduri_externe",
+      "value": "250.00"
+    },
+    {
+      "raw_code": "01",
+      "column": "total",
+      "value": "1430611.69"
+    },
+    {
+      "raw_code": "01",
+      "column": "transferuri",
+      "value": "72502.00"
+    },
+    {
+      "raw_code": "01",
+      "column": "total_general",
+      "value": "1358109.69"
+    },
+    {
+      "raw_code": "02",
+      "name_contains": "Venituri curente",
+      "column": "bugetul_local",
+      "value": "483930.00"
+    },
+    {
+      "raw_code": "02",
+      "column": "total",
+      "value": "553306.69"
+    },
+    {
+      "raw_code": "03",
+      "name_contains": "Venituri fiscale",
+      "column": "total_general",
+      "value": "431762.00"
+    },
+    {
+      "raw_code": "05",
+      "name_contains": "Impozit pe profit",
+      "column": "bugetul_local",
+      "value": "5715.00"
+    },
+    {
+      "raw_code": "08",
+      "name_contains": "Cote si sume defalcate",
+      "column": "bugetul_local",
+      "value": "211827.00"
+    }
+  ],
+  "text_contains": [],
+  "notes": "MF 'Formular 11' general-budget matrix (Anexa nr. 1 la HCL 250/2026), born-digital but printed WITHOUT ruling lines, so the digital extractor sees no grid and the page routes through docling. One row per indicator, values inline, US-locale numbers. Cross-checks: row 01 total = sum of source columns (1205961.00+176878.69+0+0+47522.00+250.00 = 1430611.69); total_general = total - transferuri (1430611.69-72502.00 = 1358109.69)."
+}

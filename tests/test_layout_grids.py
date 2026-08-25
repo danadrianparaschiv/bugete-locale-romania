@@ -5,7 +5,9 @@ counterpart of the golden-fixture eval (which needs the sample PDFs).
 """
 
 from bgconvertor.layouts import map_grid
+from bgconvertor.layouts.formular11 import try_map as formular11_try
 from bgconvertor.layouts.matrix import try_map as matrix_try
+from bgconvertor.layouts.rectificare import try_map as rectificare_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
 
 
@@ -105,6 +107,52 @@ def test_matrix_family_with_index_row():
     assert y2026["values"]["bugetul_local"] == "1250646.50"
     assert y2026["values"]["total_general"] == "1373387.50"
     assert y2026["name"].startswith("VENITURI TOTAL")
+
+
+def test_formular11_matrix_inline_values():
+    # MF Formular 11 (Baia Mare): index row "A 0 1..9=7-8", values inline
+    grid = [
+        ["", "Cod rând", "Bugetul local", "Bugetul instituțiilor publice finanțate din venituri proprii bugetul local", "Bugetul instituțiilor publice finanțate integral din venituri proprii", "Bugetul împrumuturilor", "Bugetul împrumuturilor", "Bugetul fondurilor externe nerambursabile", "TOTAL", "Transferuri între bugete**) (se scad)", "Total buget general"],
+        ["", "", "", "si subventii din", "", "externe", "interne", "", "", "", ""],
+        ["A", "0", "1", "2", "3", "4", "5", "6", "7=1+2+3+4+5+ 6", "8", "9=7-8"],
+        ["VENITURI TOTAL (rd.02+18+19+20+23)", "01", "1,205,961.00", "176,878.69", "0.00", "0.00", "47,522.00", "250.00", "1,430,611.69", "72,502.00", "1,358,109.69"],
+        ["Impozit pe profit", "05", "5,715.00", "", "", "", "", "", "5,715.00", "", "5,715.00"],
+    ]
+    lines = formular11_try(grid)
+    assert lines is not None
+    idx = _by_code(lines)
+    # row checksum holds: 7 = 1+2+3+4+5+6 and 9 = 7-8
+    assert idx["01"]["values"]["bugetul_local"] == "1205961.00"
+    assert idx["01"]["values"]["imprumuturi_interne"] == "47522.00"
+    assert idx["01"]["values"]["total"] == "1430611.69"
+    assert idx["01"]["values"]["transferuri"] == "72502.00"
+    assert idx["01"]["values"]["total_general"] == "1358109.69"
+    assert idx["05"]["name"] == "Impozit pe profit"
+    assert map_grid(grid) == lines  # registry dispatches to formular11
+
+
+def test_rectification_detail_codes_in_cod_rand():
+    # rectification annex: "COD RAND" holds real indicator codes; the
+    # "Buget/rectificat" header wraps into the first data cell
+    grid = [
+        ["DENUMIREA INDICATORILOR", "COD RAND", "Buget 2026", "Influente", "Buget"],
+        ["TOTAL VENITURI", "00.01", "1,203,356.00", "2,605.00", "rectificat 1,205,961.00"],
+        ["Ajutoare sociale", "57.02", "20,842.00", "2,605.00", "23,447.00"],
+        ["Titlul XII Proiecte cu finanțare din sumele reprezentând asistența financiară", "", "", "", ""],
+        ["nerambursabilă aferentă PNRR (cod 60.01 la 60.03)", "60", "4,337.00", "", "4,337.00"],
+    ]
+    lines = rectificare_try(grid)
+    assert lines is not None
+    idx = _by_code(lines)
+    # initial + influente = rectificat: 1203356 + 2605 = 1205961
+    assert idx["00.01"]["values"]["buget_2026"] == "1203356.00"
+    assert idx["00.01"]["values"]["influente"] == "2605.00"
+    assert idx["00.01"]["values"]["total_2026"] == "1205961.00"
+    assert idx["57.02"]["code"] == "57.02"
+    # the name row above the code row is prepended
+    assert idx["60"]["name"].startswith("Titlul XII Proiecte")
+    assert idx["60"]["values"]["total_2026"] == "4337.00"
+    assert map_grid(grid) == lines  # registry dispatches to rectificare
 
 
 def test_transposed_rejects_normal_tables():
