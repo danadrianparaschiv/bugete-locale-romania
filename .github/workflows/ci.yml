@@ -27,11 +27,23 @@ jobs:
         # LLM tests use fake clients/local cache — nothing here touches the
         # network or an API key; tests for PDFs not extracted above still skip
         run: uv run pytest -q
-      - name: golden-fixture eval — digital family gate
-        # The 4 Alba Iulia fixtures (30 value anchors + 5 text assertions) are computable in CI;
-        # scanned-layout fixtures need local OCR caches and stay a local
-        # gate (see CONTRIBUTING). Regression below the floor fails CI.
-        run: uv run bgconvertor eval --min-anchors 30 --min-text-assertions 5 --json-out eval-report.json
+      - name: golden-fixture eval — digital + exhaustive scanned-layout gates
+        # Alba Iulia is extracted from its PDF. Committed Arad/Pitesti OCR
+        # grids exhaustively gate 232 general-matrix cells, 216 transposed
+        # cells, 51 institution
+        # cells, all 216 cells in a stamp-collapsed annual table, and all 245
+        # cells in a collapsed economic-detail table, plus all 80 cells in a
+        # stamp-damaged expense chapter, 62 investment-financing cells, and 73
+        # numeric cells in the numbered Arad revenue page (with all 15 X
+        # markers anchored), offline. Alba's digital page adds 180 cells.
+        run: >-
+          uv run bgconvertor eval
+          --min-anchors 126
+          --min-text-assertions 16
+          --require-cell-ground-truth 9
+          --min-layout-cell-recall 90
+          --min-layout-cell-precision 99.5
+          --json-out eval-report.json
       - name: audit public artifact consistency
         # Every converted entry must remain a modern, hashed, internally
         # consistent bundle. Entries not yet converted remain out of scope.

@@ -21,6 +21,8 @@ from ..sums import BASE_TOLERANCE
 log = logging.getLogger("bgc.llm.repair")
 
 MAX_GROUP_CALLS = 200  # per document; the dollar budget is the real governor
+ESTIMATED_PAGE_PIXELS = 2_100_000
+ESTIMATED_CROP_PIXELS = 800_000
 
 
 class CellValue(BaseModel):
@@ -62,6 +64,8 @@ def repair_document(
     page_image_fn,
     column_labels: dict[str, str] | None = None,
     row_locator=None,  # (page, raw_codes) -> (y0_frac, y1_frac) | None
+    allowed_job_keys: set[str] | None = None,
+    job_key_prefix: str = "",
 ) -> list[Issue]:
     """Attempt LLM repair of sum-breach groups in one document.
 
@@ -75,36 +79,66 @@ def repair_document(
     repair_log: list[Issue] = []
     calls = 0
 
-    by_code = {}
-    for ln in doc.lines:
-        if ln.code is not None and ln.kind != "heading":
-            by_code.setdefault((ln.section, ln.kind, ln.func_code, ln.code), ln)
-
     # Phase A: collect all repair jobs up front (cheap, sequential)
-    jobs = []
-    for line in list(doc.lines):
-        broken = {
-            i.column: i for i in line.issues
-            if i.check == "V4_hierarchy" and i.column is not None
-        }
-        if not broken:
-            continue
-        if len(jobs) >= MAX_GROUP_CALLS:
-            break
-        children = [
-            ln for key, ln in by_code.items()
-            if key[:3] == (line.section, line.kind, line.func_code)
-            and _parent_of(key[3], line.kind) == line.code
+    jobs, by_code = _collect_sum_jobs(doc)
+
+    jobs.sort(key=lambda job: (-_sum_job_benefit(job), job[0].page, _sum_job_key(job)))
+    ledger = getattr(client, "ledger", None)
+    concurrency = getattr(getattr(client, "config", None), "llm", None)
+    if allowed_job_keys is not None:
+        jobs = [
+            job
+            for job in jobs
+            if _qualified_sum_job_key(job, job_key_prefix) in allowed_job_keys
         ]
-        if not children:
-            continue
-        # The page often prints the true composition in the parent's name
-        # ("(cod 74.02.03+74.02.05+74.02.50)"): rows OCR dropped are asked
-        # for too, so an incomplete child set can't fake a consistent sum.
-        formula = formula_children(line.name)
-        observed = {c.code for c in children}
-        missing = [c for c in (formula or []) if c not in observed]
-        jobs.append((line, broken, [line, *children], missing, sorted(broken)))
+    elif ledger is not None and concurrency is not None and jobs:
+        from .ledger import estimate_request_cost
+        from .planner import RecoveryCandidate, select_candidates
+
+        model = concurrency.repair_model
+        batch_pricing = bool(concurrency.batch) and len(jobs) >= 4
+        image_pixels = ESTIMATED_CROP_PIXELS if row_locator is not None else ESTIMATED_PAGE_PIXELS
+        candidates = []
+        for job in jobs:
+            _line, _broken, group, missing, columns = job
+            prompt = _group_prompt(group, missing, columns, labels)
+            max_tokens = _group_max_tokens(len(group) + len(missing), len(columns))
+            candidates.append(RecoveryCandidate(
+                key=_qualified_sum_job_key(job, job_key_prefix),
+                kind="sum_repair",
+                page=job[0].page,
+                benefit_units=_sum_job_benefit(job),
+                estimated_cost_usd=estimate_request_cost(
+                    model,
+                    len(prompt),
+                    max_tokens,
+                    image_pixels=image_pixels,
+                    batch=batch_pricing,
+                ),
+                detail=f"{len(group)} observed rows, {len(missing)} missing, "
+                f"{len(columns)} broken columns",
+            ))
+        plan = select_candidates(
+            candidates,
+            ledger.remaining_cost_usd,
+            max_calls=ledger.remaining_calls,
+        )
+        jobs_by_key = {
+            _qualified_sum_job_key(job, job_key_prefix): job
+            for job in jobs
+        }
+        jobs = [jobs_by_key[candidate.key] for candidate in plan.selected]
+        if plan.skipped:
+            repair_log.append(Issue(
+                check="V6_repair",
+                severity="info",
+                page=plan.skipped[0].page,
+                message=(
+                    f"budget planner selected {len(plan.selected)} sum groups "
+                    f"(~${plan.estimated_cost_usd:.3f} reserved worst-case) and skipped "
+                    f"{len(plan.skipped)} lower-yield groups"
+                ),
+            ))
 
     # Phase B: network reads, in parallel (calls are independent; the ledger
     # is thread-safe and BudgetExceeded short-circuits the remaining jobs)
@@ -124,9 +158,9 @@ def repair_document(
         return _read_group(
             client, _stack_images(images),
             group, missing, columns, labels,
+            max_tokens=_group_max_tokens(len(group) + len(missing), len(columns)),
         )
 
-    concurrency = getattr(getattr(client, "config", None), "llm", None)
     n_workers = getattr(concurrency, "concurrency", 1) or 1
     use_batch = bool(getattr(concurrency, "batch", False)) and len(jobs) >= 4
     readings: list = []
@@ -142,6 +176,8 @@ def repair_document(
                 "key": str(i), "purpose": "repair", "prompt": prompt,
                 "image": _stack_images([page_image_fn(p) for p in pages]),
                 "output_model": RowSetReading, "page": line.page,
+                "max_tokens": _group_max_tokens(len(group) + len(missing), len(columns)),
+                "benefit_units": _sum_job_benefit(job),
             })
         results = batch_structured(client, batch_jobs)
         readings = [results[str(i)] for i in range(len(jobs))]
@@ -224,7 +260,13 @@ def repair_document(
 MAX_UNPARSEABLE_CALLS = 100  # per document; the dollar budget still governs
 
 
-def repair_unparseable(doc: BudgetDocument, client, page_image_fn) -> list[Issue]:
+def repair_unparseable(
+    doc: BudgetDocument,
+    client,
+    page_image_fn,
+    allowed_job_keys: set[str] | None = None,
+    job_key_prefix: str = "",
+) -> list[Issue]:
     """Re-read cells the OCR merged/garbled (V7 unparseable).
 
     Unlike sum repair there is usually no arithmetic constraint to prove the
@@ -234,26 +276,66 @@ def repair_unparseable(doc: BudgetDocument, client, page_image_fn) -> list[Issue
     from ..llm.ledger import BudgetExceeded
 
     repair_log: list[Issue] = []
-    by_page: dict[int, list[tuple]] = {}
-    for ln in doc.lines:
-        broken = [
-            i for i in ln.issues
-            if i.check == "V7_hygiene" and i.column and "unparseable" in i.message
+    by_page = _collect_unparseable_pages(doc)
+
+    ordered_pages = sorted(
+        by_page,
+        key=lambda page: (
+            -sum(len(broken) for _, broken in by_page[page]),
+            page,
+        ),
+    )
+    ledger = getattr(client, "ledger", None)
+    cheap = getattr(getattr(client, "config", None), "llm", None)
+    if allowed_job_keys is not None:
+        ordered_pages = [
+            page
+            for page in ordered_pages
+            if _cell_job_key(page, job_key_prefix) in allowed_job_keys
         ]
-        if broken and ln.code:  # code-less rows can't be matched back reliably
-            by_page.setdefault(ln.page, []).append((ln, broken))
+    elif ledger is not None and cheap is not None and ordered_pages:
+        from .planner import RecoveryCandidate, select_candidates
+
+        candidates: list[RecoveryCandidate] = estimate_unparseable_candidates(
+            doc,
+            cheap,
+            job_key_prefix=job_key_prefix,
+        )
+        plan = select_candidates(
+            candidates,
+            ledger.remaining_cost_usd,
+            max_calls=ledger.remaining_calls,
+        )
+        ordered_pages = [candidate.page for candidate in plan.selected]
+        if plan.skipped:
+            repair_log.append(Issue(
+                check="V6_repair",
+                severity="info",
+                page=plan.skipped[0].page,
+                message=(
+                    f"budget planner selected {len(plan.selected)} unparseable-cell pages "
+                    f"and skipped {len(plan.skipped)} lower-confidence pages"
+                ),
+            ))
 
     calls = 0
-    for page, entries in sorted(by_page.items()):
+    for page in ordered_pages:
+        entries = by_page[page]
         if calls >= MAX_UNPARSEABLE_CALLS:
             break
         lines = [ln for ln, _ in entries][:20]  # keep one prompt readable
         columns = sorted({i.column for _, broken in entries for i in broken})
-        cheap = getattr(getattr(client, "config", None), "llm", None)
         cell_model = getattr(cheap, "cell_model", None)
         try:
             reading = _read_group(
-                client, page_image_fn(page), lines, [], columns, {}, model=cell_model
+                client,
+                page_image_fn(page),
+                lines,
+                [],
+                columns,
+                {},
+                model=cell_model,
+                max_tokens=_group_max_tokens(len(lines), len(columns)),
             )
         except BudgetExceeded as exc:
             repair_log.append(Issue(
@@ -301,6 +383,58 @@ def repair_unparseable(doc: BudgetDocument, client, page_image_fn) -> list[Issue
     return repair_log
 
 
+def _collect_unparseable_pages(doc: BudgetDocument) -> dict[int, list[tuple]]:
+    by_page: dict[int, list[tuple]] = {}
+    for line in doc.lines:
+        broken = [
+            issue
+            for issue in line.issues
+            if issue.check == "V7_hygiene"
+            and issue.column
+            and "unparseable" in issue.message
+        ]
+        if broken and line.code:  # code-less rows cannot be matched back reliably
+            by_page.setdefault(line.page, []).append((line, broken))
+    return by_page
+
+
+def estimate_unparseable_candidates(
+    doc: BudgetDocument,
+    llm_config,
+    *,
+    job_key_prefix: str = "",
+):
+    """Expose lower-confidence cell rereads to the file-wide planner."""
+    from .ledger import estimate_request_cost
+    from .planner import RecoveryCandidate
+
+    candidates = []
+    for page, entries in _collect_unparseable_pages(doc).items():
+        lines = [line for line, _broken in entries][:20]
+        columns = sorted({issue.column for _, broken in entries for issue in broken})
+        prompt = _group_prompt(lines, [], columns, {})
+        max_tokens = _group_max_tokens(len(lines), len(columns))
+        broken_cells = sum(len(broken) for _, broken in entries)
+        candidates.append(RecoveryCandidate(
+            key=_cell_job_key(page, job_key_prefix),
+            kind="unparseable_cell",
+            page=page,
+            benefit_units=0.25 * broken_cells,
+            estimated_cost_usd=estimate_request_cost(
+                llm_config.cell_model,
+                len(prompt),
+                max_tokens,
+                image_pixels=ESTIMATED_PAGE_PIXELS,
+            ),
+            detail=f"{broken_cells} unparseable cells; unverified transcription tier",
+        ))
+    return candidates
+
+
+def _cell_job_key(page: int, prefix: str) -> str:
+    return f"{prefix}cell:p{page}"
+
+
 def _stack_images(images):
     """Stack page images vertically (a sum group can span a page break)."""
     images = [im for im in images if im is not None]
@@ -328,6 +462,77 @@ def _parent_of(code: str, kind: str) -> str | None:
 from ..validate import formula_children  # noqa: E402 — moved; kept for callers
 
 
+def _collect_sum_jobs(doc: BudgetDocument):
+    by_code = {}
+    for line in doc.lines:
+        if line.code is not None and line.kind != "heading":
+            by_code.setdefault((line.section, line.kind, line.func_code, line.code), line)
+
+    jobs = []
+    for line in list(doc.lines):
+        broken = {
+            issue.column: issue
+            for issue in line.issues
+            if issue.check == "V4_hierarchy" and issue.column is not None
+        }
+        if not broken:
+            continue
+        if len(jobs) >= MAX_GROUP_CALLS:
+            break
+        children = [
+            child
+            for key, child in by_code.items()
+            if key[:3] == (line.section, line.kind, line.func_code)
+            and _parent_of(key[3], line.kind) == line.code
+        ]
+        if not children:
+            continue
+        # Printed formulas expose children OCR dropped. They are included in
+        # both the quality benefit and the arithmetic acceptance gate.
+        formula = formula_children(line.name)
+        observed = {child.code for child in children}
+        missing = [code for code in (formula or []) if code not in observed]
+        jobs.append((line, broken, [line, *children], missing, sorted(broken)))
+    return jobs, by_code
+
+
+def estimate_sum_repair_candidates(
+    doc: BudgetDocument,
+    llm_config,
+    *,
+    row_crops_available: bool = True,
+    column_labels: dict[str, str] | None = None,
+    job_key_prefix: str = "",
+):
+    """Expose file-wide sum-repair candidates to the CLI planner."""
+    from .ledger import estimate_request_cost
+    from .planner import RecoveryCandidate
+
+    labels = column_labels or {}
+    image_pixels = ESTIMATED_CROP_PIXELS if row_crops_available else ESTIMATED_PAGE_PIXELS
+    jobs, _by_code = _collect_sum_jobs(doc)
+    candidates = []
+    for job in jobs:
+        _line, _broken, group, missing, columns = job
+        prompt = _group_prompt(group, missing, columns, labels)
+        max_tokens = _group_max_tokens(len(group) + len(missing), len(columns))
+        candidates.append(RecoveryCandidate(
+            key=_qualified_sum_job_key(job, job_key_prefix),
+            kind="sum_repair",
+            page=job[0].page,
+            benefit_units=_sum_job_benefit(job),
+            estimated_cost_usd=estimate_request_cost(
+                llm_config.repair_model,
+                len(prompt),
+                max_tokens,
+                image_pixels=image_pixels,
+            ),
+            detail=f"{len(group)} observed rows, {len(missing)} missing, "
+            f"{len(columns)} broken columns",
+        ))
+    return candidates
+
+
 def _group_prompt(group, missing: list[str], columns: list[str], labels: dict) -> str:
     rows = [f"- {ln.code} → {ln.name[:60]}" for ln in group]
     rows += [f"- {code} → (rând nerecunoscut de OCR — caută-l în imagine)" for code in missing]
@@ -337,9 +542,38 @@ def _group_prompt(group, missing: list[str], columns: list[str], labels: dict) -
     )
 
 
+def _group_max_tokens(n_rows: int, n_columns: int) -> int:
+    return min(12000, max(2048, 512 + 220 * max(1, n_rows) * max(1, n_columns)))
+
+
+def _sum_job_key(job) -> str:
+    line = job[0]
+    return "|".join((
+        "sum",
+        str(line.page),
+        line.section or "",
+        line.kind or "",
+        line.func_code or "",
+        line.code or line.raw_code or "",
+    ))
+
+
+def _qualified_sum_job_key(job, prefix: str) -> str:
+    """Keep file-wide planner keys unique when documents share page/code context."""
+    return f"{prefix}{_sum_job_key(job)}"
+
+
+def _sum_job_benefit(job) -> float:
+    _line, _broken, group, missing, columns = job
+    # Arithmetic-proven repairs carry full weight. Missing printed rows add
+    # extra value because one accepted call can restore both recall and sums.
+    return len(columns) * (len(group) + 1.5 * len(missing))
+
+
 def _read_group(
     client, image, group, missing: list[str], columns: list[str], labels: dict,
     model: str | None = None,
+    max_tokens: int | None = None,
 ) -> RowSetReading:
     rows = [f"- {ln.code} → {ln.name[:60]}" for ln in group]
     rows += [f"- {code} → (rând nerecunoscut de OCR — caută-l în imagine)" for code in missing]
@@ -349,7 +583,8 @@ def _read_group(
     )
     return client.structured(
         "repair", prompt, RowSetReading, image=image, page=group[0].page,
-        max_tokens=12000, model=model,
+        max_tokens=max_tokens or _group_max_tokens(len(group) + len(missing), len(columns)),
+        model=model,
     )
 
 

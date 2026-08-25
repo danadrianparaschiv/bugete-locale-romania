@@ -6,12 +6,13 @@ sheet listing every Issue, and a 'Sumar calitate' scorecard.
 
 from __future__ import annotations
 
+import math
 import os
 import tempfile
 from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill
+from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from .model import BudgetDocument, ConversionResult
@@ -20,6 +21,7 @@ from .model import BudgetDocument, ConversionResult
 COLUMN_LABELS = [
     ("total", "TOTAL 2026"),
     ("total_2026", "TOTAL 2026"),
+    ("buget_2026", "Buget 2026"),
     ("credite_stinse", "Credite stingere plati"),
     ("credite_restante", "Credite plati restante"),
     ("trim1", "Trim. I"),
@@ -29,10 +31,10 @@ COLUMN_LABELS = [
     ("est2027", "Estimare 2027"),
     ("est2028", "Estimare 2028"),
     ("est2029", "Estimare 2029"),
-    ("buget_2026", "Buget 2026 (initial)"),
     ("influente", "Influente"),
     ("valoare_an_curent", "Valoare an curent"),
     ("buget_local", "Buget local"),
+    ("buget_local_pct", "% Buget local"),
     ("bugetul_local", "Bugetul local"),
     ("inst_venituri_proprii_subventii", "Inst. venituri proprii si subventii"),
     ("inst_integral_venituri_proprii", "Inst. integral venituri proprii"),
@@ -43,8 +45,11 @@ COLUMN_LABELS = [
     ("transferuri", "Transferuri intre bugete"),
     ("total_general", "Total buget general"),
     ("credite_externe", "Credite externe"),
+    ("credite_externe_pct", "% Credite externe"),
     ("credite_interne", "Credite interne"),
+    ("credite_interne_pct", "% Credite interne"),
     ("buget_fen", "Buget FEN"),
+    ("buget_fen_pct", "% Buget FEN"),
 ]
 _ORDER = {k: i for i, (k, _) in enumerate(COLUMN_LABELS)}
 _LABELS = dict(COLUMN_LABELS)
@@ -53,7 +58,13 @@ _LABELS = dict(COLUMN_LABELS)
 def _sheet_columns(lines) -> list[tuple[str, str]]:
     present = {c for ln in lines for c in (*ln.values, *ln.x_markers)}
     ordered = sorted(present, key=lambda c: _ORDER.get(c, 99))
-    return [(c, _LABELS.get(c, c)) for c in ordered]
+    labels = dict(_LABELS)
+    if "influente" in present:
+        # In a rectification annex, distinguish the two 2026 columns without
+        # relabeling ordinary annual-budget sheets as "initial".
+        labels["buget_2026"] = "Buget 2026 (initial)"
+        labels["total_2026"] = "Buget 2026 rectificat"
+    return [(c, labels.get(c, c)) for c in ordered]
 
 HEADER_FILL = PatternFill("solid", fgColor="1F4E79")
 HEADER_FONT = Font(color="FFFFFF", bold=True)
@@ -150,15 +161,20 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
         _append_values(ws, row)
 
         excel_row = ws.max_row
+        name_cell = ws.cell(row=excel_row, column=3)
+        name_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        wrapped_lines = min(5, max(1, math.ceil(len(ln.name) / 60)))
+        if wrapped_lines > 1:
+            ws.row_dimensions[excel_row].height = 15 * wrapped_lines
         if ln.kind == "heading":
-            ws.cell(row=excel_row, column=3).font = SECTION_FONT
+            name_cell.font = SECTION_FONT
         severities = {i.severity for i in ln.issues}
         fill = ERROR_FILL if "error" in severities else WARN_FILL if "warning" in severities else None
         if fill:
             for c in range(1, len(headers) + 1):
                 ws.cell(row=excel_row, column=c).fill = fill
 
-    widths = [12, 12, 60, 6, 6, 18] + [14] * len(value_columns) + [8, 50]
+    widths = [12, 12, 70, 6, 6, 18] + [14] * len(value_columns) + [8, 50]
     for i, w in enumerate(widths, 1):
         ws.column_dimensions[get_column_letter(i)].width = w
     for row in ws.iter_rows(min_row=2, min_col=7, max_col=6 + len(value_columns)):

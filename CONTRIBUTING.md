@@ -5,7 +5,9 @@
 ```bash
 uv sync
 uv run pytest        # trebuie să treacă, complet offline
-uv run bgconvertor eval  # recall pe ancorele disponibile local
+uv run bgconvertor eval  # ancore + etaloanele exhaustive disponibile
+uv run bgconvertor eval --require-cell-ground-truth 9 \
+  --min-layout-cell-recall 90 --min-layout-cell-precision 99.5
 uv run bgconvertor corpus audit data --strict --require-modern \
   --json-out artifact-audit.json
 ```
@@ -56,21 +58,29 @@ Orice modificare trebuie să păstreze:
    puțin o linie.
 2. **`uv run bgconvertor eval` fără regresii** — fixture-urile etalon din
    `tests/fixtures/golden/` conțin ancore de celule verificate manual
-   pentru familiile cunoscute. Metrica este `selected_anchor_recall`: nu
-   reprezintă recall complet pe celule sau fișiere.
+   pentru familiile cunoscute. `selected_anchor_recall` rămâne o metrică
+   parțială. Fixture-urile care declară `cell_ground_truth` inventariază toate
+   celulele numerice din scope-ul lor și raportează separat
+   `validated_cell_recall` și precizia față de etalon.
 3. **Toate conversiile publice sunt bundle-uri moderne coerente.**
    `bgconvertor corpus audit data --strict --require-modern` compară Excelul,
    `analysis.json` și manifestul, inclusiv ID-urile, hash-urile și costul
    declarat. CI blochează orice PR care introduce o neconcordanță sau revine
    la metadate legacy.
 
-CI-ul aplică automat poarta pentru familia digitală (extrage fișierul de
-referință de la zero și cere 30 de ancore numerice + 5 aserțiuni text).
-Fixture-urile pentru
-scanări depind încă de cache-urile OCR locale din `runs/`; absența lor apare
-explicit în raport și nu este interpretată drept succes. Rulează evaluarea
-completă înainte de PR când ai aceste artefacte și trece acoperirea
-fixture-urilor, nu doar procentul ancorelor, în descriere.
+CI-ul extrage familia digitală de referință de la zero și redă grilele OCR
+comise pentru matricea anuală, familia transpusă, familia instituțională,
+tabelul anual cu rânduri colapsate,
+tabelul de detaliu economic cu cinci coloane valorice, capitolul de cheltuieli
+afectat de ștampilă, lista de investiții cu procente de finanțare și tabelul
+numerotat de venituri Arad. Cere minimum 126 de ancore, 16 aserțiuni text, cel
+puțin nouă fixture-uri exhaustive, ≥90% recall numeric și ≥99,5% precizie
+pentru fiecare layout cu etalon exhaustiv. Pentru Arad p31, toate cele 15
+marcaje `X` sunt ancore hard separate, fiindcă metrica exhaustivă numerică nu
+le include. Celelalte fixture-uri scanate depind încă de cache-urile OCR locale
+din `runs/`; absența lor apare explicit în raport și nu este interpretată drept
+succes. Rulează evaluarea completă înainte de PR când ai aceste artefacte și
+trece acoperirea fixture-urilor, nu doar procentul ancorelor, în descriere.
 
 Modificările care invalidează cache-ul (orice schimbă rezultatul
 extragerii) trebuie să incrementeze `extract_version` din `config.py` —
@@ -83,7 +93,9 @@ Aceasta este cea mai valoroasă contribuție. Urmează
 [docs/adding-a-layout.md](docs/adding-a-layout.md); pe scurt: rulează
 `triage` pe PDF, inspectează grilele care eșuează, adaugă un maper în
 `src/bgconvertor/layouts/` (un modul + o linie de înregistrare), comite un
-fixture etalon cu ancore verificate manual, arată scorul de la `eval`.
+fixture etalon cu ancore verificate manual și, pentru un layout declarat
+suportat, un `cell_ground_truth` exhaustiv pentru cel puțin un scope clar.
+Arată scorul de la `eval`.
 
 Când deschizi un issue despre un PDF care se convertește prost, atașează
 rezultatul `bgconvertor triage <pdf>` și o pagină problematică

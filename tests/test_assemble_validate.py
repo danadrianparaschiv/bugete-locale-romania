@@ -1,12 +1,17 @@
 """Unit tests for assembly and validation on synthetic payloads, plus an
 integration test over the real digital PDF (skipped when absent)."""
 
+import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from bgconvertor.assemble import assemble
 from bgconvertor.config import RunConfig
+from bgconvertor.export import _sheet_columns
+from bgconvertor.export import export as export_xlsx
+from bgconvertor.extract.scanned import map_payload
 from bgconvertor.model import ConversionResult
 from bgconvertor.nomenclator import load_registry
 from bgconvertor.runstore import RunStore
@@ -32,6 +37,17 @@ def _line(raw_code, name, section=None, func=None, code=None, **values):
         "year": None,
         "values": {k: str(v) for k, v in values.items()},
     }
+
+
+def test_rectification_export_labels_distinguish_initial_and_rectified():
+    line = SimpleNamespace(
+        values={"buget_2026": 1, "influente": 2, "total_2026": 3},
+        x_markers=[],
+    )
+    columns = dict(_sheet_columns([line]))
+    assert columns["buget_2026"] == "Buget 2026 (initial)"
+    assert columns["influente"] == "Influente"
+    assert columns["total_2026"] == "Buget 2026 rectificat"
 
 
 @pytest.fixture
@@ -180,6 +196,217 @@ def test_validate_v5_identity(tmp_path, registry):
     validate(result, registry)
     v5 = [i for i in result.all_issues() if i.check == "V5_identity"]
     assert any(i.code == "00.02" for i in v5)
+
+
+def test_institution_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p301.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 301, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [301], registry),
+        pages_expected=333,
+        pages_selected=[301],
+        pages_processed=[301],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert sum(len(line.values) for doc in result.documents for line in doc.lines) == 51
+    assert stats["numeric_cells"] == 51
+    assert stats["numeric_cells_strictly_verified"] == 51
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+    assert all(
+        line.kind == "heading"
+        for doc in result.documents for line in doc.lines
+        if line.raw_code == "96"
+    )
+
+
+def test_collapsed_annual_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 9, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [9], registry),
+        pages_expected=236,
+        pages_selected=[9],
+        pages_processed=[9],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 216
+    assert stats["numeric_cells_strictly_verified"] == 216
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    line = next(
+        line
+        for doc in result.documents
+        for line in doc.lines
+        if line.raw_code == "74020502"
+    )
+    assert str(line.values["total_2026"]) == "2742"
+    assert line.name.startswith("Colectarea")
+
+
+def test_collapsed_detail_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p041.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 41, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [41], registry),
+        pages_expected=236,
+        pages_selected=[41],
+        pages_processed=[41],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 245
+    assert stats["numeric_cells_strictly_verified"] == 245
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    line = next(
+        line
+        for doc in result.documents
+        for line in doc.lines
+        if line.raw_code == "200103"
+    )
+    assert str(line.values["total_2026"]) == "52.00"
+    assert line.func_code == "68.02.05.02"
+
+
+def test_expense_chapter_grid_survives_assembly_and_validation(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p151.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 151, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [151], registry),
+        pages_expected=333,
+        pages_selected=[151],
+        pages_processed=[151],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 80
+    assert stats["numeric_cells_strictly_verified"] == 80
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    line = next(
+        line
+        for doc in result.documents
+        for line in doc.lines
+        if line.raw_code == "56.48"
+    )
+    assert str(line.values["buget_2026"]) == "93474.00"
+    assert line.section == "SECTIUNEA DE DEZVOLTARE"
+
+
+def test_revenue_detail_grid_survives_assembly_validation_and_export(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p031.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 31, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [31], registry),
+        pages_expected=333,
+        pages_selected=[31],
+        pages_processed=[31],
+    )
+    validate(result, registry)
+    stats = result.stats()
+    lines = [line for doc in result.documents for line in doc.lines]
+
+    assert payload["layout"] == "scan_revenue_detail"
+    assert stats["numeric_cells"] == 73
+    assert stats["numeric_cells_strictly_verified"] == 73
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+    assert sum(len(line.x_markers) for line in lines) == 15
+    assert [line.row_no for line in lines] == list(range(499, 521))
+    assert all(line.kind == "revenue" for line in lines)
+    assert dict(_sheet_columns(lines)) == {
+        "buget_2026": "Buget 2026",
+        "est2027": "Estimare 2027",
+        "est2028": "Estimare 2028",
+        "est2029": "Estimare 2029",
+    }
+
+    workbook_path = export_xlsx(result, tmp_path / "arad-p31.xlsx")
+    from openpyxl import load_workbook
+
+    workbook = load_workbook(workbook_path)
+    data_sheet = workbook["BL Date"]
+    assert data_sheet["G1"].value == "Buget 2026"
+    assert data_sheet["C2"].alignment.wrap_text is True
+    assert data_sheet.row_dimensions[2].height > 15
+
+
+def test_investment_grid_survives_assembly_validation_and_export(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p171.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 171, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [171], registry),
+        pages_expected=236,
+        pages_selected=[171],
+        pages_processed=[171],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["numeric_cells"] == 62
+    assert stats["numeric_cells_strictly_verified"] == 62
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+
+    lines = [line for doc in result.documents for line in doc.lines]
+    assert all(line.kind == "annex" for line in lines if line.values)
+    columns = dict(_sheet_columns(lines))
+    assert columns["buget_local_pct"] == "% Buget local"
+    assert columns["credite_externe_pct"] == "% Credite externe"
+    assert columns["credite_interne_pct"] == "% Credite interne"
+    assert columns["buget_fen_pct"] == "% Buget FEN"
 
 
 def test_integration_ab_pdf_fully_clean(ab_pdf, reference_dir):

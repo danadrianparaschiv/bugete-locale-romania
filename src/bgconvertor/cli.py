@@ -536,7 +536,7 @@ def convert(
     from . import export as export_mod
     from . import nomenclator as nom
     from .assemble import assemble
-    from .model import ConversionResult
+    from .model import ConversionResult, Issue
     from .validate import validate as run_validate
 
     config = _config()
@@ -597,6 +597,7 @@ def convert(
         + " -> Excel; totul e reluabil (cache per pagina)[/dim]"
     )
     _run_extraction(config, store, pdf, selected, workers=workers)
+    registry = nom.load_registry(config.reference_dir)
 
     ledger = client = None
     if config.llm.mode in ("repair", "full"):
@@ -604,8 +605,16 @@ def convert(
 
         from . import profilepdf
         from .llm.client import LLMClient
-        from .llm.fallback import extract_page_llm, needs_fallback
-        from .llm.ledger import Ledger
+        from .llm.fallback import (
+            FALLBACK_PROMPT,
+            extract_page_llm,
+            fallback_benefit,
+            fallback_columns,
+            fallback_max_tokens,
+            needs_fallback,
+        )
+        from .llm.ledger import Ledger, estimate_request_cost
+        from .llm.planner import RecoveryCandidate, select_candidates
 
         # ONE ledger for the whole run: fallback + repair share the budget
         ledger = Ledger(
@@ -614,28 +623,102 @@ def convert(
             max_calls=config.llm.max_calls,
         )
         client = LLMClient(config, ledger, store.root / "llm_cache")
-        fallback_pages = [
+        fallback_candidates_pages = [
             p for p in selected
             if (pl := store.get("extract", p)) is not None
             and pl.get("layout") != "digital_detail"
             and needs_fallback(pl)
             and store.get("llm_extract", p) is None
         ]
-        if fallback_pages:
+        fallback_plan = None
+        if fallback_candidates_pages:
             col_freq: Counter = Counter()
             for p in selected:
                 pl = store.get("extract", p) or {}
                 col_freq.update({c for ln in pl.get("lines", []) for c in ln.get("values", {})})
-            columns = [c for c, n in col_freq.most_common(6)] or ["buget_2026"]
-            est = len(fallback_pages) * 0.13
+            corpus_columns = [column for column, _count in col_freq.most_common()]
+
+            # Reserve only the demand the deterministic validation can already
+            # see, capped at 40% of the file budget. If there is no repairable
+            # arithmetic/cell work, full-page rescue may use the whole cap.
+            preliminary_documents = assemble(store, selected, registry)
+            preliminary = ConversionResult(pdf=pdf.name, documents=preliminary_documents)
+            run_validate(preliminary, registry)
+            sum_signals = sum(
+                1
+                for document in preliminary.documents
+                for line in document.lines
+                if any(issue.check == "V4_hierarchy" for issue in line.issues)
+            )
+            cell_pages = {
+                line.page
+                for document in preliminary.documents
+                for line in document.lines
+                if any(
+                    issue.check == "V7_hygiene" and "unparseable" in issue.message
+                    for issue in line.issues
+                )
+            }
+            repair_unit_cost = estimate_request_cost(
+                config.llm.repair_model,
+                prompt_chars=1000,
+                output_tokens=2048,
+                image_pixels=800_000,
+            )
+            cell_unit_cost = estimate_request_cost(
+                config.llm.cell_model,
+                prompt_chars=1000,
+                output_tokens=2048,
+                image_pixels=2_100_000,
+            )
+            repair_reserve = min(
+                ledger.remaining_cost_usd * 0.4,
+                sum_signals * repair_unit_cost + len(cell_pages) * cell_unit_cost,
+            )
+            fallback_budget = max(0.0, ledger.remaining_cost_usd - repair_reserve)
+
+            prepared = {}
+            candidates = []
+            fb_model = config.llm.fallback_model or config.llm.repair_model
+            for page in fallback_candidates_pages:
+                payload = store.get("extract", page) or {}
+                columns = fallback_columns(payload, corpus_columns)
+                max_tokens = fallback_max_tokens(payload, len(columns))
+                prompt = FALLBACK_PROMPT.format(
+                    columns=", ".join(f'"{column}"' for column in columns)
+                )
+                prepared[page] = (columns, max_tokens)
+                candidates.append(RecoveryCandidate(
+                    key=f"fallback:p{page}",
+                    kind="fallback_extract",
+                    page=page,
+                    benefit_units=fallback_benefit(payload),
+                    estimated_cost_usd=estimate_request_cost(
+                        fb_model,
+                        len(prompt),
+                        max_tokens,
+                        image_pixels=2_100_000,
+                    ),
+                    detail=(
+                        f"{payload.get('n_numeric_cells', 0)} OCR numeric tokens; "
+                        f"{len(columns)} requested columns"
+                    ),
+                ))
+            fallback_plan = select_candidates(
+                candidates,
+                fallback_budget,
+                max_calls=ledger.remaining_calls,
+            )
+            fallback_pages = [candidate.page for candidate in fallback_plan.selected]
             _stage_banner(
                 "Extractie LLM pagina-intreaga",
-                f"{len(fallback_pages)} pagini pe care docling nu le-a putut structura",
+                f"{len(fallback_pages)}/{len(fallback_candidates_pages)} pagini selectate "
+                "după câștigul estimat per dolar",
             )
             console.print(
-                f"  cost estimat: ~${est:.2f} (≈$0.13/pagina) · buget ramas: "
-                f"${max(0.0, config.llm.max_cost_usd - ledger.run_cost_usd):.2f} · "
-                f"coloane: {', '.join(columns)}"
+                f"  rezervare worst-case selectată: ~${fallback_plan.estimated_cost_usd:.2f} · "
+                f"rezervat pentru reparații țintite: ~${repair_reserve:.2f} · "
+                f"{len(fallback_plan.skipped)} pagini amânate de planner"
             )
 
             def llm_page(p: int):
@@ -643,15 +726,35 @@ def convert(
                 rot = (store.get("orient", p) or {}).get("rotation", 0)
                 if rot:
                     img = img.rotate(rot, expand=True)
-                return extract_page_llm(client, img, columns, p)
+                columns, max_tokens = prepared[p]
+                return extract_page_llm(
+                    client,
+                    img,
+                    columns,
+                    p,
+                    max_tokens=max_tokens,
+                )
 
-            run_stage(
-                store, "llm_extract", fallback_pages, llm_page,
-                concurrency=config.llm.concurrency,
-            )
+            if fallback_pages:
+                run_stage(
+                    store, "llm_extract", fallback_pages, llm_page,
+                    concurrency=config.llm.concurrency,
+                )
+
+        plan_record = {
+            "schema_version": 1,
+            "public_file_cap_usd": config.llm.max_cost_usd,
+            "fallback": fallback_plan.as_dict() if fallback_plan is not None else None,
+            "note": (
+                "Soft planner estimates order work; the ledger reservation before each "
+                "request remains the hard spending authority."
+            ),
+        }
+        (store.root / "llm_plan.json").write_text(
+            json.dumps(plan_record, ensure_ascii=False, indent=2) + "\n"
+        )
 
     _stage_banner("Asamblare + validare", "documente, sectiuni, coduri, sume incrucisate")
-    registry = nom.load_registry(config.reference_dir)
     documents = assemble(store, selected, registry)
     if not documents:
         console.print("[red]no documents assembled — nothing to export[/red]")
@@ -672,17 +775,54 @@ def convert(
 
     if config.llm.mode == "repair" and client is not None:
         from . import profilepdf
-        from .llm.orchestrate import repair_document, repair_unparseable
-
-        n_sum_groups = sum(
-            1 for d in result.documents for ln in d.lines
-            if any(i.check == "V4_hierarchy" for i in ln.issues)
+        from .llm.orchestrate import (
+            estimate_sum_repair_candidates,
+            estimate_unparseable_candidates,
+            repair_document,
+            repair_unparseable,
         )
+        from .llm.planner import select_candidates
+
+        sum_candidates = [
+            candidate
+            for document_index, document in enumerate(result.documents)
+            for candidate in estimate_sum_repair_candidates(
+                document,
+                config.llm,
+                row_crops_available=True,
+                job_key_prefix=f"doc:{document_index}|",
+            )
+        ]
+        sum_plan = select_candidates(
+            sum_candidates,
+            ledger.remaining_cost_usd,
+            max_calls=ledger.remaining_calls,
+        )
+        allowed_sum_jobs = {candidate.key for candidate in sum_plan.selected}
         _stage_banner(
             "Reparare LLM",
-            f"{n_sum_groups} grupuri cu sume rupte + celule ilizibile; "
+            f"{len(sum_plan.selected)}/{len(sum_candidates)} grupuri cu sume rupte "
+            "selectate global + celule ilizibile; "
             "o corectie se aplica DOAR daca suma re-citita bate",
         )
+        if sum_plan.skipped:
+            result.issues.append(Issue(
+                check="V6_repair",
+                severity="info",
+                page=sum_plan.skipped[0].page,
+                message=(
+                    f"file-wide budget planner selected {len(sum_plan.selected)} sum groups "
+                    f"(~${sum_plan.estimated_cost_usd:.3f} reserved worst-case) and deferred "
+                    f"{len(sum_plan.skipped)} lower-yield groups"
+                ),
+            ))
+        plan_path = store.root / "llm_plan.json"
+        plan_record = json.loads(plan_path.read_text()) if plan_path.exists() else {
+            "schema_version": 1,
+            "public_file_cap_usd": config.llm.max_cost_usd,
+        }
+        plan_record["sum_repair"] = sum_plan.as_dict()
+        plan_path.write_text(json.dumps(plan_record, ensure_ascii=False, indent=2) + "\n")
 
         def row_locator(p: int, codes: set) -> tuple | None:
             pl = store.get("ocr", p) or store.get("ocr_native", p) or {}
@@ -701,12 +841,53 @@ def convert(
             rot = (store.get("orient", p) or {}).get("rotation", 0)
             return img.rotate(rot, expand=True) if rot else img
 
-        for doc in result.documents:
+        for document_index, doc in enumerate(result.documents):
             result.issues.extend(
-                repair_document(doc, client, page_image, row_locator=row_locator)
+                repair_document(
+                    doc,
+                    client,
+                    page_image,
+                    row_locator=row_locator,
+                    allowed_job_keys=allowed_sum_jobs,
+                    job_key_prefix=f"doc:{document_index}|",
+                )
             )
-        for doc in result.documents:
-            result.issues.extend(repair_unparseable(doc, client, page_image))
+        cell_candidates = [
+            candidate
+            for document_index, document in enumerate(result.documents)
+            for candidate in estimate_unparseable_candidates(
+                document,
+                config.llm,
+                job_key_prefix=f"doc:{document_index}|",
+            )
+        ]
+        cell_plan = select_candidates(
+            cell_candidates,
+            ledger.remaining_cost_usd,
+            max_calls=ledger.remaining_calls,
+        )
+        allowed_cell_jobs = {candidate.key for candidate in cell_plan.selected}
+        if cell_plan.skipped:
+            result.issues.append(Issue(
+                check="V6_repair",
+                severity="info",
+                page=cell_plan.skipped[0].page,
+                message=(
+                    f"file-wide budget planner selected {len(cell_plan.selected)} "
+                    f"unparseable-cell pages and deferred {len(cell_plan.skipped)} "
+                    "lower-confidence pages"
+                ),
+            ))
+        plan_record["unparseable_cell"] = cell_plan.as_dict()
+        plan_path.write_text(json.dumps(plan_record, ensure_ascii=False, indent=2) + "\n")
+        for document_index, doc in enumerate(result.documents):
+            result.issues.extend(repair_unparseable(
+                doc,
+                client,
+                page_image,
+                allowed_job_keys=allowed_cell_jobs,
+                job_key_prefix=f"doc:{document_index}|",
+            ))
         console.print(ledger.summary())
 
     publication_record = None
@@ -763,25 +944,46 @@ def eval_cmd(
     min_text_assertions: int = typer.Option(
         0, help="Iese cu cod 1 dacă aserțiunile text potrivite scad sub prag"
     ),
+    require_cell_ground_truth: int = typer.Option(
+        0, help="Număr minim de fixture-uri cu inventar numeric exhaustiv evaluate"
+    ),
+    min_layout_cell_recall: float = typer.Option(
+        0.0, min=0.0, max=100.0,
+        help="Recall numeric minim pentru fiecare layout cu etalon exhaustiv",
+    ),
+    min_layout_cell_precision: float = typer.Option(
+        0.0, min=0.0, max=100.0,
+        help="Precizie numerică minimă pentru fiecare layout cu etalon exhaustiv",
+    ),
     json_out: Path | None = typer.Option(None, help="Raport JSON machine-readable"),
 ):
-    """Recall pe ancore selectate manual; nu este recall complet pe celule."""
+    """Ancore selectate plus recall/precizie pe etaloanele exhaustive disponibile."""
     from . import eval_harness
 
     config = _config()
     results = eval_harness.evaluate_all(config, fixtures, Path.cwd(), stage=stage)
 
     table = Table(title=f"eval vs golden fixtures (stage: {stage})")
-    for col in ("fixture", "layout", "status", "anchors", "hard", "text"):
+    for col in (
+        "fixture", "layout", "status", "anchors", "hard", "text",
+        "cell recall", "cell precision",
+    ):
         table.add_column(col)
     for r in results:
         anchors = f"{r.anchors_matched}/{r.anchors_total}" if r.anchors_total else "-"
         hard = f"{r.hard_matched}/{r.hard_total}" if r.hard_total else "-"
         text = f"{r.text_matched}/{r.text_total}" if r.text_total else "-"
+        cell_recall = f"{r.cells_matched}/{r.cells_expected}" if r.cells_expected else "-"
+        cell_precision = (
+            f"{r.cells_matched}/{r.cells_predicted}" if r.cells_predicted else "-"
+        )
         style = "dim" if r.status == "missing" else (
             "green" if not r.misses else "yellow"
         )
-        table.add_row(r.fixture_id, r.layout, r.status, anchors, hard, text, style=style)
+        table.add_row(
+            r.fixture_id, r.layout, r.status, anchors, hard, text,
+            cell_recall, cell_precision, style=style,
+        )
     console.print(table)
 
     for r in results:
@@ -792,14 +994,23 @@ def eval_cmd(
     total = report["anchors"]["total"]
     matched = report["anchors"]["matched"]
     evaluated = report["fixtures"]["evaluated"]
+    cell_recall = report["validated_cell_recall"]
+    cell_precision = report["numeric_cell_precision_against_ground_truth"]
     console.print(
         f"\n[bold]{matched}/{total}[/bold] ancore selectate potrivite · "
         f"{report['text_assertions']['matched']}/{report['text_assertions']['total']} "
         f"asertiuni text · {evaluated}/{len(results)} fixture-uri evaluate"
     )
+    if cell_recall["fixtures"]:
+        console.print(
+            f"[bold]{cell_recall['matched']}/{cell_recall['total']}[/bold] celule "
+            f"exhaustive regăsite ({cell_recall['pct']}%) · "
+            f"[bold]{cell_precision['correct']}/{cell_precision['predicted']}[/bold] "
+            f"precizie față de etalon ({cell_precision['pct']}%)"
+        )
     console.print(
-        "[dim]metrica: selected_anchor_recall; nu măsoară celulele/rândurile "
-        "absente din fixture-uri[/dim]"
+        "[dim]selected_anchor_recall rămâne o poartă parțială; metricile pe celule "
+        "se aplică numai grupurilor inventariate exhaustiv, nu întregului corpus[/dim]"
     )
     if json_out is not None:
         json_out.parent.mkdir(parents=True, exist_ok=True)
@@ -809,6 +1020,11 @@ def eval_cmd(
         matched < total
         or report["text_assertions"]["matched"] < report["text_assertions"]["total"]
         or evaluated < len(results)
+        or any(
+            r.cell_ground_truth
+            and (r.cells_matched < r.cells_expected or r.cells_matched < r.cells_predicted)
+            for r in results
+        )
     ):
         raise typer.Exit(1)
     if min_anchors and matched < min_anchors:
@@ -821,6 +1037,30 @@ def eval_cmd(
             f"{min_text_assertions}[/red]"
         )
         raise typer.Exit(1)
+    cell_fixtures = cell_recall["fixtures"]
+    if require_cell_ground_truth and cell_fixtures < require_cell_ground_truth:
+        console.print(
+            f"[red]acoperire insuficientă: {cell_fixtures} fixture-uri exhaustive "
+            f"evaluate < pragul de {require_cell_ground_truth}[/red]"
+        )
+        raise typer.Exit(1)
+    for layout, metrics in report["by_layout"].items():
+        if not metrics["cell_ground_truth_evaluated"]:
+            continue
+        recall = metrics["cell_recall_pct"]
+        precision = metrics["cell_precision_pct"]
+        if min_layout_cell_recall and recall < min_layout_cell_recall:
+            console.print(
+                f"[red]recall numeric {layout}: {recall}% < "
+                f"{min_layout_cell_recall}%[/red]"
+            )
+            raise typer.Exit(1)
+        if min_layout_cell_precision and precision < min_layout_cell_precision:
+            console.print(
+                f"[red]precizie numerică {layout}: {precision}% < "
+                f"{min_layout_cell_precision}%[/red]"
+            )
+            raise typer.Exit(1)
 
 
 @app.command()
@@ -1346,6 +1586,29 @@ def corpus_aggregate(
     n_years = {y: sum(1 for c in corpus.cities if str(y) in c.years) for y in corpus.years}
     per_year = " · ".join(f"{y}: {n} orase" for y, n in n_years.items())
     console.print(f"[bold green]✓ agregat: {len(corpus.cities)} orase ({per_year}) -> {out}[/bold green]")
+
+
+@corpus_app.command("analytics")
+def corpus_analytics(
+    data_dir: Path = typer.Option(Path("data"), exists=True, help="Rădăcina data/ cu toți anii"),
+    out_dir: Path = typer.Option(Path("analytics"), help="Directorul pentru JSON, CSV și Excel"),
+):
+    """Construiește indicatori comparabili și un Excel analitic cu surse explicite.
+
+    Valorile extrase, augmentările (populație/suprafață) și formulele derivate
+    rămân straturi distincte. Intrările neeligibile apar în date cu motivul
+    excluderii, dar nu intră în clasamente.
+    """
+    from .analytics import build_from_data, write_outputs
+
+    dataset = build_from_data(data_dir)
+    outputs = write_outputs(dataset, out_dir)
+    eligible = sum(row.plan_comparison_eligible for row in dataset.rows)
+    console.print(
+        f"[bold green]✓ analitice: {len(dataset.rows)} municipiu-ani, "
+        f"{eligible} eligibile pentru comparații[/bold green]"
+    )
+    console.print(" · ".join(f"{kind}: {path}" for kind, path in outputs.items()))
 
 
 @corpus_app.command("report")

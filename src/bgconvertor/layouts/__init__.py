@@ -7,9 +7,27 @@ new layout family = one new module here + a registration line + fixtures.
 
 from __future__ import annotations
 
-from . import formular11, matrix, rectificare, table, transposed
+from . import (
+    collapsed,
+    collapsed_detail,
+    expense_chapter,
+    formular11,
+    institution,
+    investment,
+    matrix,
+    rectificare,
+    revenue_detail,
+    table,
+    transposed,
+)
 
 MAPPERS = [
+    institution.try_map,
+    collapsed.try_map,
+    collapsed_detail.try_map,
+    expense_chapter.try_map,
+    investment.try_map,
+    revenue_detail.try_map,
     formular11.try_map,
     rectificare.try_map,
     transposed.try_map,

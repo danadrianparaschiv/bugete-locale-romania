@@ -5,6 +5,7 @@
   "layout": "scan_expense_chapter",
   "budget": "local",
   "source_type": "scanned",
+  "source_grid": "grids/ar_p151.json",
   "hazards": [
     "stamp_overlap",
     "section_header_rows",
@@ -109,5 +110,51 @@
   "text_contains": [
     "TOTAL CAPITOL 84.02"
   ],
-  "notes": "Per-chapter economic detail with inverted section header rows. Cross-checks: FUNCTIONARE + DEZVOLTARE = 124885.22 + 131336.14 = 256221.36 = capitol total; 56.48 = 12296.50 + 71861.50 + 9316.00 = 93474.00."
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {"raw_code": "70", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "71", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "71.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "71.01.02", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "71.01.30", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "84.02", "values": {"buget_2026": "256221.36", "credite_restante": "4767"}},
+        {"name_contains": "SECTIUNEA DE FUNCTIONARE", "values": {"buget_2026": "124885.22", "credite_restante": "2007"}},
+        {"raw_code": "01", "values": {"buget_2026": "109654.22", "credite_restante": "2007"}},
+        {"raw_code": "20", "values": {"buget_2026": "55759.22", "credite_restante": "2007"}},
+        {"raw_code": "20.01", "values": {"buget_2026": "839.22", "credite_restante": "0"}},
+        {"raw_code": "20.02", "values": {"buget_2026": "54401", "credite_restante": "2007"}},
+        {"raw_code": "20.05", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "20.19", "values": {"buget_2026": "504", "credite_restante": "0"}},
+        {"raw_code": "20.30", "values": {"buget_2026": "15", "credite_restante": "0"}},
+        {"raw_code": "40", "values": {"buget_2026": "53895", "credite_restante": "0"}},
+        {"raw_code": "40.03", "values": {"buget_2026": "53895", "credite_restante": "0"}},
+        {"raw_code": "79", "values": {"buget_2026": "15231", "credite_restante": "0"}},
+        {"raw_code": "81", "values": {"buget_2026": "15231", "credite_restante": "0"}},
+        {"raw_code": "81.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "81.01.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "81.02", "values": {"buget_2026": "15231", "credite_restante": "0"}},
+        {"raw_code": "81.02.05", "values": {"buget_2026": "15231", "credite_restante": "0"}},
+        {"raw_code": "84", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "85", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "85.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "85.01.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"name_contains": "SECTIUNEA DE DEZVOLTARE", "values": {"buget_2026": "131336.14", "credite_restante": "2760"}},
+        {"raw_code": "55", "values": {"buget_2026": "615", "credite_restante": "0"}},
+        {"raw_code": "55.01", "values": {"buget_2026": "615", "credite_restante": "0"}},
+        {"raw_code": "55.01.12", "values": {"buget_2026": "615", "credite_restante": "0"}},
+        {"raw_code": "56", "values": {"buget_2026": "93588.14", "credite_restante": "2760"}},
+        {"raw_code": "56.16", "values": {"buget_2026": "114.14", "credite_restante": "0"}},
+        {"raw_code": "56.16.01", "values": {"buget_2026": "0", "credite_restante": "0"}},
+        {"raw_code": "56.16.02", "values": {"buget_2026": "104.14", "credite_restante": "0"}},
+        {"raw_code": "56.16.03", "values": {"buget_2026": "10", "credite_restante": "0"}},
+        {"raw_code": "56.48", "values": {"buget_2026": "93474", "credite_restante": "2760"}},
+        {"raw_code": "56.48.01", "values": {"buget_2026": "12296.50", "credite_restante": "380"}},
+        {"raw_code": "56.48.02", "values": {"buget_2026": "71861.50", "credite_restante": "1303"}},
+        {"raw_code": "56.48.03", "values": {"buget_2026": "9316", "credite_restante": "1077"}},
+        {"raw_code": "58", "values": {"buget_2026": "3600", "credite_restante": "0"}}
+      ]
+    }
+  ],
+  "notes": "Per-chapter economic detail with inverted section header rows. The whole page is exhaustively inventoried: 40 logical rows x 2 columns = 80 cells. OCR merges rows 179-180 and the stamp contaminates code cells 191-195. Cross-checks: FUNCTIONARE + DEZVOLTARE = 124885.22 + 131336.14 = 256221.36 = capitol total; 01 + 79 = 109654.22 + 15231 = 124885.22; 56.16 + 56.48 = 114.14 + 93474 = 93588.14; 56.48 = 12296.50 + 71861.50 + 9316 = 93474 and its credits 380 + 1303 + 1077 = 2760."
 }

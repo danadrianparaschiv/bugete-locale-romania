@@ -107,11 +107,54 @@
       "column": "est2027",
       "value": "X",
       "hard": true
-    }
+    },
+    {"raw_code": "45.02.01.01", "column": "est2027", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.01", "column": "est2028", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.01", "column": "est2029", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.02", "column": "est2027", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.02", "column": "est2028", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.02", "column": "est2029", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.03", "column": "est2027", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.03", "column": "est2028", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.03", "column": "est2029", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.04", "column": "est2027", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.04", "column": "est2028", "value": "X", "hard": true},
+    {"raw_code": "45.02.01.04", "column": "est2029", "value": "X", "hard": true},
+    {"raw_code": "45.02.02.01", "column": "est2028", "value": "X", "hard": true},
+    {"raw_code": "45.02.02.01", "column": "est2029", "value": "X", "hard": true}
   ],
   "text_contains": [
     "Cod indicator",
     "PREVEDERI"
   ],
-  "notes": "Portrait revenue detail with dotted codes and Nr.crt. column. X marks 'not applicable' estimate cells (rows 515-520 area, partly under the stamp). Cross-check: 43.02.49 = 2841.30 + 0 + 596.71 = 3438.01."
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {"raw_code": "42.02.93", "values": {"buget_2026": "26666.00", "est2027": "2995.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "42.02.93.01", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "42.02.93.03", "values": {"buget_2026": "26666.00", "est2027": "2995.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02", "values": {"buget_2026": "85738.01", "est2027": "95000.00", "est2028": "55000.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.44", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.47", "values": {"buget_2026": "82300.00", "est2027": "95000.00", "est2028": "55000.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.48", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.48.01", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.48.02", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.48.03", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.49", "values": {"buget_2026": "3438.01", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.49.01", "values": {"buget_2026": "2841.30", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.49.02", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "43.02.49.03", "values": {"buget_2026": "596.71", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "45.02", "values": {"buget_2026": "114988.50", "est2027": "46940.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "45.02.01", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "45.02.01.01", "values": {"buget_2026": "0.00"}},
+        {"raw_code": "45.02.01.02", "values": {"buget_2026": "0.00"}},
+        {"raw_code": "45.02.01.03", "values": {"buget_2026": "0.00"}},
+        {"raw_code": "45.02.01.04", "values": {"buget_2026": "0.00"}},
+        {"raw_code": "45.02.02", "values": {"buget_2026": "0.00", "est2027": "0.00", "est2028": "0.00", "est2029": "0.00"}},
+        {"raw_code": "45.02.02.01", "values": {"buget_2026": "0.00"}}
+      ]
+    }
+  ],
+  "source_grid": "grids/ar_p031.json",
+  "notes": "Entire page scope: 22 numbered revenue rows, 73 numeric cells and 15 printed X markers. The stamp hides rows 515-519; the high-resolution source render confirms X in all three estimate columns for rows 515-518, four zeroes on row 519, and three X markers on row 520."
 }

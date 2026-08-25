@@ -24,7 +24,7 @@ from typing import TypeVar
 from pydantic import BaseModel
 
 from ..config import RunConfig
-from .ledger import Ledger
+from .ledger import Ledger, estimate_input_tokens
 
 log = logging.getLogger("bgc.llm")
 
@@ -152,7 +152,12 @@ class LLMClient:
 
         # worst-case hold against the budget while the call is in flight —
         # settled costs alone let concurrent big calls overshoot the cap
-        est_in = len(prompt) // 3 + (1600 if image is not None else 0)
+        image_pixels = (
+            int(image.width) * int(image.height)
+            if image is not None and hasattr(image, "width") and hasattr(image, "height")
+            else 0
+        )
+        est_in = estimate_input_tokens(len(prompt), image_pixels)
         reserved = self.ledger.reserve(model, est_in, max_tokens)
 
         content: list[dict] = []
@@ -171,7 +176,7 @@ class LLMClient:
         try:
             parsed, in_tok, out_tok, visible_out = self._attempts(
                 purpose, prompt, output_model, model, content,
-                image_bytes, page, max_tokens, t0,
+                image_bytes, page, max_tokens, t0, est_in, reserved,
             )
         finally:
             self.ledger.release(reserved)
@@ -185,7 +190,7 @@ class LLMClient:
         return parsed
 
     def _attempts(self, purpose, prompt, output_model, model, content,
-                  image_bytes, page, max_tokens, t0):
+                  image_bytes, page, max_tokens, t0, est_in, reservation):
         parsed = None
         in_tok = out_tok = 0
         visible_out: int | None = None
@@ -288,14 +293,21 @@ class LLMClient:
                     visible_output_tokens=visible_out,
                 )
                 log.debug("%s call: %s p%s $%.4f", purpose, model, page, cost)
+            # One reservation protects one real request. Settle it before a
+            # possible larger retry, then reserve that retry independently so
+            # adaptive max_tokens cannot jump over the run cap.
+            self.ledger.release(reservation)
             if parsed is not None:
                 break
             log.warning("%s call p%s returned no structured output (attempt %d, "
                         "stop_reason=%s)", purpose, page, attempt, stop)
+            if attempt == 2:
+                break
             # adaptive thinking spends from max_tokens: a max_tokens stop means
             # the cap was too small for thinking + JSON — retry with room
             if stop == "max_tokens" or not got_response:
                 max_tokens = min(64000, max_tokens * 4)
+            reservation = self.ledger.reserve(model, est_in, max_tokens)
         return parsed, in_tok, out_tok, visible_out
 
 

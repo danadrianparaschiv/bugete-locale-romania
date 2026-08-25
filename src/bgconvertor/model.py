@@ -7,10 +7,10 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-Kind = Literal["revenue", "expense_functional", "expense_economic", "heading"]
+Kind = Literal["revenue", "expense_functional", "expense_economic", "annex", "heading"]
 Severity = Literal["error", "warning", "info"]
 
-QUALITY_SCHEMA_VERSION = 1
+QUALITY_SCHEMA_VERSION = 2
 QUALITY_METRIC = "observed_strict_line_rate"
 
 
@@ -73,12 +73,17 @@ class ConversionResult(BaseModel):
         return out
 
     def stats(self) -> dict:
-        lines = [ln for d in self.documents for ln in d.lines if ln.kind != "heading"]
+        all_lines = [ln for d in self.documents for ln in d.lines]
+        lines = [ln for ln in all_lines if ln.kind != "heading"]
         issues = self.all_issues()
         by_sev = {s: sum(1 for i in issues if i.severity == s) for s in ("error", "warning", "info")}
         strict = [ln for ln in lines if not ln.issues]
-        numeric_cells = sum(len(ln.values) for ln in lines)
-        strict_numeric_cells = sum(len(ln.values) for ln in strict)
+        # Printed totals and section markers can legitimately carry values
+        # without a nomenclator code. They remain heading-kind so analytics do
+        # not mistake them for classifications, but they are still exported
+        # numeric cells and belong in the quality denominator.
+        numeric_cells = sum(len(ln.values) for ln in all_lines)
+        strict_numeric_cells = sum(len(ln.values) for ln in all_lines if not ln.issues)
         selected = sorted(set(self.pages_selected))
         processed = sorted(set(self.pages_processed))
         scope_complete = (

@@ -5,6 +5,7 @@
   "layout": "scan_detail_economic",
   "budget": "local",
   "source_type": "scanned",
+  "source_grid": "grids/ag_p041.json",
   "hazards": [
     "stamp_overlap",
     "pseudo_codes_D_F",
@@ -107,5 +108,60 @@
   "text_contains": [
     "Asistenta sociala in caz de invaliditate"
   ],
-  "notes": "Economic detail inside chapter 68.02.05.02. Codes repeat across sections on the same page (e.g. 5911, 5940 appear twice) — context matters. Pseudo-codes D / F / 01F must not be treated as indicator codes. Cross-check: 57.02 = 69666+2410 = 72076."
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {"raw_code": "5911", "values": {"total_2026": "663", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "5940", "values": {"total_2026": "4", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "D", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "70", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "71", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "7101", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "710130", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"name_contains": "FUNCTIONARE+SECTIUNEA DE DEZVOLTARE", "values": {"total_2026": "91123", "credite_restante": "0", "est2027": "93876", "est2028": "96553", "est2029": "99120"}},
+        {"raw_code": "F", "values": {"total_2026": "91115", "credite_restante": "0", "est2027": "93876", "est2028": "96553", "est2029": "99120"}},
+        {"raw_code": "01F", "values": {"total_2026": "91115", "credite_restante": "0", "est2027": "93876", "est2028": "96553", "est2029": "99120"}},
+        {"raw_code": "10", "values": {"total_2026": "18114", "credite_restante": "0", "est2027": "18655", "est2028": "19265", "est2029": "19905"}},
+        {"raw_code": "1001", "values": {"total_2026": "17439", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100101", "values": {"total_2026": "15735", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100105", "values": {"total_2026": "110", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100106", "values": {"total_2026": "49", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100117", "values": {"total_2026": "1370", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100130", "values": {"total_2026": "175", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "1002", "values": {"total_2026": "277", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100206", "values": {"total_2026": "277", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "1003", "values": {"total_2026": "398", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "100307", "values": {"total_2026": "398", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "20", "values": {"total_2026": "258", "credite_restante": "0", "est2027": "258", "est2028": "258", "est2029": "258"}},
+        {"raw_code": "2001", "values": {"total_2026": "138", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200101", "values": {"total_2026": "11", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200102", "values": {"total_2026": "6", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200103", "values": {"total_2026": "52", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200104", "values": {"total_2026": "7", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200108", "values": {"total_2026": "10", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200130", "values": {"total_2026": "52", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "2004", "values": {"total_2026": "4", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200401", "values": {"total_2026": "1", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200404", "values": {"total_2026": "3", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "2005", "values": {"total_2026": "1", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200530", "values": {"total_2026": "1", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "2006", "values": {"total_2026": "10", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "200601", "values": {"total_2026": "10", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "2013", "values": {"total_2026": "63", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "2014", "values": {"total_2026": "42", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "57", "values": {"total_2026": "72076", "credite_restante": "0", "est2027": "74296", "est2028": "76363", "est2029": "78290"}},
+        {"raw_code": "5702", "values": {"total_2026": "72076", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "570201", "values": {"total_2026": "69666", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "570202", "values": {"total_2026": "2410", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "59", "values": {"total_2026": "667", "credite_restante": "0", "est2027": "667", "est2028": "667", "est2029": "667"}},
+        {"raw_code": "5911", "values": {"total_2026": "663", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "5940", "values": {"total_2026": "4", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "D", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "70", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "71", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}},
+        {"raw_code": "7101", "values": {"total_2026": "8", "credite_restante": "0", "est2027": "0", "est2028": "0", "est2029": "0"}}
+      ]
+    }
+  ],
+  "notes": "Economic detail inside chapter 68.02.05.02. The whole page is exhaustively inventoried: 49 numeric rows x 5 columns = 245 cells. Codes repeat across sections (e.g. 5911, 5940, D, 70, 71, 7101), so one-to-one matching matters. Pseudo-codes D / F / 01F remain raw markers and never normalize. Source checksums include 57.02 = 69666+2410 = 72076, 59 = 663+4 = 667, 20.01 = 11+6+52+7+10+52 = 138, and 20 = 138+4+1+10+63+42 = 258."
 }

@@ -2,7 +2,16 @@
 
 from decimal import Decimal
 
-from bgconvertor.llm.orchestrate import CellValue, RowReading, RowSetReading, repair_document
+from bgconvertor.config import RunConfig
+from bgconvertor.llm.ledger import Ledger
+from bgconvertor.llm.orchestrate import (
+    CellValue,
+    RowReading,
+    RowSetReading,
+    estimate_sum_repair_candidates,
+    estimate_unparseable_candidates,
+    repair_document,
+)
 from bgconvertor.model import BudgetDocument, BudgetLine, Issue
 
 
@@ -120,3 +129,127 @@ def test_repair_recovers_dropped_row_from_printed_formula():
     # and never leaked an arithmetic rule to rationalize against
     assert "Regula" not in client.prompts[0]
     assert formula_children(parent.name) == ["74.02.05", "74.02.50"]
+
+
+def test_budget_planner_runs_higher_yield_sum_group_first(tmp_path):
+    low = _doc()
+    high_parent = BudgetLine(
+        code="65.02.03",
+        raw_code="650203",
+        name="Invatamant prescolar",
+        kind="expense_functional",
+        page=10,
+        section="TOTAL",
+        values={"total_2026": Decimal("30"), "est2027": Decimal("40")},
+        source="ocr",
+        issues=[
+            Issue(
+                check="V4_hierarchy",
+                severity="error",
+                page=10,
+                code="65.02.03",
+                column=column,
+                message="parent != sum(children)",
+            )
+            for column in ("total_2026", "est2027")
+        ],
+    )
+    high_children = [
+        BudgetLine(
+            code=f"65.02.03.0{index}",
+            raw_code=f"6502030{index}",
+            name=f"Child {index}",
+            kind="expense_functional",
+            page=10,
+            section="TOTAL",
+            values={"total_2026": value, "est2027": value},
+            source="ocr",
+        )
+        for index, value in ((1, Decimal("10")), (2, Decimal("15")))
+    ]
+    low.lines.extend([high_parent, *high_children])
+
+    reading = RowSetReading(rows=[
+        RowReading(code="65.02.03", cells=[
+            CellValue(column="total_2026", value="25"),
+            CellValue(column="est2027", value="25"),
+        ]),
+        RowReading(code="65.02.03.01", cells=[
+            CellValue(column="total_2026", value="10"),
+            CellValue(column="est2027", value="10"),
+        ]),
+        RowReading(code="65.02.03.02", cells=[
+            CellValue(column="total_2026", value="15"),
+            CellValue(column="est2027", value="15"),
+        ]),
+    ])
+
+    class PlannedFakeClient(FakeClient):
+        def __init__(self):
+            super().__init__([reading])
+            self.config = RunConfig()
+            self.ledger = Ledger(
+                path=tmp_path / "ledger.jsonl",
+                max_cost_usd=0.05,
+                max_calls=10,
+            )
+
+    client = PlannedFakeClient()
+    log = repair_document(low, client, page_image_fn=lambda _page: None)
+
+    assert len(client.prompts) == 1
+    assert "65.02.03" in client.prompts[0]
+    assert "74.02.05" not in client.prompts[0]
+    assert not high_parent.issues
+    assert low.lines[0].issues  # lower-yield group was deliberately deferred
+    assert any("budget planner selected 1" in issue.message for issue in log)
+
+
+def test_file_wide_candidates_have_document_qualified_keys():
+    config = RunConfig().llm
+
+    first = estimate_sum_repair_candidates(
+        _doc(), config, job_key_prefix="doc:0|"
+    )
+    second = estimate_sum_repair_candidates(
+        _doc(), config, job_key_prefix="doc:1|"
+    )
+
+    assert first[0].key.startswith("doc:0|sum|")
+    assert second[0].key.startswith("doc:1|sum|")
+    assert first[0].key != second[0].key
+
+
+def test_unparseable_candidates_are_document_qualified_and_discounted():
+    line = BudgetLine(
+        code="20.01",
+        raw_code="2001",
+        name="Furnituri",
+        kind="expense_economic",
+        page=12,
+        values={},
+        issues=[Issue(
+            check="V7_hygiene",
+            severity="error",
+            page=12,
+            code="20.01",
+            column="trim2",
+            message="unparseable OCR cell",
+        )],
+    )
+    doc = BudgetDocument(
+        title="T",
+        budget="local",
+        suffix="10",
+        pages=[12],
+        lines=[line],
+    )
+
+    candidates = estimate_unparseable_candidates(
+        doc,
+        RunConfig().llm,
+        job_key_prefix="doc:2|",
+    )
+
+    assert candidates[0].key == "doc:2|cell:p12"
+    assert candidates[0].benefit_units == 0.25

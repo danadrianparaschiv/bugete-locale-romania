@@ -1,8 +1,17 @@
 {
  "sursa": {
-  "descriere": "Populația (RPL 2021, INS) și suprafața municipiilor reședință de județ, prin Wikidata (proprietatea P843 = cod SIRUTA); suprafețele pentru Sfântu Gheorghe și Miercurea Ciuc completate din infobox-urile Wikipedia.",
-  "wikidata_interogat_la": "2026-08-24",
-  "populatie_referinta": "recensământul din 1 decembrie 2021 (RPL2021)"
+  "populatie": {
+   "descriere": "Populația rezidentă la 1 decembrie 2021, RPL2021 INS, tabelul 1.22; asociere după cod SIRUTA.",
+   "url": "https://www.recensamantromania.ro/rezultate-rpl-2021/rezultate-definitive/",
+   "fisier_url": "https://www.recensamantromania.ro/wp-content/uploads/2023/05/Tabel-1.22.xlsx",
+   "referinta": "2021-12-01",
+   "verificat_la": "2026-08-25"
+  },
+  "suprafata": {
+   "descriere": "Suprafața municipiilor prin Wikidata; Sfântu Gheorghe și Miercurea Ciuc completate din infobox-urile Wikipedia.",
+   "url": "https://www.wikidata.org/",
+   "interogat_la": "2026-08-24"
+  }
  },
  "municipii": {
   "1017": {
@@ -92,7 +101,7 @@
   "60419": {
    "nume": "Constanța",
    "wikidata": "Q79808",
-   "populatie": 263707,
+   "populatie": 263688,
    "populatie_data": "2021-12-01",
    "suprafata_km2": 124.89
   },
@@ -211,7 +220,7 @@
   "130534": {
    "nume": "Ploiești",
    "wikidata": "Q179585",
-   "populatie": 180539,
+   "populatie": 180540,
    "populatie_data": "2021-12-01",
    "suprafata_km2": 89.2
   },
@@ -232,15 +241,15 @@
   "143450": {
    "nume": "Sibiu",
    "wikidata": "Q83324",
-   "populatie": 134308,
+   "populatie": 134309,
    "populatie_data": "2021-12-01",
    "suprafata_km2": 121.0
   },
   "146263": {
    "nume": "Suceava",
    "wikidata": "Q46400",
-   "populatie": 119694,
-   "populatie_data": "2023-07-01",
+   "populatie": 84322,
+   "populatie_data": "2021-12-01",
    "suprafata_km2": 52.0
   },
   "151790": {

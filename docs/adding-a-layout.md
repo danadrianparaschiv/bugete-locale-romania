@@ -98,9 +98,20 @@ de pagina PDF randată. Fixture-urile sunt JSON în `tests/fixtures/golden/`:
 {
   "id": "bistrita_p002",
   "pdf": "...", "page": 2, "layout": "scan_transposed_detail",
+  "source_grid": "grids/bistrita_p002.json",
   "anchors": [
     {"raw_code": "070202", "column": "total", "value": "7145.00"},
     {"raw_code": "070202", "column": "trim4", "value": "1386.00"}
+  ],
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {
+          "raw_code": "070202",
+          "values": {"total": "7145.00", "trim4": "1386.00"}
+        }
+      ]
+    }
   ]
 }
 ```
@@ -110,10 +121,22 @@ Ori de câte ori se poate, alege ancore pe care aritmetica le confirmă
 referință este demonstrat, nu doar apreciat din ochi. Marchează celulele
 acoperite de ștampile sau degradate cu `"hard": true`.
 
+`anchors` pot rămâne un eșantion mic pentru diagnostic. Pentru un layout
+declarat suportat, `cell_ground_truth` trebuie însă să inventarieze fiecare
+celulă numerică din scope-ul indicat. Forma compactă `rows` reutilizează
+identitatea rândului pentru toate valorile sale. `context_contains`
+disambiguizează codurile repetate și poate lipsi când scope-ul este întreaga
+pagină. Forma explicită `cells` rămâne disponibilă pentru regiuni neregulate.
+O grilă OCR distilată în `source_grid` face mapperul reproductibil în CI fără
+PDF, OCR, rețea sau secrete. Nu include date din afara scope-ului exhaustiv în
+calculul preciziei.
+
 ## 5. Validează cu eval, apoi cu suita de teste
 
 ```bash
 uv run bgconvertor eval        # your fixture green, nothing else regressed
+uv run bgconvertor eval --require-cell-ground-truth 9 \
+  --min-layout-cell-recall 90 --min-layout-cell-precision 99.5
 uv run pytest                  # includes the ab-stays-100%-clean pin
 ```
 
@@ -125,9 +148,10 @@ cache-ul ieftin de mapare, nu OCR-ul cel scump) și rulează din nou
 ## 6. Ce trebuie să conțină un PR
 
 - modulul mapperului + linia de înregistrare,
-- fixture-ul de aur (+ eventualele indicii noi de clasificație),
+- fixture-ul de aur, scope-ul numeric exhaustiv și grila de regresie
+  (+ eventualele indicii noi de clasificație),
 - cifre înainte/după: estimarea de la triaj și `% curat` pentru fișierul
-  țintă, plus scorul de eval neschimbat pentru tot restul.
+  țintă, recall/precizie pe celule și scorul de eval pentru tot restul.
 
 Asta e întreaga buclă. Bistrița a trecut de la 31 de linii extrase la 163
 (79% pe metrica legacy a liniilor extrase) exact prin acești pași; acest

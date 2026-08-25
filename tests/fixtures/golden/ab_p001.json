@@ -94,9 +94,295 @@
       "value": "3000.00"
     }
   ],
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {
+          "name_contains": "SECTIUNEA TOTAL",
+          "values": {
+            "total": "0.00",
+            "credite_stinse": "0.00",
+            "trim1": "0.00",
+            "trim2": "0.00",
+            "trim3": "0.00",
+            "trim4": "0.00",
+            "est2027": "0.00",
+            "est2028": "0.00",
+            "est2029": "0.00"
+          }
+        },
+        {
+          "raw_code": "000102",
+          "values": {
+            "total": "646801.06",
+            "credite_stinse": "0.00",
+            "trim1": "292070.23",
+            "trim2": "184782.50",
+            "trim3": "99257.46",
+            "trim4": "70690.87",
+            "est2027": "364865.87",
+            "est2028": "348707.87",
+            "est2029": "347312.87"
+          }
+        },
+        {
+          "raw_code": "4990",
+          "values": {
+            "total": "249559.00",
+            "credite_stinse": "0.00",
+            "trim1": "90767.70",
+            "trim2": "81968.07",
+            "trim3": "45058.83",
+            "trim4": "31764.40",
+            "est2027": "251063.00",
+            "est2028": "261976.00",
+            "est2029": "273066.00"
+          }
+        },
+        {
+          "raw_code": "0002",
+          "values": {
+            "total": "307654.00",
+            "credite_stinse": "0.00",
+            "trim1": "103038.70",
+            "trim2": "101366.07",
+            "trim3": "59026.83",
+            "trim4": "44222.40",
+            "est2027": "308179.00",
+            "est2028": "320559.00",
+            "est2029": "333064.00"
+          }
+        },
+        {
+          "raw_code": "0003",
+          "values": {
+            "total": "285789.00",
+            "credite_stinse": "0.00",
+            "trim1": "98939.70",
+            "trim2": "95233.07",
+            "trim3": "53179.83",
+            "trim4": "38436.40",
+            "est2027": "290164.00",
+            "est2028": "302544.00",
+            "est2029": "315049.00"
+          }
+        },
+        {
+          "raw_code": "0004",
+          "values": {
+            "total": "142639.00",
+            "credite_stinse": "0.00",
+            "trim1": "41905.70",
+            "trim2": "60970.07",
+            "trim3": "25756.83",
+            "trim4": "14006.40",
+            "est2027": "160102.00",
+            "est2028": "171017.00",
+            "est2029": "182108.00"
+          }
+        },
+        {
+          "raw_code": "0006",
+          "values": {
+            "total": "142639.00",
+            "credite_stinse": "0.00",
+            "trim1": "41905.70",
+            "trim2": "60970.07",
+            "trim3": "25756.83",
+            "trim4": "14006.40",
+            "est2027": "160102.00",
+            "est2028": "171017.00",
+            "est2029": "182108.00"
+          }
+        },
+        {
+          "raw_code": "0302",
+          "values": {
+            "total": "5080.00",
+            "credite_stinse": "0.00",
+            "trim1": "905.00",
+            "trim2": "1390.00",
+            "trim3": "1425.00",
+            "trim4": "1360.00",
+            "est2027": "4200.00",
+            "est2028": "4200.00",
+            "est2029": "4200.00"
+          }
+        },
+        {
+          "raw_code": "030218",
+          "values": {
+            "total": "5080.00",
+            "credite_stinse": "0.00",
+            "trim1": "905.00",
+            "trim2": "1390.00",
+            "trim3": "1425.00",
+            "trim4": "1360.00",
+            "est2027": "4200.00",
+            "est2028": "4200.00",
+            "est2029": "4200.00"
+          }
+        },
+        {
+          "raw_code": "0402",
+          "values": {
+            "total": "137559.00",
+            "credite_stinse": "0.00",
+            "trim1": "41000.70",
+            "trim2": "59580.07",
+            "trim3": "24331.83",
+            "trim4": "12646.40",
+            "est2027": "155902.00",
+            "est2028": "166817.00",
+            "est2029": "177908.00"
+          }
+        },
+        {
+          "raw_code": "040201",
+          "values": {
+            "total": "134559.00",
+            "credite_stinse": "0.00",
+            "trim1": "41000.70",
+            "trim2": "58080.07",
+            "trim3": "22831.83",
+            "trim4": "12646.40",
+            "est2027": "155430.00",
+            "est2028": "166280.00",
+            "est2029": "177305.00"
+          }
+        },
+        {
+          "raw_code": "040204",
+          "values": {
+            "total": "0.00",
+            "credite_stinse": "0.00",
+            "trim1": "0.00",
+            "trim2": "0.00",
+            "trim3": "0.00",
+            "trim4": "0.00",
+            "est2027": "472.00",
+            "est2028": "537.00",
+            "est2029": "603.00"
+          }
+        },
+        {
+          "raw_code": "040205",
+          "values": {
+            "total": "3000.00",
+            "credite_stinse": "0.00",
+            "trim1": "0.00",
+            "trim2": "1500.00",
+            "trim3": "1500.00",
+            "trim4": "0.00",
+            "est2027": "0.00",
+            "est2028": "0.00",
+            "est2029": "0.00"
+          }
+        },
+        {
+          "raw_code": "0009",
+          "values": {
+            "total": "57299.00",
+            "credite_stinse": "0.00",
+            "trim1": "35036.00",
+            "trim2": "8395.00",
+            "trim3": "7475.00",
+            "trim4": "6393.00",
+            "est2027": "49100.00",
+            "est2028": "49100.00",
+            "est2029": "49100.00"
+          }
+        },
+        {
+          "raw_code": "0702",
+          "values": {
+            "total": "57299.00",
+            "credite_stinse": "0.00",
+            "trim1": "35036.00",
+            "trim2": "8395.00",
+            "trim3": "7475.00",
+            "trim4": "6393.00",
+            "est2027": "49100.00",
+            "est2028": "49100.00",
+            "est2029": "49100.00"
+          }
+        },
+        {
+          "raw_code": "070201",
+          "values": {
+            "total": "46055.00",
+            "credite_stinse": "0.00",
+            "trim1": "30765.00",
+            "trim2": "5935.00",
+            "trim3": "5205.00",
+            "trim4": "4150.00",
+            "est2027": "41500.00",
+            "est2028": "41500.00",
+            "est2029": "41500.00"
+          }
+        },
+        {
+          "raw_code": "07020101",
+          "values": {
+            "total": "21635.00",
+            "credite_stinse": "0.00",
+            "trim1": "13925.00",
+            "trim2": "3205.00",
+            "trim3": "2190.00",
+            "trim4": "2315.00",
+            "est2027": "18500.00",
+            "est2028": "18500.00",
+            "est2029": "18500.00"
+          }
+        },
+        {
+          "raw_code": "07020102",
+          "values": {
+            "total": "24420.00",
+            "credite_stinse": "0.00",
+            "trim1": "16840.00",
+            "trim2": "2730.00",
+            "trim3": "3015.00",
+            "trim4": "1835.00",
+            "est2027": "23000.00",
+            "est2028": "23000.00",
+            "est2029": "23000.00"
+          }
+        },
+        {
+          "raw_code": "070202",
+          "values": {
+            "total": "8213.00",
+            "credite_stinse": "0.00",
+            "trim1": "3801.00",
+            "trim2": "1642.00",
+            "trim3": "1425.00",
+            "trim4": "1345.00",
+            "est2027": "6000.00",
+            "est2028": "6000.00",
+            "est2029": "6000.00"
+          }
+        },
+        {
+          "raw_code": "07020201",
+          "values": {
+            "total": "5265.00",
+            "credite_stinse": "0.00",
+            "trim1": "2450.00",
+            "trim2": "1090.00",
+            "trim3": "815.00",
+            "trim4": "910.00",
+            "est2027": "4000.00",
+            "est2028": "4000.00",
+            "est2029": "4000.00"
+          }
+        }
+      ]
+    }
+  ],
   "text_contains": [
     "BUGETUL LOCAL DETALIAT",
     "ALBA IULIA"
   ],
-  "notes": "Revenue start page, SECTIUNEA TOTAL. Row checksum: trim1+trim2+trim3+trim4 = total (verified for 000102). pypdf text stream scrambles column order — extraction must be coordinate-based."
+  "notes": "Revenue start page, SECTIUNEA TOTAL. The whole printed page is exhaustively inventoried: 20 rows x 9 columns = 180 numeric cells. Row checksum: trim1+trim2+trim3+trim4 = total (verified for 000102). pypdf text stream scrambles column order — extraction must be coordinate-based."
 }

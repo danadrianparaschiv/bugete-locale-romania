@@ -39,11 +39,12 @@ linii strict verificate și afișează acoperirea disponibilă.
    de compoziție tipărite — transformă aproape orice cifră citită greșit
    într-o inconsistență detectabilă, la cost zero.
 3. **Reparare LLM cu buget limitat** *(opțional)*. Celulele care au rupt
-   aritmetica sunt recitite din imaginea paginii de către Claude; o
+   aritmetica sunt recitite din imaginea paginii de un model configurat; o
    reparare este acceptată **doar dacă face sumele să se închidă**.
    Transcrierea integrală a paginii acoperă formatele pe care OCR-ul nu le
-   poate structura. Un plafon ferm în dolari și un cache de răspunsuri
-   guvernează fiecare apel; rulările se reiau gratuit.
+   poate structura. Un planner consumă plafonul întâi pe recuperările cu cel
+   mai mare câștig estimat per dolar; registrul rezervă costul worst-case al
+   fiecărui apel/retry înainte de rețea, iar cache-ul permite reluări gratuite.
 
 ## Pornire rapidă
 
@@ -70,6 +71,9 @@ uv run bgconvertor eval
 # un set de date normalizat pentru toate fișierele convertite
 uv run bgconvertor corpus export corpus.csv
 uv run bgconvertor corpus report
+
+# indicatori comparabili + proveniență: JSON, CSV și Excel
+uv run bgconvertor corpus analytics --data-dir data --out-dir analytics
 
 # coerența Excel + analysis.json + manifest (și hash-urile bundle-urilor noi)
 uv run bgconvertor corpus audit data --json-out artifact-audit.json
@@ -135,6 +139,19 @@ după construirea unor etaloane exhaustive. Definițiile, porțile și auditul
 baseline sunt în [docs/quality.md](docs/quality.md); limitările de utilizare,
 în [DISCLAIMER.md](DISCLAIMER.md).
 
+Poarta P1 acoperă acum toate cele nouă familii numerice reprezentate în suita
+golden: 1.355/1.355 celule regăsite și corecte în scope-urile exhaustive.
+Aceasta este acoperire pe pagini reprezentative, nu recall măsurat pentru
+fiecare PDF complet. P2 prioritizează recuperarea LLM sub același plafon
+public de 5 USD/PDF și publică planul de cheltuire în run store.
+
+P3 publică un set analitic separat (`analytics.json`, `.csv`, `.xlsx`) și
+comparații pe site. Fiecare municipiu-an păstrează intrările extrase,
+augmentările și indicatorii derivați în câmpuri distincte; intrările
+necomparabile rămân vizibile cu motivul excluderii. Populația folosită drept
+numitor este cohorta unică RPL2021 INS, asociată prin SIRUTA. Contractul și
+limitele sunt în [docs/analytics.md](docs/analytics.md).
+
 ## Corpusul
 
 `data/2026/` — PDF-urile bugetare oficiale ale celor 41 de municipii
@@ -158,7 +175,7 @@ cu `bgconvertor eval`. Ghidul complet este în
 
 ```bash
 uv run pytest            # suită de teste offline (testele LLM redau casete înregistrate)
-uv run bgconvertor eval  # recall pe ancore selectate, nu recall complet pe celule
+uv run bgconvertor eval  # ancore + recall/precizie în scope-urile exhaustive
 uv run bgconvertor corpus audit data --strict --require-modern  # poarta de release
 ```
 

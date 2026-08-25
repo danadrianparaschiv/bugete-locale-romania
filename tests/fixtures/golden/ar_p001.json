@@ -5,10 +5,12 @@
   "layout": "scan_general_matrix",
   "budget": "general",
   "source_type": "scanned",
+  "source_grid": "grids/ar_p001.json",
   "hazards": [
     "rotated_90_in_image",
     "stamp_overlap",
-    "year_rows_per_indicator"
+    "year_rows_per_indicator",
+    "merged_year_row_and_next_heading"
   ],
   "columns": [
     "bugetul_local",
@@ -83,9 +85,421 @@
       "value": "0.00"
     }
   ],
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {
+          "raw_code": "01",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "1250646.50",
+            "inst_venituri_proprii_subventii": "85534.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "103613.00",
+            "fonduri_externe": "0.00",
+            "total": "1439793.50",
+            "transferuri": "66406.00",
+            "total_general": "1373387.50"
+          }
+        },
+        {
+          "raw_code": "01",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "969696.37",
+            "inst_venituri_proprii_subventii": "87420.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "48305.00",
+            "fonduri_externe": "0.00",
+            "total": "1105421.37",
+            "transferuri": "67878.00",
+            "total_general": "1037543.37"
+          }
+        },
+        {
+          "raw_code": "01",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "883884.67",
+            "inst_venituri_proprii_subventii": "89520.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "14000.00",
+            "fonduri_externe": "0.00",
+            "total": "987404.67",
+            "transferuri": "69507.00",
+            "total_general": "917897.67"
+          }
+        },
+        {
+          "raw_code": "01",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "832863.37",
+            "inst_venituri_proprii_subventii": "91400.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "924263.37",
+            "transferuri": "70965.00",
+            "total_general": "853298.37"
+          }
+        },
+        {
+          "raw_code": "02",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "801634.58",
+            "inst_venituri_proprii_subventii": "19128.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "820762.58",
+            "transferuri": "0.00",
+            "total_general": "820762.58"
+          }
+        },
+        {
+          "raw_code": "02",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "811151.37",
+            "inst_venituri_proprii_subventii": "19542.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "830693.37",
+            "transferuri": "0.00",
+            "total_general": "830693.37"
+          }
+        },
+        {
+          "raw_code": "02",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "814814.67",
+            "inst_venituri_proprii_subventii": "20013.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "834827.67",
+            "transferuri": "0.00",
+            "total_general": "834827.67"
+          }
+        },
+        {
+          "raw_code": "02",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "818373.37",
+            "inst_venituri_proprii_subventii": "20435.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "838808.37",
+            "transferuri": "0.00",
+            "total_general": "838808.37"
+          }
+        },
+        {
+          "raw_code": "03",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "737553.58",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "737553.58",
+            "transferuri": "0.00",
+            "total_general": "737553.58"
+          }
+        },
+        {
+          "raw_code": "03",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "746509.37",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "746509.37",
+            "transferuri": "0.00",
+            "total_general": "746509.37"
+          }
+        },
+        {
+          "raw_code": "03",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "750116.67",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "750116.67",
+            "transferuri": "0.00",
+            "total_general": "750116.67"
+          }
+        },
+        {
+          "raw_code": "03",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "753627.37",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "753627.37",
+            "transferuri": "0.00",
+            "total_general": "753627.37"
+          }
+        },
+        {
+          "raw_code": "04",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "04",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "04",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "04",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "05",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "05",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "05",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "05",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "0.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "0.00",
+            "transferuri": "0.00",
+            "total_general": "0.00"
+          }
+        },
+        {
+          "raw_code": "06",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "314091.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "314091.00",
+            "transferuri": "0.00",
+            "total_general": "314091.00"
+          }
+        },
+        {
+          "raw_code": "06",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "319947.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "319947.00",
+            "transferuri": "0.00",
+            "total_general": "319947.00"
+          }
+        },
+        {
+          "raw_code": "06",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "319947.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "319947.00",
+            "transferuri": "0.00",
+            "total_general": "319947.00"
+          }
+        },
+        {
+          "raw_code": "06",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "319947.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "319947.00",
+            "transferuri": "0.00",
+            "total_general": "319947.00"
+          }
+        },
+        {
+          "raw_code": "07",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "8000.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "8000.00",
+            "transferuri": "0.00",
+            "total_general": "8000.00"
+          }
+        },
+        {
+          "raw_code": "07",
+          "row_year": 2027,
+          "values": {
+            "bugetul_local": "8000.00",
+            "inst_venituri_proprii_subventii": "0",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "8000.00",
+            "transferuri": "0.00",
+            "total_general": "8000.00"
+          }
+        },
+        {
+          "raw_code": "07",
+          "row_year": 2028,
+          "values": {
+            "bugetul_local": "8000.00",
+            "inst_venituri_proprii_subventii": "0",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "8000.00",
+            "transferuri": "0.00",
+            "total_general": "8000.00"
+          }
+        },
+        {
+          "raw_code": "07",
+          "row_year": 2029,
+          "values": {
+            "bugetul_local": "8000.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "8000.00",
+            "transferuri": "0.00",
+            "total_general": "8000.00"
+          }
+        },
+        {
+          "raw_code": "08",
+          "row_year": 2026,
+          "values": {
+            "bugetul_local": "306091.00",
+            "inst_venituri_proprii_subventii": "0.00",
+            "inst_integral_venituri_proprii": "0.00",
+            "imprumuturi": "0.00",
+            "fonduri_externe": "0.00",
+            "total": "306091.00",
+            "transferuri": "0.00",
+            "total_general": "306091.00"
+          }
+        }
+      ]
+    }
+  ],
   "text_contains": [
     "BUGETUL GENERAL AL MUNICIPIULUI ARAD",
     "2027-2029"
   ],
-  "notes": "Landscape 'buget general' matrix scanned rotated 90deg: each indicator spans 4 year-rows (2026 + estimari 2027-2029), 8 value columns. Cross-check: total = sum of source columns; total_general = total - transferuri (1439793.50 - 66406.00 = 1373387.50)."
+  "notes": "Landscape 'buget general' matrix scanned rotated 90deg. The whole printed page is exhaustively inventoried: indicators 01-07 each span four year rows, indicator 08 contributes the final 2026 row, and all 29 rows have 8 value columns = 232 numeric cells. OCR merges the 2029 row of indicator 04 with the heading for indicator 05 and displaces the final value. Cross-check: total = sum of source columns; total_general = total - transferuri (1439793.50 - 66406.00 = 1373387.50)."
 }

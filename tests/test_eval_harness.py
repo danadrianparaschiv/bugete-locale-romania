@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from bgconvertor import eval_harness as ev
@@ -27,6 +28,65 @@ def test_all_committed_fixtures_are_valid():
     # every fixture asserts something
     for f in fixtures:
         assert f.anchors or f.text_contains, f.id
+    alba_digital = next(f for f in fixtures if f.id == "ab_p001")
+    assert sum(
+        len(row.values)
+        for group in alba_digital.cell_ground_truth
+        for row in group.rows
+    ) == 180
+    arad_matrix = next(f for f in fixtures if f.id == "ar_p001")
+    assert sum(
+        len(row.values)
+        for group in arad_matrix.cell_ground_truth
+        for row in group.rows
+    ) == 232
+    assert arad_matrix.source_grid
+    bistrita_transposed = next(f for f in fixtures if f.id == "bn_p002")
+    assert sum(
+        len(row.values)
+        for group in bistrita_transposed.cell_ground_truth
+        for row in group.rows
+    ) == 216
+    assert bistrita_transposed.source_grid
+    institution = next(f for f in fixtures if f.id == "ar_p301")
+    assert sum(len(group.cells) for group in institution.cell_ground_truth) == 51
+    assert institution.source_grid
+    pitesti = next(f for f in fixtures if f.id == "ag_p009")
+    assert sum(
+        len(row.values)
+        for group in pitesti.cell_ground_truth
+        for row in group.rows
+    ) == 216
+    assert pitesti.source_grid
+    pitesti_detail = next(f for f in fixtures if f.id == "ag_p041")
+    assert sum(
+        len(row.values)
+        for group in pitesti_detail.cell_ground_truth
+        for row in group.rows
+    ) == 245
+    assert pitesti_detail.source_grid
+    arad_expense = next(f for f in fixtures if f.id == "ar_p151")
+    assert sum(
+        len(row.values)
+        for group in arad_expense.cell_ground_truth
+        for row in group.rows
+    ) == 80
+    assert arad_expense.source_grid
+    pitesti_investment = next(f for f in fixtures if f.id == "ag_p171")
+    assert sum(
+        len(row.values)
+        for group in pitesti_investment.cell_ground_truth
+        for row in group.rows
+    ) == 62
+    assert pitesti_investment.source_grid
+    arad_revenue = next(f for f in fixtures if f.id == "ar_p031")
+    assert sum(
+        len(row.values)
+        for group in arad_revenue.cell_ground_truth
+        for row in group.rows
+    ) == 73
+    assert sum(anchor.value == "X" for anchor in arad_revenue.anchors) == 15
+    assert arad_revenue.source_grid
     # hazard coverage for the hard cases
     all_hazards = {h for f in fixtures for h in f.hazards}
     assert "rotated_90_in_image" in all_hazards
@@ -129,7 +189,108 @@ def test_evaluate_all_against_run_store(tmp_path):
     assert summary["scan_simple_table"]["anchors_matched"] == 1
 
     report = ev.evaluation_report(results)
+    assert report["schema_version"] == 2
     assert report["metric"] == "selected_anchor_recall"
     assert report["full_cell_recall_measured"] is False
     assert report["fixtures"] == {"total": 1, "evaluated": 1, "missing": 0}
     assert report["anchors"] == {"matched": 1, "total": 1, "pct": 100.0}
+    assert report["validated_cell_recall"]["pct"] is None
+
+
+def test_exhaustive_cells_measure_recall_precision_and_duplicates_once():
+    payload = {
+        "lines": [
+            {
+                "raw_code": "20.01", "code": "20.01", "name": "Bunuri",
+                "section": "Scoala A", "values": {"total": "10.00"},
+            },
+            {
+                "raw_code": "20.02", "code": "20.02", "name": "Reparatii",
+                "section": "Scoala A", "values": {"total": "99.00"},
+            },
+        ]
+    }
+    group = ev.CellGroundTruthGroup(
+        context_contains="Scoala A",
+        cells=[
+            ev.Anchor(raw_code="20.01", column="total", value="10.00"),
+            ev.Anchor(raw_code="20.02", column="total", value="20.00"),
+        ],
+    )
+    matched, expected, predicted, misses = ev.check_cell_ground_truth(payload, [group])
+    assert (matched, expected, predicted) == (1, 2, 2)
+    assert any("cell missing" in miss for miss in misses)
+    assert any("unexpected cell" in miss for miss in misses)
+
+    duplicate = ev.CellGroundTruthGroup(
+        context_contains="Scoala A",
+        cells=[
+            ev.Anchor(raw_code="20.01", column="total", value="10.00"),
+            ev.Anchor(raw_code="20.01", column="total", value="10.00"),
+        ],
+    )
+    assert ev.check_cell_ground_truth(payload, [duplicate])[:3] == (1, 2, 2)
+
+    empty_result = ev.evaluate_fixture(
+        ev.Fixture(
+            id="empty", pdf="x.pdf", page=1, layout="scan_simple_table",
+            source_type="scanned", cell_ground_truth=[group],
+        ),
+        {"lines": []},
+    )
+    report = ev.evaluation_report([empty_result])
+    assert report["validated_cell_recall"]["pct"] == 0.0
+    assert report["numeric_cell_precision_against_ground_truth"]["pct"] == 0.0
+
+
+def test_exhaustive_compact_rows_can_scope_the_whole_payload():
+    payload = {
+        "lines": [
+            {
+                "raw_code": "61.02", "code": "61.02", "name": "Ordine",
+                "section": None,
+                "values": {"total_2026": "10", "est2027": "11"},
+            },
+            {
+                "raw_code": "65.02", "code": "65.02", "name": "Invatamant",
+                "section": None,
+                "values": {"total_2026": "20", "est2027": "21"},
+            },
+        ]
+    }
+    group = ev.CellGroundTruthGroup(
+        rows=[
+            ev.CellGroundTruthRow(
+                raw_code="61.02", values={"total_2026": "10", "est2027": "11"}
+            ),
+            ev.CellGroundTruthRow(
+                raw_code="65.02", values={"total_2026": "20", "est2027": "21"}
+            ),
+        ]
+    )
+
+    assert ev.check_cell_ground_truth(payload, [group]) == (4, 4, 4, [])
+
+
+def test_evaluate_all_uses_committed_source_grid_without_pdf(tmp_path):
+    fdir = tmp_path / "golden"
+    grids = fdir / "grids"
+    grids.mkdir(parents=True)
+    source = {
+        "grid": [
+            ["DENUMIREA INDICATORILOR", "Cod indicator", "Buget 2026"],
+            ["Ordine publica", "610203", "21.303,00"],
+        ]
+    }
+    (grids / "doc.json").write_text(json.dumps(source))
+    fixture = ev.Fixture(
+        id="doc_p001", pdf="missing.pdf", page=1,
+        layout="scan_simple_table", source_type="scanned",
+        source_grid="grids/doc.json",
+        anchors=[ev.Anchor(raw_code="610203", column="total_2026", value="21303")],
+    )
+    (fdir / "doc_p001.json").write_text(fixture.model_dump_json())
+
+    results = ev.evaluate_all(RunConfig(runs_dir=tmp_path / "runs"), fdir, tmp_path)
+    assert results[0].status == "evaluated"
+    assert results[0].anchors_matched == 1
