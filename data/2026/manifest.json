@@ -987,33 +987,33 @@
       "capital_name": "Târgoviște",
       "path": "16-dambovita/65342-targoviste/budget_file.pdf",
       "document_status": "approved_initial",
-      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf",
+      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_1.pdf",
       "record_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/",
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T00:06:09+03:00",
+        "at": "2026-08-25T08:04:46+03:00",
         "tool_version": "0.1.0",
-        "lines": 161,
+        "lines": 1201,
         "pct_clean": 100.0,
         "errors": 0,
         "warnings": 0,
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 161,
-          "lines_strictly_verified": 161,
+          "lines": 1201,
+          "lines_strictly_verified": 1201,
           "pct_lines_strictly_verified": 100.0,
-          "numeric_cells": 1449,
-          "numeric_cells_strictly_verified": 1449,
+          "numeric_cells": 11115,
+          "numeric_cells_strictly_verified": 11115,
           "pct_numeric_cells_strictly_verified": 100.0,
           "scope": {
-            "pages_expected": 7,
-            "pages_selected": 7,
-            "pages_processed": 7,
+            "pages_expected": 41,
+            "pages_selected": 41,
+            "pages_processed": 41,
             "complete_pdf": true
           },
           "errors": 0,
@@ -1022,17 +1022,17 @@
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "78974f4d836b8355688bbe16",
-          "source_pdf_sha256": "45af06141e71b8e07e2c4201b0aeebccf14ef60f9c42506902951b241e290122",
+          "bundle_id": "a8b7140cedef5e1fa2a79b1b",
+          "source_pdf_sha256": "3bc552a19d02317fd764db1fab35d996986c5958deeb095f2dfc8795d9be4f0f",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "b2bd89e1e25a91c6f773406f29ca70c092aa853e2aa10ceedcfbc86eddf66a40",
-            "bytes": 22859
+            "sha256": "b8aee6bf73e2cfe0eb03cd151209b7b5dc61bdcaa4b39ed998fe62034251ae96",
+            "bytes": 118028
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "16e034c7ca43503d92d3e1dee1ec5c4ee023fec5d0919bf52164154cfdfd5381",
-            "bytes": 1168
+            "sha256": "9232760290c7754cec116bbedaa46f2c1fb7766128b51b96bd689de9db0c643a",
+            "bytes": 11230
           }
         },
         "llm_cost_usd": 0.0,
@@ -1045,7 +1045,7 @@
         "approved_date": "2026-04-30",
         "approved_url": "https://www.pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/Targoviste_HCL_nr_149_din_30_aprilie_2026.pdf",
         "hcl": "HCL 149/2026",
-        "notes": "ANUNȚ datat 14.04.2026 pe pagina oficială a Monitorului Oficial Local pentru 'proiectul Bugetului de Venituri și Cheltuieli pe anul 2026' (documente la /MonitorPMT/MOL6.d/2026/20260414/ANUNT.pdf; proiectul = Proiect de hotărâre nr. 150). HCL 149 din 30 aprilie 2026 (PDF oficial; textul conține data 30.04.2026 și articolele bugetare). Presa relatează că consiliul a aprobat bugetul la 30 aprilie, într-o ședință foarte scurtă."
+        "notes": "ANUNȚ datat 14.04.2026 pe pagina oficială a Monitorului Oficial Local pentru 'proiectul Bugetului de Venituri și Cheltuieli pe anul 2026' (documente la /MonitorPMT/MOL6.d/2026/20260414/ANUNT.pdf; proiectul = Proiect de hotărâre nr. 150). HCL 149 din 30 aprilie 2026 (PDF oficial; textul conține data 30.04.2026 și articolele bugetare). Sursa primară convertită este Anexa 1, «Bugetul local detaliat»; Anexa 2 descrie numai activitățile finanțate integral din venituri proprii și nu reprezintă bugetul municipal complet. Presa relatează că consiliul a aprobat bugetul la 30 aprilie, într-o ședință foarte scurtă."
       }
     },
     {

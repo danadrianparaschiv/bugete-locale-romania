@@ -209,11 +209,11 @@
       "capital_name": "Târgoviște",
       "path": "16-dambovita/65342-targoviste/budget_file.pdf",
       "document_status": "approved_initial",
-      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf",
+      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_1.pdf",
       "verification_status": "downloaded_and_verified",
-      "bytes": 205186,
-      "sha256": "45af06141e71b8e07e2c4201b0aeebccf14ef60f9c42506902951b241e290122",
-      "pages": 7
+      "bytes": 827387,
+      "sha256": "3bc552a19d02317fd764db1fab35d996986c5958deeb095f2dfc8795d9be4f0f",
+      "pages": 41
     },
     {
       "county_code": "17",

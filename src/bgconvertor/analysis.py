@@ -85,6 +85,7 @@ def _line_total(ln) -> Decimal | None:
 
 def _clean_name(name: str) -> str:
     """Drop the printed '(cod 42.02.01+…)' enumerations and 'CAP.' prefixes."""
+    name = re.sub(r"\s*©\s*MINDSOFT-SICO\b.*$", "", name, flags=re.I)
     name = re.sub(r"\s*\(\s*cod[^)]*\)?\s*", " ", name, flags=re.I)
     name = re.sub(r"^\s*CAP\.?\s*", "", name)
     return " ".join(name.split()).strip(" ,+")
@@ -230,9 +231,14 @@ def infografic(result: ConversionResult) -> dict | None:
 
 def city_analysis(result: ConversionResult) -> dict:
     stats = result.stats()
-    verified = [
+    # Headline municipality figures must come from the main local budget
+    # (source suffix .02).  Annexes financed from own revenues (.10), special
+    # funds, loans, or external grants are useful conversion outputs, but they
+    # are not interchangeable with the municipality-wide plan.
+    main_verified = [
         ln
         for doc in result.documents
+        if doc.suffix == "02"
         for ln in doc.lines
         if ln.kind != "heading" and ln.code and ln.strictly_verified
     ]
@@ -240,7 +246,7 @@ def city_analysis(result: ConversionResult) -> dict:
     def first_total(pred) -> float | None:
         """Largest matching total: the row repeats per page and per section,
         and the whole-budget figure is the largest of them."""
-        vals = [float(_line_total(ln)) for ln in verified
+        vals = [float(_line_total(ln)) for ln in main_verified
                 if pred(ln) and _line_total(ln) is not None and float(_line_total(ln)) > 0]
         return max(vals) if vals else None
 
@@ -253,7 +259,7 @@ def city_analysis(result: ConversionResult) -> dict:
 
     # top functional capitole by total, verified lines, main local-budget doc
     capitole: dict[str, dict] = {}
-    for ln in verified:
+    for ln in main_verified:
         if ln.kind != "expense_functional" or not ln.code or len(ln.code) != 5:
             continue
         if not _is_capitol(ln):  # skip TOTAL / "Partea ..." / excedent aggregates
@@ -263,14 +269,18 @@ def city_analysis(result: ConversionResult) -> dict:
             continue
         prev = capitole.get(ln.code)
         if prev is None or float(v) > prev["total"]:
-            capitole[ln.code] = {"code": ln.code, "name": ln.name[:70], "total": float(v)}
+            capitole[ln.code] = {
+                "code": ln.code,
+                "name": _clean_name(ln.name)[:70],
+                "total": float(v),
+            }
     all_capitole = sorted(capitole.values(), key=lambda c: -c["total"])
     top_capitole = all_capitole[:10]
 
 
     # a total smaller than the largest chapter under it is not the total
     rev_chapters = [
-        float(_line_total(ln)) for ln in verified
+        float(_line_total(ln)) for ln in main_verified
         if ln.kind == "revenue" and ln.code and len(ln.code) == 5
         and not ln.code.startswith(("00.", "49.")) and _is_total_section(ln)
         and _line_total(ln) is not None

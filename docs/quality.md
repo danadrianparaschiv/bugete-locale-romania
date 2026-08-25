@@ -48,6 +48,15 @@ Analizele implicite folosesc numai aceste linii strict verificate. Problemele
 de tip `info` (de exemplu o transcriere fără demonstrație independentă) nu mai
 sunt promovate drept verificate.
 
+Totalurile municipale, clasamentul capitolelor și vizualizările publice folosesc
+suplimentar numai documentul principal de buget local, identificat prin sufixul
+`.02`. Anexele `.10` (activități finanțate integral din venituri proprii) și
+celelalte surse de finanțare rămân în Excel și în metricile de calitate, dar nu
+pot deveni totalul sau structura bugetului întregului municipiu. Dacă bundle-ul
+nu conține niciun document `.02`, analiza lasă intenționat aceste câmpuri goale,
+iar publicarea în corpus este refuzată. Astfel, o anexă secundară nu mai poate
+înlocui accidental bugetul local principal.
+
 Schema de calitate 2 numără la `numeric_cells` toate valorile numerice
 exportate, inclusiv totalurile și markerii de secțiune fără cod normalizat.
 Aceștia rămân `heading` pentru a nu fi confundați cu o clasificație în
