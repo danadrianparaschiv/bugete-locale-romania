@@ -9,7 +9,7 @@
   <div class="brow" style="cursor:default">
     <span class="bt">{{ (c.nume or c.cod) | replace("CAP. ", "") }}</span>
     <span class="bg2"><i style="background:{{ color }};width:{{ (c.val / maxv * 100) | round(1) }}%"></i></span>
-    <span class="bv">{{ mii(c.val / 1000) }} mil.</span>
+    <span class="bv">{{ mii(c.val) }} mii lei</span>
   </div>
   {% endfor %}
 </div>
@@ -139,9 +139,9 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
       <div class="v">{{ mii(a.totals_mii_lei.cheltuieli) }}</div></div>
     {% endif %}
     {% if a.infografic and a.infografic.sectiuni %}
-    <div class="card"><div class="k">Funcționare / dezvoltare</div>
-      <div class="v">{{ mii(a.infografic.sectiuni.functionare / 1000) }}
-        <span style="font-size:1rem;color:var(--dim)">/ {{ mii(a.infografic.sectiuni.dezvoltare / 1000) }} mil.</span></div></div>
+    <div class="card"><div class="k">Funcționare / dezvoltare (mii lei)</div>
+      <div class="v">{{ mii(a.infografic.sectiuni.functionare) }}
+        <span style="font-size:1rem;color:var(--dim)">/ {{ mii(a.infografic.sectiuni.dezvoltare) }}</span></div></div>
     {% endif %}
   </div>
   {% endif %}

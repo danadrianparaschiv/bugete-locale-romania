@@ -86,6 +86,10 @@ publicate separat.
 
 ## Interpretare și limite
 
+- Toate valorile bugetare absolute din fișierele analitice și din paginile și
+  graficele municipiilor sunt afișate în **mii lei**. Indicatorii per capita
+  rămân în **lei/locuitor**, iar vizualizarea „din fiecare 100 de lei” rămâne în
+  lei deoarece exprimă o pondere, nu o valoare bugetară absolută.
 - Valorile bugetare sunt nominale; variațiile între ani nu sunt ajustate cu
   inflația.
 - Bugetul aprobat este un plan, execuția este mișcarea efectivă de bani. Cele

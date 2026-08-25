@@ -46,6 +46,7 @@ def _result():
 def test_infografic_blocks():
     ig = infografic(_result())
     assert ig is not None
+    assert ig["unitate"] == "mii lei"
 
     ven = ig["venituri"]
     assert ven["total"] == 1000 and ven["acoperire_pct"] == 100.0

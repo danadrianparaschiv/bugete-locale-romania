@@ -15,7 +15,8 @@
     try { return new Intl.NumberFormat("ro-RO", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n); }
     catch (e) { return n.toFixed(d); }
   }
-  function mil(v) { return nf(v / 1000, 1); }
+  function mii(v) { return nf(v, 0); }
+  function amount(v) { return mii(v) + " mii lei"; }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
   function el(id) { return document.getElementById(id); }
   function put(id, html) { var e = el(id); if (e) e.innerHTML = html; }
@@ -32,7 +33,7 @@
       arcs.push('<path d="M' + x0.toFixed(1) + " " + y0.toFixed(1) + "A" + R + " " + R + " 0 " + big + " 1 " + x1.toFixed(1) + " " + y1.toFixed(1) +
         "L" + x2.toFixed(1) + " " + y2.toFixed(1) + "A" + r + " " + r + " 0 " + big + " 0 " + x3.toFixed(1) + " " + y3.toFixed(1) +
         'Z" fill="' + GRUP[s.grup] + '" stroke="#fff" stroke-width="2" opacity="' + Math.max(1 - i * 0.05, 0.55).toFixed(2) +
-        '"><title>' + esc(s.nume) + ": " + mil(s.val) + " mil. lei (" + nf(s.val / TV * 100, 1) + "%)</title></path>");
+        '"><title>' + esc(s.nume) + ": " + amount(s.val) + " (" + nf(s.val / TV * 100, 1) + "%)</title></path>");
       if (s.val / TV >= 0.06) {
         var right = Math.cos(mid) >= 0, ex = cx + (R + 28) * Math.cos(mid), ey = cy + (R + 28) * Math.sin(mid), tx = right ? ex + 6 : ex - 6;
         labels.push('<polyline points="' + (cx + (R + 2) * Math.cos(mid)).toFixed(1) + "," + (cy + (R + 2) * Math.sin(mid)).toFixed(1) + " " +
@@ -40,16 +41,16 @@
           '<text x="' + tx.toFixed(1) + '" y="' + ey.toFixed(1) + '" fill="' + C.ink + '" font-size="12.5" text-anchor="' + (right ? "start" : "end") + '">' +
           esc(s.nume.length > 30 ? s.nume.slice(0, 28) + "…" : s.nume) + '</text>' +
           '<text x="' + tx.toFixed(1) + '" y="' + (ey + 15).toFixed(1) + '" fill="' + C.dim + '" font-size="11.5" text-anchor="' + (right ? "start" : "end") + '">' +
-          mil(s.val) + " mil. · " + nf(s.val / TV * 100, 1) + "%</text>");
+          amount(s.val) + " · " + nf(s.val / TV * 100, 1) + "%</text>");
       }
       a = b;
     });
     put("ig-ven", '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Structura veniturilor">' + arcs.join("") + labels.join("") +
-      '<text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" fill="' + C.ink + '" font-size="24" font-weight="700">' + mil(TV) + "</text>" +
-      '<text x="' + cx + '" y="' + (cy + 18) + '" text-anchor="middle" fill="' + C.dim + '" font-size="12">mil. lei venituri</text></svg>');
+      '<text x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle" fill="' + C.ink + '" font-size="24" font-weight="700">' + mii(TV) + "</text>" +
+      '<text x="' + cx + '" y="' + (cy + 18) + '" text-anchor="middle" fill="' + C.dim + '" font-size="12">mii lei venituri</text></svg>');
     put("ig-ven-list", ven.map(function (s) {
       return '<li><div class="vrow"><span>' + esc(s.nume) + ' <span class="tag" style="color:' + GRUP[s.grup] + '">' + GRUP_L[s.grup] + "</span></span>" +
-        '<span class="a">' + mil(s.val) + " mil. · " + nf(s.val / TV * 100, 1) + "%</span></div>" +
+        '<span class="a">' + amount(s.val) + " · " + nf(s.val / TV * 100, 1) + "%</span></div>" +
         '<div class="vbar"><i style="background:' + GRUP[s.grup] + ";width:" + Math.max(s.val / ven[0].val * 100, 1).toFixed(1) + '%"></i></div></li>';
     }).join(""));
   } else { hide("ig-sec-ven"); }
@@ -66,7 +67,7 @@
       return '<div class="brow' + (c.cod === sel ? " sel" : "") + '" data-cod="' + c.cod + '" tabindex="0" role="button">' +
         '<span class="bt">' + esc(c.nume.replace(/^CAP\.\s*/i, "")) + "</span>" +
         '<span class="bg2"><i style="background:' + col + ";width:" + (capVal(c) / max * 100).toFixed(1) + '%"></i></span>' +
-        '<span class="bv">' + mil(capVal(c)) + " mil.</span></div>";
+        '<span class="bv">' + amount(capVal(c)) + "</span></div>";
     }).join(""));
     Array.prototype.forEach.call(document.querySelectorAll("#ig-bars .brow"), function (row) {
       row.onclick = function () { detail(row.getAttribute("data-cod")); };
@@ -82,15 +83,15 @@
       row.className = "brow" + (row.getAttribute("data-cod") === cod ? " sel" : "");
     });
     var fd = (c.func != null && c.dezv != null)
-      ? "Funcționare " + mil(c.func) + " mil. · dezvoltare " + mil(c.dezv) + " mil." : "";
+      ? "Funcționare " + amount(c.func) + " · dezvoltare " + amount(c.dezv) : "";
     var mx = c.copii.length ? c.copii[0].val : 1;
     put("ig-detail", '<div class="ttl"><h3>' + esc(c.nume.replace(/^CAP\.\s*/i, "")) + '</h3><span class="amt">' +
-      mil(c.val) + " mil. lei · " + nf(c.val / TOT * 100, 1) + "% din buget</span></div>" +
+      amount(c.val) + " · " + nf(c.val / TOT * 100, 1) + "% din buget</span></div>" +
       (fd ? '<p class="hint">' + fd + (c.copii.length ? " — principalele subcapitole:" : "") + "</p>" : "") +
       '<div class="bars">' + c.copii.map(function (k) {
         return '<div class="brow" style="cursor:default"><span class="bt">' + esc(k.nume) + "</span>" +
           '<span class="bg2"><i style="background:' + C.dim + ";opacity:.55;width:" + (k.val / mx * 100).toFixed(1) + '%"></i></span>' +
-          '<span class="bv">' + mil(k.val) + " mil.</span></div>";
+          '<span class="bv">' + amount(k.val) + "</span></div>";
       }).join("") + "</div>");
   }
   drawBars(); detail(sel);
@@ -120,7 +121,7 @@
 
   /* ---- coloane generice (trimestre / ani) ---- */
   function columns(cats, stacks, line, ylabel) {
-    var W = 680, H = 360, L = 62, Rr = 16, T = 18, B = 40, pw = W - L - Rr, ph = H - T - B, i, j, max = 0;
+    var W = 680, H = 360, L = 76, Rr = 16, T = 18, B = 40, pw = W - L - Rr, ph = H - T - B, i, j, max = 0;
     for (i = 0; i < cats.length; i++) {
       var s = 0;
       for (j = 0; j < stacks.length; j++) s += stacks[j].data[i];
@@ -133,7 +134,7 @@
     for (i = 0; i <= 4; i++) {
       var v = max / 4 * i, yy = y(v);
       out.push('<line x1="' + L + '" y1="' + yy.toFixed(1) + '" x2="' + (W - Rr) + '" y2="' + yy.toFixed(1) + '" stroke="' + C.grid + '"/>' +
-        '<text x="' + (L - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" fill="' + C.dim + '" font-size="11">' + nf(v / 1000, 0) + "</text>");
+        '<text x="' + (L - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" fill="' + C.dim + '" font-size="11">' + mii(v) + "</text>");
     }
     for (i = 0; i < cats.length; i++) {
       var cxc = L + pw / cats.length * (i + 0.5), acc = 0;
@@ -141,7 +142,7 @@
         var v2 = stacks[j].data[i], hh = v2 / max * ph;
         out.push('<rect x="' + (cxc - bw / 2).toFixed(1) + '" y="' + y(acc + v2).toFixed(1) + '" width="' + bw.toFixed(1) +
           '" height="' + hh.toFixed(1) + '" fill="' + stacks[j].color + '"><title>' + esc(cats[i]) + " · " + esc(stacks[j].name) +
-          ": " + mil(v2) + " mil. lei</title></rect>");
+          ": " + amount(v2) + "</title></rect>");
         acc += v2;
       }
       out.push('<text x="' + cxc.toFixed(1) + '" y="' + (H - 14) + '" text-anchor="middle" fill="' + C.ink + '" font-size="12">' + esc(cats[i]) + "</text>");
@@ -152,7 +153,7 @@
       out.push('<polyline points="' + pts.join(" ") + '" fill="none" stroke="' + line.color + '" stroke-width="2.5" stroke-dasharray="6 5"/>');
       for (i = 0; i < line.data.length; i++)
         out.push('<circle cx="' + (L + pw / cats.length * (i + 0.5)).toFixed(1) + '" cy="' + y(line.data[i]).toFixed(1) +
-          '" r="4" fill="' + line.color + '"><title>' + esc(line.name) + " " + esc(cats[i]) + ": " + mil(line.data[i]) + " mil. lei</title></circle>");
+          '" r="4" fill="' + line.color + '"><title>' + esc(line.name) + " " + esc(cats[i]) + ": " + amount(line.data[i]) + "</title></circle>");
     }
     out.push('<text x="' + L + '" y="' + (T - 5) + '" fill="' + C.dim + '" font-size="10.5">' + esc(ylabel) + "</text>");
     return '<svg viewBox="0 0 ' + W + " " + H + '" role="img">' + out.join("") + "</svg>";
@@ -163,7 +164,7 @@
       [{ name: "Funcționare", data: IG.trim.functionare, color: C.ok },
        { name: "Dezvoltare", data: IG.trim.dezvoltare, color: C.warn }],
       IG.trim.venituri ? { name: "Venituri", data: IG.trim.venituri, color: C.blue } : null,
-      "milioane lei"));
+      "mii lei"));
   } else { hide("ig-sec-trim"); }
 
   if (IG.ani) {
@@ -171,7 +172,7 @@
     put("ig-ani", columns(years,
       [{ name: "Cheltuieli", data: ch, color: C.warn }],
       IG.ani.venituri ? { name: "Venituri", data: IG.ani.venituri, color: C.blue } : null,
-      "milioane lei"));
+      "mii lei"));
     var d = (ch[1] - ch[0]) / ch[0] * 100;
     var msg = d <= -5 ? "o scădere de " : d >= 5 ? "o creștere de " : "o variație de ";
     put("ig-ani-note", "Estimările primăriei pentru 2027 arată " + msg + "<b>" + nf(Math.abs(d), 1) +
