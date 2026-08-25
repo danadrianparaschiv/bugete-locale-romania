@@ -135,7 +135,7 @@ calculul preciziei.
 
 ```bash
 uv run bgconvertor eval        # your fixture green, nothing else regressed
-uv run bgconvertor eval --require-cell-ground-truth 5 \
+uv run bgconvertor eval --require-cell-ground-truth 9 \
   --min-layout-cell-recall 90 --min-layout-cell-precision 99.5
 uv run pytest                  # includes the ab-stays-100%-clean pin
 ```

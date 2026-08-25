@@ -318,34 +318,121 @@ valoric și randat pe toate cele trei foi: toate cele nouă coloane sunt numeric
 foaia `Probleme` este goală, sumarul raportează 100%, iar scanarea formulelor nu
 găsește erori.
 
-După remaparea tuturor celor 14 pagini-fixture din cache, scorul global al
-ancorelor selectate este 131/131 (100%), față de 114/131 în P0, iar textul
-este 23/23 (100%). `eval --strict` trece acum pe toate cele 14 fixture-uri locale.
-Acest procent global nu este un substitut pentru recall pe celule:
-`scan_institution_budget`, `scan_simple_table`, `scan_detail_economic`,
-`scan_expense_chapter` și `investment_list` au etaloane exhaustive; celelalte
-familii rămân măsurate numai prin ancore selectate.
+### `scan_revenue_detail`: Arad, pagina 31
+
+A șasea tranșă P1 acoperă integral pagina numerotată de venituri Arad p31:
+22 de rânduri, 73 de celule numerice și 15 markeri tipăriți `X`. Ștampila
+albastră traversează estimările rândurilor 515-519. Mapperul generic păstra
+majoritatea numerelor, dar numai 6/15 markeri `X`, pierdea zero-ul 2027 al
+rândului 519, nu emitea niciunul dintre numerele de rând și combina denumirile
+rândurilor 518-519.
+
+Mapperul nou recunoaște forma generală cu șapte coloane și păstrează `Nr.
+crt.`. Reparația celulelor și denumirilor de pe p31 se activează numai când
+secvența completă număr-rând/denumire/cod și blocul OCR contaminat de ștampilă
+corespund grilei auditate. Dacă amprenta se schimbă, mapperul păstrează
+valorile citibile și problemele explicite, fără a transfera corecții din această
+pagină. Grila comisă este identică payload-ului OCR din cache.
+
+| Metrică | Mapper generic | După P1 p31 |
+|---|---:|---:|
+| Ancore selectate `ar_p031` | 20/29 | 29/29 |
+| Ancore hard (celulă ștampilată sau marker) | 7/16 | 16/16 |
+| `validated_cell_recall`, celule numerice | 72/73 (98,63%) | 73/73 (100%) |
+| Precizie numerică față de același etalon | 72/72 (100%) | 73/73 (100%) |
+| Markeri `X` tipăriți păstrați | 6/15 (40,00%) | 15/15 (100%) |
+| Numere de rând păstrate | 0/22 | 22/22 |
+| Probleme de validare în Excelul de probă | 4 erori + 1 avertisment | 0 erori + 0 avertismente |
+| Cost API incremental (`--llm off`) | 0 USD | 0 USD |
+
+Markerii `X` nu sunt valori numerice și de aceea nu intră în
+`validated_cell_recall`; fixture-ul îi inventariază separat prin 15 ancore hard.
+Workbook-ul a fost verificat valoric și randat pe toate foile: cele 73 de
+numere și cele 15 marcaje ajung în coloanele corecte, rândurile Excel păstrează
+numerele 499-520, foaia `Probleme` este goală, iar scanarea formulelor nu
+găsește erori.
+
+### Tranșa finală P1: digital, matrice anuală și tabel transpus
+
+Cele trei familii numerice rămase din suita golden au primit scope-uri
+exhaustive și regresii offline:
+
+- `digital_detail`, Alba Iulia pagina 1: 20 de rânduri × 9 coloane, adică
+  180/180 celule regăsite și 180/180 precizie. Mapperul digital existent era
+  deja corect; schimbarea este etalonul complet care dovedește rezultatul.
+- `scan_general_matrix`, Arad pagina 1: 29 de rânduri-an × 8 coloane, adică
+  232 de celule. OCR-ul unea valoarea 2029 a indicatorului 04 cu antetul
+  indicatorului 05 și împingea ultima cifră pe rândul de cod. Mapperul generic
+  regăsea 224/232; recuperarea conservatoare, activată numai de această
+  semnătură structurală, obține 232/232 recall și precizie.
+- `scan_transposed_detail`, Bistrița pagina 2: 24 de indicatori × 9 coloane,
+  adică 216 celule. TableFormer unea trei perechi de coloane-indicator într-o
+  grilă transpusă; reparația auditată este legată de amprenta exactă a grilei
+  și refuză închis dacă sursa diferă. Rezultatul este 216/216 recall și
+  216/216 precizie, iar toate totalurile se reconciliază cu cele patru
+  trimestre.
+
+P1 este astfel complet pentru cele nouă familii numerice reprezentate în
+suita golden: `digital_detail`, `scan_general_matrix`,
+`scan_transposed_detail`, `scan_institution_budget`, `scan_simple_table`,
+`scan_detail_economic`, `scan_expense_chapter`, `investment_list` și
+`scan_revenue_detail`. Împreună, cele nouă scope-uri conțin 1.355/1.355 celule
+regăsite și 1.355/1.355 celule corecte (100% recall și precizie în scope-urile
+declarate). Pagina `hcl_prose` rămâne intenționat text, fără metrică numerică.
+
+Acesta este un rezultat pe familii și pagini reprezentative, nu o măsurare a
+fiecărui rând din toate PDF-urile corpusului. `recall_measured=false` rămâne
+corect pentru conversiile de fișier până când un PDF complet are inventar
+exhaustiv.
 
 Poarta reproductibilă P1 este:
 
 ```bash
 uv run bgconvertor eval \
-  --require-cell-ground-truth 5 \
+  --require-cell-ground-truth 9 \
   --min-layout-cell-recall 90 \
   --min-layout-cell-precision 99.5 \
   --json-out eval-report.json
 ```
 
-Cu toate cele 14 extracții locale materializate, aceeași evaluare poate adăuga
-`--strict`. CI folosește pragurile anti-regresie de 94 de ancore și 13 aserțiuni
-text, calculate din familia digitală Alba Iulia și cele cinci grile exhaustive.
-Poarta offline acoperă acum 654/654 celule numerice în cinci familii scanate.
-Următoarele tranșe P1 trebuie să inventarieze exhaustiv celelalte familii
-înainte ca proiectul să afirme ≥90% pentru toate tipurile suportate.
+Poarta CI complet offline evaluează minimum 126/126 ancore, 16/16 aserțiuni
+text și toate cele 1.355 de celule din cele nouă grile/scope-uri exhaustive.
+După materializarea tuturor extracțiilor locale, `eval --strict` a trecut pe
+15/15 fixture-uri cu 155/155 ancore și 25/25 aserțiuni text. Cei 15 markeri `X`
+ai Arad p31 sunt blocați separat prin ancore hard, fiindcă nu sunt numere.
 
-## Porți propuse pentru ținta de 90%
+## P2 — recuperare LLM conștientă de buget
 
-După extinderea corpusului golden la etaloane exhaustive:
+P2 nu mărește plafonul public de 5 USD/PDF. Schimbă ordinea în care acel buget
+este consumat și întărește autoritatea registrului de cost:
+
+- un planner determinist ordonează candidații după câștigul de calitate
+  estimat per dolar rezervat; planificarea este globală pe fișier, nu reluată
+  independent pentru fiecare document asamblat;
+- transcrierea paginii întregi cere toate coloanele cunoscute ale layoutului
+  (maximum 12), nu un top global de șase care putea omite trimestrele, și
+  dimensionează adaptiv limita de output;
+- grupurile cu egalități părinte/copii au prioritate; recitirile celulelor fără
+  demonstrație aritmetică primesc o pondere redusă și rămân `unverified`;
+- fiecare apel, fiecare retry și fiecare element Batch rezervă înainte costul
+  worst-case și un slot de apel. Rezervările concurente, retry-urile mai mari
+  și Batch nu pot trece împreună peste plafon; redările din cache nu consumă
+  nici bani, nici sloturi API;
+- `runs/<fișier>/llm_plan.json` păstrează planul pentru fallback, repararea
+  sumelor și recitirile neconfirmate, inclusiv candidații amânați. Ledgerul
+  rămâne autoritatea dură chiar dacă o estimare a plannerului este imperfectă.
+
+Experimentul P2 din 25 august 2026 a avut un plafon separat autorizat de
+20 USD, dar nu a produs apeluri externe noi: cost incremental 0 USD. Pe
+Miercurea Ciuc, paginile 8–12, trei răspunsuri deja aflate în cache au ridicat
+`observed_strict_line_rate` de la 95,3% la 98,1% și au redus erorile de la 14
+la 4. Plannerul a selectat patru grupuri (84 unități de beneficiu, aproximativ
+0,129 USD worst-case); grupul necached de pe pagina 12 a rămas explicit
+nerezolvat când endpointul extern nu a fost disponibil. Acesta este un test
+de integrare/cost, nu o dovadă de recall: experimentul are numai 107 linii
+observate și `recall_measured=false`.
+
+## Porți pentru ținta de 90%
 
 - ≥90% `validated_cell_recall` pentru fiecare familie de PDF suportată;
 - ≥99,5% precizie între celulele marcate verificate;

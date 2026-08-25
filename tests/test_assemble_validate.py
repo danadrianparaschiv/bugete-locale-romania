@@ -9,6 +9,7 @@ import pytest
 from bgconvertor.assemble import assemble
 from bgconvertor.config import RunConfig
 from bgconvertor.export import _sheet_columns
+from bgconvertor.export import export as export_xlsx
 from bgconvertor.extract.scanned import map_payload
 from bgconvertor.model import ConversionResult
 from bgconvertor.nomenclator import load_registry
@@ -282,6 +283,51 @@ def test_expense_chapter_grid_survives_assembly_and_validation(tmp_path, registr
     )
     assert str(line.values["buget_2026"]) == "93474.00"
     assert line.section == "SECTIUNEA DE DEZVOLTARE"
+
+
+def test_revenue_detail_grid_survives_assembly_validation_and_export(tmp_path, registry):
+    source_path = (
+        Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p031.json"
+    )
+    source = json.loads(source_path.read_text())
+    payload = map_payload({"tables_raw": [source["grid"]], "text": source["text"]})
+    store = _mk_store(tmp_path)
+    store.put("extract", 31, payload)
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [31], registry),
+        pages_expected=333,
+        pages_selected=[31],
+        pages_processed=[31],
+    )
+    validate(result, registry)
+    stats = result.stats()
+    lines = [line for doc in result.documents for line in doc.lines]
+
+    assert payload["layout"] == "scan_revenue_detail"
+    assert stats["numeric_cells"] == 73
+    assert stats["numeric_cells_strictly_verified"] == 73
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
+    assert sum(len(line.x_markers) for line in lines) == 15
+    assert [line.row_no for line in lines] == list(range(499, 521))
+    assert all(line.kind == "revenue" for line in lines)
+    assert dict(_sheet_columns(lines)) == {
+        "buget_2026": "Buget 2026",
+        "est2027": "Estimare 2027",
+        "est2028": "Estimare 2028",
+        "est2029": "Estimare 2029",
+    }
+
+    workbook_path = export_xlsx(result, tmp_path / "arad-p31.xlsx")
+    from openpyxl import load_workbook
+
+    workbook = load_workbook(workbook_path)
+    data_sheet = workbook["BL Date"]
+    assert data_sheet["G1"].value == "Buget 2026"
+    assert data_sheet["C2"].alignment.wrap_text is True
+    assert data_sheet.row_dimensions[2].height > 15
 
 
 def test_investment_grid_survives_assembly_validation_and_export(tmp_path, registry):

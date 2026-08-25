@@ -39,11 +39,12 @@ linii strict verificate și afișează acoperirea disponibilă.
    de compoziție tipărite — transformă aproape orice cifră citită greșit
    într-o inconsistență detectabilă, la cost zero.
 3. **Reparare LLM cu buget limitat** *(opțional)*. Celulele care au rupt
-   aritmetica sunt recitite din imaginea paginii de către Claude; o
+   aritmetica sunt recitite din imaginea paginii de un model configurat; o
    reparare este acceptată **doar dacă face sumele să se închidă**.
    Transcrierea integrală a paginii acoperă formatele pe care OCR-ul nu le
-   poate structura. Un plafon ferm în dolari și un cache de răspunsuri
-   guvernează fiecare apel; rulările se reiau gratuit.
+   poate structura. Un planner consumă plafonul întâi pe recuperările cu cel
+   mai mare câștig estimat per dolar; registrul rezervă costul worst-case al
+   fiecărui apel/retry înainte de rețea, iar cache-ul permite reluări gratuite.
 
 ## Pornire rapidă
 
@@ -134,6 +135,12 @@ produs este ≥90% `validated_cell_recall` pentru fiecare familie suportată,
 după construirea unor etaloane exhaustive. Definițiile, porțile și auditul
 baseline sunt în [docs/quality.md](docs/quality.md); limitările de utilizare,
 în [DISCLAIMER.md](DISCLAIMER.md).
+
+Poarta P1 acoperă acum toate cele nouă familii numerice reprezentate în suita
+golden: 1.355/1.355 celule regăsite și corecte în scope-urile exhaustive.
+Aceasta este acoperire pe pagini reprezentative, nu recall măsurat pentru
+fiecare PDF complet. P2 prioritizează recuperarea LLM sub același plafon
+public de 5 USD/PDF și publică planul de cheltuire în run store.
 
 ## Corpusul
 

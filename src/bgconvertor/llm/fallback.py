@@ -15,6 +15,47 @@ from pydantic import BaseModel, Field
 
 log = logging.getLogger("bgc.llm.fallback")
 
+COLUMN_ORDER = (
+    "bugetul_local",
+    "inst_venituri_proprii_subventii",
+    "inst_integral_venituri_proprii",
+    "imprumuturi",
+    "fonduri_externe",
+    "total",
+    "transferuri",
+    "total_general",
+    "credite_stinse",
+    "credite_restante",
+    "total_2026",
+    "buget_2026",
+    "trim1",
+    "trim2",
+    "trim3",
+    "trim4",
+    "est2027",
+    "est2028",
+    "est2029",
+)
+
+LAYOUT_COLUMNS = {
+    "scan_general_matrix": (
+        "bugetul_local",
+        "inst_venituri_proprii_subventii",
+        "inst_integral_venituri_proprii",
+        "imprumuturi",
+        "fonduri_externe",
+        "total",
+        "transferuri",
+        "total_general",
+    ),
+    "scan_transposed_detail": (
+        "total", "credite_stinse", "trim1", "trim2", "trim3", "trim4",
+        "est2027", "est2028", "est2029",
+    ),
+    "scan_revenue_detail": ("buget_2026", "est2027", "est2028", "est2029"),
+    "scan_expense_chapter": ("buget_2026", "credite_restante"),
+}
+
 
 class FallbackCell(BaseModel):
     column: str = Field(description="Numele coloanei, exact ca în lista cerută")
@@ -59,7 +100,57 @@ ilizibilă sau acoperită de ștampilă = null.
 """
 
 
-def extract_page_llm(client, image, columns: list[str], page: int) -> dict:
+def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> list[str]:
+    """Keep every observed/page-specific column; use corpus frequency only as fallback.
+
+    The old global top-six rule silently dropped quarterly columns on wide
+    tables. A paid page transcription must be asked for the full known schema.
+    """
+    observed = {
+        column
+        for line in payload.get("lines", [])
+        for column in (line.get("values") or {})
+    }
+    observed.update(
+        issue.get("column")
+        for line in payload.get("lines", [])
+        for issue in line.get("cell_issues", [])
+        if issue.get("column")
+    )
+    observed.update(LAYOUT_COLUMNS.get(payload.get("layout"), ()))
+    if not observed:
+        observed.update((corpus_columns or [])[:9])
+    ordered = [column for column in COLUMN_ORDER if column in observed]
+    ordered.extend(sorted(observed - set(ordered)))
+    return ordered[:12] or ["buget_2026"]
+
+
+def fallback_max_tokens(payload: dict, n_columns: int) -> int:
+    estimated_rows = max(
+        len(payload.get("lines", [])),
+        payload.get("n_numeric_cells", 0) // max(1, n_columns),
+    )
+    return min(24000, max(4096, 768 + estimated_rows * (180 + 28 * n_columns)))
+
+
+def fallback_benefit(payload: dict) -> float:
+    """Expected recovered numeric cells, discounted for transcription uncertainty."""
+    already_usable = sum(
+        len(line.get("values") or {})
+        for line in payload.get("lines", [])
+        if line.get("code")
+    )
+    missing = max(1, payload.get("n_numeric_cells", 0) - already_usable)
+    return 0.8 * missing
+
+
+def extract_page_llm(
+    client,
+    image,
+    columns: list[str],
+    page: int,
+    max_tokens: int | None = None,
+) -> dict:
     """Full-page transcription -> extraction-contract payload."""
     from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number
 
@@ -72,12 +163,16 @@ def extract_page_llm(client, image, columns: list[str], page: int) -> dict:
         model=fb_model,
         image=image,
         page=page,
-        max_tokens=24000,  # dense pages + thinking regularly exceed 16K; >16K streams
+        max_tokens=max_tokens or 24000,
     )
     lines = []
+    requested = set(columns)
     for row in reading.rows:
         values, cell_issues = {}, []
         for cell in row.cells:
+            if cell.column not in requested:
+                cell_issues.append({"column": cell.column, "raw": cell.value})
+                continue
             if cell.value is None:
                 continue
             try:

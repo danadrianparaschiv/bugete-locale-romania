@@ -39,23 +39,90 @@ def batch_structured(client: LLMClient, jobs: list[dict]) -> dict[str, object]:
     if not to_submit:
         return out
 
-    client.ledger.check_budget()
+    from .ledger import BudgetExceeded, estimate_input_tokens, estimate_request_cost
+    from .planner import RecoveryCandidate, select_candidates
+
+    candidates = []
+    by_key = {job["key"]: job for job in to_submit}
+    for job in to_submit:
+        image = job.get("image")
+        pixels = int(image.width) * int(image.height) if image is not None else 0
+        model = job.get("model") or client.config.llm.repair_model
+        candidates.append(RecoveryCandidate(
+            key=job["key"],
+            kind=job["purpose"],
+            page=job.get("page") or 0,
+            benefit_units=float(job.get("benefit_units", 1.0)),
+            estimated_cost_usd=estimate_request_cost(
+                model,
+                len(job["prompt"]),
+                job.get("max_tokens", 12000),
+                image_pixels=pixels,
+                batch=True,
+            ),
+        ))
+    plan = select_candidates(
+        candidates,
+        client.ledger.remaining_cost_usd,
+        max_calls=client.ledger.remaining_calls,
+    )
+    for candidate in plan.skipped:
+        out[candidate.key] = BudgetExceeded(
+            f"batch budget planner skipped {candidate.key}: "
+            f"${candidate.estimated_cost_usd:.4f} worst-case request"
+        )
+
+    admitted = [by_key[candidate.key] for candidate in plan.selected]
+    reservations = []
+    reserved_jobs = []
+    try:
+        for job in admitted:
+            image = job.get("image")
+            pixels = int(image.width) * int(image.height) if image is not None else 0
+            model = job.get("model") or client.config.llm.repair_model
+            try:
+                reservation = client.ledger.reserve(
+                    model,
+                    estimate_input_tokens(len(job["prompt"]), pixels),
+                    job.get("max_tokens", 12000),
+                    batch=True,
+                )
+            except BudgetExceeded as exc:
+                out[job["key"]] = exc
+                continue
+            reservations.append(reservation)
+            reserved_jobs.append(job)
+
+        if not reserved_jobs:
+            return out
+        return _submit_reserved_batch(client, reserved_jobs, out)
+    finally:
+        for reservation in reservations:
+            client.ledger.release(reservation)
+
+
+def _submit_reserved_batch(
+    client: LLMClient,
+    jobs: list[dict],
+    out: dict[str, object],
+) -> dict[str, object]:
     api = client._api()
     requests = []
-    for i, job in enumerate(to_submit):
+    for index, job in enumerate(jobs):
         model = job.get("model") or client.config.llm.repair_model
         content: list[dict] = []
         if job.get("image") is not None:
             content.append({
                 "type": "image",
                 "source": {
-                    "type": "base64", "media_type": "image/png",
+                    "type": "base64",
+                    "media_type": "image/png",
                     "data": base64.standard_b64encode(_png_bytes(job["image"])).decode(),
                 },
             })
         content.append({"type": "text", "text": job["prompt"]})
         requests.append({
-            "custom_id": f"j{i}",
+            "custom_id": f"j{index}",
             "params": {
                 "model": model,
                 "max_tokens": job.get("max_tokens", 12000),
@@ -76,7 +143,7 @@ def batch_structured(client: LLMClient, jobs: list[dict]) -> dict[str, object]:
             break
         time.sleep(POLL_SECONDS)
 
-    by_id = {f"j{i}": job for i, job in enumerate(to_submit)}
+    by_id = {f"j{index}": job for index, job in enumerate(jobs)}
     for result in api.messages.batches.results(batch.id):
         job = by_id[result.custom_id]
         if result.result.type != "succeeded":
@@ -84,22 +151,34 @@ def batch_structured(client: LLMClient, jobs: list[dict]) -> dict[str, object]:
             continue
         message = result.result.message
         client.ledger.record(
-            job["purpose"], message.model,
-            message.usage.input_tokens, message.usage.output_tokens,
-            page=job.get("page"), batch=True,
+            job["purpose"],
+            message.model,
+            message.usage.input_tokens,
+            message.usage.output_tokens,
+            page=job.get("page"),
+            batch=True,
         )
-        text = "".join(b.text for b in message.content if getattr(b, "type", "") == "text")
+        text = "".join(
+            block.text
+            for block in message.content
+            if getattr(block, "type", "") == "text"
+        )
         try:
             parsed = job["output_model"].model_validate_json(text)
         except Exception as exc:  # noqa: BLE001 - per-item failure
             out[job["key"]] = exc
             continue
         client.cache_store(
-            job["purpose"], job["prompt"], job["output_model"], parsed,
-            message.usage.input_tokens, message.usage.output_tokens,
-            model=job.get("model"), image=job.get("image"),
+            job["purpose"],
+            job["prompt"],
+            job["output_model"],
+            parsed,
+            message.usage.input_tokens,
+            message.usage.output_tokens,
+            model=job.get("model"),
+            image=job.get("image"),
         )
         out[job["key"]] = parsed
-    for job in to_submit:  # anything the results stream never mentioned
+    for job in jobs:
         out.setdefault(job["key"], RuntimeError("batch item missing from results"))
     return out

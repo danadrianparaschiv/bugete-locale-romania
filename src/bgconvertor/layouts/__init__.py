@@ -14,6 +14,7 @@ from . import (
     institution,
     investment,
     matrix,
+    revenue_detail,
     table,
     transposed,
 )
@@ -24,6 +25,7 @@ MAPPERS = [
     collapsed_detail.try_map,
     expense_chapter.try_map,
     investment.try_map,
+    revenue_detail.try_map,
     transposed.try_map,
     matrix.try_map,
     table.map_grid,  # always succeeds

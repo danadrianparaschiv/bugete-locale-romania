@@ -25,3 +25,22 @@ def test_batch_all_cached_needs_no_api(tmp_path):
     assert results["a"].ok is True
     assert client._client is None  # no SDK constructed
     assert ledger.total_calls == 1 and ledger.total_cost_usd == 0.0
+
+
+def test_batch_budget_planner_blocks_before_api_construction(tmp_path):
+    config = RunConfig()
+    ledger = Ledger(path=tmp_path / "l.jsonl", max_cost_usd=0.001, max_calls=10)
+    client = LLMClient(config, ledger, tmp_path / "cache")
+
+    results = batch_structured(client, [{
+        "key": "too-large",
+        "purpose": "repair",
+        "prompt": "read rows",
+        "image": None,
+        "output_model": Out,
+        "max_tokens": 12000,
+    }])
+
+    assert isinstance(results["too-large"], Exception)
+    assert client._client is None
+    assert ledger.total_cost_usd == 0.0

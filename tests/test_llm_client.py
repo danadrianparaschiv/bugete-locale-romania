@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+from types import SimpleNamespace
 
 import pytest
 from pydantic import BaseModel
@@ -68,3 +69,57 @@ def test_prompt_version_invalidates_cache(tmp_path):
     config.llm.prompt_version = "v999"
     key_v999 = _cache_key(config, config.llm.repair_model, "p", Verdict)
     assert key_v != key_v999
+
+
+def test_larger_retry_must_reserve_again_before_second_api_call(tmp_path):
+    client, ledger, _config = _client(tmp_path, max_cost=0.02)
+
+    class Messages:
+        def __init__(self):
+            self.calls = 0
+
+        def parse(self, **_kwargs):
+            self.calls += 1
+            return SimpleNamespace(
+                parsed_output=None,
+                usage=SimpleNamespace(input_tokens=100, output_tokens=500),
+                stop_reason="max_tokens",
+            )
+
+    messages = Messages()
+    client._client = SimpleNamespace(messages=messages)
+
+    with pytest.raises(BudgetExceeded, match="would be exceeded"):
+        client.structured("repair", "read one cell", Verdict, max_tokens=512)
+
+    assert messages.calls == 1
+    assert ledger.total_calls == 1
+    assert ledger.run_cost_usd <= ledger.max_cost_usd
+
+
+def test_failed_second_attempt_releases_its_reservation(tmp_path):
+    client, ledger, _config = _client(tmp_path, max_cost=1.0)
+
+    class Messages:
+        def __init__(self):
+            self.calls = 0
+
+        def parse(self, **_kwargs):
+            self.calls += 1
+            return SimpleNamespace(
+                parsed_output=None,
+                usage=SimpleNamespace(input_tokens=10, output_tokens=10),
+                stop_reason="end_turn",
+            )
+
+    messages = Messages()
+    client._client = SimpleNamespace(messages=messages)
+
+    with pytest.raises(RuntimeError, match="no structured output"):
+        client.structured("repair", "read one cell", Verdict, max_tokens=512)
+
+    assert messages.calls == 2
+    assert ledger.remaining_cost_usd == pytest.approx(
+        ledger.max_cost_usd - ledger.run_cost_usd
+    )
+    assert ledger.remaining_calls == ledger.max_calls - 2

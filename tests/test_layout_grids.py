@@ -6,6 +6,7 @@ counterpart of the golden-fixture eval (which needs the sample PDFs).
 
 import json
 from copy import deepcopy
+from decimal import Decimal
 from pathlib import Path
 
 from bgconvertor.layouts import map_grid
@@ -14,6 +15,7 @@ from bgconvertor.layouts.collapsed_detail import try_map as collapsed_detail_try
 from bgconvertor.layouts.expense_chapter import try_map as expense_chapter_try
 from bgconvertor.layouts.investment import try_map as investment_try
 from bgconvertor.layouts.matrix import try_map as matrix_try
+from bgconvertor.layouts.revenue_detail import try_map as revenue_detail_try
 from bgconvertor.layouts.transposed import try_map as transposed_try
 
 
@@ -99,6 +101,38 @@ def test_transposed_family():
     assert map_grid(grid) == lines  # registry dispatches to transposed
 
 
+def test_transposed_recovers_collapsed_indicator_columns_on_bistrita_p2():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "bn_p002.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+
+    assert len(lines) == 24
+    assert sum(len(line["values"]) for line in lines) == 216
+    assert not any(line.get("cell_issues") for line in lines)
+    idx = _by_code(lines)
+    assert idx["07020203"]["values"]["trim4"] == "23.00"
+    assert idx["150201"]["name"] == "Impozit pe spectacole"
+    assert idx["16020202"]["values"]["trim4"] == "959.00"
+    assert idx["0012"]["values"]["est2028"] == "60909.00"
+    assert all(
+        Decimal(line["values"]["total"])
+        == sum(Decimal(line["values"][f"trim{quarter}"]) for quarter in range(1, 5))
+        for line in lines
+    )
+
+
+def test_bistrita_transposed_repair_requires_exact_grid_fingerprint():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "bn_p002.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[0][1] = "7471,00"
+
+    lines = transposed_try(grid)
+    assert lines is not None
+    assert len(lines) == 21
+    assert sum(len(line["values"]) for line in lines) < 216
+    assert not any(line.get("raw_code") == "07020203" for line in lines)
+
+
 def test_matrix_family_with_index_row():
     grid = [
         ["", "Cod rând", "Bugetul local", "Total buget general"],
@@ -113,6 +147,40 @@ def test_matrix_family_with_index_row():
     assert y2026["values"]["bugetul_local"] == "1250646.50"
     assert y2026["values"]["total_general"] == "1373387.50"
     assert y2026["name"].startswith("VENITURI TOTAL")
+
+
+def test_matrix_recovers_merged_year_heading_and_displaced_value():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p001.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = matrix_try(grid)
+
+    assert lines is not None
+    assert len(lines) == 37
+    assert sum(len(line["values"]) for line in lines) == 232
+    assert not any(line.get("cell_issues") for line in lines)
+    assert not any(line.get("raw_code") == "IV" for line in lines)
+
+    indicator_04 = [line for line in lines if line.get("raw_code") == "04"]
+    assert [line["year"] for line in indicator_04 if line["values"]] == [
+        2026, 2027, 2028, 2029,
+    ]
+    assert all(
+        value == "0.00"
+        for line in indicator_04 if line["values"]
+        for value in line["values"].values()
+    )
+
+    indicator_05 = [line for line in lines if line.get("raw_code") == "05"]
+    assert [line["year"] for line in indicator_05 if line["values"]] == [
+        2026, 2027, 2028, 2029,
+    ]
+    assert all(line["name"] == "Impozit pe profit" for line in indicator_05)
+    indicator_08 = next(
+        line
+        for line in lines
+        if line.get("raw_code") == "08" and line.get("year") == 2026
+    )
+    assert indicator_08["values"]["total_general"] == "306091.00"
 
 
 def test_transposed_rejects_normal_tables():
@@ -250,6 +318,47 @@ def test_expense_chapter_mapper_fails_closed_on_count_or_fingerprint_change():
     grid = deepcopy(json.loads(source.read_text())["grid"])
     grid[-1][2] = "59"
     assert expense_chapter_try(grid) is None
+
+
+def test_revenue_detail_recovers_numbered_rows_and_stamp_cells():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p031.json"
+    grid = json.loads(source.read_text())["grid"]
+    lines = map_grid(grid)
+
+    assert len(lines) == 22
+    assert [line["row_no"] for line in lines] == list(range(499, 521))
+    assert sum(value != "X" for line in lines for value in line["values"].values()) == 73
+    assert sum(value == "X" for line in lines for value in line["values"].values()) == 15
+    assert not any(line.get("cell_issues") for line in lines)
+    idx = _by_code(lines)
+    assert idx["45.02.01.03"]["values"] == {
+        "buget_2026": "0.00",
+        "est2027": "X",
+        "est2028": "X",
+        "est2029": "X",
+    }
+    assert idx["45.02.02"]["values"]["est2027"] == "0.00"
+    assert idx["45.02.01.04"]["name"] == "Corecții financiare"
+    assert idx["45.02.02"]["name"].startswith("Fondul Social European")
+
+
+def test_revenue_detail_source_recovery_requires_the_stamp_fingerprint():
+    source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "ar_p031.json"
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[19][4] = "stamp changed"
+
+    lines = revenue_detail_try(grid)
+    assert lines is not None
+    idx = _by_code(lines)
+    assert "est2027" not in idx["45.02.01.01"]["values"]
+    assert idx["45.02.01.01"]["cell_issues"] == [
+        {"column": "est2027", "raw": "stamp changed"}
+    ]
+    assert idx["45.02.02"]["name"].startswith("45.02.02.01+")
+
+    grid = deepcopy(json.loads(source.read_text())["grid"])
+    grid[0][2] = "Alt cod"
+    assert revenue_detail_try(grid) is None
 
 
 def test_investment_grid_preserves_percentages_and_objective_context():

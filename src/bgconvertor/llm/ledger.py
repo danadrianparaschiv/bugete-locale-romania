@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import math
 import threading
 from dataclasses import dataclass
 from pathlib import Path
@@ -40,10 +41,17 @@ MODEL_PRICES: dict[str, tuple[float, float]] = {
     "qwen/qwen3-vl-30b-a3b-thinking": (0.30, 1.20),  # verificați
 }
 BATCH_DISCOUNT = 0.5
+IMAGE_TOKEN_AREA = 750  # conservative vision estimate: roughly pixels/token
 
 
 class BudgetExceeded(RuntimeError):
     """Raised when an LLM pass would exceed the configured budget."""
+
+
+@dataclass
+class Reservation:
+    amount: float
+    released: bool = False
 
 
 def estimate_cost(model: str, input_tokens: int, output_tokens: int, batch: bool = False) -> float:
@@ -53,6 +61,28 @@ def estimate_cost(model: str, input_tokens: int, output_tokens: int, batch: bool
         raise ValueError(f"no price entry for model {model!r} — add it to MODEL_PRICES") from None
     cost = (input_tokens * in_price + output_tokens * out_price) / 1_000_000
     return cost * BATCH_DISCOUNT if batch else cost
+
+
+def estimate_input_tokens(prompt_chars: int, image_pixels: int = 0) -> int:
+    """Conservative provider-neutral request size used for reservations."""
+    text_tokens = max(1, math.ceil(prompt_chars / 3))
+    image_tokens = math.ceil(max(0, image_pixels) / IMAGE_TOKEN_AREA)
+    return text_tokens + image_tokens
+
+
+def estimate_request_cost(
+    model: str,
+    prompt_chars: int,
+    output_tokens: int,
+    image_pixels: int = 0,
+    batch: bool = False,
+) -> float:
+    return estimate_cost(
+        model,
+        estimate_input_tokens(prompt_chars, image_pixels),
+        output_tokens,
+        batch=batch,
+    )
 
 
 @dataclass
@@ -70,10 +100,17 @@ class Ledger:
                 rec = json.loads(line)
                 self._calls += 1
                 self._cost += rec.get("cost_usd", 0.0)
+        self._billable_calls = sum(
+            1
+            for line in self.path.read_text().splitlines()
+            if not json.loads(line).get("cached", False)
+        ) if self.path.exists() else 0
         # budgets are per run: historic ledger spend is context, not quota
         self._run_cost_start = self._cost
         self._run_calls_start = self._calls
+        self._run_billable_calls_start = self._billable_calls
         self._reserved = 0.0  # cost estimat al apelurilor în zbor
+        self._reserved_calls = 0
         self._lock = threading.Lock()
 
     @property
@@ -88,6 +125,17 @@ class Ledger:
     def run_cost_usd(self) -> float:
         return self._cost - self._run_cost_start
 
+    @property
+    def remaining_cost_usd(self) -> float:
+        with self._lock:
+            return max(0.0, self.max_cost_usd - self.run_cost_usd - self._reserved)
+
+    @property
+    def remaining_calls(self) -> int:
+        with self._lock:
+            run_calls = self._billable_calls - self._run_billable_calls_start
+            return max(0, self.max_calls - run_calls - self._reserved_calls)
+
     def check_budget(self) -> None:
         """Call before each LLM request. Aborts LLM passes, never the pipeline."""
         if self.run_cost_usd + self._reserved >= self.max_cost_usd:
@@ -96,12 +144,12 @@ class Ledger:
                 f"${self._reserved:.2f} in flight >= ${self.max_cost_usd:.2f} "
                 "(raise with --max-llm-cost)"
             )
-        run_calls = self._calls - self._run_calls_start
+        run_calls = self._billable_calls - self._run_billable_calls_start
         if run_calls >= self.max_calls:
             raise BudgetExceeded(f"LLM call limit reached: {run_calls} >= {self.max_calls}")
 
     def reserve(self, model: str, input_tokens_est: int, output_tokens_est: int,
-                batch: bool = False) -> float:
+                batch: bool = False) -> Reservation:
         """Hold the worst-case cost of an in-flight call against the budget.
 
         Concurrent large calls used to overshoot the cap by several dollars
@@ -110,6 +158,12 @@ class Ledger:
         est = estimate_cost(model, input_tokens_est, output_tokens_est, batch)
         with self._lock:
             spent = self._cost - self._run_cost_start
+            run_calls = self._billable_calls - self._run_billable_calls_start
+            if run_calls + self._reserved_calls >= self.max_calls:
+                raise BudgetExceeded(
+                    f"LLM call limit would be exceeded: {run_calls} settled + "
+                    f"{self._reserved_calls} in flight >= {self.max_calls}"
+                )
             if spent + self._reserved + est > self.max_cost_usd:
                 raise BudgetExceeded(
                     f"LLM budget would be exceeded: ${spent:.2f} spent + "
@@ -117,11 +171,16 @@ class Ledger:
                     f"${self.max_cost_usd:.2f}"
                 )
             self._reserved += est
-        return est
+            self._reserved_calls += 1
+        return Reservation(est)
 
-    def release(self, reserved: float) -> None:
+    def release(self, reserved: Reservation) -> None:
         with self._lock:
-            self._reserved = max(0.0, self._reserved - reserved)
+            if reserved.released:
+                return
+            reserved.released = True
+            self._reserved = max(0.0, self._reserved - reserved.amount)
+            self._reserved_calls = max(0, self._reserved_calls - 1)
 
     def record(
         self,
@@ -155,6 +214,7 @@ class Ledger:
             with self.path.open("a") as f:
                 f.write(json.dumps(rec) + "\n")
             self._calls += 1
+            self._billable_calls += int(not cached)
             self._cost += cost
         return cost
 

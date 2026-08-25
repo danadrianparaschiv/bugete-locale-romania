@@ -1,6 +1,12 @@
 import pytest
 
-from bgconvertor.llm.ledger import BudgetExceeded, Ledger, estimate_cost
+from bgconvertor.llm.ledger import (
+    BudgetExceeded,
+    Ledger,
+    estimate_cost,
+    estimate_input_tokens,
+    estimate_request_cost,
+)
 
 
 def test_estimate_cost():
@@ -42,7 +48,37 @@ def test_call_limit_enforced(tmp_path):
 
 
 def test_cached_call_costs_nothing(tmp_path):
-    led = Ledger(path=tmp_path / "l.jsonl", max_cost_usd=1.0, max_calls=10)
+    path = tmp_path / "l.jsonl"
+    led = Ledger(path=path, max_cost_usd=1.0, max_calls=1)
     cost = led.record("repair", "claude-sonnet-5", 5000, 5000, cached=True)
     assert cost == 0.0
     assert led.total_cost_usd == 0.0
+    assert led.remaining_calls == 1
+    led.reserve("claude-sonnet-5", 1, 1)
+
+    reloaded = Ledger(path=path, max_cost_usd=1.0, max_calls=1)
+    assert reloaded.remaining_calls == 1
+
+
+def test_request_estimate_accounts_for_image_area():
+    text_only = estimate_input_tokens(300, 0)
+    with_image = estimate_input_tokens(300, 1_500_000)
+    assert text_only == 100
+    assert with_image == 2100
+    assert estimate_request_cost(
+        "claude-sonnet-5", 300, 1000, image_pixels=1_500_000
+    ) == pytest.approx(estimate_cost("claude-sonnet-5", 2100, 1000))
+
+
+def test_remaining_budget_and_call_slots_include_in_flight_reservations(tmp_path):
+    led = Ledger(path=tmp_path / "l.jsonl", max_cost_usd=1.0, max_calls=1)
+    reservation = led.reserve("claude-sonnet-5", 1000, 1000)
+    assert led.remaining_cost_usd < 1.0
+    assert led.remaining_calls == 0
+    with pytest.raises(BudgetExceeded, match="call limit would be exceeded"):
+        led.reserve("claude-sonnet-5", 1, 1)
+    led.release(reservation)
+    assert led.remaining_cost_usd == pytest.approx(1.0)
+    assert led.remaining_calls == 1
+    led.release(reservation)  # idempotent; cannot release another call's slot
+    assert led.remaining_calls == 1

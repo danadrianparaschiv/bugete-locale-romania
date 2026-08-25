@@ -230,6 +230,17 @@ def _guess_layout(lines: list[dict], text: str) -> str:
     if "credite_restante" in cols:
         return "scan_detail_economic"
     if {"est2027", "est2028", "est2029"} & cols:
+        numbered = sum(ln.get("row_no") is not None for ln in lines)
+        revenue_like = sum(
+            1
+            for ln in lines
+            if ln.get("code")
+            and ln["code"].split(".", 1)[0].isdigit()
+            and int(ln["code"].split(".", 1)[0]) <= 48
+        )
+        code_count = sum(bool(ln.get("code")) for ln in lines)
+        if numbered >= len(lines) / 2 and revenue_like >= code_count * 0.8:
+            return "scan_revenue_detail"
         return "scan_simple_table"
     # a table with data but essentially no indicator codes is an annex
     # (procurement lists, per-institution allocations, personnel tables) —

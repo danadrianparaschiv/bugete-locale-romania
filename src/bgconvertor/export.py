@@ -6,12 +6,13 @@ sheet listing every Issue, and a 'Sumar calitate' scorecard.
 
 from __future__ import annotations
 
+import math
 import os
 import tempfile
 from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill
+from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from .model import BudgetDocument, ConversionResult
@@ -20,6 +21,7 @@ from .model import BudgetDocument, ConversionResult
 COLUMN_LABELS = [
     ("total", "TOTAL 2026"),
     ("total_2026", "TOTAL 2026"),
+    ("buget_2026", "Buget 2026"),
     ("credite_stinse", "Credite stingere plati"),
     ("credite_restante", "Credite plati restante"),
     ("trim1", "Trim. I"),
@@ -143,15 +145,20 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
         _append_values(ws, row)
 
         excel_row = ws.max_row
+        name_cell = ws.cell(row=excel_row, column=3)
+        name_cell.alignment = Alignment(wrap_text=True, vertical="top")
+        wrapped_lines = min(5, max(1, math.ceil(len(ln.name) / 60)))
+        if wrapped_lines > 1:
+            ws.row_dimensions[excel_row].height = 15 * wrapped_lines
         if ln.kind == "heading":
-            ws.cell(row=excel_row, column=3).font = SECTION_FONT
+            name_cell.font = SECTION_FONT
         severities = {i.severity for i in ln.issues}
         fill = ERROR_FILL if "error" in severities else WARN_FILL if "warning" in severities else None
         if fill:
             for c in range(1, len(headers) + 1):
                 ws.cell(row=excel_row, column=c).fill = fill
 
-    widths = [12, 12, 60, 6, 6, 18] + [14] * len(value_columns) + [8, 50]
+    widths = [12, 12, 70, 6, 6, 18] + [14] * len(value_columns) + [8, 50]
     for i, w in enumerate(widths, 1):
         ws.column_dimensions[get_column_letter(i)].width = w
     for row in ws.iter_rows(min_row=2, min_col=7, max_col=6 + len(value_columns)):

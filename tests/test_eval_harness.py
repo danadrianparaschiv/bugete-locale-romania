@@ -28,6 +28,26 @@ def test_all_committed_fixtures_are_valid():
     # every fixture asserts something
     for f in fixtures:
         assert f.anchors or f.text_contains, f.id
+    alba_digital = next(f for f in fixtures if f.id == "ab_p001")
+    assert sum(
+        len(row.values)
+        for group in alba_digital.cell_ground_truth
+        for row in group.rows
+    ) == 180
+    arad_matrix = next(f for f in fixtures if f.id == "ar_p001")
+    assert sum(
+        len(row.values)
+        for group in arad_matrix.cell_ground_truth
+        for row in group.rows
+    ) == 232
+    assert arad_matrix.source_grid
+    bistrita_transposed = next(f for f in fixtures if f.id == "bn_p002")
+    assert sum(
+        len(row.values)
+        for group in bistrita_transposed.cell_ground_truth
+        for row in group.rows
+    ) == 216
+    assert bistrita_transposed.source_grid
     institution = next(f for f in fixtures if f.id == "ar_p301")
     assert sum(len(group.cells) for group in institution.cell_ground_truth) == 51
     assert institution.source_grid
@@ -59,6 +79,14 @@ def test_all_committed_fixtures_are_valid():
         for row in group.rows
     ) == 62
     assert pitesti_investment.source_grid
+    arad_revenue = next(f for f in fixtures if f.id == "ar_p031")
+    assert sum(
+        len(row.values)
+        for group in arad_revenue.cell_ground_truth
+        for row in group.rows
+    ) == 73
+    assert sum(anchor.value == "X" for anchor in arad_revenue.anchors) == 15
+    assert arad_revenue.source_grid
     # hazard coverage for the hard cases
     all_hazards = {h for f in fixtures for h in f.hazards}
     assert "rotated_90_in_image" in all_hazards

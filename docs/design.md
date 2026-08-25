@@ -98,6 +98,21 @@ modul Batch API înjumătățește costul pentru rulările nesupravegheate;
 recitirile pentru repararea sumelor decupează imaginea la grupul de rânduri
 atunci când sunt disponibile bounding box-uri.
 
+P2 adaugă două niveluri distincte de control. Plannerul moale ordonează la
+nivelul întregului fișier fallback-urile, grupurile aritmetice și recitirile
+neconfirmate după beneficiul estimat per dolar și scrie decizia în
+`llm_plan.json`. Ledgerul este autoritatea dură: rezervă worst-case costul și
+un slot înainte de fiecare cerere, inclusiv retry și Batch, astfel încât
+apelurile concurente să nu depășească plafonul. Cache hits nu consumă sloturi
+API. Grupurile confirmabile aritmetic primesc prioritate; transcrierile fără o
+identitate independentă rămân marcate `unverified`.
+
+Fallback-ul de pagină folosește schema completă cunoscută a layoutului, până
+la 12 coloane, și o limită de output adaptată volumului. Orice coloană pe care
+modelul o inventează în afara cererii este respinsă și semnalată, nu introdusă
+în date. Pentru artefactele corpusului, CLI refuză în continuare un plafon mai
+mare de 5 USD/PDF.
+
 ## Rezultate negative măsurate (păstrate intenționat)
 
 - Straturile de text încorporate din PDF-urile de copiator păreau
