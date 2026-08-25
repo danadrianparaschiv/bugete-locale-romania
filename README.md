@@ -150,7 +150,9 @@ comparații pe site. Fiecare municipiu-an păstrează intrările extrase,
 augmentările și indicatorii derivați în câmpuri distincte; intrările
 necomparabile rămân vizibile cu motivul excluderii. Populația folosită drept
 numitor este cohorta unică RPL2021 INS, asociată prin SIRUTA. Contractul și
-limitele sunt în [docs/analytics.md](docs/analytics.md).
+limitele sunt în [docs/analytics.md](docs/analytics.md). Toate tabelele din
+site pot fi sortate crescător sau descrescător după fiecare coloană, inclusiv
+după valori numerice și date.
 
 ## Corpusul
 

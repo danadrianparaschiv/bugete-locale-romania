@@ -179,6 +179,16 @@ def test_incomplete_pdf_cannot_be_published(tmp_path):
     assert not pdf.with_name("analysis.json").exists()
 
 
+def test_own_revenue_annex_cannot_be_published_as_main_budget(tmp_path):
+    _, pdf, manifest = _tree(tmp_path)
+    result = _result()
+    result.documents[0].suffix = "10"
+    with pytest.raises(ValueError, match=r"suffix \.02"):
+        publish_corpus_result(result, pdf, pdf.with_suffix(".xlsx"), manifest)
+    assert not pdf.with_suffix(".xlsx").exists()
+    assert not pdf.with_name("analysis.json").exists()
+
+
 def test_public_bundle_enforces_five_dollar_external_cost_cap(tmp_path):
     _, pdf, manifest = _tree(tmp_path)
     with pytest.raises(ValueError, match=r"\$5\.00"):

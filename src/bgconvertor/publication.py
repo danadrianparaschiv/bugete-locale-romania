@@ -111,6 +111,11 @@ def publish_corpus_result(
     stats = result.stats()
     if not stats["scope"]["complete_pdf"]:
         raise ValueError("public corpus publication requires a complete-PDF conversion")
+    if not any(document.suffix == "02" for document in result.documents):
+        raise ValueError(
+            "public corpus publication requires a main local-budget document "
+            "with suffix .02"
+        )
     if not 0 <= llm_cost_usd <= MAX_PUBLIC_LLM_COST_USD:
         raise ValueError(
             f"public LLM cost must be between $0 and ${MAX_PUBLIC_LLM_COST_USD:.2f}"

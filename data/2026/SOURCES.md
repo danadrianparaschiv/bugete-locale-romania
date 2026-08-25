@@ -1,8 +1,9 @@
 # Sursele oficiale ale bugetelor 2026
 
-Data auditului surselor: 2026-08-20. „Negăsit" înseamnă că la data
-auditului nu a fost localizat un PDF municipal oficial potrivit; nu
-înseamnă că nu a fost adoptat un buget.
+Data auditului surselor: 2026-08-20; sursa Târgoviște a fost corectată și
+reverificată la 2026-08-25. „Negăsit" înseamnă că la data auditului nu a fost
+localizat un PDF municipal oficial potrivit; nu înseamnă că nu a fost adoptat
+un buget.
 
 | Județ | Municipiu | URL sursă |
 | --- | --- | --- |
@@ -21,7 +22,7 @@ auditului nu a fost localizat un PDF municipal oficial potrivit; nu
 | Cluj | Cluj-Napoca | [PDF oficial](https://files.primariaclujnapoca.ro/hotarare_consiliu/2026/04/28/149.pdf) |
 | Constanța | Constanța | [PDF oficial](https://primaria-constanta.ro/wp-content/uploads/custom-folders/Buget-pe-surse-financiare/18.-Buget-Municipal-2026.pdf) |
 | Covasna | Sfântu Gheorghe | [PDF oficial](https://sfantugheorgheinfo.ro/uploads/buget-local-initial-1784098056.pdf) |
-| Dâmbovița | Târgoviște | [PDF oficial](https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_2.pdf) |
+| Dâmbovița | Târgoviște | [PDF oficial — Anexa 1, buget local detaliat](https://pmtgv.ro/MonitorPMT/Hotarari/2026/HCL_149/ANEXA_1.pdf) |
 | Dolj | Craiova | [PDF oficial](https://www.primariacraiova.ro/uploads/articole/attachments/69f8a1e16727b145115871.pdf) |
 | Galați | Galați | [PDF oficial](https://www.primariagalati.ro/dm_galati/hotarari.nsf/0CE0F4F9E3F36239C2258E29002B4119/$FILE/HCL_267.pdf) |
 | Giurgiu | Giurgiu | [PDF oficial](https://primariagiurgiu.ro/storage/formidable/340/BVC-2026.pdf) |

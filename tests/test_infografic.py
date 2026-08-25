@@ -72,6 +72,34 @@ def test_top_capitole_excludes_aggregates():
     assert a["infografic"] is not None
 
 
+def test_own_revenue_annex_is_not_published_as_city_headline():
+    """A valid .10 annex is not the municipality-wide local budget."""
+    r = _result()
+    r.documents[0].suffix = "10"
+    for ln in r.documents[0].lines:
+        ln.code = ln.code.replace(".02", ".10")
+    a = city_analysis(r)
+    assert a["totals_mii_lei"] == {"venituri": None, "cheltuieli": None}
+    assert a["top_capitole"] == []
+    assert a["infografic"] is None
+
+
+def test_own_revenue_annex_cannot_override_local_budget_headline():
+    """A larger supplementary annex cannot replace figures from suffix .02."""
+    r = _result()
+    own_revenue = _result().documents[0]
+    own_revenue.suffix = "10"
+    for ln in own_revenue.lines:
+        ln.code = ln.code.replace(".02", ".10")
+        ln.values = {key: value * 100 for key, value in ln.values.items()}
+    r.documents.append(own_revenue)
+
+    a = city_analysis(r)
+    assert a["totals_mii_lei"] == {"venituri": 1000.0, "cheltuieli": 1000.0}
+    assert [cap["code"] for cap in a["top_capitole"]] == ["65.02", "84.02"]
+    assert a["infografic"]["total_cheltuieli"] == 1000.0
+
+
 def test_infografic_without_sections():
     """Most scanned budgets carry no FUNCTIONARE/DEZVOLTARE split: section is
     None everywhere. None counts as TOTAL; the split blocks are simply absent."""
@@ -106,6 +134,14 @@ def test_is_total_venituri_accepts_every_spelling(raw, code, expected):
     from bgconvertor.analysis import _is_total_venituri
     ln = BudgetLine(code=code, raw_code=raw, name="TOTAL VENITURI", kind="revenue", page=1)
     assert _is_total_venituri(ln) is expected
+
+
+def test_clean_name_drops_pdf_generator_footer():
+    from bgconvertor.analysis import _clean_name
+
+    assert _clean_name(
+        "CAP. Autoritati publice © MINDSOFT-SICO - MUNICIPIUL TARGOVISTE"
+    ) == "Autoritati publice"
 
 
 @pytest.mark.parametrize("section,expected", [
