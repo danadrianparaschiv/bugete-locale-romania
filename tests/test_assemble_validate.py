@@ -3,6 +3,7 @@ integration test over the real digital PDF (skipped when absent)."""
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -36,6 +37,17 @@ def _line(raw_code, name, section=None, func=None, code=None, **values):
         "year": None,
         "values": {k: str(v) for k, v in values.items()},
     }
+
+
+def test_rectification_export_labels_distinguish_initial_and_rectified():
+    line = SimpleNamespace(
+        values={"buget_2026": 1, "influente": 2, "total_2026": 3},
+        x_markers=[],
+    )
+    columns = dict(_sheet_columns([line]))
+    assert columns["buget_2026"] == "Buget 2026 (initial)"
+    assert columns["influente"] == "Influente"
+    assert columns["total_2026"] == "Buget 2026 rectificat"
 
 
 @pytest.fixture
@@ -84,6 +96,40 @@ def test_assemble_repairs_truncated_func_prefix(tmp_path):
     })
     doc = assemble(store, [1])[0]
     assert doc.lines[-1].func_code == "50.02"
+
+
+def test_assemble_source_digit_completion_is_name_gated(tmp_path, registry):
+    """Bare codes are completed to <NN>.<suffix> only when the printed name
+    matches the official one (PMB drops the source digit document-wide).
+    Investment-list ordinals and form-internal row codes (Bacău '00',
+    Arad '96') look identical and must stay untouched — completing them
+    fabricates duplicate identities across the whole document."""
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA VENITURI SI CHELTUIELI",
+        "lines": [
+            _line("000102", "TOTAL VENITURI", total="10.00"),
+            # PMB style: source digit dropped, official names printed
+            _line("03", "Impozit pe venit", total="10.00"),
+            _line("30.05.30", "Alte venituri din concesiuni si inchirieri", total="1.00"),
+            # Arad form rows: '96' is the form's internal section code
+            _line("96", "VENITURILE SECTIUNII DE FUNCTIONARE", total="10.00"),
+        ],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "layout": "investment_list",
+        "lines": [
+            # Bacău: 'Nr. crt.' ordinal of an investment item, not a code
+            _line("12", "Amenajare spatiu comunitar, str. Progresului", total="20.00"),
+        ],
+    })
+    doc = assemble(store, [1, 2], registry)[0]
+    by_raw = {ln.raw_code: ln for ln in doc.lines}
+    assert by_raw["03"].code == "03.02"          # name matches -> completed
+    assert by_raw["30.05.30"].code == "30.02.05.30"
+    assert by_raw["96"].code == "96"             # name mismatch -> untouched
+    assert by_raw["12"].code == "12"             # out-of-scope annex -> untouched
 
 
 def test_validate_v1_unknown_code(tmp_path, registry):

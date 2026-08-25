@@ -31,9 +31,19 @@ COLUMN_LABELS = [
     ("est2027", "Estimare 2027"),
     ("est2028", "Estimare 2028"),
     ("est2029", "Estimare 2029"),
+    ("influente", "Influente"),
     ("valoare_an_curent", "Valoare an curent"),
     ("buget_local", "Buget local"),
     ("buget_local_pct", "% Buget local"),
+    ("bugetul_local", "Bugetul local"),
+    ("inst_venituri_proprii_subventii", "Inst. venituri proprii si subventii"),
+    ("inst_integral_venituri_proprii", "Inst. integral venituri proprii"),
+    ("imprumuturi", "Imprumuturi"),
+    ("imprumuturi_externe", "Imprumuturi externe"),
+    ("imprumuturi_interne", "Imprumuturi interne"),
+    ("fonduri_externe", "Fonduri externe nerambursabile"),
+    ("transferuri", "Transferuri intre bugete"),
+    ("total_general", "Total buget general"),
     ("credite_externe", "Credite externe"),
     ("credite_externe_pct", "% Credite externe"),
     ("credite_interne", "Credite interne"),
@@ -48,7 +58,13 @@ _LABELS = dict(COLUMN_LABELS)
 def _sheet_columns(lines) -> list[tuple[str, str]]:
     present = {c for ln in lines for c in (*ln.values, *ln.x_markers)}
     ordered = sorted(present, key=lambda c: _ORDER.get(c, 99))
-    return [(c, _LABELS.get(c, c)) for c in ordered]
+    labels = dict(_LABELS)
+    if "influente" in present:
+        # In a rectification annex, distinguish the two 2026 columns without
+        # relabeling ordinary annual-budget sheets as "initial".
+        labels["buget_2026"] = "Buget 2026 (initial)"
+        labels["total_2026"] = "Buget 2026 rectificat"
+    return [(c, labels.get(c, c)) for c in ordered]
 
 HEADER_FILL = PatternFill("solid", fgColor="1F4E79")
 HEADER_FONT = Font(color="FFFFFF", bold=True)

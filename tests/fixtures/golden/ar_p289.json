@@ -1,0 +1,57 @@
+{
+  "id": "ar_p289",
+  "pdf": "data/2026/02-arad/9262-arad/budget_file.pdf",
+  "page": 289,
+  "layout": "scan_table_other",
+  "budget": "own_revenue",
+  "source_type": "scanned",
+  "hazards": [
+    "form_section_rows_print_internal_codes_96_97"
+  ],
+  "columns": ["buget_2026"],
+  "anchors": [
+    {
+      "raw_code": "96",
+      "code": "96",
+      "column": "buget_2026",
+      "value": "4211.00",
+      "name_contains": "VENITURILE SECTIUNII DE FUNCTIONARE"
+    },
+    {
+      "raw_code": "65.10",
+      "code": "65.10",
+      "column": "buget_2026",
+      "value": "5681.00",
+      "name_contains": "TOTAL CHELTUIELI"
+    },
+    {
+      "raw_code": "30.10.05.30",
+      "code": "30.10.05.30",
+      "column": "buget_2026",
+      "value": "356.00"
+    },
+    {
+      "raw_code": "33.10.16",
+      "code": "33.10.16",
+      "column": "buget_2026",
+      "value": "232.00"
+    },
+    {
+      "raw_code": "33.10.19",
+      "code": "33.10.19",
+      "column": "buget_2026",
+      "value": "22.00"
+    },
+    {
+      "raw_code": "20.30",
+      "code": "20.30",
+      "column": "buget_2026",
+      "value": "761.00",
+      "name_contains": "Alte cheltuieli"
+    }
+  ],
+  "text_contains": [
+    "Capitolul 65.10"
+  ],
+  "notes": "Anexa 2A Arad, capitolul 65.10 Invatamant (venituri proprii, mii lei): randurile de sectiune ale formularului tiparesc codurile interne '96' (functionare) si '97' (dezvoltare) in coloana 'Cod indicator'. Acestea NU sunt coduri bugetare — asamblarea nu are voie sa le completeze la '96.10' (regresia v30 producea 75 de dubluri '96.10'). Ancorele verificate manual din PDF p289."
+}

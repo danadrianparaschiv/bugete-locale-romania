@@ -79,7 +79,8 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    extract_version: str = "42"  # matrix/transposed boundary recovery + exhaustive family gates
+    # v43 combines the exhaustive P1 family gates with Formular 11/rectification.
+    extract_version: str = "43"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

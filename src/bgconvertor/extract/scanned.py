@@ -225,6 +225,8 @@ def _guess_layout(lines: list[dict], text: str) -> str:
         return "allocations_annex"
     if "total_general" in cols:
         return "scan_general_matrix"
+    if "influente" in cols:
+        return "scan_rectification_detail"
     if {"trim1", "trim2", "trim3", "trim4"} <= cols and "total" in cols:
         return "scan_transposed_detail"
     if "credite_restante" in cols:

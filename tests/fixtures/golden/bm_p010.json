@@ -1,0 +1,117 @@
+{
+  "id": "bm_p010",
+  "pdf": "data/2026/26-maramures/106318-baia-mare/budget_file.pdf",
+  "page": 10,
+  "layout": "scan_rectification_detail",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": [
+    "codes_printed_under_cod_rand_header",
+    "rectificat_header_word_merged_into_first_data_cell",
+    "duplicate_codes_across_chapters",
+    "us_locale_numbers"
+  ],
+  "columns": [
+    "buget_2026",
+    "influente",
+    "total_2026"
+  ],
+  "anchors": [
+    {
+      "raw_code": "57.02",
+      "name_contains": "Ajutoare sociale",
+      "column": "buget_2026",
+      "value": "20842.00"
+    },
+    {
+      "raw_code": "57.02",
+      "column": "influente",
+      "value": "2605.00"
+    },
+    {
+      "raw_code": "57.02",
+      "column": "total_2026",
+      "value": "23447.00"
+    },
+    {
+      "raw_code": "57.02.01",
+      "name_contains": "Ajutoare sociale in numerar",
+      "column": "total_2026",
+      "value": "4899.00"
+    },
+    {
+      "raw_code": "57.02.03",
+      "column": "buget_2026",
+      "value": "90.00"
+    },
+    {
+      "raw_code": "57.02.05",
+      "name_contains": "Suport alimentar",
+      "column": "total_2026",
+      "value": "2605.00"
+    },
+    {
+      "raw_code": "66.02",
+      "name_contains": "Sanatate",
+      "column": "total_2026",
+      "value": "14457.00"
+    },
+    {
+      "raw_code": "67.02.05",
+      "name_contains": "Servicii recreative",
+      "column": "total_2026",
+      "value": "13686.50"
+    },
+    {
+      "raw_code": "67.02.05.01",
+      "name_contains": "Sport",
+      "column": "total_2026",
+      "value": "13186.50"
+    },
+    {
+      "raw_code": "68.02.15",
+      "name_contains": "Prevenirea excluderii sociale",
+      "column": "buget_2026",
+      "value": "5989.00"
+    },
+    {
+      "raw_code": "68.02.15.02",
+      "name_contains": "Cantine",
+      "column": "total_2026",
+      "value": "5184.00"
+    },
+    {
+      "raw_code": "70.02",
+      "name_contains": "Locuinte, servicii si dezvoltare publica",
+      "column": "total_2026",
+      "value": "35118.48"
+    },
+    {
+      "raw_code": "70.02.06",
+      "name_contains": "Iluminat public",
+      "column": "total_2026",
+      "value": "10874.93"
+    },
+    {
+      "raw_code": "74.02",
+      "name_contains": "Protectia mediului",
+      "column": "buget_2026",
+      "value": "57450.61"
+    },
+    {
+      "raw_code": "74.02",
+      "column": "total_2026",
+      "value": "57450.61",
+      "hard": true
+    },
+    {
+      "raw_code": "55.01.65",
+      "name_contains": "Fondul IID-Vital",
+      "column": "total_2026",
+      "value": "5288.98",
+      "hard": true
+    }
+  ],
+  "text_contains": [],
+  "notes": "Rectification detail annex: Denumire | COD RAND (holds real indicator codes) | Buget 2026 | Influente | Buget rectificat. Rectificat maps to total_2026, the pre-rectification column to buget_2026. Cross-checks: 57.02 rectificat = initial + influente (20842.00+2605.00 = 23447.00); 68.02.15 = 805.00+5184.00 = 5989.00; 67.02.05 = 13186.50+500.00 = 13686.50. Hard cells: docling smears the bottom rows' rectificat column (74.02's value lands one row up, 55.01.65 inherits a neighbour's 11794.00) — sum checks flag both for repair."
+}

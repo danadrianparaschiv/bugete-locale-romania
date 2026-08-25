@@ -276,16 +276,28 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                     with_suffix = f"{m2.group(1)}.{doc.suffix}.{m2.group(2)}"
                     if registry.exists(with_suffix):
                         line.code = with_suffix
-                elif not registry.exists(line.code):
+                elif not registry.exists(line.code) and not out_of_scope:
                     # source digit dropped entirely (PMB): 67.03.04 -> 67.02.03.04,
                     # bare capitol 67 -> 67.02 — adopt only if the completed code
-                    # exists in the nomenclator
+                    # has a nomenclator entry whose official name matches the
+                    # printed one: investment-list ordinals and row-number
+                    # artifacts (Bacău, Arad) look exactly like bare codes
                     m3 = re.match(r"^(\d{2})\.(\d{2}(?:\.\d{2})?)$|^(\d{2})$", line.code)
                     if m3:
                         cand = (f"{m3.group(1)}.{doc.suffix}.{m3.group(2)}"
                                 if m3.group(1) else f"{m3.group(3)}.{doc.suffix}")
-                        if registry.exists(cand):
-                            line.code = cand
+                        ent = next(
+                            (e for k in KIND_ORDER
+                             if (e := registry.get(k, cand)) is not None), None,
+                        )
+                        if ent is not None:
+                            from rapidfuzz import fuzz
+
+                            from .validate import FORMULA_RE, _fold
+
+                            printed = _fold(FORMULA_RE.sub("", line.name)).strip()
+                            if fuzz.token_set_ratio(printed, _fold(ent.name)) >= 60:
+                                line.code = cand
 
             # registry-driven kind for any line whose code lacks explicit
             # functional context (scans, and digital vendors that print bare

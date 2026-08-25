@@ -1,0 +1,59 @@
+{
+  "id": "bc_p010",
+  "pdf": "data/2026/04-bacau/20297-bacau/budget_file.pdf",
+  "page": 10,
+  "layout": "scan_detail_economic",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": [
+    "capitol_total_row_prints_bare_00",
+    "bare_titlu_codes_without_source_digit_context"
+  ],
+  "columns": ["total_2026", "credite_restante", "trim1", "trim2", "trim3", "trim4"],
+  "anchors": [
+    {
+      "raw_code": "50.02",
+      "code": "50.02",
+      "column": "total_2026",
+      "value": "95542.00",
+      "name_contains": "SERVICII PUBLICE GENERALE"
+    },
+    {
+      "raw_code": "51.02",
+      "code": "51.02",
+      "column": "total_2026",
+      "value": "64840.00",
+      "name_contains": "Autoritati publice"
+    },
+    {
+      "raw_code": "00",
+      "code": "00",
+      "column": "total_2026",
+      "value": "64840.00",
+      "name_contains": "TOTAL CHELTUIELI"
+    },
+    {
+      "raw_code": "10",
+      "code": "10",
+      "column": "total_2026",
+      "value": "41400.00",
+      "name_contains": "TITLUL I"
+    },
+    {
+      "raw_code": "10.01.01",
+      "code": "10.01.01",
+      "column": "total_2026",
+      "value": "38595.00",
+      "name_contains": "Salarii de baza"
+    },
+    {
+      "raw_code": "20.01.09",
+      "code": "20.01.09",
+      "column": "total_2026",
+      "value": "13.00",
+      "name_contains": "Materiale si prestari"
+    }
+  ],
+  "text_contains": [],
+  "notes": "Formular per-capitol Bacau (copiator): sub randul de capitol (51.02), totalul capitolului se retipareste cu codul '00' si titlurile economice apar fara cifra de sursa ('10', '20'). '00' NU este un cod bugetar — asamblarea nu are voie sa-l completeze la '00.02' (regresia v30: 'source digit dropped' rescria si aceste artefacte). Ancorele verificate manual din PDF p10 (8/25, Autoritati publice)."
+}

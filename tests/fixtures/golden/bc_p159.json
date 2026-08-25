@@ -1,0 +1,31 @@
+{
+  "id": "bc_p159",
+  "pdf": "data/2026/04-bacau/20297-bacau/budget_file.pdf",
+  "page": 159,
+  "layout": "investment_list",
+  "budget": "local",
+  "source_type": "scanned",
+  "hazards": [
+    "investment_ordinals_look_like_bare_capitol_codes"
+  ],
+  "columns": ["total_2026"],
+  "anchors": [
+    {
+      "raw_code": "23",
+      "code": "23",
+      "name_contains": "Reabilitare si modernizare locuri de joaca"
+    },
+    {
+      "raw_code": "31",
+      "code": "31",
+      "name_contains": "Amenajare grupuri sanitare Gradinita nr. 25"
+    },
+    {
+      "raw_code": "33",
+      "code": "33",
+      "name_contains": "KarpenHub"
+    }
+  ],
+  "text_contains": [],
+  "notes": "Lista de investitii Bacau (Pagina 4 a anexei): coloana 'Nr. crt.' produce coduri brute '23', '31', '33' care arata exact ca niste capitole fara cifra de sursa. Ele raman ordinale — asamblarea nu are voie sa le completeze la '23.02' etc. (regresia v30). Ancore de prezenta (randul exista, cu numele proiectului), fara valori: anexa e in afara nomenclatorului bugetar."
+}
