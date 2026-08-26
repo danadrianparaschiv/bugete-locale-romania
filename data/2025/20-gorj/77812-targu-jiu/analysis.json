@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1494,
-    "lines_strictly_verified": 945,
-    "pct_lines_strictly_verified": 63.3,
-    "numeric_cells": 3663,
-    "numeric_cells_strictly_verified": 2392,
-    "pct_numeric_cells_strictly_verified": 65.3,
+    "lines": 2169,
+    "lines_strictly_verified": 1619,
+    "pct_lines_strictly_verified": 74.6,
+    "numeric_cells": 7305,
+    "numeric_cells_strictly_verified": 5894,
+    "pct_numeric_cells_strictly_verified": 80.7,
     "scope": {
       "pages_expected": 136,
       "pages_selected": 136,
       "pages_processed": 136,
       "complete_pdf": true
     },
-    "pct_clean": 63.3,
-    "errors": 580,
-    "warnings": 385,
-    "info": 0,
+    "pct_clean": 74.6,
+    "errors": 481,
+    "warnings": 393,
+    "info": 1,
     "documents": 8
   },
   "llm_models": [
@@ -33,7 +33,7 @@
     {
       "code": "70.02",
       "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
-      "total": 258718.27
+      "total": 276041.71
     },
     {
       "code": "65.02",
@@ -46,19 +46,19 @@
       "total": 103466.85
     },
     {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 59638.41
+    },
+    {
       "code": "68.02",
       "name": "ASIGURARI SI ASISTENTA SOCIALA",
-      "total": 58849.2
+      "total": 58979.7
     },
     {
       "code": "51.02",
       "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
       "total": 52664.23
-    },
-    {
-      "code": "67.02",
-      "name": "CULTURA, RECREERE SI RELIGIE",
-      "total": 39626.67
     },
     {
       "code": "74.02",
@@ -71,21 +71,21 @@
       "total": 23523.58
     },
     {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 18760.33
+    },
+    {
       "code": "66.02",
       "name": "SANATATE",
       "total": 12924.54
-    },
-    {
-      "code": "65.10",
-      "name": "INVATAMANT",
-      "total": 5984.4
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1fe55518d6989355aab8e5d0",
+    "bundle_id": "879fdfcb64532ff489c79cc7",
     "source_pdf_sha256": "aefbb2cdeb7c964bf7a204be63ba871ef88551f4938088008a8908f28be711dc"
   }
 }

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 
+from ..years import years_in
 from .common import fold, mk_line, parse_cell, split_header
 
 DETAIL_COLUMNS = (
@@ -149,10 +150,9 @@ def try_map(grid: list[list[str]]) -> list[dict] | None:
         return None
     header_rows, first_data = split_header(grid)
     header = fold(" ".join(cell for index in header_rows for cell in grid[index]))
-    if not all(
-        marker in header
-        for marker in ("denumirea indicatorilor", "bugetare", "estimari", "2029")
-    ):
+    if not all(marker in header for marker in ("denumirea indicatorilor", "bugetare", "estimari")):
+        return None
+    if len(years_in(header)) < 3:
         return None
 
     codes: list[str | None] = []

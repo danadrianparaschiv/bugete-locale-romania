@@ -125,6 +125,11 @@ class TestUSFormatOCR:
         with _pytest.raises(NumberParseError):
             parse_ro_number("15,000.00 / 0.00", ocr=True)  # dual cell stays flagged
 
+    def test_numeric_column_ocr_digit_lookalikes(self):
+        assert parse_ro_number("G9.720.000", ocr=True) == Decimal("69720000")
+        assert parse_ro_number("1O5.000", ocr=True) == Decimal("105000")
+        assert parse_ro_number("69,600.000", ocr=True) == Decimal("69600000")
+
 
 def test_source_letter_suffix_stripped():
     from bgconvertor.parsing import normalize_indicator_code

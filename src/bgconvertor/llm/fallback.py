@@ -13,6 +13,8 @@ import logging
 
 from pydantic import BaseModel, Field
 
+from ..years import remap_role, role_year
+
 log = logging.getLogger("bgc.llm.fallback")
 
 COLUMN_ORDER = (
@@ -54,6 +56,7 @@ LAYOUT_COLUMNS = {
     ),
     "scan_revenue_detail": ("buget_2026", "est2027", "est2028", "est2029"),
     "scan_expense_chapter": ("buget_2026", "credite_restante"),
+    "scan_annual_total": ("total_2026",),
 }
 
 
@@ -117,12 +120,30 @@ def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> 
         for issue in line.get("cell_issues", [])
         if issue.get("column")
     )
-    observed.update(LAYOUT_COLUMNS.get(payload.get("layout"), ()))
+    budget_year = payload.get("budget_year")
+    observed.update(
+        remap_role(column, budget_year)
+        for column in LAYOUT_COLUMNS.get(payload.get("layout"), ())
+    )
     if not observed:
         observed.update((corpus_columns or [])[:9])
-    ordered = [column for column in COLUMN_ORDER if column in observed]
+    # Fixed semantic columns retain their historical order. Dynamic annual
+    # and forecast columns follow chronologically, so a 2025 document asks
+    # the provider for buget_2025, est2026..est2028 rather than 2026 labels.
+    static_order = [column for column in COLUMN_ORDER if role_year(column) is None]
+    ordered = [column for column in static_order if column in observed]
+    annual = sorted(
+        (column for column in observed if column.startswith(("total_", "buget_"))),
+        key=lambda column: (role_year(column) or 0, column),
+    )
+    forecasts = sorted(
+        (column for column in observed if column.startswith("est") and role_year(column)),
+        key=lambda column: role_year(column) or 0,
+    )
+    ordered.extend(column for column in annual + forecasts if column not in ordered)
     ordered.extend(sorted(observed - set(ordered)))
-    return ordered[:12] or ["buget_2026"]
+    default = f"buget_{budget_year}" if budget_year else "buget_2026"
+    return ordered[:12] or [default]
 
 
 def fallback_max_tokens(payload: dict, n_columns: int) -> int:

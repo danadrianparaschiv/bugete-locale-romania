@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 2046,
     "lines_strictly_verified": 2046,
     "pct_lines_strictly_verified": 100.0,
-    "numeric_cells": 18414,
-    "numeric_cells_strictly_verified": 18414,
+    "numeric_cells": 18873,
+    "numeric_cells_strictly_verified": 18873,
     "pct_numeric_cells_strictly_verified": 100.0,
     "scope": {
       "pages_expected": 70,
@@ -30,53 +30,53 @@
   "top_capitole": [
     {
       "code": "84.02",
-      "name": "CAP. Transporturi",
+      "name": "Transporturi",
       "total": 191507.05
     },
     {
       "code": "70.02",
-      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 159535.93
     },
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
+      "name": "Invatamant",
       "total": 96572.75
     },
     {
       "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie",
+      "name": "Cultura, recreere si religie",
       "total": 67833.99
     },
     {
       "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
+      "name": "Asigurari si asistenta sociala",
       "total": 59185.85
     },
     {
       "code": "51.02",
-      "name": "CAP. Autoritati publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 29691.96
     },
     {
-      "code": "67.10",
-      "name": "CAP. Cultura, recreere si religie",
-      "total": 28916.54
-    },
-    {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 13354.84
     },
     {
       "code": "74.02",
-      "name": "CAP. Protectia mediului",
+      "name": "Protectia mediului",
       "total": 9721.39
     },
     {
       "code": "55.02",
-      "name": "CAP. Tranzactii privind datoria publica si imprumuturi",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 8500.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 7600.0
     }
   ],
   "infografic": {
@@ -439,7 +439,7 @@
             "val": 2514.0
           },
           {
-            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale © MINDSOFT",
+            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
             "val": 50.0
           }
         ],
@@ -497,6 +497,12 @@
       ]
     },
     "ani": {
+      "years": [
+        2026,
+        2027,
+        2028,
+        2029
+      ],
       "cheltuieli": [
         650517.76,
         364865.87,

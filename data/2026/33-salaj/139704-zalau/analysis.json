@@ -1,59 +1,49 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1016,
-    "lines_strictly_verified": 475,
-    "pct_lines_strictly_verified": 46.8,
-    "numeric_cells": 1651,
-    "numeric_cells_strictly_verified": 904,
-    "pct_numeric_cells_strictly_verified": 54.8,
+    "lines": 1246,
+    "lines_strictly_verified": 767,
+    "pct_lines_strictly_verified": 61.6,
+    "numeric_cells": 2816,
+    "numeric_cells_strictly_verified": 2073,
+    "pct_numeric_cells_strictly_verified": 73.6,
     "scope": {
       "pages_expected": 79,
       "pages_selected": 79,
       "pages_processed": 79,
       "complete_pdf": true
     },
-    "pct_clean": 46.8,
-    "errors": 559,
-    "warnings": 427,
-    "info": 11,
+    "pct_clean": 61.6,
+    "errors": 411,
+    "warnings": 312,
+    "info": 6,
     "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 453693.02,
+    "venituri": 237564.02,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "67.10",
-      "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
-      "total": 16838.5
-    },
-    {
-      "code": "61.10",
-      "name": "Ordine publica si siguranta nationala (cod 61.10.03+61.10.05+61.10.50)",
-      "total": 7330.0
+      "code": "54.10",
+      "name": "Alte servicii publice generale",
+      "total": 6565.66
     },
     {
       "code": "65.10",
-      "name": "Invatamant (cod 65.10.03+65:10.04+65.10.05+65.10.07+65.10.11 +65.10.50",
-      "total": 6611.78
-    },
-    {
-      "code": "54.10",
-      "name": "Alte servicii publice generale (cod 54.10.10+54.10.50)",
-      "total": 6565.66
+      "name": "Invatamant",
+      "total": 114.48
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "b3843833462dbbb41ca5d5f1",
+    "bundle_id": "677bc09cf4410423c8cb7b97",
     "source_pdf_sha256": "81f62ff7c3dd59bf7811a71aa4be8feefe316cc6c37ab7827a6ac17f104082fb"
   }
 }

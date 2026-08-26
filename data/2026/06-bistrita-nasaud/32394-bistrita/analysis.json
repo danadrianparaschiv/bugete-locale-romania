@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 88,
-    "lines_strictly_verified": 40,
-    "pct_lines_strictly_verified": 45.5,
-    "numeric_cells": 499,
-    "numeric_cells_strictly_verified": 232,
-    "pct_numeric_cells_strictly_verified": 46.5,
+    "lines": 117,
+    "lines_strictly_verified": 91,
+    "pct_lines_strictly_verified": 77.8,
+    "numeric_cells": 585,
+    "numeric_cells_strictly_verified": 460,
+    "pct_numeric_cells_strictly_verified": 78.6,
     "scope": {
       "pages_expected": 18,
       "pages_selected": 18,
       "pages_processed": 18,
       "complete_pdf": true
     },
-    "pct_clean": 45.5,
-    "errors": 140,
-    "warnings": 27,
-    "info": 1,
+    "pct_clean": 77.8,
+    "errors": 36,
+    "warnings": 15,
+    "info": 3,
     "documents": 2
   },
   "llm_models": [],
@@ -30,22 +30,17 @@
   "top_capitole": [
     {
       "code": "51.02",
-      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "name": "Autoritati publice si actiuni externe (eod 51.02.01)",
       "total": 70318.0
     },
     {
-      "code": "61.02",
-      "name": "NATNALA (cod 60.02+61.02) Ora... publica si siguranta nationala (cod 6",
-      "total": 14781.0
-    },
-    {
       "code": "55.02",
-      "name": "Tranzacti privind datoria publica si imprumuturi",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 13845.0
     },
     {
       "code": "54.02",
-      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "name": "Alte servicii publice generale",
       "total": 5050.0
     }
   ],
@@ -53,7 +48,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "a571a17609497a175ea966df",
+    "bundle_id": "945e4cb01c5b5b0379c05983",
     "source_pdf_sha256": "c2a3e38efd5d6d186f05fa22205b03199ef65f4a881c73eb6bf292692bb11b46"
   }
 }

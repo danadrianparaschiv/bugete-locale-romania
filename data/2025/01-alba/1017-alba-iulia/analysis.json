@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 2063,
     "lines_strictly_verified": 2063,
     "pct_lines_strictly_verified": 100.0,
-    "numeric_cells": 16344,
-    "numeric_cells_strictly_verified": 16344,
+    "numeric_cells": 19038,
+    "numeric_cells_strictly_verified": 19038,
     "pct_numeric_cells_strictly_verified": 100.0,
     "scope": {
       "pages_expected": 74,
@@ -30,53 +30,53 @@
   "top_capitole": [
     {
       "code": "70.02",
-      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 164997.24
     },
     {
       "code": "84.02",
-      "name": "CAP. Transporturi",
+      "name": "Transporturi",
       "total": 147233.28
     },
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
+      "name": "Invatamant",
       "total": 135631.27
     },
     {
       "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
+      "name": "Asigurari si asistenta sociala",
       "total": 61745.18
     },
     {
       "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie",
+      "name": "Cultura, recreere si religie",
       "total": 44823.59
     },
     {
-      "code": "67.10",
-      "name": "CAP. Cultura, recreere si religie",
-      "total": 28890.0
-    },
-    {
       "code": "51.02",
-      "name": "CAP. Autoritati publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 26740.92
     },
     {
       "code": "74.02",
-      "name": "CAP. Protectia mediului",
+      "name": "Protectia mediului",
       "total": 26020.97
     },
     {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 16686.28
     },
     {
       "code": "55.02",
-      "name": "CAP. Tranzactii privind datoria publica si imprumuturi",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 11250.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 8100.0
     }
   ],
   "infografic": {
@@ -513,12 +513,32 @@
         129099.61,
         90966.78
       ]
+    },
+    "ani": {
+      "years": [
+        2025,
+        2026,
+        2027,
+        2028
+      ],
+      "cheltuieli": [
+        651927.73,
+        439831.58,
+        330601.0,
+        318010.88
+      ],
+      "venituri": [
+        644564.3,
+        439831.58,
+        330601.0,
+        318010.88
+      ]
     }
   },
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "32fb85b543fd4e7eb97a06d1",
+    "bundle_id": "1d72341f058f056a9d7b31d8",
     "source_pdf_sha256": "982c986a081e140fea55e43ec55a2c5508ec07d85b963a6a1d038b76a3163bfd"
   }
 }

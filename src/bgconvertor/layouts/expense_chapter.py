@@ -171,10 +171,9 @@ def try_map(grid: list[list[str]]) -> list[dict] | None:
     if not grid or max(len(row) for row in grid) != 5 or len(grid) < 3:
         return None
     header = fold(" ".join(grid[0]))
-    if not all(
-        marker in header
-        for marker in ("denumirea indicatorilor", "cod indicator", "buget an 2026")
-    ):
+    if not all(marker in header for marker in ("denumirea indicatorilor", "cod indicator")):
+        return None
+    if not re.search(r"buget\s+(?:an\s+)?(?:19|20)\d{2}", header):
         return None
     if tuple(grid[1][:5]) != ("0", "1", "2", "INITIAL 3", "4"):
         return None

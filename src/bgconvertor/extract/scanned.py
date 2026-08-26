@@ -13,8 +13,9 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-from ..layouts import map_grid
+from ..layouts import map_grid, map_grid_with_context
 from ..layouts.common import fold, is_code_cell, split_header
+from ..years import infer_budget_year, remap_lines
 
 log = logging.getLogger("bgc.extract.scanned")
 
@@ -22,24 +23,55 @@ log = logging.getLogger("bgc.extract.scanned")
 map_table = map_grid
 
 
-@lru_cache(maxsize=2)
-def _converter(cell_matching: bool = True):
+@lru_cache(maxsize=16)
+def _converter(
+    cell_matching: bool = True,
+    ocr_engine: str = "rapidocr",
+    ocr_langs: tuple[str, ...] = ("ro", "en"),
+    tableformer_mode: str = "accurate",
+):
     from docling.datamodel.base_models import InputFormat
-    from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
     from docling.document_converter import DocumentConverter, ImageFormatOption
 
-    opts = PdfPipelineOptions()
-    opts.do_ocr = True
-    opts.do_table_structure = True
-    opts.table_structure_options.mode = TableFormerMode.ACCURATE
-    opts.table_structure_options.do_cell_matching = cell_matching
+    opts = _pipeline_options(cell_matching, ocr_engine, ocr_langs, tableformer_mode)
     return DocumentConverter(
         format_options={InputFormat.IMAGE: ImageFormatOption(pipeline_options=opts)}
     )
 
 
-@lru_cache(maxsize=1)
-def _native_converter():
+def _pipeline_options(
+    cell_matching: bool = True,
+    ocr_engine: str = "rapidocr",
+    ocr_langs: tuple[str, ...] = ("ro", "en"),
+    tableformer_mode: str = "accurate",
+):
+    """Build Docling options from RunConfig; kept separate for offline tests."""
+    from docling.datamodel import pipeline_options as po
+
+    ocr_classes = {
+        "auto": po.OcrAutoOptions,
+        "rapidocr": po.RapidOcrOptions,
+        "easyocr": po.EasyOcrOptions,
+        "tesseract": po.TesseractOcrOptions,
+        "tesseract_cli": po.TesseractCliOcrOptions,
+    }
+    if ocr_engine not in ocr_classes:
+        raise ValueError(f"unsupported OCR engine: {ocr_engine}")
+    opts = po.PdfPipelineOptions()
+    opts.do_ocr = True
+    opts.ocr_options = ocr_classes[ocr_engine](
+        lang=list(ocr_langs), mode=po.OcrMode.FULL_PAGE
+    )
+    opts.do_table_structure = True
+    opts.table_structure_options.mode = po.TableFormerMode(tableformer_mode)
+    opts.table_structure_options.do_cell_matching = cell_matching
+    return opts
+
+
+@lru_cache(maxsize=4)
+def _native_converter(
+    cell_matching: bool = True, tableformer_mode: str = "accurate"
+):
     """PDF-input pipeline that trusts the embedded text layer (no OCR pass)."""
     from docling.datamodel.base_models import InputFormat
     from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
@@ -48,20 +80,28 @@ def _native_converter():
     opts = PdfPipelineOptions()
     opts.do_ocr = False
     opts.do_table_structure = True
-    opts.table_structure_options.mode = TableFormerMode.ACCURATE
+    opts.table_structure_options.mode = TableFormerMode(tableformer_mode)
+    opts.table_structure_options.do_cell_matching = cell_matching
     return DocumentConverter(
         format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=opts)}
     )
 
 
-def ocr_page_native(pdf_path: Path, page_no: int) -> dict:
+def ocr_page_native(
+    pdf_path: Path,
+    page_no: int,
+    cell_matching: bool = True,
+    tableformer_mode: str = "accurate",
+) -> dict:
     """Copier-PDF path: TableFormer over the embedded text layer.
 
     ~3x faster than render+OCR (and needs no orientation pass — the text
     layer carries its own coordinates). Parse-quality parity measured on
     Bacau; the validator+repair treat both sources identically.
     """
-    result = _native_converter().convert(pdf_path, page_range=(page_no, page_no))
+    result = _native_converter(cell_matching, tableformer_mode).convert(
+        pdf_path, page_range=(page_no, page_no)
+    )
     doc = result.document
     tables_raw = [
         [[(c.text or "") for c in row] for row in t.data.grid] for t in doc.tables
@@ -84,6 +124,10 @@ def ocr_page_native(pdf_path: Path, page_no: int) -> dict:
 def ocr_page(
     pdf_path: Path, page_no: int, rotation: int, scale: float = 2.0,
     cell_matching: bool = True, stamp_filter: bool = False,
+    ocr_engine: str = "rapidocr", ocr_langs: tuple[str, ...] = ("ro", "en"),
+    tableformer_mode: str = "accurate",
+    adaptive_preprocessing: bool = False,
+    max_deskew_degrees: float = 2.0,
 ) -> dict:
     """Expensive stage: render + rotate + docling OCR/TableFormer."""
     from docling.datamodel.base_models import DocumentStream
@@ -97,12 +141,25 @@ def ocr_page(
         from .preprocess import remove_stamps
 
         img = remove_stamps(img)
+    preprocessing = {
+        "stamp_removed": bool(stamp_filter),
+        "colored_ink_fraction": None,
+        "deskew_angle": 0.0,
+    }
+    if adaptive_preprocessing:
+        from .preprocess import adaptive_preprocess
+
+        img, preprocessing = adaptive_preprocess(
+            img, max_deskew_degrees=max_deskew_degrees
+        )
     buf = io.BytesIO()
     img.save(buf, format="PNG")
     buf.seek(0)
     stream = DocumentStream(name=f"{pdf_path.stem}_p{page_no:04d}.png", stream=buf)
 
-    result = _converter(cell_matching).convert(stream)
+    result = _converter(
+        cell_matching, ocr_engine, tuple(ocr_langs), tableformer_mode
+    ).convert(stream)
     doc = result.document
 
     tables_raw = [
@@ -120,6 +177,10 @@ def ocr_page(
         "text": text or None,
         "rotation_applied": rotation,
         "confidence_grade": grade,
+        "ocr_engine": ocr_engine,
+        "ocr_langs": list(ocr_langs),
+        "tableformer_mode": tableformer_mode,
+        "preprocessing": preprocessing,
     }
 
 
@@ -148,12 +209,44 @@ def _rows_y(doc) -> list[list[list[float]]]:
     return out
 
 
-def map_payload(ocr_payload: dict) -> dict:
+def map_payload(
+    ocr_payload: dict,
+    budget_year: int | None = None,
+    context: dict | None = None,
+) -> dict:
     """Cheap stage: stored OCR grids -> extraction-contract payload."""
     lines: list[dict] = []
     header_texts: list[str] = []
+    mapping_context = context if ocr_payload.get("tables_raw") else None
+    source_value_cells = 0
     for grid in ocr_payload.get("tables_raw", []):
-        lines.extend(map_grid(grid))
+        mapped, mapped_context = map_grid_with_context(
+            grid, context=mapping_context, budget_year=budget_year
+        )
+        lines.extend(mapped)
+        mapping_context = mapped_context or mapping_context
+        if mapped_context:
+            columns = {
+                int(index): role
+                for index, role in (mapped_context.get("columns") or {}).items()
+            }
+            _, first_data = split_header(grid)
+            value_columns = {
+                index
+                for index, role in columns.items()
+                if role not in ("name", "code", "func_code", "rowno", "ignore")
+            }
+            source_value_cells += sum(
+                1
+                for row in grid[first_data:]
+                for index in value_columns
+                if index < len(row)
+                and row[index].strip()
+                and (
+                    any(character.isdigit() for character in row[index])
+                    or fold(row[index]).strip() == "x"
+                )
+            )
         header_rows, _ = split_header(grid)
         seen: set[str] = set()
         for r in header_rows:
@@ -177,15 +270,87 @@ def map_payload(ocr_payload: dict) -> dict:
         for c in row
         if sum(ch.isdigit() for ch in c) >= 3
     )
+    resolved_year = budget_year or infer_budget_year(" ".join(header_texts))
+    remap_lines(lines, resolved_year)
+    mapped_value_cells = sum(
+        len(line.get("values") or {}) + len(line.get("cell_issues") or [])
+        for line in lines
+    )
     return {
         "lines": lines,
         "text": text,
-        "layout": _guess_layout(lines, cls_text),
+        "layout": _guess_layout(lines, cls_text, mapping_context),
         "rotation_applied": ocr_payload.get("rotation_applied", 0),
         "confidence_grade": ocr_payload.get("confidence_grade"),
         "n_tables": len(ocr_payload.get("tables_raw", [])),
         "n_numeric_cells": n_numeric,
+        "budget_year": resolved_year,
+        "mapping_context": mapping_context,
+        "mapping_stats": {
+            "source_value_cells": source_value_cells,
+            "mapped_value_cells": mapped_value_cells,
+            "coded_value_lines": sum(
+                1 for line in lines if line.get("code") and line.get("values")
+            ),
+            "value_lines": sum(1 for line in lines if line.get("values")),
+            "cell_issues": sum(len(line.get("cell_issues") or []) for line in lines),
+        },
     }
+
+
+def structural_score(payload: dict) -> float:
+    """Page-local score used only to decide whether a second OCR pass is useful."""
+    stats = payload.get("mapping_stats") or {}
+    expected = int(stats.get("source_value_cells") or 0)
+    mapped = int(stats.get("mapped_value_cells") or 0)
+    value_lines = int(stats.get("value_lines") or 0)
+    coded = int(stats.get("coded_value_lines") or 0)
+    issues = int(stats.get("cell_issues") or 0)
+    layout = payload.get("layout") or "unknown"
+    if expected == 0:
+        if int(payload.get("n_numeric_cells") or 0) <= 1:
+            return 1.0
+        if layout == "hcl_prose" or (payload.get("text") and not payload.get("n_tables")):
+            return 1.0
+        return 0.0 if not payload.get("lines") else 0.7
+    coverage = min(1.0, mapped / expected)
+    identity = coded / value_lines if value_lines else 0.0
+    if layout in (
+        "investment_list", "allocations_annex", "annex_other",
+        "scan_annual_total", "scan_general_matrix",
+    ):
+        identity = 1.0
+    hygiene = max(0.0, 1.0 - issues / expected)
+    score = 0.7 * coverage + 0.2 * identity + 0.1 * hygiene
+    if layout == "unknown":
+        score *= 0.75
+    return round(score, 4)
+
+
+def choose_best_payload(candidates: list[tuple[str, dict]]) -> dict:
+    """Select a deterministic/native OCR candidate by mapped-cell quality."""
+    if not candidates:
+        raise ValueError("at least one OCR candidate is required")
+    ranked = [
+        (
+            structural_score(payload),
+            int((payload.get("mapping_stats") or {}).get("mapped_value_cells") or 0),
+            -index,
+            name,
+            payload,
+        )
+        for index, (name, payload) in enumerate(candidates)
+    ]
+    score, _, _, name, winner = max(ranked)
+    winner["candidate_selection"] = {
+        "selected": name,
+        "score": score,
+        "candidates": [
+            {"name": candidate_name, "score": structural_score(candidate_payload)}
+            for candidate_name, candidate_payload in candidates
+        ],
+    }
+    return winner
 
 
 # -- page-level layout classification ---------------------------------------
@@ -194,18 +359,28 @@ INVEST_HINT = re.compile(
     r"valoare actualizata|executat la|rest de executat|credite de angajament|"
     r"surse de finantare|denumire.{0,20}obiectiv|neetichetat|nr\.? si data|"
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
-    r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv"
+    r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv|"
+    r"n[aeo]mi\w*.{0,20}(?:obiect|ebiact|osiect).{0,30}(?:invest|imvest|invet|irvoet)"
 )
 ALLOC_HINT = re.compile(
     r"unitati administrativ|repartizarea pe comune|pe localitati|"
-    r"fondul de salarii|numarul de personal"
+    r"fondul de salarii|numarul de personal|finantare\s*burse|"
+    r"unitatea d[eo].{0,15}invatamant.{0,80}(?:burse|buget|bufet)|"
+    r"(?:unitat|unltat).{0,100}(?:particular|confesional).{0,80}(?:burse|buget|bufet)"
 )
 INVEST_TAG = re.compile(r"^-?\s*(verde|maro|mixt|neutru|neetichetat)\b")
 
 
-def _guess_layout(lines: list[dict], text: str) -> str:
+def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> str:
     if INVEST_HINT.search(fold(text or "")):
         return "investment_list"
+    if context and int(context.get("n_cols") or 0) >= 12:
+        # Budget nomenclator tables top out at ten columns. Cluj's 15-column
+        # programme pages are investment side sheets even when OCR destroys
+        # every recognisable word in the heading.
+        return "investment_list"
+    if context and context.get("family") == "annual_total":
+        return "scan_annual_total"
     # investment objective pages tag rows verde/maro/mixt/neutru
     tags = sum(1 for ln in lines if INVEST_TAG.match(fold(ln.get("name") or "")))
     if tags >= 3:

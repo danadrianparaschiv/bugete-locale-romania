@@ -30,10 +30,14 @@ linii strict verificate și afișează acoperirea disponibilă.
 
 1. **Extragere deterministă.** PDF-urile digitale sunt citite din grila
    liniată, pe coordonate (mai multe variante de format detectate
-   automat). Scanările trec prin detecția orientării (0/90/180/270°) și
-   prin OCR-ul docling + TableFormer, apoi printr-un registru de mapări de
-   format (tabele transpuse, matrice de buget centralizat, pagini de
-   continuare fără antet, …).
+   automat); paginile digitale fără caroiaj încearcă mai întâi extractorul
+   nativ TableFormer. Scanările trec prin detecția orientării
+   (0/90/180/270°) și prin OCR-ul docling + TableFormer, apoi printr-un
+   registru de mapări de format. Antetele și coordonatele coloanelor se
+   propagă pe paginile consecutive, iar rândurile rupte exact la schimbarea
+   paginii sunt reasamblate. Numai paginile cu scor structural slab primesc
+   un al doilea candidat OCR, cu eliminare adaptivă a ștampilei și deskew;
+   candidatul este păstrat doar dacă validarea structurii se îmbunătățește.
 2. **Verificare aritmetică.** Redundanța nomenclatorului — sume de control
    pe linie, capitol = Σ subcapitole, identități între secțiuni, formule
    de compoziție tipărite — transformă aproape orice cifră citită greșit
@@ -139,8 +143,8 @@ după construirea unor etaloane exhaustive. Definițiile, porțile și auditul
 baseline sunt în [docs/quality.md](docs/quality.md); limitările de utilizare,
 în [DISCLAIMER.md](DISCLAIMER.md).
 
-Poarta P1 acoperă acum toate cele nouă familii numerice reprezentate în suita
-golden: 1.355/1.355 celule regăsite și corecte în scope-urile exhaustive.
+Poarta P1 acoperă acum toate cele zece familii numerice reprezentate în suita
+golden: 1.398/1.398 celule regăsite și corecte în scope-urile exhaustive.
 Aceasta este acoperire pe pagini reprezentative, nu recall măsurat pentru
 fiecare PDF complet. P2 prioritizează recuperarea LLM sub același plafon
 public de 5 USD/PDF și publică planul de cheltuire în run store.

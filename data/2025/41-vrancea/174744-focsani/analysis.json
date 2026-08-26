@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 229,
-    "lines_strictly_verified": 184,
-    "pct_lines_strictly_verified": 80.3,
-    "numeric_cells": 233,
-    "numeric_cells_strictly_verified": 189,
-    "pct_numeric_cells_strictly_verified": 81.1,
+    "lines": 895,
+    "lines_strictly_verified": 854,
+    "pct_lines_strictly_verified": 95.4,
+    "numeric_cells": 1306,
+    "numeric_cells_strictly_verified": 1270,
+    "pct_numeric_cells_strictly_verified": 97.2,
     "scope": {
       "pages_expected": 30,
       "pages_selected": 30,
       "pages_processed": 30,
       "complete_pdf": true
     },
-    "pct_clean": 80.3,
-    "errors": 23,
-    "warnings": 35,
+    "pct_clean": 95.4,
+    "errors": 12,
+    "warnings": 31,
     "info": 0,
     "documents": 3
   },
@@ -33,59 +33,39 @@
     {
       "code": "84.02",
       "name": "Transporturi",
-      "total": 174.09
-    },
-    {
-      "code": "68.02",
-      "name": "Cap. 68.02 Asigurari si asistenta sociala",
-      "total": 60.18
+      "total": 174090.0
     },
     {
       "code": "65.02",
-      "name": "nvǎţământ",
-      "total": 46.614
+      "name": "Învăţământ",
+      "total": 46614.0
     },
     {
       "code": "51.02",
-      "name": "Autorități publice",
-      "total": 46.35
+      "name": "Autorităţi publice",
+      "total": 46350.0
     },
     {
       "code": "81.02",
       "name": "Combustibili si energie",
-      "total": 42.208
+      "total": 42208.0
     },
     {
       "code": "67.02",
       "name": "Cultură, recreere si religie",
-      "total": 31.772
-    },
-    {
-      "code": "66.02",
-      "name": "Cap. 66.02 Sanatate",
-      "total": 11.5
-    },
-    {
-      "code": "61.02",
-      "name": "Cap.61.02 Ordine publica",
-      "total": 11.15
+      "total": 31772.0
     },
     {
       "code": "80.02",
       "name": "Actiuni gen.economice, comerciale",
-      "total": 10.125
-    },
-    {
-      "code": "74.02",
-      "name": "cap.74.02 Protectia mediului",
-      "total": 1.37
+      "total": 10125.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1004d751ebe4384fe005ad91",
+    "bundle_id": "bfecd798ca355a724ad4a23a",
     "source_pdf_sha256": "7fe6897b4a6290a662d2112c1e04ecd2f5fce33fad1086238c8a45182546cab1"
   }
 }

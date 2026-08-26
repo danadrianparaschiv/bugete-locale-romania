@@ -16,6 +16,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from .model import BudgetDocument, ConversionResult
+from .years import column_label, role_year
 
 # Canonical order + labels; each sheet shows only the columns its lines carry.
 COLUMN_LABELS = [
@@ -57,13 +58,29 @@ _LABELS = dict(COLUMN_LABELS)
 
 def _sheet_columns(lines) -> list[tuple[str, str]]:
     present = {c for ln in lines for c in (*ln.values, *ln.x_markers)}
-    ordered = sorted(present, key=lambda c: _ORDER.get(c, 99))
+    def order(column: str) -> tuple[float, int, str]:
+        if column in _ORDER:
+            return float(_ORDER[column]), role_year(column) or 0, column
+        if column.startswith("total_"):
+            return 1.0, role_year(column) or 0, column
+        if column.startswith("buget_"):
+            return 2.0, role_year(column) or 0, column
+        if column.startswith("est") and role_year(column):
+            return 10.0, role_year(column) or 0, column
+        return 99.0, 0, column
+
+    ordered = sorted(present, key=order)
     labels = dict(_LABELS)
+    labels.update({column: column_label(column) for column in present if column_label(column)})
     if "influente" in present:
-        # In a rectification annex, distinguish the two 2026 columns without
+        # In a rectification annex, distinguish the two annual columns without
         # relabeling ordinary annual-budget sheets as "initial".
-        labels["buget_2026"] = "Buget 2026 (initial)"
-        labels["total_2026"] = "Buget 2026 rectificat"
+        for column in present:
+            year = role_year(column)
+            if column.startswith("buget_") and year:
+                labels[column] = f"Buget {year} (initial)"
+            elif column.startswith("total_") and year:
+                labels[column] = f"Buget {year} rectificat"
     return [(c, labels.get(c, c)) for c in ordered]
 
 HEADER_FILL = PatternFill("solid", fgColor="1F4E79")

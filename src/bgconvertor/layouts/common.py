@@ -15,6 +15,7 @@ from ..parsing import (
     parse_ro_number,
     split_combined_code,
 )
+from ..years import role_for_header
 
 HEADER_PATTERNS = [
     # order matters: specific labels must win over their generic substrings
@@ -26,9 +27,6 @@ HEADER_PATTERNS = [
     (re.compile(r"cod\s*rand"), "rowno"),
     (re.compile(r"\bcod\b"), "code"),
     (re.compile(r"denumirea|denumire"), "name"),
-    (re.compile(r"2027"), "est2027"),
-    (re.compile(r"2028"), "est2028"),
-    (re.compile(r"2029"), "est2029"),
     (re.compile(r"credite externe"), "credite_externe"),
     (re.compile(r"credit de? angajam"), "credite_angajament"),
     (re.compile(r"credite interne"), "credite_interne"),
@@ -44,7 +42,7 @@ HEADER_PATTERNS = [
     (re.compile(r"intre bugete"), "transferuri"),
     (re.compile(r"bugetul local"), "bugetul_local"),
     (re.compile(r"buget local"), "buget_local"),
-    (re.compile(r"buget an 2026|buget initial"), "buget_2026"),
+    (re.compile(r"buget initial"), "buget_2026"),
     (re.compile(r"\bfen\b|08d"), "buget_fen"),
     (re.compile(r"prevederi anuale|buget ?2026"), "total_2026"),
     (re.compile(r"\btotal\b"), "total"),
@@ -133,6 +131,17 @@ def column_semantics(grid, header_rows: list[int], n_cols: int) -> dict[int, str
     columns: dict[int, str] = {}
     for i in range(n_cols):
         joined = fold(" ".join(grid[r][i] for r in header_rows if i < len(grid[r])))
+        dynamic_role = role_for_header(joined)
+        if dynamic_role:
+            if dynamic_role not in columns.values():
+                columns[i] = dynamic_role
+                continue
+            if (
+                dynamic_role.startswith(("total_", "buget_"))
+                and "credite_restante" not in columns.values()
+            ):
+                columns[i] = "credite_restante"
+                continue
         for pattern, role in HEADER_PATTERNS:
             if not pattern.search(joined):
                 continue

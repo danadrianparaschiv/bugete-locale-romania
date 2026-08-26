@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 431,
-    "lines_strictly_verified": 289,
-    "pct_lines_strictly_verified": 67.1,
-    "numeric_cells": 209,
-    "numeric_cells_strictly_verified": 116,
-    "pct_numeric_cells_strictly_verified": 55.5,
+    "lines": 494,
+    "lines_strictly_verified": 349,
+    "pct_lines_strictly_verified": 70.6,
+    "numeric_cells": 672,
+    "numeric_cells_strictly_verified": 552,
+    "pct_numeric_cells_strictly_verified": 82.1,
     "scope": {
       "pages_expected": 21,
       "pages_selected": 21,
       "pages_processed": 21,
       "complete_pdf": true
     },
-    "pct_clean": 67.1,
-    "errors": 36,
-    "warnings": 136,
+    "pct_clean": 70.6,
+    "errors": 39,
+    "warnings": 140,
     "info": 0,
     "documents": 1
   },
@@ -30,13 +30,8 @@
   "top_capitole": [
     {
       "code": "65.02",
-      "name": "ÎNVÃTĂMÂNT",
+      "name": "ÎNVĂŢĂMÂNT",
       "total": 313831.85
-    },
-    {
-      "code": "67.02",
-      "name": "CULTURA, RELIGIA, ALTE ACTIVITÄTI SPORTIVE SI DE TINERET",
-      "total": 254712.13
     },
     {
       "code": "84.02",
@@ -45,12 +40,17 @@
     },
     {
       "code": "70.02",
-      "name": "SERVICII SI DEZVOLTARE PUBLICÃ, LOCUINTE",
+      "name": "SERVICII ŞI DEZVOLTARE PUBLICĂ, LOCUINŢE",
       "total": 203033.61
     },
     {
+      "code": "67.02",
+      "name": "CULTURA, RELIGIA, ALTE ACTIVITĂŢI SPORTIVE ŞI DE TINERET",
+      "total": 128665.94
+    },
+    {
       "code": "74.02",
-      "name": "PROTECTIA MEDIULUI",
+      "name": "PROTECŢIA MEDIULUI",
       "total": 97980.0
     },
     {
@@ -60,12 +60,12 @@
     },
     {
       "code": "61.02",
-      "name": "APÄRARE,ORDINE PUBLICÃ,SIGURANTĂ NATIONALĂ",
+      "name": "APĂRARE,ORDINE PUBLICĂ,SI URANŢĂ NAŢIONALĂ",
       "total": 17948.5
     },
     {
       "code": "66.02",
-      "name": "SÄNÄTATE",
+      "name": "SĂNĂTATE",
       "total": 16928.0
     },
     {
@@ -83,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "da82f4bb55c23a81768c06c1",
+    "bundle_id": "4382ed08e561ce30b736cc97",
     "source_pdf_sha256": "94d7e3035a2c1cb711c234218973a6623d887be2e9d2350ff0aaee28a1806dbc"
   }
 }

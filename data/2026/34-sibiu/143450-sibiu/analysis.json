@@ -1,30 +1,28 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 4042,
-    "lines_strictly_verified": 2687,
-    "pct_lines_strictly_verified": 66.5,
-    "numeric_cells": 12561,
-    "numeric_cells_strictly_verified": 8226,
-    "pct_numeric_cells_strictly_verified": 65.5,
+    "lines": 5523,
+    "lines_strictly_verified": 4930,
+    "pct_lines_strictly_verified": 89.3,
+    "numeric_cells": 17745,
+    "numeric_cells_strictly_verified": 16147,
+    "pct_numeric_cells_strictly_verified": 91.0,
     "scope": {
       "pages_expected": 361,
       "pages_selected": 361,
       "pages_processed": 361,
       "complete_pdf": true
     },
-    "pct_clean": 66.5,
-    "errors": 1695,
-    "warnings": 1056,
-    "info": 16,
-    "documents": 10
+    "pct_clean": 89.3,
+    "errors": 544,
+    "warnings": 576,
+    "info": 1,
+    "documents": 27
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": null
@@ -37,18 +35,18 @@
     },
     {
       "code": "65.02",
-      "name": "ÎNVÃTĂMÂNT",
+      "name": "iNv~TAM~NT",
       "total": 313166.99
     },
     {
-      "code": "67.02",
-      "name": "CULTURA, RELIGIA, ALTE ACTIVITÄTI SPORTIVE SI DE TINERET",
-      "total": 263585.59
+      "code": "70.02",
+      "name": "SERVICII SI DEZVOLTARE PUBLIC~, LOCUINTE",
+      "total": 260858.84
     },
     {
-      "code": "70.02",
-      "name": "SERVICII ŞI DEZVOLTARE PUBLICÃ, LOCUINTE",
-      "total": 260858.84
+      "code": "67.02",
+      "name": "CULTURA, RELIGIA, ALTE ACTIVIT~TI SPORTIVE SI DE TINERET",
+      "total": 134640.75
     },
     {
       "code": "74.02",
@@ -62,30 +60,30 @@
     },
     {
       "code": "66.02",
-      "name": "SÄNÄTATE",
+      "name": "SNTATE",
       "total": 22818.2
     },
     {
-      "code": "66.10",
-      "name": "CAP. Sanatate",
-      "total": 20674.29
-    },
-    {
       "code": "61.02",
-      "name": "APÃRARE,ORDINE PUBLICÃ,SIGURANTĂ NATIONALĂ",
+      "name": "AP~RARE, ORDINE PUBLIC~,SIGURANT NATIONAL",
       "total": 15737.55
     },
     {
-      "code": "61.10",
-      "name": "CAP. Ordine publica si siguranta nationala",
-      "total": 15737.55
+      "code": "83.02",
+      "name": "AGRICULTURA, SILVICULTURA, PISCICULTURA SI VANATOARE",
+      "total": 1400.0
+    },
+    {
+      "code": "87.02",
+      "name": "Al TE ACTIUNI ECONOMICE",
+      "total": 1280.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "fb60137a13538817c2904ce5",
+    "bundle_id": "8550b466b53e34df59be95a4",
     "source_pdf_sha256": "564679af6db5d66c39aa21559fc9cac2dcd41417e0ed9bc2360e8838e3632017"
   }
 }

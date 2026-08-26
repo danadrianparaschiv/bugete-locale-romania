@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1177,
-    "lines_strictly_verified": 943,
-    "pct_lines_strictly_verified": 80.1,
-    "numeric_cells": 3323,
-    "numeric_cells_strictly_verified": 2225,
-    "pct_numeric_cells_strictly_verified": 67.0,
+    "lines": 1278,
+    "lines_strictly_verified": 1087,
+    "pct_lines_strictly_verified": 85.1,
+    "numeric_cells": 4193,
+    "numeric_cells_strictly_verified": 3282,
+    "pct_numeric_cells_strictly_verified": 78.3,
     "scope": {
       "pages_expected": 60,
       "pages_selected": 60,
       "pages_processed": 60,
       "complete_pdf": true
     },
-    "pct_clean": 80.1,
-    "errors": 110,
-    "warnings": 232,
+    "pct_clean": 85.1,
+    "errors": 88,
+    "warnings": 154,
     "info": 9,
     "documents": 2
   },
@@ -41,38 +41,43 @@
       "total": 6431000.0
     },
     {
-      "code": "54.02",
-      "name": "SERVICII PUBLICE GENERALE",
-      "total": 1135000.0
-    },
-    {
       "code": "51.02",
-      "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
+      "name": "Autoritati publice si actiuni externe Din total capitol:",
       "total": 67622.9
     },
     {
+      "code": "84.02",
+      "name": "Transporturi Din total capitol:",
+      "total": 59481.0
+    },
+    {
       "code": "67.02",
-      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "name": "Cultura, recreere si religie Din total capitol:",
       "total": 23328.0
     },
     {
       "code": "61.02",
-      "name": "Ordine publica si siguranta nationala (cod 61.02.03+61.02.05+61.02.50)",
+      "name": "Ordine publica si siguranta nationala Din total capitol:",
       "total": 11035.0
     },
     {
       "code": "55.02",
-      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "name": "Tranzacţii privind datoria publică şi împrumuturi",
       "total": 4486.0
     },
     {
       "code": "80.02",
-      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01+80.02",
+      "name": "Actiuni generale economice, comerciale si de munca Din total capitol:",
       "total": 4220.0
     },
     {
+      "code": "54.02",
+      "name": "Alte servicii publice generale Din total capitol:",
+      "total": 1135.0
+    },
+    {
       "code": "66.02",
-      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50) Din total capitol:",
+      "name": "Sanatate Din total capitol:",
       "total": 400.0
     }
   ],
@@ -80,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "121649ec1532ec882564fe9a",
+    "bundle_id": "34c44d8868ff8ff0bbbefa7a",
     "source_pdf_sha256": "e836f34e2cd0a7d6b37601d64c662847cf2e22a95100e2b125804d4a1e0aa475"
   }
 }

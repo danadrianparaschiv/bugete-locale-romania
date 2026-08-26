@@ -25,19 +25,19 @@
         "pct_clean": 100.0,
         "errors": 0,
         "warnings": 0,
-        "at": "2026-08-25T00:04:04+03:00",
+        "at": "2026-08-26T02:32:31+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
           "lines": 2046,
           "lines_strictly_verified": 2046,
           "pct_lines_strictly_verified": 100.0,
-          "numeric_cells": 18414,
-          "numeric_cells_strictly_verified": 18414,
+          "numeric_cells": 18873,
+          "numeric_cells_strictly_verified": 18873,
           "pct_numeric_cells_strictly_verified": 100.0,
           "scope": {
             "pages_expected": 70,
@@ -55,13 +55,13 @@
           "source_pdf_sha256": "bf163704f2ac629afe6038f67e9cc6763c131cd08b0e4a18c97077b275832f5d",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "69881425de455fea3b402ddc0c0c25159b6d042ab58a1abc00e8f4ebdc948574",
-            "bytes": 198525
+            "sha256": "bc8b1fffe60e4102866c48127e8b18f60a387b2181fe32101fb03f0f1b3c0695",
+            "bytes": 201504
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "c55e34ebd4b00b4d380fd3ab67a801ad0d1c9d556a01eea5c9af66020301b363",
-            "bytes": 12121
+            "sha256": "172fd7ae62957ea48aa74fe7cee3f6508e031227469ebd25669fbd0214c145de",
+            "bytes": 12118
           }
         },
         "llm_cost_usd": 0.0,
@@ -88,47 +88,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 5732,
-        "pct_clean": 58.1,
-        "errors": 2261,
-        "warnings": 2284,
-        "at": "2026-08-25T00:04:40+03:00",
+        "lines": 7121,
+        "pct_clean": 67.3,
+        "errors": 2161,
+        "warnings": 2091,
+        "at": "2026-08-26T03:07:51+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 7,
-          "lines": 5732,
-          "lines_strictly_verified": 3333,
-          "pct_lines_strictly_verified": 58.1,
-          "numeric_cells": 12089,
-          "numeric_cells_strictly_verified": 7720,
-          "pct_numeric_cells_strictly_verified": 63.9,
+          "lines": 7121,
+          "lines_strictly_verified": 4793,
+          "pct_lines_strictly_verified": 67.3,
+          "numeric_cells": 20214,
+          "numeric_cells_strictly_verified": 15476,
+          "pct_numeric_cells_strictly_verified": 76.6,
           "scope": {
             "pages_expected": 333,
             "pages_selected": 333,
             "pages_processed": 333,
             "complete_pdf": true
           },
-          "errors": 2261,
-          "warnings": 2284,
-          "info": 6
+          "errors": 2161,
+          "warnings": 2091,
+          "info": 5
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "2bb0ac24fd93e1d93762afb5",
+          "bundle_id": "9f756d1d7b990e36b4436409",
           "source_pdf_sha256": "d9554c184a3821bc00735387857b6228dfe46d582e0b5e5be40adcc546418698",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "4d38a5fb0269bb7a1c1a83543ba3dce594c7d43dc84181d5223c309e6c60ae68",
-            "bytes": 952803
+            "sha256": "a66b312b7f7c9c200f1527cad7f65b04aae3d2dbc29e6b25b8f38fdcfd23f06b",
+            "bytes": 966599
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "bf0f0c1cf4968ef98946bf1480ea3e21f594c2bfaae13927f7f37417c310a72e",
-            "bytes": 2334
+            "sha256": "16389273b404cafb878532999a0c65ac6369a50678a86b2132ad58c6e07d4b6b",
+            "bytes": 2310
           }
         },
         "llm_cost_usd": 0.0,
@@ -155,47 +155,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 3198,
-        "pct_clean": 42.8,
-        "errors": 696,
-        "warnings": 1888,
-        "at": "2026-08-25T00:04:56+03:00",
+        "lines": 6281,
+        "pct_clean": 70.5,
+        "errors": 671,
+        "warnings": 1931,
+        "at": "2026-08-26T08:49:33+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 6,
-          "lines": 3198,
-          "lines_strictly_verified": 1369,
-          "pct_lines_strictly_verified": 42.8,
-          "numeric_cells": 14912,
-          "numeric_cells_strictly_verified": 6293,
-          "pct_numeric_cells_strictly_verified": 42.2,
+          "lines": 6281,
+          "lines_strictly_verified": 4430,
+          "pct_lines_strictly_verified": 70.5,
+          "numeric_cells": 26612,
+          "numeric_cells_strictly_verified": 17754,
+          "pct_numeric_cells_strictly_verified": 66.7,
           "scope": {
             "pages_expected": 236,
             "pages_selected": 236,
             "pages_processed": 236,
             "complete_pdf": true
           },
-          "errors": 696,
-          "warnings": 1888,
-          "info": 20
+          "errors": 671,
+          "warnings": 1931,
+          "info": 18
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "8580564c2fa1a5c3042976b4",
+          "bundle_id": "2305987b3094fa6c007f7d00",
           "source_pdf_sha256": "0a27814f40521408f3d54d23264675df228805fb102cb525e4d97833a5ab3d1d",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "cc51b478667382508272d66fed7ce59837970a72788b376a3202143ebc777440",
-            "bytes": 564996
+            "sha256": "521589ac068310e42d3ee1c0e036eaf984efe8ba46e1812345ffdcc2762b253b",
+            "bytes": 575291
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "7151602ab963e7bbb6f620e9d6d56c275d9191172a28e17cb1b726b062a844d5",
-            "bytes": 2417
+            "sha256": "8c3e30f967e7a7812baf34f5c35f41573dde599b5bc7b4074dd01261778a22f9",
+            "bytes": 2229
           }
         },
         "llm_cost_usd": 0.0,
@@ -222,47 +222,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1868,
-        "pct_clean": 42.7,
-        "errors": 848,
-        "warnings": 1013,
-        "at": "2026-08-25T00:05:01+03:00",
+        "lines": 2418,
+        "pct_clean": 73.4,
+        "errors": 663,
+        "warnings": 570,
+        "at": "2026-08-26T03:41:39+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 2,
-          "lines": 1868,
-          "lines_strictly_verified": 798,
-          "pct_lines_strictly_verified": 42.7,
-          "numeric_cells": 8253,
-          "numeric_cells_strictly_verified": 4615,
-          "pct_numeric_cells_strictly_verified": 55.9,
+          "documents": 4,
+          "lines": 2418,
+          "lines_strictly_verified": 1776,
+          "pct_lines_strictly_verified": 73.4,
+          "numeric_cells": 10334,
+          "numeric_cells_strictly_verified": 8138,
+          "pct_numeric_cells_strictly_verified": 78.7,
           "scope": {
             "pages_expected": 173,
             "pages_selected": 173,
             "pages_processed": 173,
             "complete_pdf": true
           },
-          "errors": 848,
-          "warnings": 1013,
-          "info": 0
+          "errors": 663,
+          "warnings": 570,
+          "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "c656799e06275aa6489d63e3",
+          "bundle_id": "92da91ea4760d776c43b5fbe",
           "source_pdf_sha256": "59b7177b568fe520ce8a77a0476ca3aa0857ee357821d12a215a6d703357a72a",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "312293bc4aaf3a319fd348ee4f0864451be6201b2f51852b0ee5eabff4ac9511",
-            "bytes": 318089
+            "sha256": "bd7fc4546c9e0fcedc92f06b4f821056b0bce1bf3474d7c88b14890804a09f1e",
+            "bytes": 309252
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "2b4dad46dc4037996bf05ec4256663c9ba33ecbc0acd2166b5a792514805232d",
-            "bytes": 1884
+            "sha256": "a02532b1b1f6deb7a199fabbc6431c60885fc3f7ae8dc85f34fa055d406ea152",
+            "bytes": 1569
           }
         },
         "llm_cost_usd": 0.0,
@@ -294,20 +294,20 @@
         "pct_clean": 93.7,
         "errors": 197,
         "warnings": 44,
-        "at": "2026-08-25T00:05:02+03:00",
+        "at": "2026-08-26T03:41:47+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
           "lines": 1315,
           "lines_strictly_verified": 1232,
           "pct_lines_strictly_verified": 93.7,
-          "numeric_cells": 6517,
-          "numeric_cells_strictly_verified": 6018,
-          "pct_numeric_cells_strictly_verified": 92.3,
+          "numeric_cells": 6720,
+          "numeric_cells_strictly_verified": 6221,
+          "pct_numeric_cells_strictly_verified": 92.6,
           "scope": {
             "pages_expected": 50,
             "pages_selected": 50,
@@ -320,17 +320,17 @@
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "7d8b39242db68b4239db6d9b",
+          "bundle_id": "4264cea31b15614a19517069",
           "source_pdf_sha256": "95a3fc91a587d5593bda28fd8760e0391e636bef858bcdfbbc2779f90824137c",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "deb013a0c7a2f05ac581a6d9a719018c5fb1648cc18912d8662294aad2f94441",
-            "bytes": 129980
+            "sha256": "45397efe5791fc164f87ef641be6dae0bf2bed0038815caf91006eea4fa41272",
+            "bytes": 131936
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "5200bbfcdbd1428240ae95181a1328431362bb95c427cca783c958d775b669a8",
-            "bytes": 8574
+            "sha256": "daa81563b1ce6b437cb549d0ad9df4c8ba326a496fc0c473151da667cd76ecc2",
+            "bytes": 8655
           }
         },
         "llm_cost_usd": 0.0,
@@ -358,47 +358,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 88,
-        "pct_clean": 45.5,
-        "errors": 140,
-        "warnings": 27,
-        "at": "2026-08-25T00:05:03+03:00",
+        "lines": 117,
+        "pct_clean": 77.8,
+        "errors": 36,
+        "warnings": 15,
+        "at": "2026-08-26T03:43:24+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
-          "lines": 88,
-          "lines_strictly_verified": 40,
-          "pct_lines_strictly_verified": 45.5,
-          "numeric_cells": 499,
-          "numeric_cells_strictly_verified": 232,
-          "pct_numeric_cells_strictly_verified": 46.5,
+          "lines": 117,
+          "lines_strictly_verified": 91,
+          "pct_lines_strictly_verified": 77.8,
+          "numeric_cells": 585,
+          "numeric_cells_strictly_verified": 460,
+          "pct_numeric_cells_strictly_verified": 78.6,
           "scope": {
             "pages_expected": 18,
             "pages_selected": 18,
             "pages_processed": 18,
             "complete_pdf": true
           },
-          "errors": 140,
-          "warnings": 27,
-          "info": 1
+          "errors": 36,
+          "warnings": 15,
+          "info": 3
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "a571a17609497a175ea966df",
+          "bundle_id": "945e4cb01c5b5b0379c05983",
           "source_pdf_sha256": "c2a3e38efd5d6d186f05fa22205b03199ef65f4a881c73eb6bf292692bb11b46",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "85e62c40314281dbf43f4a895b7f7b9ce33737c5ff438a8a509a79151a7b67e8",
-            "bytes": 31388
+            "sha256": "d7dc8f542bdb4cba2a51ed926c57c9469b904613d50342c45b3ff674325fc0c5",
+            "bytes": 24093
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "e2faeed039ad29270ee73e8387a06cb192254f8d7eb14f772d533ff13336a690",
-            "bytes": 1619
+            "sha256": "361df6cee5bd5c4d1cb2e04bf9b440d61606123dba3c4f820024393cddb8b041",
+            "bytes": 1433
           }
         },
         "llm_cost_usd": 0.0,
@@ -426,47 +426,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 5343,
-        "pct_clean": 69.5,
-        "errors": 2847,
-        "warnings": 858,
-        "at": "2026-08-25T00:05:16+03:00",
+        "lines": 6633,
+        "pct_clean": 63.4,
+        "errors": 2839,
+        "warnings": 1793,
+        "at": "2026-08-26T04:00:47+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 52,
-          "lines": 5343,
-          "lines_strictly_verified": 3711,
-          "pct_lines_strictly_verified": 69.5,
-          "numeric_cells": 13073,
-          "numeric_cells_strictly_verified": 9158,
-          "pct_numeric_cells_strictly_verified": 70.1,
+          "documents": 9,
+          "lines": 6633,
+          "lines_strictly_verified": 4206,
+          "pct_lines_strictly_verified": 63.4,
+          "numeric_cells": 21854,
+          "numeric_cells_strictly_verified": 13904,
+          "pct_numeric_cells_strictly_verified": 63.6,
           "scope": {
             "pages_expected": 268,
             "pages_selected": 268,
             "pages_processed": 268,
             "complete_pdf": true
           },
-          "errors": 2847,
-          "warnings": 858,
-          "info": 30
+          "errors": 2839,
+          "warnings": 1793,
+          "info": 32
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "ff38daf0ad1a9ba156a85f73",
+          "bundle_id": "1d80d808d9a6e0859d67b504",
           "source_pdf_sha256": "719a96d92e00c1729fceb8cfb2f30a372d19eb5adb8e44ba73e13c08570a14a0",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "cbb4f0ecc01686facf6b33b99fbee491698f0e06a6deab21dcb42aafdeadd72f",
-            "bytes": 766674
+            "sha256": "8c6a18fd56a095e948c2dad1996413eef8e1bc776bc63ef9ff00185be981f098",
+            "bytes": 796905
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "cac4355473cdff50b72be53e218c4858ebe938cd640c3c1b2928e0d32609f3bf",
-            "bytes": 1579
+            "sha256": "3eb49ad62ccf02c8b3c9b1d371b46bbe1ac460f2de254b21344d80e45c6b5f64",
+            "bytes": 2080
           }
         },
         "llm_cost_usd": 0.0,
@@ -494,23 +494,23 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1751,
-        "pct_clean": 96.9,
-        "errors": 81,
-        "warnings": 6,
-        "at": "2026-08-25T00:05:17+03:00",
+        "lines": 1752,
+        "pct_clean": 96.5,
+        "errors": 114,
+        "warnings": 3,
+        "at": "2026-08-26T04:02:52+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 1751,
-          "lines_strictly_verified": 1697,
-          "pct_lines_strictly_verified": 96.9,
-          "numeric_cells": 6685,
-          "numeric_cells_strictly_verified": 6470,
+          "lines": 1752,
+          "lines_strictly_verified": 1691,
+          "pct_lines_strictly_verified": 96.5,
+          "numeric_cells": 6031,
+          "numeric_cells_strictly_verified": 5840,
           "pct_numeric_cells_strictly_verified": 96.8,
           "scope": {
             "pages_expected": 63,
@@ -518,23 +518,23 @@
             "pages_processed": 63,
             "complete_pdf": true
           },
-          "errors": 81,
-          "warnings": 6,
+          "errors": 114,
+          "warnings": 3,
           "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "33392de38e42ae0e9b673d09",
+          "bundle_id": "3a29cfeeab7db4eeaa113514",
           "source_pdf_sha256": "b199237dfa6815501d94bde880e1e696737983820d7c525066c710eea7b5956c",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "0b32da26fcf0b788373a65066e75cde865b26928a7f3d1746faff019a19ac8d5",
-            "bytes": 132506
+            "sha256": "9780dc58ca11c0124c44b3dbcef7f7040c8cd80a0df06d1776e8d58673a3b3ae",
+            "bytes": 138491
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "864eff46e4f122b88779ddc054f349ae141486e63c935741dbfed29f77b874e0",
-            "bytes": 1305
+            "sha256": "d5bacf17751267f14a8bf1456aa837dfc141ee334fb8c37fcbe518cebb5b5997",
+            "bytes": 2131
           }
         },
         "llm_cost_usd": 0.0,
@@ -562,48 +562,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 6681,
-        "pct_clean": 66.2,
-        "errors": 2006,
-        "warnings": 1481,
-        "at": "2026-08-25T00:05:25+03:00",
+        "lines": 6907,
+        "pct_clean": 72.1,
+        "errors": 1878,
+        "warnings": 1091,
+        "at": "2026-08-26T04:24:50+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 33,
-          "lines": 6681,
-          "lines_strictly_verified": 4426,
-          "pct_lines_strictly_verified": 66.2,
-          "numeric_cells": 13498,
-          "numeric_cells_strictly_verified": 9200,
-          "pct_numeric_cells_strictly_verified": 68.2,
+          "documents": 38,
+          "lines": 6907,
+          "lines_strictly_verified": 4977,
+          "pct_lines_strictly_verified": 72.1,
+          "numeric_cells": 14848,
+          "numeric_cells_strictly_verified": 11249,
+          "pct_numeric_cells_strictly_verified": 75.8,
           "scope": {
             "pages_expected": 239,
             "pages_selected": 239,
             "pages_processed": 239,
             "complete_pdf": true
           },
-          "errors": 2006,
-          "warnings": 1481,
-          "info": 9
+          "errors": 1878,
+          "warnings": 1091,
+          "info": 8
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "8798b7d414c58d8bfc8bb995",
+          "bundle_id": "c5ac1f6158e1d71c67705399",
           "source_pdf_sha256": "834b5ce2c1949f69c7188e1081b194224cd401a4c4324b4c45f716236545d531",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "011a698c0152803723640fbb4cc54edc80d243a1ca894a9719603a935f7bfbff",
-            "bytes": 677696
+            "sha256": "a681d4ffe4210d8e16dbbc048490cb68fcf93e9979350ed84d62908801b19834",
+            "bytes": 631259
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "86997b9157ae7c0ae3a64faed2a57279d04f853e35c371ccea16b0ca1e4e08cd",
-            "bytes": 2179
+            "sha256": "4f6d0c3b9710b05c5fad82cb68a77d9148f8be0834f32df06ca2b47cb94cc541",
+            "bytes": 1856
           }
         },
         "llm_cost_usd": 0.0,
@@ -631,47 +631,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T00:05:26+03:00",
+        "at": "2026-08-26T04:29:21+03:00",
         "tool_version": "0.1.0",
-        "lines": 1295,
-        "pct_clean": 25.6,
-        "errors": 73,
-        "warnings": 947,
+        "lines": 1324,
+        "pct_clean": 64.7,
+        "errors": 112,
+        "warnings": 435,
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 1295,
-          "lines_strictly_verified": 331,
-          "pct_lines_strictly_verified": 25.6,
-          "numeric_cells": 5310,
-          "numeric_cells_strictly_verified": 1308,
-          "pct_numeric_cells_strictly_verified": 24.6,
+          "lines": 1324,
+          "lines_strictly_verified": 856,
+          "pct_lines_strictly_verified": 64.7,
+          "numeric_cells": 5211,
+          "numeric_cells_strictly_verified": 3250,
+          "pct_numeric_cells_strictly_verified": 62.4,
           "scope": {
             "pages_expected": 47,
             "pages_selected": 47,
             "pages_processed": 47,
             "complete_pdf": true
           },
-          "errors": 73,
-          "warnings": 947,
-          "info": 5
+          "errors": 112,
+          "warnings": 435,
+          "info": 2
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "86c75d8db8bdcdd08f59a0fc",
+          "bundle_id": "68083999b6f22ae66a3d822a",
           "source_pdf_sha256": "a21df7960b1d449f1bfb364dcc14faa577515c6c8bbc6d55f22bf786651427de",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "cf12d7096cdaec5b5a4f12673553af8ef3cad40a343e8e5fd97532eb2e37e30e",
-            "bytes": 119347
+            "sha256": "2fc2186c065f5bc73f9093b02c3f63a38dc8a7fad904e1256ccbd33ffe1088dd",
+            "bytes": 110828
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "c2de403fbb025fc19636b7067918033dd96eb8cdf2a309d029f819cc8b8a9c8b",
-            "bytes": 2468
+            "sha256": "db4ef61bfd02eb059bffae59473891904b7c879ea604c504b8940dd9d90ebfb4",
+            "bytes": 1314
           }
         },
         "llm_cost_usd": 0.0,
@@ -719,47 +719,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 329,
-        "pct_clean": 18.2,
-        "errors": 100,
-        "warnings": 329,
-        "at": "2026-08-25T00:05:27+03:00",
+        "lines": 316,
+        "pct_clean": 49.4,
+        "errors": 22,
+        "warnings": 191,
+        "at": "2026-08-26T08:50:46+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
-          "lines": 329,
-          "lines_strictly_verified": 60,
-          "pct_lines_strictly_verified": 18.2,
-          "numeric_cells": 1498,
-          "numeric_cells_strictly_verified": 303,
-          "pct_numeric_cells_strictly_verified": 20.2,
+          "lines": 316,
+          "lines_strictly_verified": 156,
+          "pct_lines_strictly_verified": 49.4,
+          "numeric_cells": 822,
+          "numeric_cells_strictly_verified": 510,
+          "pct_numeric_cells_strictly_verified": 62.0,
           "scope": {
             "pages_expected": 48,
             "pages_selected": 48,
             "pages_processed": 48,
             "complete_pdf": true
           },
-          "errors": 100,
-          "warnings": 329,
+          "errors": 22,
+          "warnings": 191,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "ec65f4cc1c58b54db994107c",
+          "bundle_id": "51e53c10aab2161454c34620",
           "source_pdf_sha256": "296fe666b1f666bff02da8bba7fbe606d3e9b9ce34a88520211c9b80d0dadcb4",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "f9c6ad85e015c26fec6cbde546f6d2b862a25da404e91a9c59738b557fc4b125",
-            "bytes": 107822
+            "sha256": "57b08021f55eaac7967a076a2d0e32faf6627e3937b1ff1aeed47f6612d1156b",
+            "bytes": 50379
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "67a4b19b8a3c39621325bbdbd4cfe542c04d2959bcaab2171aef197bc594f8f5",
-            "bytes": 1621
+            "sha256": "868f7dd0e20f901123032f20b9220f1a4fee37622713d634277c0406f71cb82d",
+            "bytes": 1709
           }
         },
         "llm_cost_usd": 0.0,
@@ -787,48 +787,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T00:06:01+03:00",
+        "at": "2026-08-26T05:26:33+03:00",
         "tool_version": "0.1.0",
-        "lines": 17619,
-        "pct_clean": 54.1,
-        "errors": 1763,
-        "warnings": 7280,
+        "lines": 21104,
+        "pct_clean": 46.3,
+        "errors": 831,
+        "warnings": 10997,
         "llm_preset": "mixt:flash+sonnet",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 57,
-          "lines": 17619,
-          "lines_strictly_verified": 9532,
-          "pct_lines_strictly_verified": 54.1,
-          "numeric_cells": 17875,
-          "numeric_cells_strictly_verified": 9559,
-          "pct_numeric_cells_strictly_verified": 53.5,
+          "documents": 39,
+          "lines": 21104,
+          "lines_strictly_verified": 9762,
+          "pct_lines_strictly_verified": 46.3,
+          "numeric_cells": 31106,
+          "numeric_cells_strictly_verified": 19846,
+          "pct_numeric_cells_strictly_verified": 63.8,
           "scope": {
             "pages_expected": 753,
             "pages_selected": 753,
             "pages_processed": 753,
             "complete_pdf": true
           },
-          "errors": 1763,
-          "warnings": 7280,
+          "errors": 831,
+          "warnings": 10997,
           "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "966d9448edb68a613684521f",
+          "bundle_id": "3dabee46065e70e5fad075ff",
           "source_pdf_sha256": "3e8719cc77b7071e79fbf93c0c95d9b4b915c9e08411f854043129d42ad2e4db",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "1251a8237121c767f353466acf86dcfef6cd3f656022417f1bceaaf07c99b902",
-            "bytes": 1779998
+            "sha256": "f1db37f40e262ccee7cc528b2ab05d713a3a76277cd56ae1275bd2805fbadf64",
+            "bytes": 1693270
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "1ce1f51212430f5b94900e403b6abd64b14d187678241067e6dbe6379d8993bd",
-            "bytes": 2171
+            "sha256": "00299bcbd1fc63ee6e1e626ac49f7fee9e8edef0b76ada585b95031f51a65801",
+            "bytes": 2197
           }
         },
         "llm_cost_usd": 0.0,
@@ -856,47 +856,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T00:06:07+03:00",
+        "at": "2026-08-26T05:55:56+03:00",
         "tool_version": "0.1.0",
-        "lines": 3690,
-        "pct_clean": 73.3,
-        "errors": 846,
-        "warnings": 486,
+        "lines": 4034,
+        "pct_clean": 74.8,
+        "errors": 650,
+        "warnings": 653,
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 14,
-          "lines": 3690,
-          "lines_strictly_verified": 2706,
-          "pct_lines_strictly_verified": 73.3,
-          "numeric_cells": 4046,
-          "numeric_cells_strictly_verified": 2162,
-          "pct_numeric_cells_strictly_verified": 53.4,
+          "documents": 10,
+          "lines": 4034,
+          "lines_strictly_verified": 3019,
+          "pct_lines_strictly_verified": 74.8,
+          "numeric_cells": 8618,
+          "numeric_cells_strictly_verified": 6492,
+          "pct_numeric_cells_strictly_verified": 75.3,
           "scope": {
             "pages_expected": 405,
             "pages_selected": 405,
             "pages_processed": 405,
             "complete_pdf": true
           },
-          "errors": 846,
-          "warnings": 486,
-          "info": 16
+          "errors": 650,
+          "warnings": 653,
+          "info": 19
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "657e2d7ffc0f622d06282160",
+          "bundle_id": "a4100d335b929bc90b256188",
           "source_pdf_sha256": "fd1ebad83c5d829363cac4880e7719d90c901c832bd7dd124d2710cde22fae5b",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "2d7f7c6ff7055d5fc7236200a969454b78fdf65ee53eed63f0e058eca42b4fa5",
-            "bytes": 526642
+            "sha256": "b0bc173feb44a9a82959e747b6bd5561e3f6c8e074c3c32d3aadca35bbc99d07",
+            "bytes": 462113
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "6d1dd90ea7997ab57bfede555ded8048da2a728ac0b4d96d21210b3ae08da4a7",
-            "bytes": 2528
+            "sha256": "2b9bea431ed2dabe2af6dd5857224c31cf05430a9862453afc23fe0cc6122b4c",
+            "bytes": 2334
           }
         },
         "llm_cost_usd": 0.0,
@@ -924,47 +924,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T00:06:09+03:00",
+        "at": "2026-08-26T05:58:28+03:00",
         "tool_version": "0.1.0",
-        "lines": 1752,
-        "pct_clean": 91.7,
-        "errors": 62,
-        "warnings": 95,
+        "lines": 1743,
+        "pct_clean": 93.9,
+        "errors": 59,
+        "warnings": 57,
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 1752,
-          "lines_strictly_verified": 1607,
-          "pct_lines_strictly_verified": 91.7,
-          "numeric_cells": 1747,
-          "numeric_cells_strictly_verified": 1606,
-          "pct_numeric_cells_strictly_verified": 91.9,
+          "lines": 1743,
+          "lines_strictly_verified": 1636,
+          "pct_lines_strictly_verified": 93.9,
+          "numeric_cells": 1811,
+          "numeric_cells_strictly_verified": 1708,
+          "pct_numeric_cells_strictly_verified": 94.3,
           "scope": {
             "pages_expected": 41,
             "pages_selected": 41,
             "pages_processed": 41,
             "complete_pdf": true
           },
-          "errors": 62,
-          "warnings": 95,
-          "info": 9
+          "errors": 59,
+          "warnings": 57,
+          "info": 5
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "ef6b1f4774d85f31d354b3e1",
+          "bundle_id": "198bc4e848d02b46cc234276",
           "source_pdf_sha256": "71ca1b3eeff73fc5dd5092a000783a7db1f2b5a33690f4eefe68a536c4f704b6",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "b087d7662f0728f1e493abd7285a049892ca5e1003fb11b143e7bc14937b193f",
-            "bytes": 105914
+            "sha256": "f87fbdc8b5b303c26d055f8304447d13679fe0c1b1ec64655c0430ea14f28cfb",
+            "bytes": 113426
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "ceb75a677a3866f76bdb2357f32269487fda23e481a8f5732771ac313718b265",
-            "bytes": 2477
+            "sha256": "c0e97afc2fb05689b5cd6da9cfa5c469b8beeab2370ba13dd37717c0881dc918",
+            "bytes": 2074
           }
         },
         "llm_cost_usd": 0.0,
@@ -992,7 +992,7 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-25T08:04:46+03:00",
+        "at": "2026-08-26T08:51:12+03:00",
         "tool_version": "0.1.0",
         "lines": 1201,
         "pct_clean": 100.0,
@@ -1026,13 +1026,13 @@
           "source_pdf_sha256": "3bc552a19d02317fd764db1fab35d996986c5958deeb095f2dfc8795d9be4f0f",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "b8aee6bf73e2cfe0eb03cd151209b7b5dc61bdcaa4b39ed998fe62034251ae96",
-            "bytes": 118028
+            "sha256": "c0c0d11786c2da5d7ab3862b3d1396a24bc6b63bcd2f0c7bf7f1e2bb46f189fd",
+            "bytes": 118025
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "9232760290c7754cec116bbedaa46f2c1fb7766128b51b96bd689de9db0c643a",
-            "bytes": 11230
+            "sha256": "1bdc4a1d775ef9645c24e5303abb0402891107887cc7816f5befd4004b088709",
+            "bytes": 11311
           }
         },
         "llm_cost_usd": 0.0,
@@ -1068,24 +1068,24 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 562,
-        "pct_clean": 60.1,
-        "errors": 54,
-        "warnings": 224,
-        "at": "2026-08-25T00:06:11+03:00",
+        "lines": 541,
+        "pct_clean": 47.7,
+        "errors": 46,
+        "warnings": 300,
+        "at": "2026-08-26T06:03:17+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 562,
-          "lines_strictly_verified": 338,
-          "pct_lines_strictly_verified": 60.1,
-          "numeric_cells": 1576,
-          "numeric_cells_strictly_verified": 998,
+          "lines": 541,
+          "lines_strictly_verified": 258,
+          "pct_lines_strictly_verified": 47.7,
+          "numeric_cells": 1551,
+          "numeric_cells_strictly_verified": 982,
           "pct_numeric_cells_strictly_verified": 63.3,
           "scope": {
             "pages_expected": 85,
@@ -1093,23 +1093,23 @@
             "pages_processed": 85,
             "complete_pdf": true
           },
-          "errors": 54,
-          "warnings": 224,
-          "info": 2
+          "errors": 46,
+          "warnings": 300,
+          "info": 3
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "d9a674d086ad53724c54d191",
+          "bundle_id": "0b56d2616d8d4ac906934863",
           "source_pdf_sha256": "b6add684b5c934570145e4563671977c2feadb2b32de1f6e337cbeaeeddf705c",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "33166e45180bf6c7bf3fecb5f324c9c974d9127921752fbf6fa126038a00c5fa",
-            "bytes": 86875
+            "sha256": "56606dc84b17d8d7fa0c6934f354528082c0aaed13210a2e703672a0d7c29545",
+            "bytes": 81129
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "8b6a9c5288d6891eb8449cafeb7737ee3728601dfae62b18f22229aa62fe3312",
-            "bytes": 1099
+            "sha256": "aefeeda7a4b747ffdb2bf4c424a12ca97cb0f174772ea1951b2a767ba4c3d6e9",
+            "bytes": 1202
           }
         },
         "llm_cost_usd": 0.0,
@@ -1137,48 +1137,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 268,
-        "pct_clean": 59.0,
-        "errors": 229,
-        "warnings": 129,
-        "at": "2026-08-25T00:06:12+03:00",
+        "lines": 393,
+        "pct_clean": 97.7,
+        "errors": 10,
+        "warnings": 10,
+        "at": "2026-08-26T06:09:46+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 268,
-          "lines_strictly_verified": 158,
-          "pct_lines_strictly_verified": 59.0,
-          "numeric_cells": 1030,
-          "numeric_cells_strictly_verified": 640,
-          "pct_numeric_cells_strictly_verified": 62.1,
+          "lines": 393,
+          "lines_strictly_verified": 384,
+          "pct_lines_strictly_verified": 97.7,
+          "numeric_cells": 1156,
+          "numeric_cells_strictly_verified": 1103,
+          "pct_numeric_cells_strictly_verified": 95.4,
           "scope": {
             "pages_expected": 63,
             "pages_selected": 63,
             "pages_processed": 63,
             "complete_pdf": true
           },
-          "errors": 229,
-          "warnings": 129,
+          "errors": 10,
+          "warnings": 10,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "5e16730b7a23fc65546a57e9",
+          "bundle_id": "655ba33ab9716f5e8f3927cf",
           "source_pdf_sha256": "0c572fa3d9650964582daad708945a82668d91f9af5222e4e9fa394166d95a74",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "729f62f2b7b157e58525caf61f7ce55fe543a0a90127ed647a8de82a8362cc10",
-            "bytes": 120657
+            "sha256": "c43b9c6dba4635dd880b2ec3dab0073da71ad33bd61fcae4c51c60497e8b0fcc",
+            "bytes": 51147
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "98484fb657be3c619132431c48775b6c2fd6f4314d0b9635544c7b2fed6a64e1",
-            "bytes": 1482
+            "sha256": "cd0ddf76a032c53cdd34559db4907d1eb22be4a3a9f576ac383d06112b6ffb3b",
+            "bytes": 1099
           }
         },
         "llm_cost_usd": 0.0,
@@ -1204,48 +1204,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1143,
-        "pct_clean": 63.8,
-        "errors": 593,
-        "warnings": 272,
-        "at": "2026-08-25T00:06:17+03:00",
+        "lines": 1482,
+        "pct_clean": 78.0,
+        "errors": 392,
+        "warnings": 211,
+        "at": "2026-08-26T06:29:16+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
-          "lines": 1143,
-          "lines_strictly_verified": 729,
-          "pct_lines_strictly_verified": 63.8,
-          "numeric_cells": 2756,
-          "numeric_cells_strictly_verified": 1780,
-          "pct_numeric_cells_strictly_verified": 64.6,
+          "lines": 1482,
+          "lines_strictly_verified": 1156,
+          "pct_lines_strictly_verified": 78.0,
+          "numeric_cells": 3570,
+          "numeric_cells_strictly_verified": 2822,
+          "pct_numeric_cells_strictly_verified": 79.0,
           "scope": {
             "pages_expected": 167,
             "pages_selected": 167,
             "pages_processed": 167,
             "complete_pdf": true
           },
-          "errors": 593,
-          "warnings": 272,
+          "errors": 392,
+          "warnings": 211,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "3d08e1d80a7d22564857c44f",
+          "bundle_id": "75ed4b3f90dec5efe2997e42",
           "source_pdf_sha256": "67b39fa4155600c95617157768adfb75385f536396ac24949c53ba4079a3b056",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "e47d40ef4acfa01b42a2669bf2020ad6af7ac9962130bb07c4da316ef026c8ae",
-            "bytes": 259343
+            "sha256": "e97659d02db88bd72d364bf04af4d84eb7c90b9e8f612870e5f0ce454aecb6d4",
+            "bytes": 226034
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "eb26bedfc0c0eb28d2eaf1273e9687314896b3081883caaefdae5692343e206d",
-            "bytes": 2196
+            "sha256": "75841c1ea6d2f92508d4946607f598269a144745b093b941d786376ecd08171d",
+            "bytes": 2165
           }
         },
         "llm_cost_usd": 0.0,
@@ -1293,47 +1293,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 643,
-        "pct_clean": 83.7,
-        "errors": 196,
-        "warnings": 75,
-        "at": "2026-08-25T00:06:18+03:00",
+        "lines": 616,
+        "pct_clean": 86.4,
+        "errors": 163,
+        "warnings": 50,
+        "at": "2026-08-26T06:33:44+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 643,
-          "lines_strictly_verified": 538,
-          "pct_lines_strictly_verified": 83.7,
-          "numeric_cells": 3151,
-          "numeric_cells_strictly_verified": 2690,
-          "pct_numeric_cells_strictly_verified": 85.4,
+          "lines": 616,
+          "lines_strictly_verified": 532,
+          "pct_lines_strictly_verified": 86.4,
+          "numeric_cells": 3252,
+          "numeric_cells_strictly_verified": 2734,
+          "pct_numeric_cells_strictly_verified": 84.1,
           "scope": {
             "pages_expected": 34,
             "pages_selected": 34,
             "pages_processed": 34,
             "complete_pdf": true
           },
-          "errors": 196,
-          "warnings": 75,
-          "info": 5
+          "errors": 163,
+          "warnings": 50,
+          "info": 6
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "457021626e74e336129580a1",
+          "bundle_id": "5a902770117a24d2615a7205",
           "source_pdf_sha256": "a31c3022c165f7ea68e623c4d2e2382517a8eb0559907404a095ba69a0780b34",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "32ed306527c96777cbe11dce678c877e8bb6373d1c0c01b604aeb8ad4cdbede4",
-            "bytes": 75237
+            "sha256": "b8cc0edff4a1c06ed0c1a0fd858978b876b3472566e14f21321aa1415635b612",
+            "bytes": 70696
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "045906c556ee2caa02167efbdf86d2975059e475cda90a22183307b88969bcb8",
+            "sha256": "dc3109e15d59284f927c519c962d96867a1e9de95b46e3101d4c3d085c353808",
             "bytes": 1100
           }
         },
@@ -1366,20 +1366,20 @@
         "pct_clean": 100.0,
         "errors": 0,
         "warnings": 0,
-        "at": "2026-08-25T00:06:19+03:00",
+        "at": "2026-08-26T06:33:47+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
           "lines": 664,
           "lines_strictly_verified": 664,
           "pct_lines_strictly_verified": 100.0,
-          "numeric_cells": 5976,
-          "numeric_cells_strictly_verified": 5976,
+          "numeric_cells": 6075,
+          "numeric_cells_strictly_verified": 6075,
           "pct_numeric_cells_strictly_verified": 100.0,
           "scope": {
             "pages_expected": 23,
@@ -1397,13 +1397,13 @@
           "source_pdf_sha256": "1cd4632d00c3c19ffafaa4d3db1fa859d212a945eb0bf6906aa0a07f22635b2f",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "00836cf4c6dbd060a833299884a6a74734e38bddeb553e74f6be3a0447fa221b",
-            "bytes": 61814
+            "sha256": "9990ebb1999b8bb9f910cace0b1271b885b3a773403a3f3ed034f2f77c48822f",
+            "bytes": 62724
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "0d9262adde3b7ecd90c041bb23789b151a7831cf3fe242b901856302ce3c3158",
-            "bytes": 10923
+            "sha256": "b6ad714ead802d9f3d3063c87665ce8e501eec621808fee1d99525896757fca6",
+            "bytes": 10849
           }
         },
         "llm_cost_usd": 0.0,
@@ -1431,48 +1431,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 134,
-        "pct_clean": 82.8,
-        "errors": 10,
-        "warnings": 13,
-        "at": "2026-08-25T00:06:19+03:00",
+        "lines": 148,
+        "pct_clean": 78.4,
+        "errors": 16,
+        "warnings": 16,
+        "at": "2026-08-26T06:34:14+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 134,
-          "lines_strictly_verified": 111,
-          "pct_lines_strictly_verified": 82.8,
-          "numeric_cells": 134,
-          "numeric_cells_strictly_verified": 111,
-          "pct_numeric_cells_strictly_verified": 82.8,
+          "lines": 148,
+          "lines_strictly_verified": 116,
+          "pct_lines_strictly_verified": 78.4,
+          "numeric_cells": 248,
+          "numeric_cells_strictly_verified": 218,
+          "pct_numeric_cells_strictly_verified": 87.9,
           "scope": {
             "pages_expected": 7,
             "pages_selected": 7,
             "pages_processed": 7,
             "complete_pdf": true
           },
-          "errors": 10,
-          "warnings": 13,
+          "errors": 16,
+          "warnings": 16,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "2e9b92650eade08f3c5fee68",
+          "bundle_id": "3a78ab94a1841411ebe60ab1",
           "source_pdf_sha256": "dd864af7087a266099acd67afb6cdfc9fa4566fad0a1977217f337cf11235169",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "e4e2f7289501cf6b7a590cc901e0b0ad13bc5d32bc16ef3bb0ecab0369270cd4",
-            "bytes": 21857
+            "sha256": "7768729552f65c581c4b21e74e0f09fbf1e7541ecb86ebb49c1b2b1f3648f0cd",
+            "bytes": 22063
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "b08d928c9faa4dcc16d67a977db1d316158f2a8bcf44168f223b144948b29b4a",
-            "bytes": 1517
+            "sha256": "9af862cd5bd920ce1e4ce10b615d10d0b9a001c2b8b24c4bd61138baa557d7f2",
+            "bytes": 1624
           }
         },
         "llm_cost_usd": 0.0,
@@ -1524,48 +1524,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 9279,
-        "pct_clean": 80.3,
-        "errors": 1361,
-        "warnings": 1063,
-        "at": "2026-08-25T00:06:25+03:00",
+        "lines": 8825,
+        "pct_clean": 81.4,
+        "errors": 1298,
+        "warnings": 918,
+        "at": "2026-08-26T07:25:44+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 286,
-          "lines": 9279,
-          "lines_strictly_verified": 7454,
-          "pct_lines_strictly_verified": 80.3,
-          "numeric_cells": 16633,
-          "numeric_cells_strictly_verified": 13542,
-          "pct_numeric_cells_strictly_verified": 81.4,
+          "documents": 245,
+          "lines": 8825,
+          "lines_strictly_verified": 7183,
+          "pct_lines_strictly_verified": 81.4,
+          "numeric_cells": 18910,
+          "numeric_cells_strictly_verified": 15944,
+          "pct_numeric_cells_strictly_verified": 84.3,
           "scope": {
             "pages_expected": 551,
             "pages_selected": 551,
             "pages_processed": 551,
             "complete_pdf": true
           },
-          "errors": 1361,
-          "warnings": 1063,
-          "info": 3
+          "errors": 1298,
+          "warnings": 918,
+          "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "9b9a7cfec0ac7ffaf595708e",
+          "bundle_id": "e1e60f121560c544da5b42e5",
           "source_pdf_sha256": "11587b75564d341840099bfc28de10dd54aafaa050a2535a577951a53ced4c38",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "8df38c14c93ccd3005ad0fd8a101016a48c7e3dcc8b8a2e7afe9bf196e5ac6fe",
-            "bytes": 983659
+            "sha256": "97c39b545c3e04502298d1889f53679363eca79ff7f25287a958df5f7b1a1a5a",
+            "bytes": 985174
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "1e0f60bab8f69811d26818b73754983b0758d8a14be16f0133834e75ed9dabdf",
-            "bytes": 2261
+            "sha256": "74797b489278b621e2ba32d6224082ea409e88a96a49ac41266673c1370cb19d",
+            "bytes": 2151
           }
         },
         "llm_cost_usd": 0.0,
@@ -1635,48 +1635,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 3090,
-        "pct_clean": 93.1,
-        "errors": 98,
-        "warnings": 148,
-        "at": "2026-08-25T00:06:27+03:00",
+        "lines": 1106,
+        "pct_clean": 90.0,
+        "errors": 65,
+        "warnings": 83,
+        "at": "2026-08-26T07:31:46+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 38,
-          "lines": 3090,
-          "lines_strictly_verified": 2876,
-          "pct_lines_strictly_verified": 93.1,
-          "numeric_cells": 6117,
-          "numeric_cells_strictly_verified": 5695,
-          "pct_numeric_cells_strictly_verified": 93.1,
+          "lines": 1106,
+          "lines_strictly_verified": 995,
+          "pct_lines_strictly_verified": 90.0,
+          "numeric_cells": 4574,
+          "numeric_cells_strictly_verified": 4360,
+          "pct_numeric_cells_strictly_verified": 95.3,
           "scope": {
             "pages_expected": 103,
             "pages_selected": 103,
             "pages_processed": 103,
             "complete_pdf": true
           },
-          "errors": 98,
-          "warnings": 148,
+          "errors": 65,
+          "warnings": 83,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "1ca29fa417a92f45319e9b22",
+          "bundle_id": "37d4eac1f622d079b1043f9f",
           "source_pdf_sha256": "59c60ecb2f4ffa822b8c89fd96d5d67e99929e412aa4b3197e0fc8a1c527b595",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "b14a6b488490ffd5daa963e4769e6c75f18d9ee88a5198985587465daf3b908c",
-            "bytes": 232615
+            "sha256": "a4ed4441d765208e91855064ff574fcc4549ff23679d1bab588573960ddd2274",
+            "bytes": 221832
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "cb1827cb301f2946087ada0987c0a27abc73b83caf58eab74b5456161f8d5fe5",
-            "bytes": 1749
+            "sha256": "32d32d2173438f2f566f2e6f47546937835b506c0777d5536819dabf8c7cff59",
+            "bytes": 1526
           }
         },
         "llm_cost_usd": 0.0,
@@ -1704,47 +1704,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 133,
-        "pct_clean": 76.7,
-        "errors": 12,
-        "warnings": 22,
-        "at": "2026-08-25T00:06:27+03:00",
+        "lines": 134,
+        "pct_clean": 78.4,
+        "errors": 8,
+        "warnings": 23,
+        "at": "2026-08-26T07:32:04+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 133,
-          "lines_strictly_verified": 102,
-          "pct_lines_strictly_verified": 76.7,
-          "numeric_cells": 122,
-          "numeric_cells_strictly_verified": 94,
-          "pct_numeric_cells_strictly_verified": 77.0,
+          "lines": 134,
+          "lines_strictly_verified": 105,
+          "pct_lines_strictly_verified": 78.4,
+          "numeric_cells": 131,
+          "numeric_cells_strictly_verified": 104,
+          "pct_numeric_cells_strictly_verified": 79.4,
           "scope": {
             "pages_expected": 4,
             "pages_selected": 4,
             "pages_processed": 4,
             "complete_pdf": true
           },
-          "errors": 12,
-          "warnings": 22,
+          "errors": 8,
+          "warnings": 23,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "fd5cdbde2e0077d9091cceb6",
+          "bundle_id": "83299a7720029c7de2d1c4cc",
           "source_pdf_sha256": "42167e06fc08ab248cb200ee268bf29ba0a02f0dd490d40d9615340eded9e7bd",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "8f835dd8d97a8e75c948ba9d7ee34b542abefd32c6eceacce0e4ecaf5f4022a9",
-            "bytes": 17053
+            "sha256": "83af767f1cc9cbb736af1a55e7e37a969d65411b8d4085b8b0095b9e61fb6380",
+            "bytes": 17181
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "929e7be804364262110c05311e0367868da4b09a3373317cf6d6e03d90a2a422",
+            "sha256": "53eff25bb623f17a916e8105529ee3bc891923eaf338b0e92c96935812cc24bf",
             "bytes": 1674
           }
         },
@@ -1833,48 +1833,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1016,
-        "pct_clean": 46.8,
-        "errors": 559,
-        "warnings": 427,
-        "at": "2026-08-25T00:06:30+03:00",
+        "lines": 1246,
+        "pct_clean": 61.6,
+        "errors": 411,
+        "warnings": 312,
+        "at": "2026-08-26T07:39:01+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "mixt:flash+sonnet",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
-          "lines": 1016,
-          "lines_strictly_verified": 475,
-          "pct_lines_strictly_verified": 46.8,
-          "numeric_cells": 1651,
-          "numeric_cells_strictly_verified": 904,
-          "pct_numeric_cells_strictly_verified": 54.8,
+          "lines": 1246,
+          "lines_strictly_verified": 767,
+          "pct_lines_strictly_verified": 61.6,
+          "numeric_cells": 2816,
+          "numeric_cells_strictly_verified": 2073,
+          "pct_numeric_cells_strictly_verified": 73.6,
           "scope": {
             "pages_expected": 79,
             "pages_selected": 79,
             "pages_processed": 79,
             "complete_pdf": true
           },
-          "errors": 559,
-          "warnings": 427,
-          "info": 11
+          "errors": 411,
+          "warnings": 312,
+          "info": 6
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "b3843833462dbbb41ca5d5f1",
+          "bundle_id": "677bc09cf4410423c8cb7b97",
           "source_pdf_sha256": "81f62ff7c3dd59bf7811a71aa4be8feefe316cc6c37ab7827a6ac17f104082fb",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "d3ba3ad0f655d4ccc3af39769d202385eb568e2d89c95053fa08511ecd421016",
-            "bytes": 224633
+            "sha256": "9fcdd058b4e0ebe9e36d295d924d4e29d5db9ba11e4653107827ed2601cd4f60",
+            "bytes": 211105
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "3929bacff5b3ae60f9e21027a1c2e4ae679cab5d19b5a73f2cbafc3cb91f02e2",
-            "bytes": 1641
+            "sha256": "f9b8ddec21c734ea00943ddf3554802d471a782a000c34a84b9a75bf2b380215",
+            "bytes": 1276
           }
         },
         "llm_cost_usd": 0.0,
@@ -1904,48 +1904,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 4042,
-        "pct_clean": 66.5,
-        "errors": 1695,
-        "warnings": 1056,
-        "at": "2026-08-25T00:06:44+03:00",
+        "lines": 5523,
+        "pct_clean": 89.3,
+        "errors": 544,
+        "warnings": 576,
+        "at": "2026-08-26T08:54:17+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 10,
-          "lines": 4042,
-          "lines_strictly_verified": 2687,
-          "pct_lines_strictly_verified": 66.5,
-          "numeric_cells": 12561,
-          "numeric_cells_strictly_verified": 8226,
-          "pct_numeric_cells_strictly_verified": 65.5,
+          "documents": 27,
+          "lines": 5523,
+          "lines_strictly_verified": 4930,
+          "pct_lines_strictly_verified": 89.3,
+          "numeric_cells": 17745,
+          "numeric_cells_strictly_verified": 16147,
+          "pct_numeric_cells_strictly_verified": 91.0,
           "scope": {
             "pages_expected": 361,
             "pages_selected": 361,
             "pages_processed": 361,
             "complete_pdf": true
           },
-          "errors": 1695,
-          "warnings": 1056,
-          "info": 16
+          "errors": 544,
+          "warnings": 576,
+          "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "fb60137a13538817c2904ce5",
+          "bundle_id": "8550b466b53e34df59be95a4",
           "source_pdf_sha256": "564679af6db5d66c39aa21559fc9cac2dcd41417e0ed9bc2360e8838e3632017",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "b9f94f17624ba9d592930939ef3ddf818b35a7e167473125ed175e85d14ac32c",
-            "bytes": 780055
+            "sha256": "80b75c11f1198c0c18f88bb185f8fbd351f6f8d82baa72baf457668f6748d1f1",
+            "bytes": 623634
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "6bbf40d4440bee4542327d42e79db431656e5a47c386c618821d6961fb85293a",
-            "bytes": 2168
+            "sha256": "aa2e880c2c907457ece436267d1bac2196310c089118d60f3f6d2c7a0284b857",
+            "bytes": 2140
           }
         },
         "llm_cost_usd": 0.0,
@@ -1973,47 +1973,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 775,
-        "pct_clean": 94.1,
-        "errors": 22,
-        "warnings": 25,
-        "at": "2026-08-25T00:06:45+03:00",
+        "lines": 779,
+        "pct_clean": 94.0,
+        "errors": 24,
+        "warnings": 24,
+        "at": "2026-08-26T08:12:27+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 775,
-          "lines_strictly_verified": 729,
-          "pct_lines_strictly_verified": 94.1,
-          "numeric_cells": 775,
-          "numeric_cells_strictly_verified": 729,
-          "pct_numeric_cells_strictly_verified": 94.1,
+          "lines": 779,
+          "lines_strictly_verified": 732,
+          "pct_lines_strictly_verified": 94.0,
+          "numeric_cells": 780,
+          "numeric_cells_strictly_verified": 733,
+          "pct_numeric_cells_strictly_verified": 94.0,
           "scope": {
             "pages_expected": 29,
             "pages_selected": 29,
             "pages_processed": 29,
             "complete_pdf": true
           },
-          "errors": 22,
-          "warnings": 25,
+          "errors": 24,
+          "warnings": 24,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "4a266d5e2a76355b46127fd0",
+          "bundle_id": "5d6ae55513c63c4f91d17c1d",
           "source_pdf_sha256": "f965a34a536602ccad08a33d81b91f238308f1690a906777f4fd6baf9503e67e",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "9a0cb961d3277f6b1c7a84998e57d424ede7c765c95b5f04b2ccd974164395ad",
-            "bytes": 51492
+            "sha256": "575d3898a09c03e26cedc4fbfd342f54b6f5829e5106237a2f23fc80031df49d",
+            "bytes": 51753
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "8e86b2155e88e0d03109718c6c328b46553e67318bd678e428ac5850fc2d2d24",
+            "sha256": "dcf2906f1da14fbcca1fa0411d9ea2d63988fe8e2a7cf30c4097d8d4cd64aa9e",
             "bytes": 1309
           }
         },
@@ -2042,48 +2042,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 87,
-        "pct_clean": 78.2,
-        "errors": 5,
-        "warnings": 16,
-        "at": "2026-08-25T00:06:45+03:00",
+        "lines": 85,
+        "pct_clean": 98.8,
+        "errors": 0,
+        "warnings": 1,
+        "at": "2026-08-26T08:13:04+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 87,
-          "lines_strictly_verified": 68,
-          "pct_lines_strictly_verified": 78.2,
-          "numeric_cells": 246,
-          "numeric_cells_strictly_verified": 197,
-          "pct_numeric_cells_strictly_verified": 80.1,
+          "lines": 85,
+          "lines_strictly_verified": 84,
+          "pct_lines_strictly_verified": 98.8,
+          "numeric_cells": 266,
+          "numeric_cells_strictly_verified": 263,
+          "pct_numeric_cells_strictly_verified": 98.9,
           "scope": {
             "pages_expected": 4,
             "pages_selected": 4,
             "pages_processed": 4,
             "complete_pdf": true
           },
-          "errors": 5,
-          "warnings": 16,
+          "errors": 0,
+          "warnings": 1,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "795865ee2396dde8a3911e93",
+          "bundle_id": "47dd91e0e5afefff5cadf3b2",
           "source_pdf_sha256": "09d17a11457e42458692b2375b14e5e6d5a1974f2a7f96ebc443f457bc864d9c",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "3473358f68d8ab12a5ac10bc48073bbc4b0b7a10496e808cfbbe86cd5cb2fd40",
-            "bytes": 13499
+            "sha256": "841be1876229458fd6e802cc9db0834e656ed8e1095b12dc39f901ed37c666e8",
+            "bytes": 12493
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "9aa3dca74b59d2a68ab75fb7b362f09c51c1f670f275810989818191384e7481",
-            "bytes": 1065
+            "sha256": "4847b8d7c9492959bd672e2652efa36f6c3f6f76c91b9378805cb6be65211cf9",
+            "bytes": 1064
           }
         },
         "llm_cost_usd": 0.0,
@@ -2111,48 +2111,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 340,
-        "pct_clean": 79.1,
-        "errors": 26,
-        "warnings": 47,
-        "at": "2026-08-25T00:06:46+03:00",
+        "lines": 359,
+        "pct_clean": 77.4,
+        "errors": 41,
+        "warnings": 41,
+        "at": "2026-08-26T08:15:06+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 340,
-          "lines_strictly_verified": 269,
-          "pct_lines_strictly_verified": 79.1,
-          "numeric_cells": 340,
-          "numeric_cells_strictly_verified": 269,
-          "pct_numeric_cells_strictly_verified": 79.1,
+          "lines": 359,
+          "lines_strictly_verified": 278,
+          "pct_lines_strictly_verified": 77.4,
+          "numeric_cells": 639,
+          "numeric_cells_strictly_verified": 558,
+          "pct_numeric_cells_strictly_verified": 87.3,
           "scope": {
             "pages_expected": 17,
             "pages_selected": 17,
             "pages_processed": 17,
             "complete_pdf": true
           },
-          "errors": 26,
-          "warnings": 47,
+          "errors": 41,
+          "warnings": 41,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "e69fe8c0cbcc1ff2d59fe96c",
+          "bundle_id": "d1ae8f96b8e745ec4f7ac671",
           "source_pdf_sha256": "b254e8d7de2abc3d9ed143e2363e7b96cc80bcc13b8f40eb2996a1b68a77e85e",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "bdeed33dc0a1ad9048df4f7660fc67f908a271904247b1f03e97ae8f663ffb9e",
-            "bytes": 45802
+            "sha256": "62c2369f339bd880ad0998eabbc8571cf479391ff558ad9f3a8cabb628a085ca",
+            "bytes": 46283
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "0e397f253ab7575e82f8da92efe7f33f19d451e961a3e6305b2034030fc53193",
-            "bytes": 2139
+            "sha256": "4ff3bab5d66546e41b04c37bac825a102a94985eacbe0f2681404feb146d608e",
+            "bytes": 1210
           }
         },
         "llm_cost_usd": 0.0,
@@ -2180,47 +2180,47 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 720,
-        "pct_clean": 66.9,
-        "errors": 296,
-        "warnings": 185,
-        "at": "2026-08-25T00:06:48+03:00",
+        "lines": 669,
+        "pct_clean": 72.5,
+        "errors": 94,
+        "warnings": 105,
+        "at": "2026-08-26T08:20:54+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 1,
-          "lines": 720,
-          "lines_strictly_verified": 482,
-          "pct_lines_strictly_verified": 66.9,
-          "numeric_cells": 885,
-          "numeric_cells_strictly_verified": 571,
-          "pct_numeric_cells_strictly_verified": 64.5,
+          "lines": 669,
+          "lines_strictly_verified": 485,
+          "pct_lines_strictly_verified": 72.5,
+          "numeric_cells": 1088,
+          "numeric_cells_strictly_verified": 897,
+          "pct_numeric_cells_strictly_verified": 82.4,
           "scope": {
             "pages_expected": 58,
             "pages_selected": 58,
             "pages_processed": 58,
             "complete_pdf": true
           },
-          "errors": 296,
-          "warnings": 185,
+          "errors": 94,
+          "warnings": 105,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "5a2681604e1605cf72646b4e",
+          "bundle_id": "759aa0a7ae3adf30705f0e54",
           "source_pdf_sha256": "cc943daf2757091d1ed492066c0d8baaf728c7929175729efd7e8249547f4d35",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "6f89d500ce66e9297546c9602bceffd715a4b8c87ccd1af1a99a28cc3fdf6cde",
-            "bytes": 135962
+            "sha256": "52251ba040d2fb16206dee1865ef155d056aad09360acf2574678df8712c241b",
+            "bytes": 98675
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "9479ac9b0099c8957d6416965ed38a566f158c63091f15edfbb7c7ae5e9b903a",
+            "sha256": "538246ae5411f8b374245fc55c528de79993a3c3eaa6fc12ed0df9ad1786f302",
             "bytes": 2142
           }
         },
@@ -2249,48 +2249,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 1890,
-        "pct_clean": 37.8,
-        "errors": 421,
-        "warnings": 1075,
-        "at": "2026-08-25T00:06:52+03:00",
+        "lines": 2682,
+        "pct_clean": 61.1,
+        "errors": 397,
+        "warnings": 867,
+        "at": "2026-08-26T08:31:52+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 7,
-          "lines": 1890,
-          "lines_strictly_verified": 714,
-          "pct_lines_strictly_verified": 37.8,
-          "numeric_cells": 3052,
-          "numeric_cells_strictly_verified": 1138,
-          "pct_numeric_cells_strictly_verified": 37.3,
+          "documents": 8,
+          "lines": 2682,
+          "lines_strictly_verified": 1638,
+          "pct_lines_strictly_verified": 61.1,
+          "numeric_cells": 6105,
+          "numeric_cells_strictly_verified": 4633,
+          "pct_numeric_cells_strictly_verified": 75.9,
           "scope": {
             "pages_expected": 135,
             "pages_selected": 135,
             "pages_processed": 135,
             "complete_pdf": true
           },
-          "errors": 421,
-          "warnings": 1075,
-          "info": 14
+          "errors": 397,
+          "warnings": 867,
+          "info": 7
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "997e6745e64cda05fed30dde",
+          "bundle_id": "9af1989fbd8fbbd8aa108b23",
           "source_pdf_sha256": "909e33948475c34614574a6e2aa48da06062a087a1425855d29ad94f93feb4fc",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "082d7a34cfc2a46ede2a67aa1a16dc7d4714c6dcba322ee399621fb2eb0e646b",
-            "bytes": 304476
+            "sha256": "be05037cda6caa634ca10c2e632784cc0999e124edd54728da4794acc73322fd",
+            "bytes": 309943
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "cc5c340e4bf5338adc504742b8c505c301970b368515972a5f204b54caa4f287",
-            "bytes": 2402
+            "sha256": "cbbbfbf6f5305a95e83828abfc02fc02cdc0111a89154a6e5462908ca23827eb",
+            "bytes": 2373
           }
         },
         "llm_cost_usd": 0.0,
@@ -2340,48 +2340,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 245,
-        "pct_clean": 71.8,
-        "errors": 46,
-        "warnings": 67,
-        "at": "2026-08-25T00:06:53+03:00",
+        "lines": 436,
+        "pct_clean": 86.9,
+        "errors": 11,
+        "warnings": 53,
+        "at": "2026-08-26T08:35:46+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 3,
-          "lines": 245,
-          "lines_strictly_verified": 176,
-          "pct_lines_strictly_verified": 71.8,
-          "numeric_cells": 204,
-          "numeric_cells_strictly_verified": 145,
-          "pct_numeric_cells_strictly_verified": 71.1,
+          "lines": 436,
+          "lines_strictly_verified": 379,
+          "pct_lines_strictly_verified": 86.9,
+          "numeric_cells": 679,
+          "numeric_cells_strictly_verified": 622,
+          "pct_numeric_cells_strictly_verified": 91.6,
           "scope": {
             "pages_expected": 33,
             "pages_selected": 33,
             "pages_processed": 33,
             "complete_pdf": true
           },
-          "errors": 46,
-          "warnings": 67,
+          "errors": 11,
+          "warnings": 53,
           "info": 0
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "4d4df771e01847d72b86711f",
+          "bundle_id": "c25262c69c3eda19b126b2e4",
           "source_pdf_sha256": "6564117f742e92ef18443ff0eb166013f511b2b26e8c0ad79d8783549bc3f0de",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "0980b725c83cfab0e82ef9c6ba8c638d80cf0f97587bb2509d68784edf9dd346",
-            "bytes": 72380
+            "sha256": "1b09f73c1c78c0236617916428a8fdd0116c52f5099dd72c0b0e4ba9abfbb754",
+            "bytes": 54328
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "6538f814744ecc85978b491bcd0389949d10d801869370ea0da8ad13744b1a1d",
-            "bytes": 2000
+            "sha256": "3f61b835f116d243a0bf5c44e752e4001551a8da148dd956f9b6e647a6230362",
+            "bytes": 2020
           }
         },
         "llm_cost_usd": 0.0,
@@ -2410,48 +2410,48 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 9279,
-        "pct_clean": 80.3,
-        "errors": 1361,
-        "warnings": 1063,
-        "at": "2026-08-25T00:06:25+03:00",
+        "lines": 8825,
+        "pct_clean": 81.4,
+        "errors": 1298,
+        "warnings": 918,
+        "at": "2026-08-26T07:25:44+03:00",
         "tool_version": "0.1.0",
         "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
-          "schema_version": 1,
+          "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 286,
-          "lines": 9279,
-          "lines_strictly_verified": 7454,
-          "pct_lines_strictly_verified": 80.3,
-          "numeric_cells": 16633,
-          "numeric_cells_strictly_verified": 13542,
-          "pct_numeric_cells_strictly_verified": 81.4,
+          "documents": 245,
+          "lines": 8825,
+          "lines_strictly_verified": 7183,
+          "pct_lines_strictly_verified": 81.4,
+          "numeric_cells": 18910,
+          "numeric_cells_strictly_verified": 15944,
+          "pct_numeric_cells_strictly_verified": 84.3,
           "scope": {
             "pages_expected": 551,
             "pages_selected": 551,
             "pages_processed": 551,
             "complete_pdf": true
           },
-          "errors": 1361,
-          "warnings": 1063,
-          "info": 3
+          "errors": 1298,
+          "warnings": 918,
+          "info": 1
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "9b9a7cfec0ac7ffaf595708e",
+          "bundle_id": "e1e60f121560c544da5b42e5",
           "source_pdf_sha256": "11587b75564d341840099bfc28de10dd54aafaa050a2535a577951a53ced4c38",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "8df38c14c93ccd3005ad0fd8a101016a48c7e3dcc8b8a2e7afe9bf196e5ac6fe",
-            "bytes": 983659
+            "sha256": "97c39b545c3e04502298d1889f53679363eca79ff7f25287a958df5f7b1a1a5a",
+            "bytes": 985174
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "1e0f60bab8f69811d26818b73754983b0758d8a14be16f0133834e75ed9dabdf",
-            "bytes": 2261
+            "sha256": "74797b489278b621e2ba32d6224082ea409e88a96a49ac41266673c1370cb19d",
+            "bytes": 2151
           }
         },
         "llm_cost_usd": 0.0,

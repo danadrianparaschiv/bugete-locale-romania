@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -60,17 +60,21 @@ class RunConfig(BaseSettings):
 
     # OCR / docling (used from Phase 2; part of config now so hashes are stable)
     ocr_langs: list[str] = ["ro", "en"]
-    ocr_engine: str = "rapidocr"
-    tableformer_mode: str = "accurate"
-    # Copier PDFs: extract from the embedded text layer instead of re-OCR.
-    # Measured on Bacau: 3x faster but -8pp validated cleanliness (the copier
-    # text is corrupted) — enable only for files with a GOOD text layer.
+    ocr_engine: Literal["auto", "rapidocr", "easyocr", "tesseract", "tesseract_cli"] = (
+        "rapidocr"
+    )
+    tableformer_mode: Literal["fast", "accurate"] = "accurate"
+    # Copier PDFs always try the embedded text layer before raster OCR. This
+    # switch accepts any non-empty native mapping (score threshold zero); the
+    # default still requires the same structural gate as OCR output.
     prefer_native_text: bool = False
-    # Whiten saturated (stamp-ink) pixels before OCR. Off by default: flipping
-    # it does NOT invalidate cached OCR (the ocr stage keys on nothing), so
-    # enable it only together with a deliberate re-OCR of the target file.
+    # Whiten saturated (stamp-ink) pixels before OCR. Adaptive recovery may
+    # also try this on structurally poor pages and retain it only on a gain.
     stamp_filter: bool = False
     docling_cell_matching: bool = True
+    adaptive_ocr: bool = True
+    structural_score_threshold: float = Field(default=0.85, ge=0.0, le=1.0)
+    max_deskew_degrees: float = Field(default=2.0, ge=0.0, le=5.0)
 
     llm: LLMConfig = LLMConfig()
 
@@ -79,20 +83,32 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    # v43 combines the exhaustive P1 family gates with Formular 11/rectification.
-    extract_version: str = "43"
+    # v45 closes P1: dynamic years (without confusing economic codes for
+    # years), continuation schemas/rows, Cluj annual totals, native-first
+    # routing and validation-selected OCR preprocessing.
+    extract_version: str = "45"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.
     STAGE_FIELDS: dict[str, list[str]] = {
         "profile": [],
         "orient": [],
-        "ocr": ["render_scale", "ocr_langs", "ocr_engine", "tableformer_mode", "docling_cell_matching"],
+        "ocr": [
+            "render_scale", "ocr_langs", "ocr_engine", "tableformer_mode",
+            "docling_cell_matching", "stamp_filter",
+        ],
+        "ocr_native": ["tableformer_mode", "docling_cell_matching"],
+        "ocr_recovery": [
+            "render_scale", "ocr_langs", "ocr_engine", "tableformer_mode",
+            "docling_cell_matching", "adaptive_ocr", "structural_score_threshold",
+            "max_deskew_degrees",
+        ],
         "classify": ["render_scale", "llm.classify_model", "llm.prompt_version", "llm.mode"],
         # extract derives from ocr output, so it inherits ocr's fields too
         "extract": [
             "extract_version", "render_scale", "ocr_langs", "ocr_engine",
-            "tableformer_mode", "docling_cell_matching",
+            "tableformer_mode", "docling_cell_matching", "stamp_filter",
+            "adaptive_ocr", "structural_score_threshold", "max_deskew_degrees",
         ],
         "llm": ["render_scale", "llm.repair_model", "llm.prompt_version"],
         "llm_extract": [

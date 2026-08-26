@@ -1,49 +1,54 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 286,
-    "lines_strictly_verified": 56,
-    "pct_lines_strictly_verified": 19.6,
-    "numeric_cells": 847,
-    "numeric_cells_strictly_verified": 168,
-    "pct_numeric_cells_strictly_verified": 19.8,
+    "lines": 265,
+    "lines_strictly_verified": 55,
+    "pct_lines_strictly_verified": 20.8,
+    "numeric_cells": 1481,
+    "numeric_cells_strictly_verified": 882,
+    "pct_numeric_cells_strictly_verified": 59.6,
     "scope": {
       "pages_expected": 17,
       "pages_selected": 17,
       "pages_processed": 17,
       "complete_pdf": true
     },
-    "pct_clean": 19.6,
-    "errors": 37,
-    "warnings": 309,
+    "pct_clean": 20.8,
+    "errors": 22,
+    "warnings": 298,
     "info": 0,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 233521.0,
     "cheltuieli": null
   },
   "top_capitole": [
     {
       "code": "65.02",
-      "name": "INVATAMANT DE STAT (20 institutii)",
+      "name": "INVATAMANT DE STAT ( 20 institutii)",
       "total": 23509.0
     },
     {
       "code": "55.02",
       "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
       "total": 10600.0
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 2525.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ca749df4b0c8b905e1861a25",
+    "bundle_id": "ff07f8ea862584a41a5e23b9",
     "source_pdf_sha256": "9f45afdfc5a5b68a5f39d4ceff59d1e4a92587b714bfdfef299a2a8e8d0ea2ec"
   }
 }

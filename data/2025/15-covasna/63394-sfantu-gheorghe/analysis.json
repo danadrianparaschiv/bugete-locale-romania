@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1676,
-    "lines_strictly_verified": 1545,
-    "pct_lines_strictly_verified": 92.2,
-    "numeric_cells": 1671,
-    "numeric_cells_strictly_verified": 1544,
-    "pct_numeric_cells_strictly_verified": 92.4,
+    "lines": 1667,
+    "lines_strictly_verified": 1546,
+    "pct_lines_strictly_verified": 92.7,
+    "numeric_cells": 1736,
+    "numeric_cells_strictly_verified": 1618,
+    "pct_numeric_cells_strictly_verified": 93.2,
     "scope": {
       "pages_expected": 40,
       "pages_selected": 40,
       "pages_processed": 40,
       "complete_pdf": true
     },
-    "pct_clean": 92.2,
-    "errors": 53,
-    "warnings": 92,
-    "info": 8,
+    "pct_clean": 92.7,
+    "errors": 54,
+    "warnings": 77,
+    "info": 7,
     "documents": 1
   },
   "llm_models": [],
@@ -30,60 +30,60 @@
   "top_capitole": [
     {
       "code": "67.02",
-      "name": "Cultura, recreere si religie(cod 67.02.03+67.02.05+67.02.06+67.02.50)",
+      "name": "Cultura, recreere si religie",
       "total": 40140270.0
     },
     {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala (cod 68.02.04+68.02.05+68.02.06+68.02.1",
-      "total": 40105280.0
-    },
-    {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
-      "total": 24115000.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.12+65.02.",
-      "total": 18211160.0
-    },
-    {
       "code": "70.02",
-      "name": "Locuinte, servicll sl dezvoltare publlca(cod 70.02.03+70.02.05 la 70.0",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 9908280.0
     },
     {
       "code": "74.02",
-      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "name": "Protectia mediului",
       "total": 8258280.0
     },
     {
       "code": "55.02",
-      "name": "Tranzactii privind datoria publica si Împrumuturi",
+      "name": "Tranzactii privind datoria publica si împrumuturi",
       "total": 6589710.0
     },
     {
       "code": "66.02",
-      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50)",
+      "name": "Sanatate",
       "total": 5930340.0
     },
     {
-      "code": "61.02",
-      "name": "Ordine publica si siguranta nationala(cod 61.02.03+61.02.05+61.02.50)",
-      "total": 4608400.0
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 3300000.0
     },
     {
-      "code": "54.02",
-      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
-      "total": 3300000.0
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 2761130.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "total": 1453700.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 1172170.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 885000.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "b9fd50c8e10f4115e44636bf",
+    "bundle_id": "4a6ea89cdb59add781a9f9f4",
     "source_pdf_sha256": "2edd0eb570404b0f01b4ccf8fe8149aa797cbed2d361276859f7eaa0dd11a1e8"
   }
 }

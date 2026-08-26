@@ -190,7 +190,7 @@ def try_map(grid: list[list[str]]) -> list[dict] | None:
     if not (
         "denumirea indicatorilor" in header
         and "estimari" in header
-        and ("buget2026" in header or "prevederi anuale" in header)
+        and (re.search(r"buget\s*(?:19|20)\d{2}", header) or "prevederi anuale" in header)
     ):
         return None
 

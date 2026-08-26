@@ -1,4 +1,5 @@
 from pathlib import Path
+from threading import Event, Thread
 
 import pytest
 
@@ -19,6 +20,46 @@ def test_put_get_roundtrip(store: RunStore):
     store.put("extract", 3, {"rows": [1, 2]})
     assert store.get("extract", 3) == {"rows": [1, 2]}
     assert store.get("extract", 4) is None
+
+
+def test_malformed_page_cache_is_a_miss_and_can_be_rebuilt(store: RunStore):
+    path = store._page_path("extract", 3)
+    path.write_text("")
+    assert store.get("extract", 3) is None
+    assert store.pages_done("extract") == []
+
+    store.put("extract", 3, {"rows": [1, 2]})
+    assert store.get("extract", 3) == {"rows": [1, 2]}
+    assert store.pages_done("extract") == [3]
+
+
+def test_atomic_page_publication_never_exposes_partial_json(store: RunStore, monkeypatch):
+    store.put("extract", 3, {"version": "old"})
+    started = Event()
+    release = Event()
+
+    from bgconvertor import runstore as runstore_module
+
+    original_dump = runstore_module.json.dump
+
+    def delayed_dump(*args, **kwargs):
+        started.set()
+        assert release.wait(timeout=2)
+        return original_dump(*args, **kwargs)
+
+    monkeypatch.setattr(runstore_module.json, "dump", delayed_dump)
+    writer = Thread(target=store.put, args=("extract", 3, {"version": "new"}))
+    writer.start()
+    assert started.wait(timeout=2)
+
+    # The writer has created/truncated only its private temporary file. The
+    # shared destination remains the complete previous envelope until replace.
+    assert store.get("extract", 3) == {"version": "old"}
+    release.set()
+    writer.join(timeout=2)
+    assert not writer.is_alive()
+    assert store.get("extract", 3) == {"version": "new"}
+    assert list((store.root / "extract").glob("*.tmp")) == []
 
 
 def test_config_change_invalidates_only_dependent_stage(store: RunStore):
@@ -67,6 +108,23 @@ def test_run_stage_fail_soft_and_resume(store: RunStore):
     s2 = run_stage(store, "extract", [1, 2, 3], fn, show_progress=False)
     assert calls == [2]
     assert (s2.cached, s2.failed) == ([1, 3], [2])
+
+
+def test_run_stage_force_recomputes_and_observes_cached_payloads(store: RunStore):
+    store.put("extract", 1, {"version": 1})
+    seen = []
+    cached = run_stage(
+        store, "extract", [1], lambda page: {"version": 2},
+        show_progress=False, on_cached=lambda page, payload: seen.append((page, payload)),
+    )
+    assert cached.cached == [1]
+    assert seen == [(1, {"version": 1})]
+    forced = run_stage(
+        store, "extract", [1], lambda page: {"version": 2},
+        show_progress=False, force=True,
+    )
+    assert forced.ok == [1]
+    assert store.get("extract", 1) == {"version": 2}
 
 
 def test_run_stage_fail_fast(store: RunStore):

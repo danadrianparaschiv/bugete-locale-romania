@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 245,
-    "lines_strictly_verified": 176,
-    "pct_lines_strictly_verified": 71.8,
-    "numeric_cells": 204,
-    "numeric_cells_strictly_verified": 145,
-    "pct_numeric_cells_strictly_verified": 71.1,
+    "lines": 436,
+    "lines_strictly_verified": 379,
+    "pct_lines_strictly_verified": 86.9,
+    "numeric_cells": 679,
+    "numeric_cells_strictly_verified": 622,
+    "pct_numeric_cells_strictly_verified": 91.6,
     "scope": {
       "pages_expected": 33,
       "pages_selected": 33,
       "pages_processed": 33,
       "complete_pdf": true
     },
-    "pct_clean": 71.8,
-    "errors": 46,
-    "warnings": 67,
+    "pct_clean": 86.9,
+    "errors": 11,
+    "warnings": 53,
     "info": 0,
     "documents": 3
   },
@@ -33,7 +33,32 @@
     {
       "code": "84.02",
       "name": "Transporturi",
-      "total": 187.363
+      "total": 187363.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 42988.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învăţământ",
+      "total": 42159.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorităţi publice",
+      "total": 34827.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere si religie",
+      "total": 30910.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni gen.economice, comerciale",
+      "total": 9780.0
     },
     {
       "code": "68.02",
@@ -41,46 +66,21 @@
       "total": 63.634
     },
     {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 42.988
-    },
-    {
-      "code": "65.02",
-      "name": "nvǎţământ",
-      "total": 42.159
-    },
-    {
-      "code": "51.02",
-      "name": "Autorități publice",
-      "total": 34.827
-    },
-    {
-      "code": "67.02",
-      "name": "Cultură, recreere si religie",
-      "total": 30.91
-    },
-    {
       "code": "66.02",
       "name": "Cap. 66.02 Sanatate",
       "total": 11.992
     },
     {
-      "code": "80.02",
-      "name": "Actiuni gen.economice, comerciale",
-      "total": 9.78
-    },
-    {
       "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 8.145
+      "name": "Cap.54.02 Alte servicii publice generale",
+      "total": 3.515
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "4d4df771e01847d72b86711f",
+    "bundle_id": "c25262c69c3eda19b126b2e4",
     "source_pdf_sha256": "6564117f742e92ef18443ff0eb166013f511b2b26e8c0ad79d8783549bc3f0de"
   }
 }

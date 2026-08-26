@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1294,
-    "lines_strictly_verified": 1230,
-    "pct_lines_strictly_verified": 95.1,
-    "numeric_cells": 1280,
-    "numeric_cells_strictly_verified": 1226,
-    "pct_numeric_cells_strictly_verified": 95.8,
+    "lines": 1347,
+    "lines_strictly_verified": 1225,
+    "pct_lines_strictly_verified": 90.9,
+    "numeric_cells": 1602,
+    "numeric_cells_strictly_verified": 1497,
+    "pct_numeric_cells_strictly_verified": 93.4,
     "scope": {
       "pages_expected": 38,
       "pages_selected": 38,
       "pages_processed": 38,
       "complete_pdf": true
     },
-    "pct_clean": 95.1,
-    "errors": 64,
-    "warnings": 19,
+    "pct_clean": 90.9,
+    "errors": 90,
+    "warnings": 51,
     "info": 0,
     "documents": 1
   },
@@ -29,44 +29,9 @@
   },
   "top_capitole": [
     {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 782306026.0
-    },
-    {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe",
-      "total": 444281004.0
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 320477000.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 154598000.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 104301000.0
-    },
-    {
       "code": "66.02",
       "name": "Sanatate",
       "total": 92667141.0
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 73000000.0
-    },
-    {
-      "code": "61.02",
-      "name": "Ordine publica si siguranta nationala",
-      "total": 50693000.0
     },
     {
       "code": "55.02",
@@ -77,13 +42,18 @@
       "code": "54.02",
       "name": "Alte servicii publice generale",
       "total": 15878000.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "total": 600000.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "a919498cd777e3700102c702",
+    "bundle_id": "729e7de08312d405a59c40f0",
     "source_pdf_sha256": "7071747e95b9f326fc8d44baaee1d143d9fc89dc7b3beecefec1569cf7c3beba"
   }
 }

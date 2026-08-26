@@ -247,6 +247,9 @@ def _run_extraction(
     from pypdf import PdfReader
 
     from . import profilepdf
+    from .years import infer_budget_year_from_path
+
+    budget_year = infer_budget_year_from_path(pdf)
 
     _stage_banner("Profilare pagini", "detectam care pagini au text nativ vs. scanate")
     reader = PdfReader(pdf)
@@ -266,7 +269,9 @@ def _run_extraction(
         with pdfplumber.open(pdf) as plumber:
             summary = run_stage(
                 store, "extract", digital_pages,
-                lambda p: digital.extract_page(plumber.pages[p - 1]),
+                lambda p: digital.extract_page(
+                    plumber.pages[p - 1], budget_year=budget_year
+                ),
             )
         console.print("digital " + summary.line())
         # Pages with a text layer but no ruled grid (copier-embedded OCR text)
@@ -278,27 +283,45 @@ def _run_extraction(
                 for marker in ("ruling lines", "grid header", "header row containing")
             )
         ]
-        if rerouted and config.prefer_native_text:
+        if rerouted:
             from .extract import scanned as sc
 
             _stage_banner("Extractie din stratul de text (nativ)",
-                          "TableFormer pe textul incorporat; fara OCR, fara orientare")
+                          "prima incercare pentru pagini digitale fara caroiaj")
             run_stage(
                 store, "ocr_native", rerouted,
-                lambda p: sc.ocr_page_native(pdf, p),
+                lambda p: sc.ocr_page_native(
+                    pdf, p,
+                    cell_matching=config.docling_cell_matching,
+                    tableformer_mode=config.tableformer_mode,
+                ),
             )
-            summary = run_stage(
-                store, "extract", rerouted,
-                lambda p: sc.map_payload(store.get("ocr_native", p) or {}),
-            )
-            console.print("native " + summary.line())
-        elif rerouted:
-            console.print(
-                f"[yellow]{len(rerouted)} pages have a text layer but no ruled grid "
-                f"(copier PDF) — rerouting through OCR (measured more accurate than "
-                f"the embedded text; BGC_PREFER_NATIVE_TEXT=1 flips this)[/yellow]"
-            )
-            scanned_pages = sorted(set(scanned_pages) | set(rerouted))
+            native_good = []
+            native_threshold = 0.0 if config.prefer_native_text else config.structural_score_threshold
+            for page in rerouted:
+                mapped = sc.map_payload(
+                    store.get("ocr_native", page) or {}, budget_year=budget_year
+                )
+                score = sc.structural_score(mapped)
+                if mapped.get("lines") and score >= native_threshold:
+                    mapped["candidate_selection"] = {
+                        "selected": "native_text",
+                        "score": score,
+                        "candidates": [{"name": "native_text", "score": score}],
+                    }
+                    store.put("extract", page, mapped)
+                    native_good.append(page)
+            raster_pages = sorted(set(rerouted) - set(native_good))
+            if raster_pages:
+                console.print(
+                    f"[yellow]{len(raster_pages)} pagini native au scor structural slab; "
+                    "continua cu OCR raster si selectie pe validare[/yellow]"
+                )
+                scanned_pages = sorted(set(scanned_pages) | set(raster_pages))
+            if native_good:
+                console.print(
+                    f"native: {len(native_good)} pagini acceptate fara OCR raster"
+                )
 
     if scanned_pages:
         from .extract import orient, scanned
@@ -332,12 +355,104 @@ def _run_extraction(
                 scale=config.render_scale,
                 cell_matching=config.docling_cell_matching,
                 stamp_filter=config.stamp_filter,
+                ocr_engine=config.ocr_engine,
+                ocr_langs=tuple(config.ocr_langs),
+                tableformer_mode=config.tableformer_mode,
             ),
         )
+
+        # Score the first pass cheaply. Good pages stay single-pass; only
+        # structurally weak pages receive one alternative OCR/render attempt.
+        preliminary_context = None
+        preliminary_page = None
+        poor_pages: list[int] = []
+        for page in scanned_pages:
+            if preliminary_page != page - 1:
+                preliminary_context = None
+            preliminary = scanned.map_payload(
+                store.get("ocr", page) or {},
+                budget_year=budget_year,
+                context=preliminary_context,
+            )
+            preliminary_page = page
+            preliminary_context = preliminary.get("mapping_context")
+            if scanned.structural_score(preliminary) < config.structural_score_threshold:
+                poor_pages.append(page)
+
+        if config.adaptive_ocr and poor_pages:
+            _stage_banner(
+                "Recuperare OCR adaptiva",
+                f"{len(poor_pages)} pagini sub scorul structural "
+                f"{config.structural_score_threshold:.2f}; un singur candidat alternativ",
+            )
+            run_stage(
+                store, "ocr_recovery", poor_pages,
+                lambda p: scanned.ocr_page(
+                    pdf, p,
+                    rotation=(store.get("orient", p) or {}).get("rotation", 0),
+                    scale=config.render_scale,
+                    cell_matching=not config.docling_cell_matching,
+                    stamp_filter=False,
+                    ocr_engine=config.ocr_engine,
+                    ocr_langs=tuple(config.ocr_langs),
+                    tableformer_mode=config.tableformer_mode,
+                    adaptive_preprocessing=True,
+                    max_deskew_degrees=config.max_deskew_degrees,
+                ),
+            )
+
         _stage_banner("Mapare tabele", "structura OCR -> linii bugetare (rapid)")
+        first_page = min(scanned_pages)
+        previous = store.get("extract", first_page - 1) if first_page > 1 else None
+        mapping_state = {
+            "page": first_page - 1 if previous and previous.get("mapping_context") else None,
+            "context": previous.get("mapping_context") if previous else None,
+        }
+
+        def _advance_mapping(page: int, payload: dict) -> None:
+            mapping_state["page"] = page
+            mapping_state["context"] = payload.get("mapping_context")
+
+        def _map_scanned(page: int) -> dict:
+            if mapping_state["page"] != page - 1:
+                mapping_state["context"] = None
+            candidates = [(
+                "ocr_baseline",
+                scanned.map_payload(
+                    store.get("ocr", page) or {},
+                    budget_year=budget_year,
+                    context=mapping_state["context"],
+                ),
+            )]
+            recovery = store.get("ocr_recovery", page)
+            if recovery is not None:
+                candidates.append((
+                    "ocr_preprocessed",
+                    scanned.map_payload(
+                        recovery,
+                        budget_year=budget_year,
+                        context=mapping_state["context"],
+                    ),
+                ))
+            native = store.get("ocr_native", page)
+            if native is not None:
+                candidates.append((
+                    "native_text",
+                    scanned.map_payload(
+                        native,
+                        budget_year=budget_year,
+                        context=mapping_state["context"],
+                    ),
+                ))
+            payload = scanned.choose_best_payload(candidates)
+            _advance_mapping(page, payload)
+            return payload
+
         summary = run_stage(
             store, "extract", scanned_pages,
-            lambda p: scanned.map_payload(store.get("ocr", p) or {}),
+            _map_scanned,
+            on_cached=_advance_mapping,
+            force=True,
         )
         console.print("scanned " + summary.line())
 
@@ -355,13 +470,11 @@ def extract(
     store = RunStore(config, pdf)
     selected = parse_pages(pages, len(PdfReader(pdf).pages))
 
-    if workers > 1 and len(selected) > workers:
-        _spawn_extract_workers(store, pdf, selected, workers)
-        done = len(store.pages_done("extract"))
-        console.print(f"workers finished: {done} pages extracted in store")
-        return
-
-    _run_extraction(config, store, pdf, selected)
+    # `_run_extraction` profiles first and fans out only the genuinely stale
+    # OCR pages. The parent then performs the cheap mapping pass in page order
+    # so continuation schemas can propagate safely. Spawning here would load
+    # Docling in N processes even for a fully cached remap.
+    _run_extraction(config, store, pdf, selected, workers=workers)
 
 
 @app.command()

@@ -68,11 +68,13 @@ soluție garantată).
 
 Emite linii conform contractului de extracție (documentat în
 `eval_harness.py`): `raw_code`, `code` normalizat, `name`, `section`,
-`values` (șiruri zecimale canonice indexate pe coloană: `total`,
-`trim1..4`, `est2027..29`, …). Folosește funcțiile ajutătoare din
+`values` (șiruri zecimale canonice indexate pe coloană: `total_2026`,
+`trim1..4`, `est2027..29`, …). Anul nu este constant: pentru un buget 2025,
+cheile devin `total_2025`/`buget_2025` și `est2026..28`. Folosește funcțiile ajutătoare din
 `layouts/common.py` — `mk_line`, `parse_cell` (tolerantă la convenția
 locală de scriere a numerelor și la zgomotul de OCR), vocabularul comun de
-antete.
+antete — și utilitarele din `years.py`; nu introduce ani noi hardcodați în
+mapper.
 
 Înregistrează-l în `layouts/__init__.py`:
 

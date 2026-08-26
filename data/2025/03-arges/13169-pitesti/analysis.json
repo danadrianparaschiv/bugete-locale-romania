@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 403,
-    "lines_strictly_verified": 308,
-    "pct_lines_strictly_verified": 76.4,
-    "numeric_cells": 320,
-    "numeric_cells_strictly_verified": 268,
-    "pct_numeric_cells_strictly_verified": 83.8,
+    "lines": 467,
+    "lines_strictly_verified": 399,
+    "pct_lines_strictly_verified": 85.4,
+    "numeric_cells": 1365,
+    "numeric_cells_strictly_verified": 1314,
+    "pct_numeric_cells_strictly_verified": 96.3,
     "scope": {
       "pages_expected": 38,
       "pages_selected": 38,
       "pages_processed": 38,
       "complete_pdf": true
     },
-    "pct_clean": 76.4,
+    "pct_clean": 85.4,
     "errors": 28,
-    "warnings": 80,
+    "warnings": 53,
     "info": 0,
     "documents": 1
   },
@@ -37,17 +37,17 @@
     },
     {
       "code": "68.02",
-      "name": "ASIGURĂRI ŞI ASISTENTÅ SOCIALÃ",
+      "name": "ASIGURÄRI ŞI ASISTENTÃ SOCIALÃ",
       "total": 103918.0
     },
     {
       "code": "67.02",
-      "name": "CULTURÃ, RECREERE ŞI RELIGIE",
+      "name": "CULTURÅ, RECREERE ŞI RELIGIE",
       "total": 98548.0
     },
     {
       "code": "65.02",
-      "name": "ÎNVÄTÄMÂNT",
+      "name": "ÎNVÅTÃMÂNT",
       "total": 66679.0
     },
     {
@@ -62,7 +62,7 @@
     },
     {
       "code": "61.02",
-      "name": "ORDINE PUBLICA ŞI SIGURANTÃ NATIONALÅ",
+      "name": "ORDINE PUBLICA ŞI SIGURANTÃ NATIONALÃ",
       "total": 25375.0
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "code": "55.02",
-      "name": "TRANZACTII PRIVIND DATORIA PUBLICÃ ŞI ÎMPRUMUTURI",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICÅ SI ÎMPRUMUTURI",
       "total": 2000.0
     },
     {
@@ -85,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "7de1ee8a21fc7bf4aababc1e",
+    "bundle_id": "f522cef40e0275dbabe4dc24",
     "source_pdf_sha256": "040ccefe38f4b3bc096be69bbdb87a73afae9c2a08bbc4f7c3edd8401a2e6715"
   }
 }

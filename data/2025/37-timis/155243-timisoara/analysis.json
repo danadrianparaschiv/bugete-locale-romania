@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 346,
-    "lines_strictly_verified": 276,
-    "pct_lines_strictly_verified": 79.8,
-    "numeric_cells": 346,
-    "numeric_cells_strictly_verified": 276,
-    "pct_numeric_cells_strictly_verified": 79.8,
+    "lines": 373,
+    "lines_strictly_verified": 292,
+    "pct_lines_strictly_verified": 78.3,
+    "numeric_cells": 650,
+    "numeric_cells_strictly_verified": 569,
+    "pct_numeric_cells_strictly_verified": 87.5,
     "scope": {
       "pages_expected": 18,
       "pages_selected": 18,
       "pages_processed": 18,
       "complete_pdf": true
     },
-    "pct_clean": 79.8,
-    "errors": 33,
-    "warnings": 39,
+    "pct_clean": 78.3,
+    "errors": 41,
+    "warnings": 40,
     "info": 0,
     "documents": 1
   },
@@ -29,61 +29,21 @@
   },
   "top_capitole": [
     {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 198393080.0
-    },
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 178436680.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 176520450.0
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 176297000.0
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 154250000.0
-    },
-    {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe",
-      "total": 124385320.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 77788470.0
-    },
-    {
-      "code": "61.02",
-      "name": "Ordine publica si siguranta nationala",
-      "total": 44503620.0
-    },
-    {
-      "code": "66.02",
-      "name": "Sanatate",
-      "total": 28519260.0
-    },
-    {
       "code": "55.02",
       "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 27422900.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 5433000.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ff3a80264042003cf541a990",
+    "bundle_id": "306670ed714ed2e86501509f",
     "source_pdf_sha256": "cc5da585b570f3ff9e4024a2d1bd7155d93e488245969ae64fee733afc1f16d7"
   }
 }

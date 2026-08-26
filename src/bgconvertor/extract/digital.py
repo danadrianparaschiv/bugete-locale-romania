@@ -19,6 +19,7 @@ import unicodedata
 from decimal import Decimal
 
 from ..parsing import NumberParseError, parse_ro_number
+from ..years import remap_lines, role_for_header
 
 log = logging.getLogger("bgc.extract.digital")
 
@@ -34,9 +35,6 @@ HEADER_ROLES = [
     (re.compile(r"trim\.?\s*(ii|11)\b(?!i)"), "trim2"),
     (re.compile(r"trim\.?\s*(iii|ill|lll)"), "trim3"),
     (re.compile(r"trim\.?\s*iv"), "trim4"),
-    (re.compile(r"2027"), "est2027"),
-    (re.compile(r"2028"), "est2028"),
-    (re.compile(r"2029"), "est2029"),
     (re.compile(r"credite|din care"), "credite_stinse"),
     (re.compile(r"\btotal\b"), "total"),
 ]
@@ -48,7 +46,7 @@ def _fold(s: str) -> str:
     return "".join(c for c in nfkd if not unicodedata.combining(c)).lower()
 
 
-def extract_page(plumber_page) -> dict:
+def extract_page(plumber_page, budget_year: int | None = None) -> dict:
     boundaries = _column_boundaries(plumber_page)
     words = plumber_page.extract_words(keep_blank_chars=False)
     columns, header_top, header_bottom = _header_columns(words, boundaries)
@@ -137,7 +135,13 @@ def extract_page(plumber_page) -> dict:
             line["cell_issues"] = cell_issues
         lines.append(line)
 
-    return {"lines": lines, "text": text or None, "layout": "digital_detail"}
+    remap_lines(lines, budget_year)
+    return {
+        "lines": lines,
+        "text": text or None,
+        "layout": "digital_detail",
+        "budget_year": budget_year,
+    }
 
 
 def _column_boundaries(page) -> list[float]:
@@ -174,6 +178,10 @@ def _header_columns(words, xs: list[float]) -> tuple[dict[int, str], float, floa
             if lo <= (w["x0"] + w["x1"]) / 2 < hi
         ))
         if not cell:
+            continue
+        dynamic_role = role_for_header(cell)
+        if dynamic_role and dynamic_role not in columns.values():
+            columns[i] = dynamic_role
             continue
         for pattern, role in HEADER_ROLES:
             if pattern.search(cell) and role not in columns.values():
@@ -217,16 +225,17 @@ def _rand_no(rand_words) -> int | None:
     return None
 
 
-NUMERIC_ROLES = (
-    "total", "credite_stinse", "trim1", "trim2", "trim3", "trim4",
-    "est2027", "est2028", "est2029",
-)
+NUMERIC_ROLES = ("total", "credite_stinse", "trim1", "trim2", "trim3", "trim4")
 
 
 def _parse_values(cells) -> tuple[dict, list]:
     values: dict[str, str] = {}
     issues: list[dict] = []
-    for role in NUMERIC_ROLES:
+    dynamic_roles = sorted(
+        role for role in cells
+        if re.fullmatch(r"(?:total|buget)_\d{4}|est\d{4}", role)
+    )
+    for role in (*NUMERIC_ROLES, *dynamic_roles):
         group = cells.get(role, [])
         raw = "".join(w["text"] for w in group)
         if not raw:

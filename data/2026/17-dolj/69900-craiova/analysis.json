@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 562,
-    "lines_strictly_verified": 338,
-    "pct_lines_strictly_verified": 60.1,
-    "numeric_cells": 1576,
-    "numeric_cells_strictly_verified": 998,
+    "lines": 541,
+    "lines_strictly_verified": 258,
+    "pct_lines_strictly_verified": 47.7,
+    "numeric_cells": 1551,
+    "numeric_cells_strictly_verified": 982,
     "pct_numeric_cells_strictly_verified": 63.3,
     "scope": {
       "pages_expected": 85,
@@ -16,10 +16,10 @@
       "pages_processed": 85,
       "complete_pdf": true
     },
-    "pct_clean": 60.1,
-    "errors": 54,
-    "warnings": 224,
-    "info": 2,
+    "pct_clean": 47.7,
+    "errors": 46,
+    "warnings": 300,
+    "info": 3,
     "documents": 1
   },
   "llm_models": [
@@ -29,12 +29,18 @@
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "67.10",
+      "name": "Cultura,recreeresireligie",
+      "total": 8880.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "d9a674d086ad53724c54d191",
+    "bundle_id": "0b56d2616d8d4ac906934863",
     "source_pdf_sha256": "b6add684b5c934570145e4563671977c2feadb2b32de1f6e337cbeaeeddf705c"
   }
 }

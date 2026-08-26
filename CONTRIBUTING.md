@@ -73,9 +73,12 @@ comise pentru matricea anuală, familia transpusă, familia instituțională,
 tabelul anual cu rânduri colapsate,
 tabelul de detaliu economic cu cinci coloane valorice, capitolul de cheltuieli
 afectat de ștampilă, lista de investiții cu procente de finanțare și tabelul
-numerotat de venituri Arad. Cere minimum 126 de ancore, 16 aserțiuni text, cel
-puțin nouă fixture-uri exhaustive, ≥90% recall numeric și ≥99,5% precizie
-pentru fiecare layout cu etalon exhaustiv. Pentru Arad p31, toate cele 15
+numerotat de venituri Arad, plus familia anual-total din scanarea Cluj.
+Cere minimum 148 de ancore, 19 aserțiuni text, zece fixture-uri exhaustive,
+≥90% recall numeric și ≥99,5% precizie pentru fiecare layout cu etalon
+exhaustiv. Nouă scope-uri scanate sunt complet reproductibile numai din
+grilele comise; CI materializează al zecelea scope din PDF-ul digital Alba.
+Pentru Arad p31, toate cele 15
 marcaje `X` sunt ancore hard separate, fiindcă metrica exhaustivă numerică nu
 le include. Celelalte fixture-uri scanate depind încă de cache-urile OCR locale
 din `runs/`; absența lor apare explicit în raport și nu este interpretată drept
@@ -86,6 +89,10 @@ Modificările care invalidează cache-ul (orice schimbă rezultatul
 extragerii) trebuie să incrementeze `extract_version` din `config.py` —
 asta îi spune magaziei de rulări să remapeze; fără asta modificarea ta pur
 și simplu nu se aplică paginilor deja procesate.
+Artefactele JSON per pagină trebuie publicate atomic prin `RunStore`; nu scrie
+direct în directoarele de etapă. Procesul părinte citește cache-ul în timp ce
+workerii OCR îl completează, iar un fișier parțial trebuie să rămână un cache
+miss recuperabil, nu o eroare de document.
 
 ## Adăugarea unui format nou de municipiu
 

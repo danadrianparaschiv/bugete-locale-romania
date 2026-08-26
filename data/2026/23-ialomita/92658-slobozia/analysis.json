@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 134,
-    "lines_strictly_verified": 111,
-    "pct_lines_strictly_verified": 82.8,
-    "numeric_cells": 134,
-    "numeric_cells_strictly_verified": 111,
-    "pct_numeric_cells_strictly_verified": 82.8,
+    "lines": 148,
+    "lines_strictly_verified": 116,
+    "pct_lines_strictly_verified": 78.4,
+    "numeric_cells": 248,
+    "numeric_cells_strictly_verified": 218,
+    "pct_numeric_cells_strictly_verified": 87.9,
     "scope": {
       "pages_expected": 7,
       "pages_selected": 7,
       "pages_processed": 7,
       "complete_pdf": true
     },
-    "pct_clean": 82.8,
-    "errors": 10,
-    "warnings": 13,
+    "pct_clean": 78.4,
+    "errors": 16,
+    "warnings": 16,
     "info": 0,
     "documents": 1
   },
@@ -28,6 +28,11 @@
     "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 35360.0
+    },
     {
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
@@ -53,7 +58,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "2e9b92650eade08f3c5fee68",
+    "bundle_id": "3a78ab94a1841411ebe60ab1",
     "source_pdf_sha256": "dd864af7087a266099acd67afb6cdfc9fa4566fad0a1977217f337cf11235169"
   }
 }

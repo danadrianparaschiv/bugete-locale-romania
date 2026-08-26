@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 1571,
-    "lines_strictly_verified": 1568,
-    "pct_lines_strictly_verified": 99.8,
-    "numeric_cells": 12512,
-    "numeric_cells_strictly_verified": 12502,
+    "lines_strictly_verified": 1569,
+    "pct_lines_strictly_verified": 99.9,
+    "numeric_cells": 14447,
+    "numeric_cells_strictly_verified": 14437,
     "pct_numeric_cells_strictly_verified": 99.9,
     "scope": {
       "pages_expected": 53,
@@ -16,8 +16,8 @@
       "pages_processed": 53,
       "complete_pdf": true
     },
-    "pct_clean": 99.8,
-    "errors": 3,
+    "pct_clean": 99.9,
+    "errors": 7,
     "warnings": 1,
     "info": 1,
     "documents": 1
@@ -30,153 +30,57 @@
   "top_capitole": [
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
+      "name": "Invatamant",
       "total": 315923.0
     },
     {
       "code": "84.02",
-      "name": "CAP. Transporturi",
+      "name": "Transporturi",
       "total": 238279.0
     },
     {
       "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie",
+      "name": "Cultura, recreere si religie",
       "total": 188379.0
     },
     {
       "code": "70.02",
-      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 174607.0
     },
     {
       "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
+      "name": "Asigurari si asistenta sociala",
       "total": 133648.0
     },
     {
       "code": "51.02",
-      "name": "CAP. Autoritati publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 127665.0
     },
     {
       "code": "74.02",
-      "name": "CAP. Protectia mediului © INDSOFT-SICO - MUNICIPIUL CRAIOVA",
+      "name": "Protectia mediului © INDSOFT-SICO - MUNICIPIUL CRAIOVA",
       "total": 123551.0
     },
     {
       "code": "66.02",
-      "name": "CAP. Sanatate",
+      "name": "Sanatate",
       "total": 72493.0
     },
     {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 35928.0
     },
     {
       "code": "81.02",
-      "name": "CAP. Combustibili si energie",
+      "name": "Combustibili si energie",
       "total": 29100.0
     }
   ],
   "infografic": {
     "unitate": "mii lei",
-    "venituri": {
-      "total": 1453290.0,
-      "surse": [
-        {
-          "cod": "04.02",
-          "nume": "Cote si sume defalcate din impozitul pe venit",
-          "grup": "proprii",
-          "val": 488662.0
-        },
-        {
-          "cod": "42.02",
-          "nume": "Subventii de la bugetul de stat",
-          "grup": "stat",
-          "val": 394535.0
-        },
-        {
-          "cod": "07.02",
-          "nume": "Impozite si taxe pe proprietate",
-          "grup": "proprii",
-          "val": 169770.0
-        },
-        {
-          "cod": "11.02",
-          "nume": "Sume defalcate din TVA",
-          "grup": "stat",
-          "val": 154985.0
-        },
-        {
-          "cod": "45.02",
-          "nume": "Sume primite de la UE/alti donatori in contul platilor efectuate si prefinantari",
-          "grup": "ue",
-          "val": 65848.0
-        },
-        {
-          "cod": "36.02",
-          "nume": "Diverse venituri",
-          "grup": "proprii",
-          "val": 53734.0
-        },
-        {
-          "cod": "16.02",
-          "nume": "Taxe pe utilizarea bunurilor, autorizarea utilizarii bunurilor sau pe desfasurar",
-          "grup": "proprii",
-          "val": 41104.0
-        },
-        {
-          "cod": "43.02",
-          "nume": "Subventii de la alte administratii",
-          "grup": "stat",
-          "val": 31156.0
-        },
-        {
-          "cod": "30.02",
-          "nume": "Venituri din proprietate",
-          "grup": "proprii",
-          "val": 20343.0
-        },
-        {
-          "cod": "35.02",
-          "nume": "Amenzi, penalitati si confiscari",
-          "grup": "proprii",
-          "val": 14449.0
-        },
-        {
-          "cod": "33.02",
-          "nume": "Venituri din prestari de servicii si alte activitati",
-          "grup": "proprii",
-          "val": 6407.0
-        },
-        {
-          "cod": "01.02",
-          "nume": "Impozit pe profit",
-          "grup": "proprii",
-          "val": 2335.0
-        },
-        {
-          "cod": "15.02",
-          "nume": "Taxe pe servicii specifice",
-          "grup": "proprii",
-          "val": 483.0
-        },
-        {
-          "cod": "37.02",
-          "nume": "Transferuri voluntare, altele decat subventiile",
-          "grup": "proprii",
-          "val": 150.0
-        },
-        {
-          "cod": "39.02",
-          "nume": "Venituri din valorificarea unor bunuri",
-          "grup": "proprii",
-          "val": 24.0
-        }
-      ],
-      "acoperire_pct": 99.4
-    },
     "capitole": [
       {
         "cod": "65.02",
@@ -530,12 +434,32 @@
         247773.0,
         91920.0
       ]
+    },
+    "ani": {
+      "years": [
+        2025,
+        2026,
+        2027,
+        2028
+      ],
+      "cheltuieli": [
+        1460426.0,
+        1277679.0,
+        1307591.0,
+        1115927.0
+      ],
+      "venituri": [
+        1453290.0,
+        1277679.0,
+        1307591.0,
+        1115927.0
+      ]
     }
   },
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "5fe6935295dd89d3192874c4",
+    "bundle_id": "54ae22edbda89cd4941b948a",
     "source_pdf_sha256": "8a67f7fee04bdf30a73ebf9810e590b09c0806ad33fd109d319c88b7e70680a1"
   }
 }

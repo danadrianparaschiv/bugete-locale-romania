@@ -1,30 +1,28 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 2353,
-    "lines_strictly_verified": 1632,
-    "pct_lines_strictly_verified": 69.4,
-    "numeric_cells": 3384,
-    "numeric_cells_strictly_verified": 1936,
-    "pct_numeric_cells_strictly_verified": 57.2,
+    "lines": 2502,
+    "lines_strictly_verified": 1864,
+    "pct_lines_strictly_verified": 74.5,
+    "numeric_cells": 6143,
+    "numeric_cells_strictly_verified": 4748,
+    "pct_numeric_cells_strictly_verified": 77.3,
     "scope": {
       "pages_expected": 233,
       "pages_selected": 233,
       "pages_processed": 233,
       "complete_pdf": true
     },
-    "pct_clean": 69.4,
-    "errors": 621,
-    "warnings": 394,
-    "info": 12,
-    "documents": 8
+    "pct_clean": 74.5,
+    "errors": 440,
+    "warnings": 416,
+    "info": 10,
+    "documents": 7
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": 2311355.0
@@ -32,32 +30,32 @@
   "top_capitole": [
     {
       "code": "81.02",
-      "name": "Combustibili si energie (cod 81.02.06+81.02.07+81.02.50) Din total cap",
+      "name": "Combustibili si energie Din total capitol:",
       "total": 624699.0
     },
     {
       "code": "84.02",
-      "name": "Transporturi (cod 84.02.03+84.02.04+84.02.06+84.02.50) Din total capit",
+      "name": "Transporturi Din total capitol:",
       "total": 272811.0
     },
     {
       "code": "74.02",
-      "name": "Protectia mediului (cod 74.02.03+74.02.05+74.02.06+74.02.50)",
+      "name": "Protectia mediului",
       "total": 222167.0
     },
     {
       "code": "51.02",
-      "name": "Autoritati publice si actiuni externe (cod 51.02.01) Din total capitol",
+      "name": "Autoritati publice si actiuni externe Din total capitol:",
       "total": 166876.0
     },
     {
       "code": "66.02",
-      "name": "Sanatate (cod 66.02.06+66.02.08+66.02.50) Din total capitol:",
+      "name": "Sanatate Din total capitol:",
       "total": 96847.0
     },
     {
       "code": "61.02",
-      "name": "Ordine publica si siguranta nationala (cod 61.02.03+61.02.05+61.02.50)",
+      "name": "Ordine publica si siguranta nationala Din total capitol:",
       "total": 49930.0
     },
     {
@@ -67,17 +65,17 @@
     },
     {
       "code": "87.02",
-      "name": "Alte actiuni economice (cod 87.02.01+87.02.03 la 87.02.05+87.02.50) Di",
+      "name": "Alte actiuni economice Din total capitol:",
       "total": 4140.0
     },
     {
       "code": "54.02",
-      "name": "Alte servicii publice generale (cod 54.02.05 la 54.02.07+54.02.10+54.0",
+      "name": "Alte servicii publice generale Din total capitol:",
       "total": 950.0
     },
     {
       "code": "80.02",
-      "name": "Actiuni generale economice, comerciale si de munca (cod 80.02.01+80.02",
+      "name": "Actiuni generale economice, comerciale si de munca Din total capitol:",
       "total": 572.0
     }
   ],
@@ -85,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "b671eee2e5784c076960985f",
+    "bundle_id": "2d34de23fd6bcdb00eea7675",
     "source_pdf_sha256": "eda52ec5920710370388c11a7e1a2eff160162f0fb88cdd26b0e11607648395b"
   }
 }

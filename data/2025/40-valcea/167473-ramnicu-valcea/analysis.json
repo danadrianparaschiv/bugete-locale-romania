@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 327,
-    "lines_strictly_verified": 146,
-    "pct_lines_strictly_verified": 44.6,
-    "numeric_cells": 664,
-    "numeric_cells_strictly_verified": 240,
-    "pct_numeric_cells_strictly_verified": 36.1,
+    "lines": 268,
+    "lines_strictly_verified": 175,
+    "pct_lines_strictly_verified": 65.3,
+    "numeric_cells": 2203,
+    "numeric_cells_strictly_verified": 2003,
+    "pct_numeric_cells_strictly_verified": 90.9,
     "scope": {
       "pages_expected": 68,
       "pages_selected": 68,
       "pages_processed": 68,
       "complete_pdf": true
     },
-    "pct_clean": 44.6,
-    "errors": 184,
-    "warnings": 140,
+    "pct_clean": 65.3,
+    "errors": 65,
+    "warnings": 72,
     "info": 0,
     "documents": 1
   },
@@ -27,53 +27,18 @@
   ],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": null
+    "cheltuieli": 632161.84
   },
   "top_capitole": [
     {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 128973.2
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 88355.9
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 72987.5
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 70590.42
-    },
-    {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe",
-      "total": 63477.6
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 47811.0
+      "total": 54971.3
     },
     {
       "code": "66.02",
       "name": "Sanatate",
       "total": 12721.0
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 8780.0
-    },
-    {
-      "code": "55.02",
-      "name": "Tranzactii privind datoria publica si împrumuturi",
-      "total": 6300.0
     },
     {
       "code": "54.02",
@@ -85,7 +50,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "694e5e430ce8db0518cf4144",
+    "bundle_id": "d4f3cc4761f6f4d560b58a2b",
     "source_pdf_sha256": "3b431e59a1588c1f3cccfda628ae0f1442fc6c157965cb86873c2c1a4d4736d1"
   }
 }
