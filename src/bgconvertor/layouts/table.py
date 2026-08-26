@@ -21,20 +21,28 @@ from .common import (
     widest_text_col,
 )
 
+
 # continuation pages print no header: when the first column is code-like and
 # the trailing columns are numeric, assume the dominant annex shape
-POSITIONAL_ROLES = {
-    4: ["code", "name", "total_2026", "credite_restante"],
-    5: ["code", "name", "total_2026", "est2027", "est2028"],
-    6: ["code", "name", "total_2026", "est2027", "est2028", "est2029"],
-    7: ["code", "name", "total_2026", "trim1", "trim2", "trim3", "trim4"],
-    10: ["code", "name", "total_2026", "trim1", "trim2", "trim3", "trim4",
-         "est2027", "est2028", "est2029"],
-}
+def _positional_roles(n_cols: int, budget_year: int | None) -> list[str] | None:
+    year = budget_year or 2026
+    total = f"total_{year}"
+    estimates = [f"est{year + offset}" for offset in (1, 2, 3)]
+    return {
+        4: ["code", "name", total, "credite_restante"],
+        5: ["code", "name", total, *estimates[:2]],
+        6: ["code", "name", total, *estimates],
+        7: ["code", "name", total, "trim1", "trim2", "trim3", "trim4"],
+        10: [
+            "code", "name", total, "trim1", "trim2", "trim3", "trim4", *estimates
+        ],
+    }.get(n_cols)
 
 
-def _positional_columns(grid, n_cols: int) -> dict[int, str] | None:
-    roles = POSITIONAL_ROLES.get(n_cols)
+def _positional_columns(
+    grid, n_cols: int, budget_year: int | None = None
+) -> dict[int, str] | None:
+    roles = _positional_roles(n_cols, budget_year)
     if roles is None:
         return None
     rows = [r for r in grid if any(c.strip() for c in r)]
@@ -60,18 +68,53 @@ def _positional_columns(grid, n_cols: int) -> dict[int, str] | None:
     return None
 
 
-def map_grid(grid: list[list[str]]) -> list[dict]:
+def _infer_columns(
+    grid: list[list[str]],
+    context: dict | None = None,
+    budget_year: int | None = None,
+) -> tuple[dict[int, str], int, bool]:
     n_cols = max(len(r) for r in grid)
     header_rows, first_data = split_header(grid)
     columns = column_semantics(grid, header_rows, n_cols)
+    rows_ = [row for row in grid[first_data:] if any(cell.strip() for cell in row)]
+
+    # Some vendors merge ``Cod`` and ``Denumire indicator`` in the second
+    # header cell while data still occupy separate columns 0/1. Header-only
+    # semantics then swaps every code and name. Recover the geometry only
+    # when the unassigned left neighbour is code-like on at least one third
+    # of data rows.
+    for index, role in list(columns.items()):
+        joined = fold(
+            " ".join(grid[row][index] for row in header_rows if index < len(grid[row]))
+        )
+        if role != "code" or not all(word in joined for word in ("cod", "indicator")):
+            continue
+        left = index - 1
+        if left < 0 or columns.get(left):
+            continue
+        hits = sum(
+            1 for row in rows_ if left < len(row) and is_code_cell(row[left])
+        )
+        if rows_ and hits >= len(rows_) / 3:
+            columns[left] = "code"
+            columns[index] = "name"
+            break
+    inherited = False
+    if not header_rows and context and context.get("n_cols") == n_cols:
+        prior = {int(index): role for index, role in (context.get("columns") or {}).items()}
+        if "name" in prior.values() and any(
+            role not in ("name", "code", "func_code", "rowno", "ignore")
+            for role in prior.values()
+        ):
+            columns = prior
+            inherited = True
     if not header_rows and len([r for r in columns.values() if r not in ("name",)]) < 2:
-        positional = _positional_columns(grid, n_cols)
+        positional = _positional_columns(grid, n_cols, budget_year)
         if positional:
             columns = positional
     if "code" not in columns.values():
         # a column of code-like cells whose header OCR lost (or that sits
         # past the columns positional detection checks) is the code column
-        rows_ = [r for r in grid[first_data:] if any(c.strip() for c in r)]
         for i in range(min(3, n_cols)):
             if columns.get(i):
                 continue
@@ -85,7 +128,6 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
     # roles (garbled headers like 'Tatal' or headerless continuation pages)
     value_roles = [r for r in columns.values() if r not in ("name", "code", "rowno")]
     if not value_roles:
-        rows_ = [r for r in grid[first_data:] if any(c.strip() for c in r)]
         numeric_cols = []
         for i in range(n_cols):
             if columns.get(i):
@@ -97,19 +139,60 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
             )
             if rows_ and hits >= len(rows_) / 3:
                 numeric_cols.append(i)
+        year = budget_year or 2026
         tail = (
-            ["total_2026", "trim1", "trim2", "trim3", "trim4"]
+            [f"total_{year}", "trim1", "trim2", "trim3", "trim4"]
             if len(numeric_cols) >= 5
-            else ["total_2026", "est2027", "est2028", "est2029"]
+            else [f"total_{year}", *(f"est{year + offset}" for offset in (1, 2, 3))]
         )
         for i, role in zip(numeric_cols, tail, strict=False):
             columns[i] = role
     # the "din care credite..." subcolumn often loses its header to OCR:
-    # an unmapped column immediately right of buget_2026 takes that role
+    # an unmapped column immediately right of the current budget takes that role
     for i, role in list(columns.items()):
-        if role == "buget_2026" and (i + 1) not in columns and (i + 1) < n_cols:
+        if role.startswith("buget_") and (i + 1) not in columns and (i + 1) < n_cols:
             if "credite_restante" not in columns.values():
                 columns[i + 1] = "credite_restante"
+    return columns, first_data, inherited
+
+
+def mapping_context(
+    grid: list[list[str]],
+    context: dict | None = None,
+    budget_year: int | None = None,
+) -> dict | None:
+    if not grid:
+        return context
+    columns, _, inherited = _infer_columns(grid, context=context, budget_year=budget_year)
+    if "name" not in columns.values():
+        return context
+    if not any(
+        role not in ("name", "code", "func_code", "rowno", "ignore")
+        for role in columns.values()
+    ):
+        return context
+    return {
+        "family": context.get("family", "table") if inherited and context else "table",
+        "n_cols": max(len(row) for row in grid),
+        "columns": {str(index): role for index, role in columns.items()},
+        "budget_year": budget_year or (context or {}).get("budget_year"),
+    }
+
+
+def map_grid(grid: list[list[str]]) -> list[dict]:
+    lines, _ = map_grid_with_context(grid)
+    return lines
+
+
+def map_grid_with_context(
+    grid: list[list[str]],
+    context: dict | None = None,
+    budget_year: int | None = None,
+) -> tuple[list[dict], dict | None]:
+    n_cols = max(len(r) for r in grid)
+    columns, first_data, _ = _infer_columns(
+        grid, context=context, budget_year=budget_year
+    )
 
     lines: list[dict] = []
     section: str | None = None
@@ -135,6 +218,10 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
                     continue  # row-span artifact: section text smeared into cells
                 parse_cell(text, role, values, cell_issues)
         name_text = " ".join(name)
+
+        # Printed column-index row, not a budget fact.
+        if fold(raw_code or "") == "a" and fold(name_text) == "b":
+            continue
 
         # SECTIUNEA rows sometimes carry the section totals as values
         # (ar-style chapter tables print them inline)
@@ -172,4 +259,4 @@ def map_grid(grid: list[list[str]]) -> list[dict]:
             raw_code, func_ctx = func_ctx, None
         lines.append(mk_line(raw_code, name_text, section, values, cell_issues,
                              row_no, func_ctx=func_ctx))
-    return lines
+    return lines, mapping_context(grid, context=context, budget_year=budget_year)

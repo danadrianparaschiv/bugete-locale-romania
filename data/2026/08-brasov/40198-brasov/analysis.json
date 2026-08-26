@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1751,
-    "lines_strictly_verified": 1697,
-    "pct_lines_strictly_verified": 96.9,
-    "numeric_cells": 6685,
-    "numeric_cells_strictly_verified": 6470,
+    "lines": 1752,
+    "lines_strictly_verified": 1691,
+    "pct_lines_strictly_verified": 96.5,
+    "numeric_cells": 6031,
+    "numeric_cells_strictly_verified": 5840,
     "pct_numeric_cells_strictly_verified": 96.8,
     "scope": {
       "pages_expected": 63,
@@ -16,34 +16,74 @@
       "pages_processed": 63,
       "complete_pdf": true
     },
-    "pct_clean": 96.9,
-    "errors": 81,
-    "warnings": 6,
+    "pct_clean": 96.5,
+    "errors": 114,
+    "warnings": 3,
     "info": 1,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 1006716.06,
-    "cheltuieli": null
+    "cheltuieli": 1599854.11
   },
   "top_capitole": [
     {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 257823.71
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 174861.96
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 108954.2
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 101429.2
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 51506.33
+    },
+    {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 38534.5
     },
     {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 33870.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 20676.45
+    },
+    {
       "code": "87.02",
-      "name": "CAP. Alte actiuni economice",
+      "name": "Alte actiuni economice",
       "total": 16272.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 9069.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "33392de38e42ae0e9b673d09",
+    "bundle_id": "3a29cfeeab7db4eeaa113514",
     "source_pdf_sha256": "b199237dfa6815501d94bde880e1e696737983820d7c525066c710eea7b5956c"
   }
 }

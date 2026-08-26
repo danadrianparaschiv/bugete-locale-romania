@@ -1,38 +1,74 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 395,
-    "lines_strictly_verified": 392,
-    "pct_lines_strictly_verified": 99.2,
-    "numeric_cells": 395,
-    "numeric_cells_strictly_verified": 392,
-    "pct_numeric_cells_strictly_verified": 99.2,
+    "lines": 409,
+    "lines_strictly_verified": 303,
+    "pct_lines_strictly_verified": 74.1,
+    "numeric_cells": 870,
+    "numeric_cells_strictly_verified": 660,
+    "pct_numeric_cells_strictly_verified": 75.9,
     "scope": {
       "pages_expected": 14,
       "pages_selected": 14,
       "pages_processed": 14,
       "complete_pdf": true
     },
-    "pct_clean": 99.2,
-    "errors": 2,
-    "warnings": 1,
+    "pct_clean": 74.1,
+    "errors": 19,
+    "warnings": 90,
     "info": 0,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 898933000.0,
     "cheltuieli": null
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 177109000.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 97331000.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 94024000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 79448000.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 12458000.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si împrumuturi",
+      "total": 3005000.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 843000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ec396436bea676233de8b352",
+    "bundle_id": "8b7fe76335b01b27f9bccf42",
     "source_pdf_sha256": "ea306d7d3294b4eb1a5a550fbf475ccace516c2e55263cefa8297c3d7f0459d1"
   }
 }

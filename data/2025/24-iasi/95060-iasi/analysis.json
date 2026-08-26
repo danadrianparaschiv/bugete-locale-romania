@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1287,
-    "lines_strictly_verified": 954,
-    "pct_lines_strictly_verified": 74.1,
-    "numeric_cells": 3621,
-    "numeric_cells_strictly_verified": 2681,
-    "pct_numeric_cells_strictly_verified": 74.0,
+    "lines": 6160,
+    "lines_strictly_verified": 5875,
+    "pct_lines_strictly_verified": 95.4,
+    "numeric_cells": 15417,
+    "numeric_cells_strictly_verified": 14312,
+    "pct_numeric_cells_strictly_verified": 92.8,
     "scope": {
       "pages_expected": 246,
       "pages_selected": 246,
       "pages_processed": 246,
       "complete_pdf": true
     },
-    "pct_clean": 74.1,
-    "errors": 279,
-    "warnings": 211,
+    "pct_clean": 95.4,
+    "errors": 212,
+    "warnings": 190,
     "info": 0,
     "documents": 3
   },
@@ -26,29 +26,24 @@
     "gemini-3.6-flash"
   ],
   "totals_mii_lei": {
-    "venituri": 2090266.36,
+    "venituri": null,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "66.10",
-      "name": "Sanatate",
-      "total": 372752.67
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 79202.29
     },
     {
-      "code": "67.10",
-      "name": "Cultura, recreere si religie",
-      "total": 80515.37
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 52925.39
     },
     {
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
       "total": 46742.5
-    },
-    {
-      "code": "61.10",
-      "name": "siguranta nationala",
-      "total": 46500.0
     },
     {
       "code": "54.02",
@@ -61,26 +56,21 @@
       "total": 33643.0
     },
     {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 15706.81
+    },
+    {
       "code": "87.02",
       "name": "Alte actiuni economice",
       "total": 970.0
-    },
-    {
-      "code": "54.10",
-      "name": "generale Alte servicii publice",
-      "total": 380.0
-    },
-    {
-      "code": "68.10",
-      "name": "Asigurari si asistenta sociala",
-      "total": 30.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ceb9fb0e2d0a29c9e3a80a8d",
+    "bundle_id": "66b8d6dd13e2d3d576e37c17",
     "source_pdf_sha256": "8dd751e532427b1a05525301f4601c653c4500710897c3f8c2ad4a236c515966"
   }
 }

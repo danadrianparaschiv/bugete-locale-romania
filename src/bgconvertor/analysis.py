@@ -15,12 +15,11 @@ from decimal import Decimal
 from pathlib import Path
 
 from .model import ConversionResult
+from .years import annual_columns, estimate_columns, role_year
 
 ANALYSIS_SCHEMA_VERSION = 2
 
-TOTAL_COLS = ("total", "total_2026", "buget_2026")
 TRIM_COLS = ("trim1", "trim2", "trim3", "trim4")
-EST_COLS = ("est2027", "est2028", "est2029")
 
 # revenue chapters grouped by who controls the money (rest -> "proprii")
 GRUP_STAT = {"11.02", "42.02", "43.02"}
@@ -77,7 +76,7 @@ def _is_capitol(ln) -> bool:
 
 
 def _line_total(ln) -> Decimal | None:
-    for col in TOTAL_COLS:
+    for col in annual_columns(ln.values):
         if col in ln.values:
             return ln.values[col]
     return None
@@ -218,10 +217,18 @@ def infografic(result: ConversionResult) -> dict | None:
 
     # multi-year projections from the printed estimate columns
     if tot_ch is not None:
-        est_c = _floats(tot_ch, EST_COLS)
-        est_v = _floats(tot_ven, EST_COLS) if tot_ven is not None else None
+        est_cols = estimate_columns(tot_ch.values)
+        est_c = _floats(tot_ch, est_cols) if est_cols else None
+        est_v = _floats(tot_ven, est_cols) if tot_ven is not None and est_cols else None
         if est_c and total_cheltuieli is not None:
-            out["ani"] = {"cheltuieli": [total_cheltuieli, *est_c]}
+            annual = annual_columns(tot_ch.values)
+            base_year = role_year(annual[0]) if annual else None
+            if base_year is None:
+                base_year = int(est_cols[0][3:]) - 1
+            out["ani"] = {
+                "years": [base_year, *(int(column[3:]) for column in est_cols)],
+                "cheltuieli": [total_cheltuieli, *est_c],
+            }
             if est_v and total_venituri is not None:
                 out["ani"]["venituri"] = [total_venituri, *est_v]
 

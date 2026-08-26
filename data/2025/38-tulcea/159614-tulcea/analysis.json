@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 654,
-    "lines_strictly_verified": 516,
-    "pct_lines_strictly_verified": 78.9,
-    "numeric_cells": 863,
-    "numeric_cells_strictly_verified": 632,
-    "pct_numeric_cells_strictly_verified": 73.2,
+    "lines": 600,
+    "lines_strictly_verified": 540,
+    "pct_lines_strictly_verified": 90.0,
+    "numeric_cells": 826,
+    "numeric_cells_strictly_verified": 763,
+    "pct_numeric_cells_strictly_verified": 92.4,
     "scope": {
       "pages_expected": 67,
       "pages_selected": 67,
       "pages_processed": 67,
       "complete_pdf": true
     },
-    "pct_clean": 78.9,
-    "errors": 218,
-    "warnings": 122,
+    "pct_clean": 90.0,
+    "errors": 15,
+    "warnings": 51,
     "info": 0,
     "documents": 5
   },
@@ -45,7 +45,7 @@
     },
     {
       "code": "68.02",
-      "name": "Asigurări și asistentă socială",
+      "name": "Asigurări și asistență socială",
       "total": 53446.5
     },
     {
@@ -55,12 +55,12 @@
     },
     {
       "code": "74.02",
-      "name": "Protecția mediului",
+      "name": "Protectia mediului",
       "total": 31580.2
     },
     {
       "code": "67.02",
-      "name": "Cultură, recreere și religie",
+      "name": "Culturã, recreere și religie",
       "total": 16402.0
     },
     {
@@ -83,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "7af50b51b3d2e3092a42cec8",
+    "bundle_id": "ec77c3db684cead3cdc7db18",
     "source_pdf_sha256": "c57d9dfd44f2f8b6a286ba6bbf9838bd801e15a2a5cb50b87078ddb8156bb44b"
   }
 }

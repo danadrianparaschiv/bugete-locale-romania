@@ -119,7 +119,8 @@ class Fixture(BaseModel):
     text_contains: list[str] = []
     cell_ground_truth: list[CellGroundTruthGroup] = []
     # CI-safe OCR regression grid, relative to the golden fixture directory.
-    # Used only when the current run store has no extraction for this page.
+    # This is authoritative for extract-stage evaluation: a developer's local
+    # run cache must never change the result of the reproducible offline gate.
     source_grid: str | None = None
     notes: str = ""
 
@@ -361,6 +362,7 @@ def _source_grid_payload(fixtures_dir: Path, fixture: Fixture) -> dict | None:
     if not isinstance(grid, list):
         raise ValueError(f"invalid source grid in {source_path}")
     from .extract.scanned import map_payload
+    from .years import infer_budget_year_from_path
 
     return map_payload({
         "tables_raw": [grid],
@@ -368,7 +370,7 @@ def _source_grid_payload(fixtures_dir: Path, fixture: Fixture) -> dict | None:
         "rotation_applied": source.get("rotation_applied", 0)
         if isinstance(source, dict) else 0,
         "confidence_grade": "fixture",
-    })
+    }, budget_year=infer_budget_year_from_path(Path(fixture.pdf)))
 
 
 def evaluate_all(
@@ -384,8 +386,12 @@ def evaluate_all(
         if fixture.pdf not in stores and pdf_path.exists():
             stores[fixture.pdf] = RunStore(config, pdf_path)
         store = stores.get(fixture.pdf)
-        payload = None
-        if store:
+        payload = (
+            _source_grid_payload(fixtures_dir, fixture)
+            if stage == "extract" and fixture.source_grid is not None
+            else None
+        )
+        if payload is None and store:
             payload = store.get(stage, fixture.page)
             if stage == "extract":
                 # same precedence as assembly: full-page LLM extraction wins

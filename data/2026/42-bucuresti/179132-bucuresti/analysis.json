@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 9279,
-    "lines_strictly_verified": 7454,
-    "pct_lines_strictly_verified": 80.3,
-    "numeric_cells": 16633,
-    "numeric_cells_strictly_verified": 13542,
-    "pct_numeric_cells_strictly_verified": 81.4,
+    "lines": 8825,
+    "lines_strictly_verified": 7183,
+    "pct_lines_strictly_verified": 81.4,
+    "numeric_cells": 18910,
+    "numeric_cells_strictly_verified": 15944,
+    "pct_numeric_cells_strictly_verified": 84.3,
     "scope": {
       "pages_expected": 551,
       "pages_selected": 551,
       "pages_processed": 551,
       "complete_pdf": true
     },
-    "pct_clean": 80.3,
-    "errors": 1361,
-    "warnings": 1063,
-    "info": 3,
-    "documents": 286
+    "pct_clean": 81.4,
+    "errors": 1298,
+    "warnings": 918,
+    "info": 1,
+    "documents": 245
   },
   "llm_models": [
     "gemini-3.6-flash"
   ],
   "totals_mii_lei": {
-    "venituri": 8593888.15,
+    "venituri": 5820631.41,
     "cheltuieli": null
   },
   "top_capitole": [
@@ -34,16 +34,6 @@
       "code": "54.02",
       "name": "Alte servicii publice generale Servicii publice comunitare de evidenta",
       "total": 5247749.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 928000.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 672651.0
     },
     {
       "code": "68.02",
@@ -56,14 +46,14 @@
       "total": 346349.0
     },
     {
-      "code": "67.10",
-      "name": "Cultura, recreere si religie",
-      "total": 63372.0
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 167824.95
     },
     {
-      "code": "74.10",
-      "name": "Protectia mediului",
-      "total": 28945.0
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 32146.0
     },
     {
       "code": "54.10",
@@ -79,13 +69,18 @@
       "code": "87.02",
       "name": "Alte actiuni economice",
       "total": 550.0
+    },
+    {
+      "code": "60.02",
+      "name": "Aparare nationala",
+      "total": 12.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "9b9a7cfec0ac7ffaf595708e",
+    "bundle_id": "e1e60f121560c544da5b42e5",
     "source_pdf_sha256": "11587b75564d341840099bfc28de10dd54aafaa050a2535a577951a53ced4c38"
   }
 }

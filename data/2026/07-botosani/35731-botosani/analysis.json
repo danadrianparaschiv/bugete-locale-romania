@@ -1,59 +1,89 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 5343,
-    "lines_strictly_verified": 3711,
-    "pct_lines_strictly_verified": 69.5,
-    "numeric_cells": 13073,
-    "numeric_cells_strictly_verified": 9158,
-    "pct_numeric_cells_strictly_verified": 70.1,
+    "lines": 6633,
+    "lines_strictly_verified": 4206,
+    "pct_lines_strictly_verified": 63.4,
+    "numeric_cells": 21854,
+    "numeric_cells_strictly_verified": 13904,
+    "pct_numeric_cells_strictly_verified": 63.6,
     "scope": {
       "pages_expected": 268,
       "pages_selected": 268,
       "pages_processed": 268,
       "complete_pdf": true
     },
-    "pct_clean": 69.5,
-    "errors": 2847,
-    "warnings": 858,
-    "info": 30,
-    "documents": 52
+    "pct_clean": 63.4,
+    "errors": 2839,
+    "warnings": 1793,
+    "info": 32,
+    "documents": 9
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": null
+    "cheltuieli": 557751.57
   },
   "top_capitole": [
     {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 83742.69
+    },
+    {
+      "code": "66.10",
+      "name": "Sanatate",
+      "total": 69193.62
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 49276.43
+    },
+    {
+      "code": "74.02",
+      "name": "Protecţia mediului",
+      "total": 41207.6
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 28400.0
+    },
+    {
       "code": "67.10",
-      "name": "Spitale generale Cultura, recreere si religie (cod 67.10.03 + 67.10.05",
+      "name": "Cultura, recreere si religie",
       "total": 27120.14
     },
     {
-      "code": "70.07",
-      "name": "Locuinte, servicii si dezvoltare publica Din total capitol:",
-      "total": 10662.34
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 26452.62
     },
     {
-      "code": "74.10",
-      "name": "Protectia mediului",
-      "total": 899.0
+      "code": "81.02",
+      "name": "Combustibil si energie",
+      "total": 16850.0
     },
     {
-      "code": "70.10",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 540.0
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si",
+      "total": 12810.81
+    },
+    {
+      "code": "65.10",
+      "name": "Invatamant",
+      "total": 11349.13
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ff38daf0ad1a9ba156a85f73",
+    "bundle_id": "1d80d808d9a6e0859d67b504",
     "source_pdf_sha256": "719a96d92e00c1729fceb8cfb2f30a372d19eb5adb8e44ba73e13c08570a14a0"
   }
 }

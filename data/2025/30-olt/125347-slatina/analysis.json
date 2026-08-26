@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 75,
-    "lines_strictly_verified": 67,
-    "pct_lines_strictly_verified": 89.3,
-    "numeric_cells": 75,
-    "numeric_cells_strictly_verified": 61,
-    "pct_numeric_cells_strictly_verified": 81.3,
+    "lines": 2537,
+    "lines_strictly_verified": 2534,
+    "pct_lines_strictly_verified": 99.9,
+    "numeric_cells": 3287,
+    "numeric_cells_strictly_verified": 3283,
+    "pct_numeric_cells_strictly_verified": 99.9,
     "scope": {
       "pages_expected": 163,
       "pages_selected": 163,
       "pages_processed": 163,
       "complete_pdf": true
     },
-    "pct_clean": 89.3,
-    "errors": 11,
-    "warnings": 7,
+    "pct_clean": 99.9,
+    "errors": 7,
+    "warnings": 2,
     "info": 0,
     "documents": 1
   },
@@ -35,7 +35,7 @@
     },
     {
       "code": "84.02",
-      "name": "Transporturi",
+      "name": "Transporturt",
       "total": 97346.0
     },
     {
@@ -55,12 +55,12 @@
     },
     {
       "code": "67.02",
-      "name": "Cultura, recreere si religie",
+      "name": "-Cultura, recreere si religie",
       "total": 45823.0
     },
     {
       "code": "74.02",
-      "name": "Protectia mediului",
+      "name": ". - Protectia mediului",
       "total": 41350.0
     },
     {
@@ -70,12 +70,12 @@
     },
     {
       "code": "61.02",
-      "name": "Ordine publica si siguranta nationala",
+      "name": "Ordine publica si si_g_uranta nationala",
       "total": 11491.0
     },
     {
       "code": "55.02",
-      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "name": "Tranzacţii privind datoria publică şi Imprumuturi",
       "total": 7344.0
     }
   ],
@@ -83,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "bdb06712f422faea3a972496",
+    "bundle_id": "3c0c7f6379894cb31256e05b",
     "source_pdf_sha256": "fd8ea4e95b61309967ed545fb3ca5d8f0a0e11901c4729d12ed09f6dc41303f7"
   }
 }

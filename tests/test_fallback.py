@@ -39,6 +39,28 @@ def test_wide_transposed_fallback_keeps_all_nine_columns():
     ]
 
 
+def test_layout_fallback_columns_follow_document_year():
+    payload = {
+        "layout": "scan_revenue_detail",
+        "budget_year": 2025,
+        "lines": [],
+    }
+    assert fallback_columns(payload) == [
+        "buget_2025",
+        "est2026",
+        "est2027",
+        "est2028",
+    ]
+
+
+def test_annual_total_fallback_uses_document_year():
+    assert fallback_columns({
+        "layout": "scan_annual_total",
+        "budget_year": 2027,
+        "lines": [],
+    }) == ["total_2027"]
+
+
 def test_fallback_size_and_benefit_scale_with_missing_numeric_work():
     small = {"n_numeric_cells": 20, "lines": []}
     large = {"n_numeric_cells": 400, "lines": []}
@@ -72,4 +94,3 @@ def test_full_page_output_rejects_unrequested_columns():
         {"column": "invented", "raw": "999,00"}
     ]
     assert client.calls[0][3]["max_tokens"] == 4096
-

@@ -21,7 +21,7 @@ SCAN_SAMPLES = 5
 KNOWN_GOOD_LAYOUTS = {
     "digital_detail", "scan_simple_table", "scan_detail_economic",
     "scan_general_matrix", "scan_transposed_detail", "hcl_prose",
-    "investment_list", "allocations_annex", "annex_other",
+    "investment_list", "allocations_annex", "annex_other", "scan_annual_total",
 }
 
 
@@ -30,7 +30,9 @@ def run_triage(config: RunConfig, store: RunStore, pdf: Path) -> dict:
 
     from . import profilepdf
     from .llm.fallback import needs_fallback
+    from .years import infer_budget_year_from_path
 
+    budget_year = infer_budget_year_from_path(pdf)
     reader = PdfReader(pdf)
     n = len(reader.pages)
     pages = list(range(1, n + 1))
@@ -50,7 +52,7 @@ def run_triage(config: RunConfig, store: RunStore, pdf: Path) -> dict:
         sample = digital[min(1, len(digital) - 1)]
         with pdfplumber.open(pdf) as plumber:
             try:
-                dig.extract_page(plumber.pages[sample - 1])
+                dig.extract_page(plumber.pages[sample - 1], budget_year=budget_year)
                 digital_status = "grid_ok"
             except Exception as exc:
                 digital_status = f"no_grid ({str(exc)[:60]}) — va trece prin OCR"
@@ -78,9 +80,16 @@ def run_triage(config: RunConfig, store: RunStore, pdf: Path) -> dict:
                     rotation=(store.get("orient", p) or {}).get("rotation", 0),
                     scale=config.render_scale,
                     cell_matching=config.docling_cell_matching,
+                    stamp_filter=config.stamp_filter,
+                    ocr_engine=config.ocr_engine,
+                    ocr_langs=tuple(config.ocr_langs),
+                    tableformer_mode=config.tableformer_mode,
                 ))
             if store.get("extract", p) is None:
-                store.put("extract", p, sc.map_payload(store.get("ocr", p) or {}))
+                store.put(
+                    "extract", p,
+                    sc.map_payload(store.get("ocr", p) or {}, budget_year=budget_year),
+                )
             pl = store.get("extract", p) or {}
             layouts[pl.get("layout") or "unknown"] += 1
             grades[pl.get("confidence_grade") or "?"] += 1

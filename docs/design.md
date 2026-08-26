@@ -51,6 +51,10 @@ invalidează exact etapele care depind de ea. Etapele scumpe (OCR) sunt
 separate de cele ieftine (maparea), astfel încât iterarea pe mappere nu
 replătește niciodată OCR-ul. Eșecurile sunt artefacte per pagină, cu
 traceback-uri; o cădere la pagina 37 nu pierde niciodată paginile 1–36.
+Workerii publică JSON-ul prin înlocuire atomică în același director, astfel
+încât procesul părinte care urmărește progresul vede versiunea veche sau cea
+nouă, niciodată un fișier parțial. Un artefact legacy gol/trunchiat este tratat
+ca un cache miss și se reconstruiește; nu poate opri conversia întregului PDF.
 
 ## Registrul de machete (layouts)
 
@@ -65,6 +69,29 @@ din contextul documentului), sufixe-fantomă `.00`, întreaga menajerie de
 marcaje `x` din OCR, două convenții locale de scriere a numerelor, stiluri
 per pagină de rupere a denumirilor pe rânduri, împărțirea documentelor pe
 instituții condusă de antetele paginilor.
+
+P1 adaugă explicit starea de mapare între pagini consecutive: familia,
+numărul coloanelor, rolul fiecărei coordonate și anul bugetar. Un antet absent
+sau deteriorat poate astfel moșteni schema precedentă numai când geometria și
+forma rândurilor sunt compatibile; starea se resetează la un gol de pagini sau
+la o schemă nouă. Asamblarea unește un rând rupt la schimbarea paginii numai
+pentru două forme complementare și neechivoce (identitate fără valori urmată
+de valori anonime, respectiv nume fără valori urmat de cod + valori).
+
+Cheile anuale sunt derivate din anul corpusului și din antet, nu dintr-o
+constantă 2026: `total_<an>`/`buget_<an>` și `est<an+1>...`. Același contract
+alimentează Excelul, analiza JSON, fallback-ul LLM și graficele multianuale.
+Fișierele 2026 rămân compatibile semantic cu vechile chei.
+
+Rutarea OCR este deterministă și limitată la doi candidați. O pagină digitală
+fără caroiaj încearcă întâi TableFormer peste stratul de text; dacă scorul
+structural nu trece pragul, se randează și se face OCR. Pentru o pagină
+scanată slabă, singura alternativă comută cell matching și alege adaptiv
+eliminarea pixelilor de ștampilă plus un deskew mic. Câștigătorul este ales
+după acoperirea celulelor, identitatea rândurilor și igiena parse-ului;
+egalitatea păstrează baseline-ul. Limba OCR, motorul (`auto`, RapidOCR,
+EasyOCR, Tesseract Python sau CLI) și modul TableFormer (`fast`/`accurate`)
+sunt aplicate efectiv opțiunilor Docling și fac parte din cheia cache-ului.
 
 ## Modelul de verificare
 
@@ -115,13 +142,14 @@ mare de 5 USD/PDF.
 
 ## Rezultate negative măsurate (păstrate intenționat)
 
-- Straturile de text încorporate din PDF-urile de copiator păreau
-  utilizabile, dar au obținut scoruri **mai slabe** decât re-OCR-ul la
-  curățenia validată (−8pp pe testul A/B de la Bacău) — livrate dezactivate
-  implicit, în spatele opțiunii `prefer_native_text`.
-- Un filtru cromatic de eliminare a ștampilelor nu a mișcat nicio ancoră de
-  aur — OCR-ul citea deja prin ștampilele din corpus; livrat dezactivat
-  implicit.
+- Straturile de text încorporate din PDF-urile de copiator au obținut scoruri
+  **mai slabe** decât re-OCR-ul la curățenia validată (−8pp pe testul A/B de la
+  Bacău). De aceea nu sunt acceptate automat: calea nativă este ieftină și se
+  încearcă prima, dar trebuie să treacă scorul structural; altfel OCR-ul raster
+  rămâne candidatul de bază.
+- Un filtru cromatic de eliminare a ștampilelor nu a mișcat singur nicio ancoră
+  de aur. Nu este aplicat global; intră numai în candidatul adaptiv al paginilor
+  slabe, împreună cu deskew, și rezultatul este păstrat numai la îmbunătățire.
 
 Harness-ul de evaluare combină ancore de aur pentru toate familiile cu
 inventare exhaustive de celule pentru familiile migrate în P1

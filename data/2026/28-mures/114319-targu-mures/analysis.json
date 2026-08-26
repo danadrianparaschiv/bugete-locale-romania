@@ -1,33 +1,45 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 3090,
-    "lines_strictly_verified": 2876,
-    "pct_lines_strictly_verified": 93.1,
-    "numeric_cells": 6117,
-    "numeric_cells_strictly_verified": 5695,
-    "pct_numeric_cells_strictly_verified": 93.1,
+    "lines": 1106,
+    "lines_strictly_verified": 995,
+    "pct_lines_strictly_verified": 90.0,
+    "numeric_cells": 4574,
+    "numeric_cells_strictly_verified": 4360,
+    "pct_numeric_cells_strictly_verified": 95.3,
     "scope": {
       "pages_expected": 103,
       "pages_selected": 103,
       "pages_processed": 103,
       "complete_pdf": true
     },
-    "pct_clean": 93.1,
-    "errors": 98,
-    "warnings": 148,
+    "pct_clean": 90.0,
+    "errors": 65,
+    "warnings": 83,
     "info": 0,
     "documents": 38
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 805849000.0,
     "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 120130000.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 16747000.0
+    },
     {
       "code": "66.02",
       "name": "Sanatate",
@@ -37,33 +49,13 @@
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe",
       "total": 13000000.0
-    },
-    {
-      "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 4257000.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 2975000.0
-    },
-    {
-      "code": "55.02",
-      "name": "Tranzactii privind datoria publica si imprumuturi",
-      "total": 2505000.0
-    },
-    {
-      "code": "80.02",
-      "name": "Actiuni generale economice, comerciale si de munca",
-      "total": 2000000.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1ca29fa417a92f45319e9b22",
+    "bundle_id": "37d4eac1f622d079b1043f9f",
     "source_pdf_sha256": "59c60ecb2f4ffa822b8c89fd96d5d67e99929e412aa4b3197e0fc8a1c527b595"
   }
 }

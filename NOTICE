@@ -29,3 +29,9 @@ Date ale terților incluse în acest depozit:
 
 5. Suprafața municipiilor — Wikidata (CC0), interogată prin codul SIRUTA;
    excepțiile și data interogării sunt descrise în reference/municipii.json.
+
+Grilele OCR sanitizate din `tests/fixtures/golden/grids/` sunt fragmente
+structurale derivate din PDF-urile administrative publice descrise la punctul
+2. Ele păstrează numai textul necesar testării extractoarelor, fără cache-uri,
+imagini intermediare sau date private; proveniența exactă (PDF + pagină) este
+declarată de fixture-ul JSON pereche.

@@ -1,89 +1,89 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 831,
-    "lines_strictly_verified": 603,
-    "pct_lines_strictly_verified": 72.6,
-    "numeric_cells": 2336,
-    "numeric_cells_strictly_verified": 1702,
-    "pct_numeric_cells_strictly_verified": 72.9,
+    "lines": 835,
+    "lines_strictly_verified": 589,
+    "pct_lines_strictly_verified": 70.5,
+    "numeric_cells": 3802,
+    "numeric_cells_strictly_verified": 2911,
+    "pct_numeric_cells_strictly_verified": 76.6,
     "scope": {
       "pages_expected": 64,
       "pages_selected": 64,
       "pages_processed": 64,
       "complete_pdf": true
     },
-    "pct_clean": 72.6,
-    "errors": 226,
-    "warnings": 107,
-    "info": 9,
+    "pct_clean": 70.5,
+    "errors": 259,
+    "warnings": 117,
+    "info": 16,
     "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 1006361.0,
-    "cheltuieli": 624339.0
+    "cheltuieli": 384333.0
   },
   "top_capitole": [
     {
       "code": "65.02",
-      "name": "Invatamant (cod 65 02 03 la 05.02.05+65.02.07+65.02.11+65.02.12+65 02 ",
+      "name": "Invatamant",
       "total": 262429.17
     },
     {
       "code": "70.02",
-      "name": "Locuinte, servicãi si dezvoltare publica (cod 70.02 03-70.02.05 (a 70.",
+      "name": "Locuinte, servicãi si dezveltare pubica",
       "total": 210229.72
     },
     {
+      "code": "00.10",
+      "name": "Partes H-a SERVICI PUBLICE GENERALE",
+      "total": 137697.45
+    },
+    {
       "code": "74.02",
-      "name": "Protectia mediulue (cod",
+      "name": "Protectia mediulul",
       "total": 135844.38
     },
     {
       "code": "84.02",
-      "name": "Transporturi (cod",
+      "name": "Transporturi",
       "total": 129018.41
     },
     {
+      "code": "68.02",
+      "name": "Asigurarí si asistenta sociala",
+      "total": 118785.0
+    },
+    {
       "code": "66.10",
-      "name": "Sanatate ( cod 66.10.06+66.10.08-66.10.50)",
+      "name": "Sanatate",
       "total": 77945.0
     },
     {
       "code": "51.02",
-      "name": "Autoritati publice si acliuri eatame (cod 51.02.01)",
+      "name": "Autoritati publice si actiuri exteme",
       "total": 50400.0
     },
     {
       "code": "66.02",
-      "name": "Sanatate (cod 66.02.06+65.02.08+65.02.50)",
+      "name": "Sanatate",
       "total": 42389.0
     },
     {
       "code": "67.02",
-      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.02.50)",
-      "total": 29009.25
-    },
-    {
-      "code": "61.02",
-      "name": "Ondine publica si siguranta rationala (cod 61.02:03+61.02.05+61.02.50)",
-      "total": 20001.21
-    },
-    {
-      "code": "65.10",
-      "name": "Invatamant ( cod 65.10.03+65.10.04+65.10.05+65.10.07+65 10.11+05.10.50",
-      "total": 10647.45
+      "name": "Cultura, recreere si religie",
+      "total": 29609.25
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "c33195152810075de0f35c9b",
+    "bundle_id": "522338885fdd11f49ca78747",
     "source_pdf_sha256": "8e4489aa69d76fd47fd4e861127df84dd2d21e094522b6d9e4e3fb36474d02d8"
   }
 }

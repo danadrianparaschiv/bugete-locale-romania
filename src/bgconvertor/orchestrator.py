@@ -48,6 +48,8 @@ def run_stage(
     fn: Callable[[int], Any],
     show_progress: bool = True,
     concurrency: int = 1,
+    on_cached: Callable[[int, Any], None] | None = None,
+    force: bool = False,
 ) -> StageSummary:
     """Apply fn(page) -> payload for each page not already cached.
 
@@ -75,8 +77,11 @@ def run_stage(
     heartbeat = {"last": start}
 
     def process(page: int) -> None:
-        if store.get(stage, page) is not None:
+        cached_payload = store.get(stage, page)
+        if cached_payload is not None and not force:
             summary.cached.append(page)
+            if on_cached is not None:
+                on_cached(page, cached_payload)
             return
         try:
             payload = fn(page)

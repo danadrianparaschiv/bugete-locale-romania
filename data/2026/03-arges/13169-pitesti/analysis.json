@@ -1,41 +1,41 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 3198,
-    "lines_strictly_verified": 1369,
-    "pct_lines_strictly_verified": 42.8,
-    "numeric_cells": 14912,
-    "numeric_cells_strictly_verified": 6293,
-    "pct_numeric_cells_strictly_verified": 42.2,
+    "lines": 6281,
+    "lines_strictly_verified": 4430,
+    "pct_lines_strictly_verified": 70.5,
+    "numeric_cells": 26612,
+    "numeric_cells_strictly_verified": 17754,
+    "pct_numeric_cells_strictly_verified": 66.7,
     "scope": {
       "pages_expected": 236,
       "pages_selected": 236,
       "pages_processed": 236,
       "complete_pdf": true
     },
-    "pct_clean": 42.8,
-    "errors": 696,
-    "warnings": 1888,
-    "info": 20,
+    "pct_clean": 70.5,
+    "errors": 671,
+    "warnings": 1931,
+    "info": 18,
     "documents": 6
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 291406.0,
+    "venituri": 848702.87,
     "cheltuieli": 969479.87
   },
   "top_capitole": [
     {
       "code": "00.02",
-      "name": "1. VENITURI CURENTE (cOd 00.03+00.12)",
+      "name": "1. VENITURI CURENTE",
       "total": 554489.87
     },
     {
       "code": "00.03",
-      "name": "A. VENITURI FISCALE (cOd 00.04+00.09+00.10+00.11)",
+      "name": "A. VENITURI FISCALE",
       "total": 506292.87
     },
     {
@@ -49,33 +49,33 @@
       "total": 283685.0
     },
     {
-      "code": "65.02",
-      "name": "Invatamant (cod 65.02.03 la 65.02.05+65.02.07+65.02.11+65.02.1",
-      "total": 186474.87
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie (cod 67.02.03+67.02.05+67.02.06+67.0",
-      "total": 143278.0
+      "code": "00.10",
+      "name": "A4. IMPOZITE SI TAXE PE BUNURI SI SERVICII",
+      "total": 140180.87
     },
     {
       "code": "74.02",
-      "name": "Protectia mediuiui (cod 74.02.03+74.02.05+74.02.06+74 02.50)",
+      "name": "Protectia mediuiui",
       "total": 108086.0
     },
     {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 89257.0
+    },
+    {
       "code": "00.09",
-      "name": "A3. IMPOZITE SI TAXE PE PROPRIETATE (Cd 07.02)",
+      "name": "A3. IMPOZITE SI TAXE PE PROPRIETATE (d 07.02)",
       "total": 78730.0
     },
     {
-      "code": "67.07",
-      "name": "Cultura. recreere si religie (cod 67.07.03+67.07.05+67.07.50)",
-      "total": 72457.0
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 60582.0
     },
     {
       "code": "51.02",
-      "name": "Autoritati publice si actiuni externe (cod 51.02.01)",
+      "name": "Autoritati publice si actiuni externe",
       "total": 51256.0
     }
   ],
@@ -83,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "8580564c2fa1a5c3042976b4",
+    "bundle_id": "2305987b3094fa6c007f7d00",
     "source_pdf_sha256": "0a27814f40521408f3d54d23264675df228805fb102cb525e4d97833a5ab3d1d"
   }
 }

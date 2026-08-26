@@ -184,14 +184,14 @@
   } else { hide("ig-sec-trim"); }
 
   if (IG.ani) {
-    var years = ["2026", "2027", "2028", "2029"], ch = IG.ani.cheltuieli;
+    var years = (IG.ani.years || [2026, 2027, 2028, 2029]).map(String), ch = IG.ani.cheltuieli;
     put("ig-ani", columns(years,
       [{ name: "Cheltuieli", data: ch, color: C.warn }],
       IG.ani.venituri ? { name: "Venituri", data: IG.ani.venituri, color: C.blue } : null,
       "mii lei"));
     var d = (ch[1] - ch[0]) / ch[0] * 100;
     var msg = d <= -5 ? "o scădere de " : d >= 5 ? "o creștere de " : "o variație de ";
-    put("ig-ani-note", "Estimările primăriei pentru 2027 arată " + msg + "<b>" + nf(Math.abs(d), 1) +
+    put("ig-ani-note", "Estimările primăriei pentru " + years[1] + " arată " + msg + "<b>" + nf(Math.abs(d), 1) +
       "%</b> față de " + years[0] + ", conform coloanelor de proiecție din același document.");
   } else { hide("ig-sec-ani"); }
 })();

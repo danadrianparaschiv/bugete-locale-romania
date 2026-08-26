@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 664,
     "lines_strictly_verified": 664,
     "pct_lines_strictly_verified": 100.0,
-    "numeric_cells": 5976,
-    "numeric_cells_strictly_verified": 5976,
+    "numeric_cells": 6075,
+    "numeric_cells_strictly_verified": 6075,
     "pct_numeric_cells_strictly_verified": 100.0,
     "scope": {
       "pages_expected": 23,
@@ -30,52 +30,52 @@
   "top_capitole": [
     {
       "code": "70.02",
-      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 133965.72
     },
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
+      "name": "Invatamant",
       "total": 67029.9
     },
     {
       "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
+      "name": "Asigurari si asistenta sociala",
       "total": 54683.5
     },
     {
       "code": "84.02",
-      "name": "CAP. Transporturi",
+      "name": "Transporturi",
       "total": 52021.84
     },
     {
       "code": "74.02",
-      "name": "CAP. Protectia mediului",
+      "name": "Protectia mediului",
       "total": 49377.17
     },
     {
       "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie © MINDSOFT-SICO - MUNICIPIUL DEVA",
+      "name": "Cultura, recreere si religie",
       "total": 46533.2
     },
     {
       "code": "51.02",
-      "name": "CAP. Autoritati publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 31980.1
     },
     {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 10813.63
     },
     {
       "code": "66.02",
-      "name": "CAP. Sanatate",
+      "name": "Sanatate",
       "total": 5027.0
     },
     {
       "code": "55.02",
-      "name": "CAP. Tranzactii privind datoria publica si imprumuturi",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
       "total": 4534.3
     }
   ],
@@ -225,7 +225,7 @@
             "val": 18500.17
           },
           {
-            "nume": "Invatamant prescolar si primar © MINDSOFT-SICO - MUNICIPIUL DEVA",
+            "nume": "Invatamant prescolar si primar",
             "val": 2053.4
           },
           {
@@ -321,7 +321,7 @@
       },
       {
         "cod": "67.02",
-        "nume": "Cultura, recreere si religie © MINDSOFT-SICO - MUNICIPIUL DEVA",
+        "nume": "Cultura, recreere si religie",
         "val": 46533.2,
         "copii": [
           {
@@ -439,6 +439,12 @@
     ],
     "total_cheltuieli": 457871.86,
     "ani": {
+      "years": [
+        2026,
+        2027,
+        2028,
+        2029
+      ],
       "cheltuieli": [
         457871.86,
         192934.0,

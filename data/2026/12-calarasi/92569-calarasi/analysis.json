@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 329,
-    "lines_strictly_verified": 60,
-    "pct_lines_strictly_verified": 18.2,
-    "numeric_cells": 1498,
-    "numeric_cells_strictly_verified": 303,
-    "pct_numeric_cells_strictly_verified": 20.2,
+    "lines": 316,
+    "lines_strictly_verified": 156,
+    "pct_lines_strictly_verified": 49.4,
+    "numeric_cells": 822,
+    "numeric_cells_strictly_verified": 510,
+    "pct_numeric_cells_strictly_verified": 62.0,
     "scope": {
       "pages_expected": 48,
       "pages_selected": 48,
       "pages_processed": 48,
       "complete_pdf": true
     },
-    "pct_clean": 18.2,
-    "errors": 100,
-    "warnings": 329,
+    "pct_clean": 49.4,
+    "errors": 22,
+    "warnings": 191,
     "info": 0,
     "documents": 2
   },
@@ -28,6 +28,11 @@
     "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 36110.0
+    },
     {
       "code": "70.02",
       "name": "LOCUINTE,SERVICII SI DEZVOLTARE PUBLICA",
@@ -58,7 +63,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "ec65f4cc1c58b54db994107c",
+    "bundle_id": "51e53c10aab2161454c34620",
     "source_pdf_sha256": "296fe666b1f666bff02da8bba7fbe606d3e9b9ce34a88520211c9b80d0dadcb4"
   }
 }

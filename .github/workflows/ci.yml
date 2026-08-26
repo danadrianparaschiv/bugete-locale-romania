@@ -35,12 +35,13 @@ jobs:
         # cells in a collapsed economic-detail table, plus all 80 cells in a
         # stamp-damaged expense chapter, 62 investment-financing cells, and 73
         # numeric cells in the numbered Arad revenue page (with all 15 X
-        # markers anchored), offline. Alba's digital page adds 180 cells.
+        # markers anchored), plus 43 cells from Cluj's annual-total family,
+        # offline. Alba's digital page adds 180 cells.
         run: >-
           uv run bgconvertor eval
-          --min-anchors 126
-          --min-text-assertions 16
-          --require-cell-ground-truth 9
+          --min-anchors 148
+          --min-text-assertions 19
+          --require-cell-ground-truth 10
           --min-layout-cell-recall 90
           --min-layout-cell-precision 99.5
           --json-out eval-report.json

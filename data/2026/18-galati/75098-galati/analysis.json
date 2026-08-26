@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 268,
-    "lines_strictly_verified": 158,
-    "pct_lines_strictly_verified": 59.0,
-    "numeric_cells": 1030,
-    "numeric_cells_strictly_verified": 640,
-    "pct_numeric_cells_strictly_verified": 62.1,
+    "lines": 393,
+    "lines_strictly_verified": 384,
+    "pct_lines_strictly_verified": 97.7,
+    "numeric_cells": 1156,
+    "numeric_cells_strictly_verified": 1103,
+    "pct_numeric_cells_strictly_verified": 95.4,
     "scope": {
       "pages_expected": 63,
       "pages_selected": 63,
       "pages_processed": 63,
       "complete_pdf": true
     },
-    "pct_clean": 59.0,
-    "errors": 229,
-    "warnings": 129,
+    "pct_clean": 97.7,
+    "errors": 10,
+    "warnings": 10,
     "info": 0,
     "documents": 1
   },
@@ -29,33 +29,12 @@
     "venituri": null,
     "cheltuieli": null
   },
-  "top_capitole": [
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 172333.0
-    },
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 57627.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 50353.0
-    },
-    {
-      "code": "87.02",
-      "name": "Alte actiuni economice",
-      "total": 5001.0
-    }
-  ],
+  "top_capitole": [],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "5e16730b7a23fc65546a57e9",
+    "bundle_id": "655ba33ab9716f5e8f3927cf",
     "source_pdf_sha256": "0c572fa3d9650964582daad708945a82668d91f9af5222e4e9fa394166d95a74"
   }
 }

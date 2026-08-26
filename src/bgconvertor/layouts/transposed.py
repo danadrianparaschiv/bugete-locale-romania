@@ -14,7 +14,6 @@ import re
 from .common import fold, mk_line, parse_cell
 
 PERIOD_LABELS = [
-    (re.compile(r"^20(2[5-9])$"), lambda m: f"est20{m.group(1)}"),
     (re.compile(r"^trim\.?\s*i?v$"), lambda m: "trim4"),
     (re.compile(r"^trim\.?\s*(iii|ill|lll|11l)$"), lambda m: "trim3"),
     (re.compile(r"^trim\.?\s*(ii|11)$"), lambda m: "trim2"),
@@ -161,8 +160,16 @@ BISTRITA_P2_ROWS = (
 )
 
 
-def _period_key(label: str) -> str | None:
+def _period_key(label: str, budget_year: int | None = None) -> str | None:
     t = fold(label).strip()
+    year_match = re.fullmatch(r"((?:19|20)\d{2})", t)
+    if year_match:
+        year = int(year_match.group(1))
+        current = budget_year or 2026
+        # Compact economic codes such as 2001/2002 occupy the same physical
+        # column on ordinary (non-transposed) tables. Only years in this
+        # document's budget window are period labels.
+        return f"est{year}" if current <= year <= current + 3 else None
     for pattern, keyfn in PERIOD_LABELS:
         m = pattern.match(t)
         if m:
@@ -189,7 +196,9 @@ def _bistrita_p2() -> list[dict]:
     ]
 
 
-def try_map(grid: list[list[str]]) -> list[dict] | None:
+def try_map(
+    grid: list[list[str]], budget_year: int | None = None
+) -> list[dict] | None:
     """Returns contract lines, or None when the grid is not this shape."""
     # Source-audited recovery for the p2 grid where TableFormer merges three
     # pairs of indicator columns. The exact fingerprint prevents these
@@ -204,7 +213,7 @@ def try_map(grid: list[list[str]]) -> list[dict] | None:
     for row in grid:
         cells = [row[i].strip() if i < len(row) else "" for i in range(n_cols)]
         head = fold(cells[0])
-        key = _period_key(cells[0])
+        key = _period_key(cells[0], budget_year=budget_year)
         if key:
             period_rows.setdefault(key, cells)
         elif head == "cod":

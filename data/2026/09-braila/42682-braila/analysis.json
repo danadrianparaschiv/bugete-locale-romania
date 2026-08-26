@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 6681,
-    "lines_strictly_verified": 4426,
-    "pct_lines_strictly_verified": 66.2,
-    "numeric_cells": 13498,
-    "numeric_cells_strictly_verified": 9200,
-    "pct_numeric_cells_strictly_verified": 68.2,
+    "lines": 6907,
+    "lines_strictly_verified": 4977,
+    "pct_lines_strictly_verified": 72.1,
+    "numeric_cells": 14848,
+    "numeric_cells_strictly_verified": 11249,
+    "pct_numeric_cells_strictly_verified": 75.8,
     "scope": {
       "pages_expected": 239,
       "pages_selected": 239,
       "pages_processed": 239,
       "complete_pdf": true
     },
-    "pct_clean": 66.2,
-    "errors": 2006,
-    "warnings": 1481,
-    "info": 9,
-    "documents": 33
+    "pct_clean": 72.1,
+    "errors": 1878,
+    "warnings": 1091,
+    "info": 8,
+    "documents": 38
   },
   "llm_models": [
     "gemini-3.6-flash"
   ],
   "totals_mii_lei": {
     "venituri": 863892.19,
-    "cheltuieli": null
+    "cheltuieli": 550564.87
   },
   "top_capitole": [
     {
@@ -47,28 +47,13 @@
     },
     {
       "code": "51.02",
-      "name": "Autoritatì publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 61277.0
-    },
-    {
-      "code": "67.02",
-      "name": "Cultura, recreere si religie",
-      "total": 57177.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servici si dezvoltare publica",
-      "total": 33750.0
     },
     {
       "code": "66.02",
       "name": "Sanatate",
       "total": 12410.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 7150.0
     },
     {
       "code": "80.02",
@@ -77,7 +62,7 @@
     },
     {
       "code": "55.02",
-      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "name": "Tranzactii privind datoria publica si imprumutur",
       "total": 250.0
     }
   ],
@@ -85,7 +70,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "8798b7d414c58d8bfc8bb995",
+    "bundle_id": "c5ac1f6158e1d71c67705399",
     "source_pdf_sha256": "834b5ce2c1949f69c7188e1081b194224cd401a4c4324b4c45f716236545d531"
   }
 }

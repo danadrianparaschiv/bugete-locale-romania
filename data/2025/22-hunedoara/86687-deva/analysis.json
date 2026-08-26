@@ -1,89 +1,89 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 4849,
-    "lines_strictly_verified": 2883,
-    "pct_lines_strictly_verified": 59.5,
-    "numeric_cells": 17234,
-    "numeric_cells_strictly_verified": 10570,
-    "pct_numeric_cells_strictly_verified": 61.3,
+    "lines": 4791,
+    "lines_strictly_verified": 2245,
+    "pct_lines_strictly_verified": 46.9,
+    "numeric_cells": 20423,
+    "numeric_cells_strictly_verified": 9693,
+    "pct_numeric_cells_strictly_verified": 47.5,
     "scope": {
       "pages_expected": 266,
       "pages_selected": 266,
       "pages_processed": 266,
       "complete_pdf": true
     },
-    "pct_clean": 59.5,
-    "errors": 2666,
-    "warnings": 1101,
-    "info": 19,
-    "documents": 14
+    "pct_clean": 46.9,
+    "errors": 2531,
+    "warnings": 1081,
+    "info": 24,
+    "documents": 9
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 428235.76,
-    "cheltuieli": null
+    "cheltuieli": 490221.89
   },
   "top_capitole": [
     {
+      "code": "60.02",
+      "name": "CHELTUIELILE SECTIUNII DE DEZVOLTARE (5002+5902+6302+6902+7902",
+      "total": 246561.6
+    },
+    {
       "code": "70.02",
-      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
-      "total": 123238.54
-    },
-    {
-      "code": "74.02",
-      "name": "CAP. Protectia mediului",
-      "total": 57043.88
-    },
-    {
-      "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
-      "total": 50379.5
-    },
-    {
-      "code": "84.02",
-      "name": "CAP. Transporturi",
-      "total": 39889.05
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 94777.25
     },
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
-      "total": 18128.04
+      "name": "INVATAMANT",
+      "total": 94133.29
     },
     {
-      "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
-      "total": 12751.79
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 50493.46
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 46135.74
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 37115.95
     },
     {
       "code": "51.02",
       "name": "AUTORITATI PUBLICE SI ACTIUNI",
-      "total": 11010.66
+      "total": 35714.41
     },
     {
-      "code": "54.02",
-      "name": "CAP. Alte servicii publice generale",
-      "total": 1749.2
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 33000.95
     },
     {
-      "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie",
-      "total": 1584.5
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA",
+      "total": 12751.79
     },
     {
-      "code": "01.10",
-      "name": "DEFICIT",
-      "total": 69.21
+      "code": "67.10",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 11196.12
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "3842f71e95130791b7ed903a",
+    "bundle_id": "62f0f209083fa67f8a084d21",
     "source_pdf_sha256": "63d03df23babb9f3e91f8a11360fcbb779483050cfa4b990df3476debda17c53"
   }
 }

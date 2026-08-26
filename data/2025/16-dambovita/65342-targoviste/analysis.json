@@ -1,14 +1,14 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 611,
     "lines_strictly_verified": 611,
     "pct_lines_strictly_verified": 100.0,
-    "numeric_cells": 4888,
-    "numeric_cells_strictly_verified": 4888,
+    "numeric_cells": 5598,
+    "numeric_cells_strictly_verified": 5598,
     "pct_numeric_cells_strictly_verified": 100.0,
     "scope": {
       "pages_expected": 22,
@@ -30,52 +30,52 @@
   "top_capitole": [
     {
       "code": "70.02",
-      "name": "CAP. Locuinte, servicii si dezvoltare publica",
+      "name": "Locuinte, servicii si dezvoltare publica",
       "total": 131083.0
     },
     {
       "code": "65.02",
-      "name": "CAP. Invatamant",
+      "name": "Invatamant",
       "total": 127805.0
     },
     {
       "code": "84.02",
-      "name": "CAP. Transporturi",
+      "name": "Transporturi",
       "total": 110973.0
     },
     {
       "code": "68.02",
-      "name": "CAP. Asigurari si asistenta sociala",
+      "name": "Asigurari si asistenta sociala",
       "total": 91229.0
     },
     {
       "code": "74.02",
-      "name": "CAP. Protectia mediului",
+      "name": "Protectia mediului",
       "total": 41449.0
     },
     {
       "code": "54.02",
-      "name": "CAP. Alte servicii publice generale",
+      "name": "Alte servicii publice generale",
       "total": 30642.0
     },
     {
       "code": "67.02",
-      "name": "CAP. Cultura, recreere si religie",
+      "name": "Cultura, recreere si religie",
       "total": 28437.0
     },
     {
       "code": "51.02",
-      "name": "CAP. Autoritati publice si actiuni externe",
+      "name": "Autoritati publice si actiuni externe",
       "total": 26180.0
     },
     {
       "code": "61.02",
-      "name": "CAP. Ordine publica si siguranta nationala",
+      "name": "Ordine publica si siguranta nationala",
       "total": 15278.0
     },
     {
       "code": "66.02",
-      "name": "CAP. Sanatate",
+      "name": "Sanatate",
       "total": 13043.0
     }
   ],
@@ -429,12 +429,32 @@
         ]
       }
     ],
-    "total_cheltuieli": 624604.0
+    "total_cheltuieli": 624604.0,
+    "ani": {
+      "years": [
+        2025,
+        2026,
+        2027,
+        2028
+      ],
+      "cheltuieli": [
+        624604.0,
+        554067.0,
+        569768.0,
+        588281.0
+      ],
+      "venituri": [
+        608092.0,
+        554067.0,
+        569768.0,
+        588281.0
+      ]
+    }
   },
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "69c1154f1a7941f1ae3ec36f",
+    "bundle_id": "3b05135223d890f2e70a6baf",
     "source_pdf_sha256": "c4a9f22e039db03e67678f16d82886c5daa175d5e3f14a3b08ae58be87536327"
   }
 }

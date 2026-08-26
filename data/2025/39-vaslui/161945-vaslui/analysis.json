@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1338,
-    "lines_strictly_verified": 787,
-    "pct_lines_strictly_verified": 58.8,
-    "numeric_cells": 1114,
-    "numeric_cells_strictly_verified": 524,
-    "pct_numeric_cells_strictly_verified": 47.0,
+    "lines": 1470,
+    "lines_strictly_verified": 668,
+    "pct_lines_strictly_verified": 45.4,
+    "numeric_cells": 2845,
+    "numeric_cells_strictly_verified": 1754,
+    "pct_numeric_cells_strictly_verified": 61.7,
     "scope": {
       "pages_expected": 64,
       "pages_selected": 64,
       "pages_processed": 64,
       "complete_pdf": true
     },
-    "pct_clean": 58.8,
-    "errors": 30,
-    "warnings": 870,
+    "pct_clean": 45.4,
+    "errors": 162,
+    "warnings": 925,
     "info": 0,
     "documents": 1
   },
@@ -26,15 +26,66 @@
     "gemini-3.6-flash"
   ],
   "totals_mii_lei": {
-    "venituri": 226266281.0,
-    "cheltuieli": null
+    "venituri": 410246406.0,
+    "cheltuieli": 463645776.0
   },
-  "top_capitole": [],
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi - din care titlurile:",
+      "total": 147573746.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială - din care titlurile:",
+      "total": 53656617.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice și acțiuni externe - din care titlurile:",
+      "total": 36055362.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protecția mediului - din care titlurile:",
+      "total": 34262840.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere și religie - din care titlurile:",
+      "total": 31931886.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învățământ - din care titlurile:",
+      "total": 22595858.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publică și siguranță națională - din care titlurile:",
+      "total": 14000542.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuințe, servicii și dezvoltare publică - din care titlurile:",
+      "total": 13459194.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale - din care titlurile:",
+      "total": 3304926.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili și energie - din care titlurile:",
+      "total": 450000.0
+    }
+  ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "0eb07169d7a2d96d15249b2b",
+    "bundle_id": "33131cd3a205ca3e8378de8c",
     "source_pdf_sha256": "355a9f863c5937612888ba94f0cb9b139a31eeb12614649a96caaeafa5b1b1f7"
   }
 }

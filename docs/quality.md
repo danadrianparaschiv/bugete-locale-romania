@@ -381,13 +381,32 @@ exhaustive și regresii offline:
   216/216 precizie, iar toate totalurile se reconciliază cu cele patru
   trimestre.
 
-P1 este astfel complet pentru cele nouă familii numerice reprezentate în
+### Familia Cluj `scan_annual_total`
+
+Scanarea mare Cluj folosește predominant forma cu patru coloane `denumire |
+cod rând | indicator bugetar | total anual`; TableFormer unește frecvent cele
+două antete centrale, iar mapperul generic confunda numărul de rând cu codul
+bugetar. Mapperul dedicat păstrează cele două identități separat, acceptă
+varianta cu denumire duplicată pe cinci coloane și moștenește schema pe
+paginile consecutive cu antet lipsă ori deteriorat. Celulele cu litere OCR
+care sunt cifre neechivoce sunt reparate numai în coloane deja numerice.
+
+Fixture-ul public `cj_p097` inventariază exhaustiv 43/43 celule, inclusiv două
+cazuri hard verificate pe randarea PDF; recall-ul și precizia sunt 100%, la 0
+USD API. Separat, un audit local al celor 753 de grile OCR Cluj a găsit 607
+pagini din această familie și a demonstrat că mapperul păstrează 20.394/20.394
+celule deja parseabile din OCR. Ultima cifră este un audit de pierdere la
+mapare, nu ground truth vizual pentru întregul PDF și nu se prezintă drept
+`validated_cell_recall` de fișier.
+
+P1 este astfel complet pentru cele zece familii numerice reprezentate în
 suita golden: `digital_detail`, `scan_general_matrix`,
 `scan_transposed_detail`, `scan_institution_budget`, `scan_simple_table`,
 `scan_detail_economic`, `scan_expense_chapter`, `investment_list` și
-`scan_revenue_detail`. Împreună, cele nouă scope-uri conțin 1.355/1.355 celule
-regăsite și 1.355/1.355 celule corecte (100% recall și precizie în scope-urile
-declarate). Pagina `hcl_prose` rămâne intenționat text, fără metrică numerică.
+`scan_revenue_detail`, plus `scan_annual_total`. Împreună, cele zece scope-uri
+conțin 1.398/1.398 celule regăsite și 1.398/1.398 celule corecte (100% recall și
+precizie în scope-urile declarate). Pagina `hcl_prose` rămâne intenționat text,
+fără metrică numerică.
 
 Acesta este un rezultat pe familii și pagini reprezentative, nu o măsurare a
 fiecărui rând din toate PDF-urile corpusului. `recall_measured=false` rămâne
@@ -397,18 +416,52 @@ exhaustiv.
 Poarta reproductibilă P1 este:
 
 ```bash
+# CI materializează mai întâi scope-ul digital Alba (0 USD API)
+uv run bgconvertor convert data/2026/01-alba/1017-alba-iulia/budget_file.pdf
 uv run bgconvertor eval \
-  --require-cell-ground-truth 9 \
+  --require-cell-ground-truth 10 \
   --min-layout-cell-recall 90 \
   --min-layout-cell-precision 99.5 \
   --json-out eval-report.json
 ```
 
-Poarta CI complet offline evaluează minimum 126/126 ancore, 16/16 aserțiuni
-text și toate cele 1.355 de celule din cele nouă grile/scope-uri exhaustive.
-După materializarea tuturor extracțiilor locale, `eval --strict` a trecut pe
-15/15 fixture-uri cu 155/155 ancore și 25/25 aserțiuni text. Cei 15 markeri `X`
-ai Arad p31 sunt blocați separat prin ancore hard, fiindcă nu sunt numere.
+Poarta CI complet offline materializează Alba și evaluează minimum 148/148
+ancore, 19/19 aserțiuni text și toate cele 1.398 de celule din cele zece
+grile/scope-uri exhaustive. Nouă scope-uri scanate (1.218 celule) rulează
+direct din grilele sanitizate comise; al zecelea adaugă cele 180 de celule ale
+PDF-ului digital Alba. Cei 15 markeri `X` ai Arad p31 sunt blocați separat prin
+ancore hard, fiindcă nu sunt numere. Pentru fixture-urile care declară
+`source_grid`, grila comisă este sursa autoritară a evaluării: un cache local
+creat de o conversie anterioară nu poate modifica scorul offline.
+
+### Refresh-ul complet al corpusului după P1
+
+La 26 august 2026, toate cele 69 de conversii publice au fost auditate după
+remaparea cu versiunea de extracție 45. Prima trecere paralelă, care a
+reconstruit o singură dată cache-urile OCR invalidate de noua selecție de
+preprocesare, a durat 549,6 minute și a publicat 62/69 bundle-uri la 0 USD API.
+Șase dintre cele șapte cazuri păstrate de gardul atomic au fost apoi închise
+serial: trei căderi `recursive_mutex` ale runtime-ului OCR pe macOS, două
+fișiere cache legacy parțiale și un cache Târgoviște legat de PDF-ul anterior.
+Citirea cache-ului tratează acum JSON-ul parțial drept miss, iar toate scrierile
+per pagină sunt publicate atomic; regresiile sunt acoperite offline.
+
+Poarta finală a raportat:
+
+| Stare după refresh P1 | Intrări |
+|---|---:|
+| Conversii publice cu bundle modern coerent | 69/69 |
+| Conversii publice inconsistente | 0 |
+| Intrări intenționat neconvertite | 14 |
+| Cost API al refresh-ului și retry-urilor | 0 USD |
+
+O excepție de **sursă**, nu de mapper, rămâne declarată explicit: PDF-ul comis
+pentru Brașov 2025 este anexa instituțiilor finanțate din venituri proprii
+(`.10`), nu bugetul local principal (`.02`). Gardul de publicare a refuzat să
+îl republice drept buget principal; bundle-ul modern anterior a rămas intact
+și trece auditul de coerență a artefactelor. Înlocuirea lui necesită mai întâi
+o sursă oficială `.02` verificată. Cifra 69/69 de mai sus dovedește acordul
+PDF/Excel/analiză/manifest, nu corectează această limitare semantică a sursei.
 
 ## P2 — recuperare LLM conștientă de buget
 

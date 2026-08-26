@@ -62,6 +62,21 @@ def test_infografic_blocks():
     assert ig["sectiuni"] == {"functionare": 700.0, "dezvoltare": 300.0}
     assert ig["trim"]["venituri"] == [400, 300, 200, 100]
     assert ig["ani"]["cheltuieli"] == [1000, 900, 850, 800]
+    assert ig["ani"]["years"] == [2026, 2027, 2028, 2029]
+
+
+def test_infografic_projection_years_are_dynamic():
+    result = _result()
+    for line in result.documents[0].lines:
+        values = line.values
+        if "total" in values:
+            values["total_2025"] = values.pop("total")
+        for old, new in (("est2027", "est2026"), ("est2028", "est2027"), ("est2029", "est2028")):
+            if old in values:
+                values[new] = values.pop(old)
+    ig = infografic(result)
+    assert ig is not None
+    assert ig["ani"]["years"] == [2025, 2026, 2027, 2028]
 
 
 def test_top_capitole_excludes_aggregates():

@@ -183,7 +183,8 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 continue
         doc.pages.append(page)
 
-        for raw in payload["lines"]:
+        for source_raw in payload["lines"]:
+            raw = dict(source_raw)
             if raw.get("section"):
                 canon = SECTION_CANON.get(raw["section"], raw["section"])
                 if canon != section:
@@ -192,6 +193,52 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
             raw_code = raw.get("raw_code") or ""
             name = raw.get("name") or ""
+            out_of_scope = payload.get("layout") in (
+                "investment_list", "allocations_annex", "annex_other"
+            )
+
+            # A physical table row may cross the page break.  Join only
+            # complementary fragments on consecutive pages: an identified
+            # row without values followed by anonymous values, or a name-only
+            # tail followed by code/value cells.  Anything less constrained
+            # remains separate rather than risking a false merge.
+            previous_line = doc.lines[-1] if doc.lines else None
+            consecutive = previous_line is not None and previous_line.page == page - 1
+            raw_values = raw.get("values") or {}
+            if (
+                consecutive
+                and previous_line.raw_code
+                and not previous_line.values
+                and not raw_code
+                and not name
+                and raw_values
+            ):
+                fragment = _to_line(
+                    raw, page, section, region,
+                    "ocr" if is_scanned else "digital",
+                    suppress_cell_issues=out_of_scope,
+                    annex_data=out_of_scope,
+                )
+                previous_line.values.update(fragment.values)
+                previous_line.x_markers.extend(
+                    marker for marker in fragment.x_markers
+                    if marker not in previous_line.x_markers
+                )
+                previous_line.issues.extend(fragment.issues)
+                continue
+            if (
+                consecutive
+                and not previous_line.raw_code
+                and not previous_line.values
+                and previous_line.name
+                and "SECTIUNEA" not in previous_line.name.upper()
+                and raw_code
+                and not name
+            ):
+                raw["name"] = previous_line.name
+                name = previous_line.name
+                doc.lines.pop()
+
             upper = name.upper()
             if REVENUE_TOTAL_RE.match(raw_code) and "VENITURI" in upper:
                 region = "revenue"
@@ -204,9 +251,6 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             ):
                 region = "expense"
 
-            out_of_scope = payload.get("layout") in (
-                "investment_list", "allocations_annex", "annex_other"
-            )
             line = _to_line(
                 raw, page, section, region,
                 "ocr" if is_scanned else "digital",

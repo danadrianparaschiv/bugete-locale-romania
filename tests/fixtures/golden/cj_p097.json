@@ -1,0 +1,73 @@
+{
+  "id": "cj_p097",
+  "pdf": "data/2026/13-cluj/54975-cluj-napoca/budget_file.pdf",
+  "page": 97,
+  "layout": "scan_annual_total",
+  "budget": "local",
+  "source_type": "scanned",
+  "source_grid": "grids/cj_p097.json",
+  "hazards": [
+    "merged_row_number_and_indicator_headers",
+    "funding_source_suffix_on_codes",
+    "numeric_digit_lookalikes",
+    "one_reversed_numeric_cell"
+  ],
+  "columns": ["total_2026"],
+  "anchors": [
+    {"raw_code": "20.06.01", "code": "20.06.01", "column": "total_2026", "value": "522000", "name_contains": "Deplasari interne"},
+    {"raw_code": "57.02.01", "column": "total_2026", "value": "95328107"},
+    {"raw_code": "66.02A", "code": "66.02", "column": "total_2026", "value": "69720000", "hard": true},
+    {"raw_code": "10.01.30", "column": "total_2026", "value": "600000", "hard": true},
+    {"raw_code": "20.01.02", "column": "total_2026", "value": "5000"}
+  ],
+  "cell_ground_truth": [
+    {
+      "rows": [
+        {"raw_code": "20.06.01", "values": {"total_2026": "522000"}},
+        {"raw_code": "20.06.02", "values": {"total_2026": "40000"}},
+        {"raw_code": "20.11", "values": {"total_2026": "105000"}},
+        {"raw_code": "20.13", "values": {"total_2026": "231000"}},
+        {"raw_code": "20.14", "values": {"total_2026": "5000"}},
+        {"raw_code": "20.25", "values": {"total_2026": "11000"}},
+        {"raw_code": "20.30", "values": {"total_2026": "12205000"}},
+        {"raw_code": "20.30.01", "values": {"total_2026": "3000"}},
+        {"raw_code": "20.30.02", "values": {"total_2026": "44000"}},
+        {"raw_code": "20.30.04", "values": {"total_2026": "92000"}},
+        {"raw_code": "20.30.30", "values": {"total_2026": "12066000"}},
+        {"raw_code": "51", "values": {"total_2026": "29000000"}},
+        {"raw_code": "51.01", "values": {"total_2026": "29000000"}},
+        {"raw_code": "51.01.46", "values": {"total_2026": "29000000"}},
+        {"raw_code": "57", "values": {"total_2026": "165047107"}},
+        {"raw_code": "57.02", "values": {"total_2026": "165047107"}},
+        {"raw_code": "57.02.01", "values": {"total_2026": "95328107"}},
+        {"raw_code": "57.02.02", "values": {"total_2026": "69600000"}},
+        {"raw_code": "57.02.03", "values": {"total_2026": "119000"}},
+        {"raw_code": "59", "values": {"total_2026": "13740000"}},
+        {"raw_code": "59.11", "values": {"total_2026": "12900000"}},
+        {"raw_code": "59.40", "values": {"total_2026": "840000"}},
+        {"raw_code": "84", "values": {"total_2026": "-792686"}},
+        {"raw_code": "85", "values": {"total_2026": "-792686"}},
+        {"raw_code": "85.01", "values": {"total_2026": "-792686"}},
+        {"raw_code": "85.01.01", "values": {"total_2026": "-792686"}},
+        {"raw_code": "64.02A", "values": {"total_2026": "340251262"}},
+        {"raw_code": "66.02A", "values": {"total_2026": "69720000"}},
+        {"raw_code": "01", "values": {"total_2026": "69728582"}},
+        {"raw_code": "10", "values": {"total_2026": "37635000"}},
+        {"raw_code": "10.01", "values": {"total_2026": "36600000"}},
+        {"raw_code": "10.01.01", "values": {"total_2026": "31440000"}},
+        {"raw_code": "10.01.05", "values": {"total_2026": "3460000"}},
+        {"raw_code": "10.01.17", "values": {"total_2026": "1100000"}},
+        {"raw_code": "10.01.30", "values": {"total_2026": "600000"}},
+        {"raw_code": "10.02", "values": {"total_2026": "210000"}},
+        {"raw_code": "10.02.06", "values": {"total_2026": "210000"}},
+        {"raw_code": "10.03", "values": {"total_2026": "825000"}},
+        {"raw_code": "10.03.07", "values": {"total_2026": "825000"}},
+        {"raw_code": "20", "values": {"total_2026": "2633582"}},
+        {"raw_code": "20.01", "values": {"total_2026": "828582"}},
+        {"raw_code": "20.01.01", "values": {"total_2026": "90000"}},
+        {"raw_code": "20.01.02", "values": {"total_2026": "5000"}}
+      ]
+    }
+  ],
+  "notes": "Cluj-Napoca p97, visually audited against a render of the committed public PDF. Exhaustive inventory: 43 logical rows x one annual-total column = 43 numeric cells. The source prints row numbers 254-296 separately from budget codes; OCR merges those headers, which previously made the generic mapper export row numbers as codes. The exact full-page fingerprint also scopes recovery of G9.720.000 -> 69.720.000 and reversed OCR 000'009 -> the visibly printed 600.000."
+}

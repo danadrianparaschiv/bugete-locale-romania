@@ -84,6 +84,42 @@ def test_assemble_documents_sections_regions(tmp_path):
     assert doc.lines[-1].section == "TOTAL"
 
 
+def test_assemble_stitches_a_row_split_across_pages(tmp_path):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT",
+        "layout": "scan_simple_table",
+        "lines": [_line("6502", "Invatamant")],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "layout": "scan_simple_table",
+        "lines": [_line(None, "", total_2025="123.00")],
+    })
+    doc = assemble(store, [1, 2])[0]
+    assert len(doc.lines) == 1
+    assert doc.lines[0].raw_code == "6502"
+    assert doc.lines[0].values == {"total_2025": 123}
+
+
+def test_assemble_stitches_name_above_code_across_pages(tmp_path):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT",
+        "layout": "scan_simple_table",
+        "lines": [_line(None, "Invatamant prescolar")],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "layout": "scan_simple_table",
+        "lines": [_line("650203", "", total_2025="45")],
+    })
+    doc = assemble(store, [1, 2])[0]
+    assert len(doc.lines) == 1
+    assert doc.lines[0].name == "Invatamant prescolar"
+    assert doc.lines[0].raw_code == "650203"
+
+
 def test_assemble_repairs_truncated_func_prefix(tmp_path):
     store = _mk_store(tmp_path)
     store.put("extract", 1, {

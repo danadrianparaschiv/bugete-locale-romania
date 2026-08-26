@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1143,
-    "lines_strictly_verified": 729,
-    "pct_lines_strictly_verified": 63.8,
-    "numeric_cells": 2756,
-    "numeric_cells_strictly_verified": 1780,
-    "pct_numeric_cells_strictly_verified": 64.6,
+    "lines": 1482,
+    "lines_strictly_verified": 1156,
+    "pct_lines_strictly_verified": 78.0,
+    "numeric_cells": 3570,
+    "numeric_cells_strictly_verified": 2822,
+    "pct_numeric_cells_strictly_verified": 79.0,
     "scope": {
       "pages_expected": 167,
       "pages_selected": 167,
       "pages_processed": 167,
       "complete_pdf": true
     },
-    "pct_clean": 63.8,
-    "errors": 593,
-    "warnings": 272,
+    "pct_clean": 78.0,
+    "errors": 392,
+    "warnings": 211,
     "info": 0,
     "documents": 2
   },
@@ -31,23 +31,18 @@
   },
   "top_capitole": [
     {
-      "code": "67.02",
-      "name": "CULTURĂ, RECREERE ȘI RELIGIE TOTAL din care:",
-      "total": 4246800.0
-    },
-    {
       "code": "74.02",
-      "name": "CAPITOL 74.02 PROTECȚIA MEDIULUI",
+      "name": "ITOL 74.02 PROTECȚIA MEDIULUI",
       "total": 3207000.0
     },
     {
       "code": "65.02",
-      "name": "CAP.65.02 ÎNVĂȚĂMÂNT",
+      "name": "65.02 ÎNVĂȚĂMÂNT",
       "total": 1056600.0
     },
     {
       "code": "84.02",
-      "name": "CAPITOL 84.02 TRANSPORTURI",
+      "name": "ITOL 84.02 TRANSPORTURI",
       "total": 907800.0
     },
     {
@@ -56,24 +51,29 @@
       "total": 67734.83
     },
     {
-      "code": "70.02",
-      "name": "LOCUINTE. SERVICII SI DEZVOLTARE",
-      "total": 64729.8
-    },
-    {
       "code": "51.02",
-      "name": "AUTORITATI PUBLICE SI ACTIUNIEXTERNE",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
       "total": 62833.0
     },
     {
+      "code": "70.02",
+      "name": "LOCUINTE. SERVICII SI DEZVOLTARE",
+      "total": 46348.0
+    },
+    {
       "code": "61.02",
-      "name": "ORDINE PUBLICASISIGURANTA NATIONALA",
+      "name": "ORDINE PUBLICA SISIGURANTA NATIONALA",
       "total": 8546.75
     },
     {
       "code": "81.02",
-      "name": "CAPITOL 81.02 COMBUSTIBILI ȘI ENERGIE",
+      "name": "ITOL 81.02 COMBUSTIBILI ȘI ENERGIE",
       "total": 5900.0
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA. RECREERE SI RELIGIE",
+      "total": 5560.0
     },
     {
       "code": "66.02",
@@ -85,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "3d08e1d80a7d22564857c44f",
+    "bundle_id": "75ed4b3f90dec5efe2997e42",
     "source_pdf_sha256": "67b39fa4155600c95617157768adfb75385f536396ac24949c53ba4079a3b056"
   }
 }

@@ -1,91 +1,38 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1134,
-    "lines_strictly_verified": 459,
-    "pct_lines_strictly_verified": 40.5,
-    "numeric_cells": 1644,
-    "numeric_cells_strictly_verified": 690,
-    "pct_numeric_cells_strictly_verified": 42.0,
+    "lines": 1390,
+    "lines_strictly_verified": 912,
+    "pct_lines_strictly_verified": 65.6,
+    "numeric_cells": 2757,
+    "numeric_cells_strictly_verified": 1922,
+    "pct_numeric_cells_strictly_verified": 69.7,
     "scope": {
       "pages_expected": 75,
       "pages_selected": 75,
       "pages_processed": 75,
       "complete_pdf": true
     },
-    "pct_clean": 40.5,
-    "errors": 334,
-    "warnings": 529,
-    "info": 9,
-    "documents": 2
+    "pct_clean": 65.6,
+    "errors": 269,
+    "warnings": 361,
+    "info": 6,
+    "documents": 4
   },
-  "llm_models": [
-    "gemini-3.6-flash"
-  ],
+  "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 419146.32,
     "cheltuieli": null
   },
-  "top_capitole": [
-    {
-      "code": "84.02",
-      "name": "8). Cap. 8402 Transporturi",
-      "total": 105562.77
-    },
-    {
-      "code": "67.02",
-      "name": "11). Cap. 67.02 Cultură, recreere, religie, total din care:",
-      "total": 30261.48
-    },
-    {
-      "code": "70.02",
-      "name": "6). Cap. 70.02 Locuinte, servicii si dezvoltare publica din care:",
-      "total": 29636.65
-    },
-    {
-      "code": "67.10",
-      "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
-      "total": 13242.69
-    },
-    {
-      "code": "55.02",
-      "name": "6). Cap. 55.02 Tranzactii privind datoria publica si imprumuturi",
-      "total": 9100.0
-    },
-    {
-      "code": "61.10",
-      "name": "Ordine publica si siguranta nationala (cod 61.10.03+61.10.05+61.10.50)",
-      "total": 7487.0
-    },
-    {
-      "code": "54.10",
-      "name": "Alte servicii publice generale (cod 54.10.10+54.10.50)",
-      "total": 6228.58
-    },
-    {
-      "code": "65.10",
-      "name": "65.10.03+65.10.04+65.10.05+65.10.07+65.10.11 Invatamant ( cod +65.10.5",
-      "total": 5802.65
-    },
-    {
-      "code": "66.02",
-      "name": "10). Cap. 66.02 Sanatate",
-      "total": 5775.57
-    },
-    {
-      "code": "68.02",
-      "name": "5). Cap. 6802 Asistenta sociala",
-      "total": 3492.0
-    }
-  ],
+  "top_capitole": [],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "b42707419914b0177f0dc3cf",
+    "bundle_id": "a7115b258c1167521d0acbb1",
     "source_pdf_sha256": "25f9d2406e632e2b6cb874a9db7eb11e9f71d7a225cd3b631f92b4343789e3d0"
   }
 }

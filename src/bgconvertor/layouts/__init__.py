@@ -8,10 +8,12 @@ new layout family = one new module here + a registration line + fixtures.
 from __future__ import annotations
 
 from . import (
+    annual_total,
     collapsed,
     collapsed_detail,
     expense_chapter,
     formular11,
+    general_summary,
     institution,
     investment,
     matrix,
@@ -22,6 +24,7 @@ from . import (
 )
 
 MAPPERS = [
+    annual_total.try_map,
     institution.try_map,
     collapsed.try_map,
     collapsed_detail.try_map,
@@ -31,16 +34,44 @@ MAPPERS = [
     formular11.try_map,
     rectificare.try_map,
     transposed.try_map,
+    general_summary.try_map,
     matrix.try_map,
     table.map_grid,  # always succeeds
 ]
 
 
-def map_grid(grid: list[list[str]]) -> list[dict]:
+def map_grid(
+    grid: list[list[str]],
+    context: dict | None = None,
+    budget_year: int | None = None,
+) -> list[dict]:
+    lines, _ = map_grid_with_context(grid, context=context, budget_year=budget_year)
+    return lines
+
+
+def map_grid_with_context(
+    grid: list[list[str]],
+    context: dict | None = None,
+    budget_year: int | None = None,
+) -> tuple[list[dict], dict | None]:
     if not grid or not grid[0]:
-        return []
+        return [], context
     for mapper in MAPPERS:
-        lines = mapper(grid)
+        if mapper is annual_total.try_map:
+            lines = mapper(grid, budget_year=budget_year, context=context)
+        elif mapper is transposed.try_map:
+            lines = mapper(grid, budget_year=budget_year)
+        elif mapper is table.map_grid:
+            return table.map_grid_with_context(
+                grid, context=context, budget_year=budget_year
+            )
+        else:
+            lines = mapper(grid)
         if lines is not None:
-            return lines
-    return []
+            mapped_context = (
+                annual_total.mapping_context(grid, budget_year, context=context)
+                if mapper is annual_total.try_map
+                else table.mapping_context(grid, budget_year=budget_year)
+            )
+            return lines, mapped_context or context
+    return [], context

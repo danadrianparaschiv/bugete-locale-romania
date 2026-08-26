@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1868,
-    "lines_strictly_verified": 798,
-    "pct_lines_strictly_verified": 42.7,
-    "numeric_cells": 8253,
-    "numeric_cells_strictly_verified": 4615,
-    "pct_numeric_cells_strictly_verified": 55.9,
+    "lines": 2418,
+    "lines_strictly_verified": 1776,
+    "pct_lines_strictly_verified": 73.4,
+    "numeric_cells": 10334,
+    "numeric_cells_strictly_verified": 8138,
+    "pct_numeric_cells_strictly_verified": 78.7,
     "scope": {
       "pages_expected": 173,
       "pages_selected": 173,
       "pages_processed": 173,
       "complete_pdf": true
     },
-    "pct_clean": 42.7,
-    "errors": 848,
-    "warnings": 1013,
-    "info": 0,
-    "documents": 2
+    "pct_clean": 73.4,
+    "errors": 663,
+    "warnings": 570,
+    "info": 1,
+    "documents": 4
   },
   "llm_models": [],
   "totals_mii_lei": {
@@ -30,23 +30,13 @@
   "top_capitole": [
     {
       "code": "68.02",
-      "name": "Asigurari si asistenta sociala",
-      "total": 114454.0
+      "name": "Total Asigurari si asistenta sociala",
+      "total": 5963604.0
     },
     {
-      "code": "00.17",
-      "name": "IV. SUBVENTII",
-      "total": 83242.99
-    },
-    {
-      "code": "74.10",
-      "name": "Protectia mediului",
-      "total": 28122.0
-    },
-    {
-      "code": "61.10",
-      "name": "Ordine publica si siguranta nationala",
-      "total": 21141.74
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 45125.5
     },
     {
       "code": "66.02",
@@ -54,26 +44,21 @@
       "total": 20109.0
     },
     {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 10886.0
-    },
-    {
-      "code": "70.10",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 1851.0
-    },
-    {
       "code": "65.10",
       "name": "INVATAMANT",
       "total": 890.0
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publica si siguranta nationain",
+      "total": 153.5
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "c656799e06275aa6489d63e3",
+    "bundle_id": "92da91ea4760d776c43b5fbe",
     "source_pdf_sha256": "59b7177b568fe520ce8a77a0476ca3aa0857ee357821d12a215a6d703357a72a"
   }
 }

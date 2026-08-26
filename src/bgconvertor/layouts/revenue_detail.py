@@ -13,6 +13,7 @@ from this page.
 
 from __future__ import annotations
 
+from ..years import years_in
 from .common import fold, mk_line, parse_cell
 
 VALUE_COLUMNS = ("buget_2026", "est2027", "est2028", "est2029")
@@ -114,16 +115,10 @@ def _shape(grid: list[list[str]]) -> int | None:
     if len(grid) < 4 or max(len(row) for row in grid) != 7:
         return None
     header = fold(" ".join(cell for row in grid[:2] for cell in row))
-    required = (
-        "denumirea",
-        "cod indicator",
-        "prevederi anuale",
-        "buget an 2026",
-        "2027",
-        "2028",
-        "2029",
-    )
-    if not all(marker in header for marker in required):
+    years = years_in(header)
+    if not all(marker in header for marker in ("denumirea", "cod indicator", "prevederi anuale")):
+        return None
+    if len(years) < 4 or years[:4] != list(range(years[0], years[0] + 4)):
         return None
     index_row = [cell.strip() for cell in grid[2][:7]]
     if index_row[2:7] != ["2", "3", "4", "5", "6"]:

@@ -197,6 +197,35 @@ def test_evaluate_all_against_run_store(tmp_path):
     assert report["validated_cell_recall"]["pct"] is None
 
 
+def test_committed_source_grid_overrides_local_run_cache(tmp_path, monkeypatch):
+    """Offline golden scores cannot depend on whichever PDF ran most recently."""
+    pdf = tmp_path / "doc.pdf"
+    pdf.write_bytes(b"%PDF fake")
+    config = RunConfig(runs_dir=tmp_path / "runs")
+    store = RunStore(config, pdf)
+    store.put("extract", 3, {"lines": []})
+
+    fdir = tmp_path / "golden"
+    fdir.mkdir()
+    fx = ev.Fixture(
+        id="doc_p003",
+        pdf="doc.pdf",
+        page=3,
+        layout="scan_simple_table",
+        source_type="scanned",
+        source_grid="grids/doc_p003.json",
+        anchors=[
+            ev.Anchor(raw_code="610203", column="total_2026", value="21303")
+        ],
+    )
+    (fdir / "doc_p003.json").write_text(fx.model_dump_json())
+    monkeypatch.setattr(ev, "_source_grid_payload", lambda *_: _payload())
+
+    result = ev.evaluate_all(config, fdir, tmp_path, stage="extract")[0]
+    assert result.status == "evaluated"
+    assert result.anchors_matched == 1
+
+
 def test_exhaustive_cells_measure_recall_precision_and_duplicates_once():
     payload = {
         "lines": [

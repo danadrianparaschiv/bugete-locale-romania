@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
   "quality": {
-    "schema_version": 1,
+    "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 5732,
-    "lines_strictly_verified": 3333,
-    "pct_lines_strictly_verified": 58.1,
-    "numeric_cells": 12089,
-    "numeric_cells_strictly_verified": 7720,
-    "pct_numeric_cells_strictly_verified": 63.9,
+    "lines": 7121,
+    "lines_strictly_verified": 4793,
+    "pct_lines_strictly_verified": 67.3,
+    "numeric_cells": 20214,
+    "numeric_cells_strictly_verified": 15476,
+    "pct_numeric_cells_strictly_verified": 76.6,
     "scope": {
       "pages_expected": 333,
       "pages_selected": 333,
       "pages_processed": 333,
       "complete_pdf": true
     },
-    "pct_clean": 58.1,
-    "errors": 2261,
-    "warnings": 2284,
-    "info": 6,
+    "pct_clean": 67.3,
+    "errors": 2161,
+    "warnings": 2091,
+    "info": 5,
     "documents": 7
   },
   "llm_models": [],
@@ -34,48 +34,48 @@
       "total": 74945.12
     },
     {
-      "code": "81.07",
-      "name": "Combustibili si energie (cod 81.07.06+81.07.50) Din total capitol:",
-      "total": 60754.0
-    },
-    {
-      "code": "65.07",
-      "name": "Învățământ (cod 65.07.04)",
-      "total": 28185.0
-    },
-    {
       "code": "55.02",
-      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "name": "Tranzacții privind datoria publică șiîmprumuturi",
       "total": 19883.0
     },
     {
       "code": "70.02",
-      "name": "1344 MEDIU $I APE (cod 70.02+74.02) Locuințe, servicii și dezvoltare p",
+      "name": "1344 MEDIU $I APE Locuințe, servicii și dezvoltare publică 1345",
       "total": 16887.0
     },
     {
       "code": "54.02",
-      "name": "TOTAL CAPITOL 54.02 \"ALTE SERVICII PUBLICE GENERALE\", din care pe titl",
-      "total": 9036.02
-    },
-    {
-      "code": "84.07",
-      "name": "Transporturi (cod 84.07.03+84.07.06+84.07.50)",
-      "total": 7035.0
-    },
-    {
-      "code": "65.10",
-      "name": "TOTAL CHELTUIELI",
-      "total": 5681.0
-    },
-    {
-      "code": "01.10",
-      "name": "TITLUL I CHELTUIELI DE PERSONAL",
-      "total": 86.0
+      "name": "Alte servicii publice generale",
+      "total": 272.0
     },
     {
       "code": "60.02",
-      "name": "Apărare (cod 60.02.02)",
+      "name": "Apărare",
+      "total": 0.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultură, silvicultură, piscicultură și vânătoare",
+      "total": 0.0
+    },
+    {
+      "code": "56.02",
+      "name": "între diferite nivele ale administrației",
+      "total": 0.0
+    },
+    {
+      "code": "61.02",
+      "name": "Apărare națională Ordine publică și siguranță 774 națională",
+      "total": 0.0
+    },
+    {
+      "code": "80.02",
+      "name": "Acțiuni generale economice, comerciale și de muncă",
+      "total": 0.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte acțiuni economice",
       "total": 0.0
     }
   ],
@@ -83,7 +83,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "2bb0ac24fd93e1d93762afb5",
+    "bundle_id": "9f756d1d7b990e36b4436409",
     "source_pdf_sha256": "d9554c184a3821bc00735387857b6228dfe46d582e0b5e5be40adcc546418698"
   }
 }

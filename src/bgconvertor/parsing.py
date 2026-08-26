@@ -61,6 +61,14 @@ def parse_ro_number(raw: str | None, ocr: bool = False) -> ParsedCell:
             return "X"
         if s == "?":
             return None  # OCR gave up on the cell — empty, not zero
+        # A single glyph in an otherwise well-formed numeric cell is often a
+        # digit lookalike. This runs only in columns already known to be
+        # numeric, and only when the substitution yields numeric punctuation.
+        lookalikes = str.maketrans({"O": "0", "o": "0", "I": "1", "l": "1",
+                                    "S": "5", "s": "5", "G": "6", "B": "8"})
+        repaired = s.translate(lookalikes)
+        if repaired != s and re.fullmatch(r"[\d.,()\-−–—]+", repaired):
+            s = repaired
     if s in tuple(_MINUS_CHARS):
         return None  # a lone dash is an empty cell, not zero
 
@@ -81,6 +89,9 @@ def parse_ro_number(raw: str | None, ocr: bool = False) -> ParsedCell:
             # 48152.87 / 30.0 -> decimal comma misread (RO thousands are
             # always 3 digits, so a 1-2 digit tail can't be a thousands group)
             s = f"{intpart},{tail}"
+    if ocr and re.fullmatch(r"\d{1,3}(?:[.,]\d{3})+", s):
+        # Mixed thousands separators without decimals: ``69,600.000``.
+        s = s.replace(".", "").replace(",", "")
     if ocr and "," in s and "." in s and s.rindex(".") > s.rindex(","):
         # US-style print (Bacau): 19,809.00 -> comma=thousands, dot=decimal
         int_part, _, dec = s.rpartition(".")
