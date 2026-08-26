@@ -49,6 +49,12 @@ class BudgetDocument(BaseModel):
     suffix: str  # "02" | "10"
     pages: list[int]
     lines: list[BudgetLine]
+    # Stable validation/analytics scope for repeated forms inside one PDF.
+    # Individual institution budgets often print the same document title and
+    # the same indicator codes; the fiscal code is the preferred identity,
+    # with the first physical page as a deterministic fallback.
+    context_id: str | None = None
+    institution: str | None = None
 
     def section_lines(self, section: str | None) -> list[BudgetLine]:
         return [ln for ln in self.lines if ln.section == section]

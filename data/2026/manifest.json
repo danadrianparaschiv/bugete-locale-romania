@@ -88,11 +88,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 7121,
-        "pct_clean": 67.3,
-        "errors": 2161,
-        "warnings": 2091,
-        "at": "2026-08-26T03:07:51+03:00",
+        "lines": 7151,
+        "pct_clean": 68.0,
+        "errors": 1598,
+        "warnings": 2286,
+        "at": "2026-08-26T10:52:38+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
@@ -100,40 +100,41 @@
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 7,
-          "lines": 7121,
-          "lines_strictly_verified": 4793,
-          "pct_lines_strictly_verified": 67.3,
-          "numeric_cells": 20214,
-          "numeric_cells_strictly_verified": 15476,
-          "pct_numeric_cells_strictly_verified": 76.6,
+          "lines": 7151,
+          "lines_strictly_verified": 4862,
+          "pct_lines_strictly_verified": 68.0,
+          "numeric_cells": 20771,
+          "numeric_cells_strictly_verified": 15619,
+          "pct_numeric_cells_strictly_verified": 75.2,
           "scope": {
             "pages_expected": 333,
             "pages_selected": 333,
             "pages_processed": 333,
             "complete_pdf": true
           },
-          "errors": 2161,
-          "warnings": 2091,
-          "info": 5
+          "errors": 1598,
+          "warnings": 2286,
+          "info": 680
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "9f756d1d7b990e36b4436409",
+          "bundle_id": "5361886f63b10744f89c2d44",
           "source_pdf_sha256": "d9554c184a3821bc00735387857b6228dfe46d582e0b5e5be40adcc546418698",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "a66b312b7f7c9c200f1527cad7f65b04aae3d2dbc29e6b25b8f38fdcfd23f06b",
-            "bytes": 966599
+            "sha256": "338252403edb0e18ea39e7921d774d22e81f3e1eda201bfe95256a1137e3b891",
+            "bytes": 977238
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "16389273b404cafb878532999a0c65ac6369a50678a86b2132ad58c6e07d4b6b",
-            "bytes": 2310
+            "sha256": "0fe64adaa5932b897d1d9edb0384c685562f026513a390a1a48359d47d104ca1",
+            "bytes": 2366
           }
         },
-        "llm_cost_usd": 0.0,
+        "llm_cost_usd": 0.1391,
         "llm_cost_scope": "current_run_incremental",
-        "llm_lifetime_cost_usd": 0.0
+        "llm_lifetime_cost_usd": 16.9663,
+        "llm_preset": "google:gemini-3.6-flash"
       },
       "timeline": {
         "debate_date": "2026-04-13",
@@ -426,11 +427,11 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "lines": 6633,
-        "pct_clean": 63.4,
-        "errors": 2839,
-        "warnings": 1793,
-        "at": "2026-08-26T04:00:47+03:00",
+        "lines": 6661,
+        "pct_clean": 64.1,
+        "errors": 2009,
+        "warnings": 2036,
+        "at": "2026-08-26T10:27:56+03:00",
         "tool_version": "0.1.0",
         "analysis": "analysis.json",
         "quality": {
@@ -438,40 +439,41 @@
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 9,
-          "lines": 6633,
-          "lines_strictly_verified": 4206,
-          "pct_lines_strictly_verified": 63.4,
-          "numeric_cells": 21854,
-          "numeric_cells_strictly_verified": 13904,
-          "pct_numeric_cells_strictly_verified": 63.6,
+          "lines": 6661,
+          "lines_strictly_verified": 4271,
+          "pct_lines_strictly_verified": 64.1,
+          "numeric_cells": 22657,
+          "numeric_cells_strictly_verified": 14121,
+          "pct_numeric_cells_strictly_verified": 62.3,
           "scope": {
             "pages_expected": 268,
             "pages_selected": 268,
             "pages_processed": 268,
             "complete_pdf": true
           },
-          "errors": 2839,
-          "warnings": 1793,
-          "info": 32
+          "errors": 2009,
+          "warnings": 2036,
+          "info": 920
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "1d80d808d9a6e0859d67b504",
+          "bundle_id": "9500d9c236f813ea3261ef36",
           "source_pdf_sha256": "719a96d92e00c1729fceb8cfb2f30a372d19eb5adb8e44ba73e13c08570a14a0",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "8c6a18fd56a095e948c2dad1996413eef8e1bc776bc63ef9ff00185be981f098",
-            "bytes": 796905
+            "sha256": "bdbc2ba57f6cc4ce3b87ac67b901d89684568dabcff86edfcc1522aaeea9a474",
+            "bytes": 803488
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "3eb49ad62ccf02c8b3c9b1d371b46bbe1ac460f2de254b21344d80e45c6b5f64",
-            "bytes": 2080
+            "sha256": "c518425a6711170ff492ee05421265b9040731b496a37e20fc0771bf6956a6bf",
+            "bytes": 2107
           }
         },
-        "llm_cost_usd": 0.0,
+        "llm_cost_usd": 0.0782,
         "llm_cost_scope": "current_run_incremental",
-        "llm_lifetime_cost_usd": 0.0
+        "llm_lifetime_cost_usd": 4.8531,
+        "llm_preset": "google:gemini-3.6-flash"
       },
       "timeline": {
         "debate_date": "2026-04-09",
@@ -631,12 +633,12 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-26T04:29:21+03:00",
+        "at": "2026-08-26T10:25:31+03:00",
         "tool_version": "0.1.0",
         "lines": 1324,
-        "pct_clean": 64.7,
-        "errors": 112,
-        "warnings": 435,
+        "pct_clean": 65.2,
+        "errors": 79,
+        "warnings": 476,
         "analysis": "analysis.json",
         "quality": {
           "schema_version": 2,
@@ -644,39 +646,40 @@
           "recall_measured": false,
           "documents": 1,
           "lines": 1324,
-          "lines_strictly_verified": 856,
-          "pct_lines_strictly_verified": 64.7,
-          "numeric_cells": 5211,
-          "numeric_cells_strictly_verified": 3250,
-          "pct_numeric_cells_strictly_verified": 62.4,
+          "lines_strictly_verified": 863,
+          "pct_lines_strictly_verified": 65.2,
+          "numeric_cells": 5234,
+          "numeric_cells_strictly_verified": 3304,
+          "pct_numeric_cells_strictly_verified": 63.1,
           "scope": {
             "pages_expected": 47,
             "pages_selected": 47,
             "pages_processed": 47,
             "complete_pdf": true
           },
-          "errors": 112,
-          "warnings": 435,
-          "info": 2
+          "errors": 79,
+          "warnings": 476,
+          "info": 37
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "68083999b6f22ae66a3d822a",
+          "bundle_id": "0d81d6518e79b65cec0ae830",
           "source_pdf_sha256": "a21df7960b1d449f1bfb364dcc14faa577515c6c8bbc6d55f22bf786651427de",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "2fc2186c065f5bc73f9093b02c3f63a38dc8a7fad904e1256ccbd33ffe1088dd",
-            "bytes": 110828
+            "sha256": "91bfdeeb13912159deea24c4ff519d3d2b3ba095efc058313e19a3ae74475860",
+            "bytes": 111515
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "db4ef61bfd02eb059bffae59473891904b7c879ea604c504b8940dd9d90ebfb4",
-            "bytes": 1314
+            "sha256": "38b5f6a1992feb08c45a816c5d688168f45f25890db391716e832ed7020ce5ff",
+            "bytes": 1656
           }
         },
-        "llm_cost_usd": 0.0,
+        "llm_cost_usd": 0.0436,
         "llm_cost_scope": "current_run_incremental",
-        "llm_lifetime_cost_usd": 0.0
+        "llm_lifetime_cost_usd": 0.3335,
+        "llm_preset": "google:gemini-3.6-flash"
       },
       "timeline": {
         "debate_date": "2026-04-07",
@@ -787,53 +790,53 @@
       "conversion": {
         "status": "converted",
         "workbook": "budget_file.xlsx",
-        "at": "2026-08-26T05:26:33+03:00",
+        "at": "2026-08-26T14:24:22+03:00",
         "tool_version": "0.1.0",
-        "lines": 21104,
-        "pct_clean": 46.3,
-        "errors": 831,
-        "warnings": 10997,
-        "llm_preset": "mixt:flash+sonnet",
+        "lines": 22104,
+        "pct_clean": 94.8,
+        "errors": 654,
+        "warnings": 755,
+        "llm_preset": "google:gemini-3.6-flash",
         "analysis": "analysis.json",
         "quality": {
           "schema_version": 2,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
-          "documents": 39,
-          "lines": 21104,
-          "lines_strictly_verified": 9762,
-          "pct_lines_strictly_verified": 46.3,
-          "numeric_cells": 31106,
-          "numeric_cells_strictly_verified": 19846,
-          "pct_numeric_cells_strictly_verified": 63.8,
+          "documents": 156,
+          "lines": 22104,
+          "lines_strictly_verified": 20959,
+          "pct_lines_strictly_verified": 94.8,
+          "numeric_cells": 31177,
+          "numeric_cells_strictly_verified": 30035,
+          "pct_numeric_cells_strictly_verified": 96.3,
           "scope": {
             "pages_expected": 753,
             "pages_selected": 753,
             "pages_processed": 753,
             "complete_pdf": true
           },
-          "errors": 831,
-          "warnings": 10997,
-          "info": 1
+          "errors": 654,
+          "warnings": 755,
+          "info": 251
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "3dabee46065e70e5fad075ff",
+          "bundle_id": "7ffa514ed21af37f3e04704b",
           "source_pdf_sha256": "3e8719cc77b7071e79fbf93c0c95d9b4b915c9e08411f854043129d42ad2e4db",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "f1db37f40e262ccee7cc528b2ab05d713a3a76277cd56ae1275bd2805fbadf64",
-            "bytes": 1693270
+            "sha256": "202ac8b3b84d0718877558135c304d2c91179996a00ef5765090b0fc22258540",
+            "bytes": 1743620
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "00299bcbd1fc63ee6e1e626ac49f7fee9e8edef0b76ada585b95031f51a65801",
-            "bytes": 2197
+            "sha256": "6a66bb994b9154dae74f76e38dc0d0f4ffd5ac80fb5be7ac859fb65f17dda567",
+            "bytes": 2148
           }
         },
-        "llm_cost_usd": 0.0,
+        "llm_cost_usd": 0.0085,
         "llm_cost_scope": "current_run_incremental",
-        "llm_lifetime_cost_usd": 0.0
+        "llm_lifetime_cost_usd": 17.174
       },
       "timeline": {
         "debate_date": "2026-04-08",

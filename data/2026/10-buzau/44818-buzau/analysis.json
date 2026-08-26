@@ -5,29 +5,46 @@
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 1324,
-    "lines_strictly_verified": 856,
-    "pct_lines_strictly_verified": 64.7,
-    "numeric_cells": 5211,
-    "numeric_cells_strictly_verified": 3250,
-    "pct_numeric_cells_strictly_verified": 62.4,
+    "lines_strictly_verified": 863,
+    "pct_lines_strictly_verified": 65.2,
+    "numeric_cells": 5234,
+    "numeric_cells_strictly_verified": 3304,
+    "pct_numeric_cells_strictly_verified": 63.1,
     "scope": {
       "pages_expected": 47,
       "pages_selected": 47,
       "pages_processed": 47,
       "complete_pdf": true
     },
-    "pct_clean": 64.7,
-    "errors": 112,
-    "warnings": 435,
-    "info": 2,
+    "pct_clean": 65.2,
+    "errors": 79,
+    "warnings": 476,
+    "info": 37,
     "documents": 1
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 832952.64,
     "cheltuieli": null
   },
   "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 96419.75
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 58530.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 21500.0
+    },
     {
       "code": "54.02",
       "name": "Alte servicii publice generale",
@@ -43,7 +60,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "68083999b6f22ae66a3d822a",
+    "bundle_id": "0d81d6518e79b65cec0ae830",
     "source_pdf_sha256": "a21df7960b1d449f1bfb364dcc14faa577515c6c8bbc6d55f22bf786651427de"
   }
 }

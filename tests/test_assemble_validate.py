@@ -265,6 +265,48 @@ def test_institution_grid_survives_assembly_and_validation(tmp_path, registry):
     )
 
 
+def test_cluj_individual_forms_scope_legitimate_and_real_duplicates(tmp_path, registry):
+    """Repeated codes are legitimate across institutions, but not twice in one form."""
+    fixture_path = (
+        Path(__file__).parent / "fixtures" / "assembly"
+        / "cluj_individual_boundaries.json"
+    )
+    fixture = json.loads(fixture_path.read_text())
+    store = _mk_store(tmp_path)
+    for page in fixture["pages"]:
+        store.put("extract", page["page"], page["payload"])
+
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [140, 144, 145], registry),
+        pages_expected=145,
+        pages_selected=[140, 144, 145],
+        pages_processed=[140, 144, 145],
+    )
+    validate(result, registry)
+
+    assert len(result.documents) == 2
+    first, second = result.documents
+    assert first.context_id == "cui:17973191"
+    assert second.context_id == "cui:5303102"
+    assert first.institution == "Colegiul Unitarian Janos Zsigmond"
+    assert second.pages == [144, 145]
+    economic = [
+        line for doc in result.documents for line in doc.lines
+        if line.code == "20"
+    ]
+    assert all(line.kind == "expense_economic" for line in economic)
+    assert all(line.func_code == "54.02" for line in economic)
+
+    duplicates = [
+        issue for issue in result.all_issues()
+        if issue.check == "V7_hygiene" and "duplicate" in issue.message
+    ]
+    assert len(duplicates) == 1
+    assert duplicates[0].page == 145
+    assert duplicates[0].message == "duplicate of p144 with different values"
+
+
 def test_collapsed_annual_grid_survives_assembly_and_validation(tmp_path, registry):
     source_path = (
         Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"

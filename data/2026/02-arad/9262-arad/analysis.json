@@ -4,25 +4,27 @@
     "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 7121,
-    "lines_strictly_verified": 4793,
-    "pct_lines_strictly_verified": 67.3,
-    "numeric_cells": 20214,
-    "numeric_cells_strictly_verified": 15476,
-    "pct_numeric_cells_strictly_verified": 76.6,
+    "lines": 7151,
+    "lines_strictly_verified": 4862,
+    "pct_lines_strictly_verified": 68.0,
+    "numeric_cells": 20771,
+    "numeric_cells_strictly_verified": 15619,
+    "pct_numeric_cells_strictly_verified": 75.2,
     "scope": {
       "pages_expected": 333,
       "pages_selected": 333,
       "pages_processed": 333,
       "complete_pdf": true
     },
-    "pct_clean": 67.3,
-    "errors": 2161,
-    "warnings": 2091,
-    "info": 5,
+    "pct_clean": 68.0,
+    "errors": 1598,
+    "warnings": 2286,
+    "info": 680,
     "documents": 7
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 1250646.5,
     "cheltuieli": null
@@ -42,6 +44,11 @@
       "code": "70.02",
       "name": "1344 MEDIU $I APE Locuințe, servicii și dezvoltare publică 1345",
       "total": 16887.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sănătate {cod 1239 66.02.06+66.02.08+66.02.50]",
+      "total": 9793.0
     },
     {
       "code": "54.02",
@@ -72,18 +79,13 @@
       "code": "80.02",
       "name": "Acțiuni generale economice, comerciale și de muncă",
       "total": 0.0
-    },
-    {
-      "code": "87.02",
-      "name": "Alte acțiuni economice",
-      "total": 0.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "9f756d1d7b990e36b4436409",
+    "bundle_id": "5361886f63b10744f89c2d44",
     "source_pdf_sha256": "d9554c184a3821bc00735387857b6228dfe46d582e0b5e5be40adcc546418698"
   }
 }

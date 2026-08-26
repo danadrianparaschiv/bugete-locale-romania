@@ -359,7 +359,10 @@ def _check_duplicates(doc: BudgetDocument) -> None:
     for ln in doc.lines:
         if ln.code is None or ln.kind == "heading":
             continue
-        key = (ln.section, ln.kind, ln.func_code, ln.code)
+        # context_id makes the validation scope explicit for repeated forms.
+        # Documents are already assembled per context, but retaining it in
+        # the key prevents future combined-document callers from regressing.
+        key = (doc.context_id, ln.section, ln.kind, ln.func_code, ln.code)
         prev = seen.get(key)
         if prev is None:
             seen[key] = ln
