@@ -25,3 +25,12 @@ def test_llm_models_aggregated_and_legacy_flagged():
 
 def test_no_llm_lines_means_empty_list():
     assert city_analysis(_result(["digital", "ocr"]))["llm_models"] == []
+
+
+def test_mixed_row_uses_cell_level_provenance():
+    result = _result(["mixed"])
+    result.documents[0].lines[0].value_sources = {
+        "total": "llm:gemini-3.6-flash"
+    }
+
+    assert city_analysis(result)["llm_models"] == ["gemini-3.6-flash"]

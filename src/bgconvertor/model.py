@@ -33,14 +33,38 @@ class BudgetLine(BaseModel):
     page: int
     section: str | None = None  # TOTAL | FUNCTIONARE | DEZVOLTARE
     values: dict[str, Decimal] = Field(default_factory=dict)
+    # Cell-level provenance is needed when paid recovery fills only gaps in a
+    # deterministic row. Missing entries inherit ``source`` for old bundles.
+    value_sources: dict[str, str] = Field(default_factory=dict)
     x_markers: list[str] = Field(default_factory=list)  # columns holding "X"
     source: str = "digital"  # digital | ocr | llm
+    code_source: str | None = None  # independent provenance when only code changed
     issues: list[Issue] = Field(default_factory=list)
 
     @property
     def strictly_verified(self) -> bool:
         """True only when no validator emitted an error, warning, or info issue."""
         return not self.issues
+
+    @property
+    def provenance_sources(self) -> set[str]:
+        """Every extractor that contributed a numeric value to this row."""
+        sources = set(self.value_sources.values())
+        if len(self.value_sources) < len(self.values):
+            sources.add(self.source)
+        if self.code_source:
+            sources.add(self.code_source)
+        return sources or {self.source}
+
+    def set_value_with_source(self, column: str, value: Decimal, source: str) -> None:
+        """Replace one value without losing provenance of the other cells."""
+        previous_source = self.source
+        for existing in self.values:
+            self.value_sources.setdefault(existing, previous_source)
+        self.values[column] = value
+        self.value_sources[column] = source
+        sources = set(self.value_sources.values())
+        self.source = next(iter(sources)) if len(sources) == 1 else "mixed"
 
 
 class BudgetDocument(BaseModel):

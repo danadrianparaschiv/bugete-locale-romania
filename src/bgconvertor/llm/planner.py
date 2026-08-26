@@ -18,6 +18,7 @@ class RecoveryCandidate:
     page: int
     benefit_units: float
     estimated_cost_usd: float
+    estimated_calls: int = 1
     cached: bool = False
     detail: str = ""
 
@@ -53,6 +54,7 @@ class RecoveryPlan:
                 "page": candidate.page,
                 "benefit_units": round(candidate.benefit_units, 3),
                 "estimated_cost_usd": round(candidate.admitted_cost_usd, 6),
+                "estimated_calls": 0 if candidate.cached else candidate.estimated_calls,
                 "benefit_per_dollar": (
                     None
                     if candidate.benefit_per_dollar == float("inf")
@@ -100,13 +102,13 @@ def select_candidates(
     paid_calls = 0
     for candidate in sorted(candidates, key=_rank):
         paid = not candidate.cached
-        call_fits = max_calls is None or not paid or paid_calls < max_calls
+        calls = candidate.estimated_calls if paid else 0
+        call_fits = max_calls is None or paid_calls + calls <= max_calls
         cost_fits = spent + candidate.admitted_cost_usd <= budget_usd + 1e-12
         if call_fits and cost_fits:
             selected.append(candidate)
             spent += candidate.admitted_cost_usd
-            paid_calls += int(paid)
+            paid_calls += calls
         else:
             skipped.append(candidate)
     return RecoveryPlan(tuple(selected), tuple(skipped), max(0.0, budget_usd))
-

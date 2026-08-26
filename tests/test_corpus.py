@@ -38,7 +38,7 @@ def test_export_rows_shape_and_verified(ab_ready, monkeypatch, tmp_path):
     assert set(r) == {
         "municipality", "siruta", "county_code", "county", "year",
         "document", "context_id", "institution", "budget", "suffix", "section", "kind",
-        "code", "func_code", "name", "column", "value", "source", "verified",
+        "code", "code_source", "func_code", "name", "column", "value", "source", "verified",
         "verification_status", "validation_issues", "page",
     }
     assert r["municipality"] == "Alba Iulia"  # resolved via SIRUTA manifest
@@ -55,6 +55,8 @@ def test_info_issue_is_not_exported_as_verified(monkeypatch, tmp_path):
     line = BudgetLine(
         code="04.02", name="Cote", kind="revenue", page=1,
         values={"total": Decimal("1")},
+        source="mixed",
+        value_sources={"total": "llm:gemini-3.6-flash"},
         issues=[Issue(check="V7_hygiene", severity="info", message="review")],
     )
     result = ConversionResult(
@@ -68,3 +70,4 @@ def test_info_issue_is_not_exported_as_verified(monkeypatch, tmp_path):
     assert rows[0]["verified"] is False
     assert rows[0]["verification_status"] == "flagged"
     assert rows[0]["validation_issues"] == "V7_hygiene:info"
+    assert rows[0]["source"] == "llm:gemini-3.6-flash"

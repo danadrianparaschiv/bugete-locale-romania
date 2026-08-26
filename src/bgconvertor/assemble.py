@@ -587,9 +587,7 @@ def _fix_misread_codes(doc, registry) -> None:
 
 
 def _pick_payload(store: RunStore, page: int):
-    """Deterministic extraction wins whenever it is usable; the full-page
-    LLM transcription only fills in for pages the mappers could not read
-    (it may predate mapper improvements)."""
+    """Merge paid recovery into deterministic output by row and cell."""
     det = store.get("extract", page)
     llm = store.get("llm_extract", page)
     if det is not None:
@@ -599,11 +597,9 @@ def _pick_payload(store: RunStore, page: int):
             return det  # deliberately out of scope — an LLM transcription adds noise
         if llm is None:
             return det
-        def _good(pl):
-            return sum(1 for ln in pl.get("lines", []) if ln.get("code") and ln.get("values"))
-        # whichever reads more of the page wins; deterministic wins ties
-        return det if _good(det) >= _good(llm) else llm
-    return llm or det
+    from .llm.fallback import merge_page_payloads
+
+    return merge_page_payloads(det, [llm] if llm is not None else [])
 
 
 def _to_line(
@@ -670,10 +666,11 @@ def _to_line(
         )
         for ci in raw.get("cell_issues", [])
     ]
+    source = raw.get("source") or default_source
     return BudgetLine(
         issues=line_issues,
         raw_code=raw.get("raw_code"),
-        source=raw.get("source") or default_source,
+        source=source,
         code=code,
         func_code=func_code,
         name=raw.get("name") or "",
@@ -682,5 +679,9 @@ def _to_line(
         page=page,
         section=section,
         values=values,
+        value_sources={
+            column: (raw.get("value_sources") or {}).get(column, source)
+            for column in values
+        },
         x_markers=x_markers,
     )

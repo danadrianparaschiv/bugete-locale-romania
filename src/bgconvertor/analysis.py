@@ -303,9 +303,10 @@ def city_analysis(result: ConversionResult) -> dict:
     # provenance: which LLMs contributed lines/values ("llm:<model>" sources);
     # bare "llm" (pre-provenance caches) reports as "llm (model neînregistrat)"
     llm_models = sorted({
-        ln.source.split(":", 1)[1] if ":" in ln.source else "llm (model neînregistrat)"
+        source.split(":", 1)[1] if ":" in source else "llm (model neînregistrat)"
         for doc in result.documents for ln in doc.lines
-        if ln.source.startswith("llm")
+        for source in ln.provenance_sources
+        if source.startswith("llm")
     })
 
     return {

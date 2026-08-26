@@ -25,6 +25,7 @@ class Preset:
     base_url: str | None  # None -> native Anthropic SDK
     description: str  # shown by `bgconvertor models` (user-facing, Romanian)
     fallback_model: str | None = None  # full-page transcription; None -> repair_model
+    premium_model: str | None = None  # second attempt only after cheap validation failure
     reasoning: str | None = None  # compat: reasoning_effort — thinking-ul se facturează
 
 
@@ -86,8 +87,8 @@ PRESETS: dict[str, Preset] = {
         "mixt", "gemini-3.6-flash", "gemini-3.6-flash",
         "GEMINI_API_KEY",
         "https://generativelanguage.googleapis.com/v1beta/openai/",
-        "mixt — reparare Gemini Flash + transcriere de pagină Sonnet 5",
-        fallback_model="claude-sonnet-5", reasoning="low"),
+        "mixt — Gemini Flash întâi; Sonnet 5 numai pentru escaladări cu randament mare",
+        premium_model="claude-sonnet-5", reasoning="low"),
 }
 
 # model -> (api_key_env, base_url) pentru rutarea per apel; modelele claude-*
@@ -95,7 +96,7 @@ PRESETS: dict[str, Preset] = {
 MODEL_ROUTES: dict[str, tuple[str, str]] = {
     m: (p.api_key_env, p.base_url)
     for p in PRESETS.values() if p.base_url
-    for m in (p.repair_model, p.cell_model, p.fallback_model)
+    for m in (p.repair_model, p.cell_model, p.fallback_model, p.premium_model)
     if m and not m.startswith("claude-")
 }
 
@@ -119,6 +120,7 @@ def apply(config, key: str) -> Preset:
     config.llm.cell_model = p.cell_model
     config.llm.classify_model = p.cell_model
     config.llm.fallback_model = p.fallback_model
+    config.llm.premium_model = p.premium_model
     config.llm.reasoning_effort = p.reasoning
     config.llm.api_key_env = p.api_key_env
     config.llm.base_url = p.base_url

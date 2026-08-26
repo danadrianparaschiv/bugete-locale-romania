@@ -217,9 +217,9 @@ vreodată corectată automat).
 7. Planifică de la început a doua trecere: înlocuirea proiectelor cu
    anexele aprobate + reconvertirea țintită (proveniența per linie
    spune exact unde merită un model mai bun).
-8. ~~Rezervarea bugetului la lansarea apelului~~ (implementat 24.08.2026,
-   după incidentul de facturare); rămâne: ordinea paginilor de fallback
-   după randament.
+8. ~~Rezervarea bugetului la lansarea apelului și ordonarea fallback-ului după
+   randament~~ (implementate; planner comun pe fișier, benzi dense și
+   escaladare premium rezervată worst-case).
 9. Reconciliere factură↔registru după fiecare campanie: `bgconvertor
    costuri --csv` lângă exportul de facturare al furnizorului.
 10. Triaj complet pentru fiecare an, chiar și la orașe „cunoscute" —

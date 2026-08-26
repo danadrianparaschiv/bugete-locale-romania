@@ -78,6 +78,31 @@ def validate(result: ConversionResult, registry: Registry) -> ConversionResult:
     return result
 
 
+def revalidate(result: ConversionResult, registry: Registry) -> ConversionResult:
+    """Re-run validators after repair without duplicating stale findings.
+
+    Assembly evidence (unparseable source cells and audited info repairs) and
+    V6 repair provenance survive. Validator-generated errors/warnings are
+    rebuilt from the mutated document, so a repaired code/value cannot hide a
+    newly created hierarchy or identity breach.
+    """
+
+    def stale(issue: Issue) -> bool:
+        if issue.severity not in ("error", "warning"):
+            return False
+        if issue.check in {
+            "V1_code", "V2_name", "V3_row_checksum", "V4_hierarchy", "V5_identity"
+        }:
+            return True
+        return issue.check == "V7_hygiene" and "duplicate" in issue.message
+
+    result.issues = [issue for issue in result.issues if not stale(issue)]
+    for document in result.documents:
+        for line in document.lines:
+            line.issues = [issue for issue in line.issues if not stale(issue)]
+    return validate(result, registry)
+
+
 # -- V1 + V2 ----------------------------------------------------------------
 
 def _lookup(line: BudgetLine, doc: BudgetDocument, registry: Registry):

@@ -46,3 +46,20 @@ def test_planner_call_limit_counts_only_paid_candidates_and_is_stable():
     assert [candidate.key for candidate in plan.selected] == ["free", "first-page"]
     assert [candidate.key for candidate in plan.skipped] == ["later-page"]
 
+
+def test_planner_reserves_both_calls_for_possible_premium_escalation():
+    candidate = RecoveryCandidate(
+        key="tiered",
+        kind="repair",
+        page=1,
+        benefit_units=10,
+        estimated_cost_usd=0.5,
+        estimated_calls=2,
+    )
+
+    blocked = select_candidates([candidate], budget_usd=1, max_calls=1)
+    admitted = select_candidates([candidate], budget_usd=1, max_calls=2)
+
+    assert not blocked.selected
+    assert admitted.selected == (candidate,)
+    assert admitted.as_dict()["selected"][0]["estimated_calls"] == 2
