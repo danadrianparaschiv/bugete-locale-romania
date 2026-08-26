@@ -4,34 +4,71 @@
     "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 21104,
-    "lines_strictly_verified": 9762,
-    "pct_lines_strictly_verified": 46.3,
-    "numeric_cells": 31106,
-    "numeric_cells_strictly_verified": 19846,
-    "pct_numeric_cells_strictly_verified": 63.8,
+    "lines": 22104,
+    "lines_strictly_verified": 20959,
+    "pct_lines_strictly_verified": 94.8,
+    "numeric_cells": 31177,
+    "numeric_cells_strictly_verified": 30035,
+    "pct_numeric_cells_strictly_verified": 96.3,
     "scope": {
       "pages_expected": 753,
       "pages_selected": 753,
       "pages_processed": 753,
       "complete_pdf": true
     },
-    "pct_clean": 46.3,
-    "errors": 831,
-    "warnings": 10997,
-    "info": 1,
-    "documents": 39
+    "pct_clean": 94.8,
+    "errors": 654,
+    "warnings": 755,
+    "info": 251,
+    "documents": 156
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 3918810049.0,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe",
-      "total": 376972077.0
+      "code": "00.01",
+      "name": "TOTALVENITURI",
+      "total": 1700369000.0
+    },
+    {
+      "code": "00.03",
+      "name": "L VENITURI CURENTE",
+      "total": 1662312000.0
+    },
+    {
+      "code": "00.04",
+      "name": "A. VENITURI FISCALE",
+      "total": 1639849000.0
+    },
+    {
+      "code": "00.02",
+      "name": "VENITURI PROPRII",
+      "total": 1417354000.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 1343743341.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 543584202.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 343210000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 329057262.0
     },
     {
       "code": "67.02",
@@ -42,48 +79,13 @@
       "code": "70.02",
       "name": "Locuinte, servicii si dezvoltare publica",
       "total": 273720138.0
-    },
-    {
-      "code": "74.02",
-      "name": "Protectia mediului",
-      "total": 178161000.0
-    },
-    {
-      "code": "55.02",
-      "name": "Tranzactii privind datoria publica si imprumuturi",
-      "total": 35300629.0
-    },
-    {
-      "code": "66.02",
-      "name": "Sanatate",
-      "total": 20490000.0
-    },
-    {
-      "code": "61.02",
-      "name": "Ordine publica si siguranta nationala",
-      "total": 17925400.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 12836000.0
-    },
-    {
-      "code": "83.02",
-      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
-      "total": 342000.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 308711.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "3dabee46065e70e5fad075ff",
+    "bundle_id": "7ffa514ed21af37f3e04704b",
     "source_pdf_sha256": "3e8719cc77b7071e79fbf93c0c95d9b4b915c9e08411f854043129d42ad2e4db"
   }
 }

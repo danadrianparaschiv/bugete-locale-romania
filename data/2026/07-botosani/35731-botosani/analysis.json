@@ -4,25 +4,27 @@
     "schema_version": 2,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 6633,
-    "lines_strictly_verified": 4206,
-    "pct_lines_strictly_verified": 63.4,
-    "numeric_cells": 21854,
-    "numeric_cells_strictly_verified": 13904,
-    "pct_numeric_cells_strictly_verified": 63.6,
+    "lines": 6661,
+    "lines_strictly_verified": 4271,
+    "pct_lines_strictly_verified": 64.1,
+    "numeric_cells": 22657,
+    "numeric_cells_strictly_verified": 14121,
+    "pct_numeric_cells_strictly_verified": 62.3,
     "scope": {
       "pages_expected": 268,
       "pages_selected": 268,
       "pages_processed": 268,
       "complete_pdf": true
     },
-    "pct_clean": 63.4,
-    "errors": 2839,
-    "warnings": 1793,
-    "info": 32,
+    "pct_clean": 64.1,
+    "errors": 2009,
+    "warnings": 2036,
+    "info": 920,
     "documents": 9
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": null,
     "cheltuieli": 557751.57
@@ -36,7 +38,7 @@
     {
       "code": "66.10",
       "name": "Sanatate",
-      "total": 69193.62
+      "total": 83168.85
     },
     {
       "code": "51.02",
@@ -83,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1d80d808d9a6e0859d67b504",
+    "bundle_id": "9500d9c236f813ea3261ef36",
     "source_pdf_sha256": "719a96d92e00c1729fceb8cfb2f30a372d19eb5adb8e44ba73e13c08570a14a0"
   }
 }

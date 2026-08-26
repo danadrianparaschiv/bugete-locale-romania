@@ -1,0 +1,38 @@
+{
+  "pages": [
+    {
+      "page": 140,
+      "payload": {
+        "layout": "scan_annual_total",
+        "text": "CONSILIUL LOCAL AL MUNICIPIULUI CLUJ-NAPOCA Colegiul Unitarian Janos Zsigmond 17973191 Anexa 2A.14 la Hotararea nr. 49/2026 BUGETUL LOCAL PE ANUL 2026 - BUGET INDIVIDUAL Sursa de finantare: 02A (lei) 1/4",
+        "lines": [
+          {"raw_code": "5002A", "code": "50.02", "name": "TOTAL CHELTUIELI", "values": {"total_2026": "100"}},
+          {"raw_code": "S4.02A", "code": null, "name": "Alte servicii publice generale", "values": {"total_2026": "100"}},
+          {"raw_code": "20", "code": "20", "name": "TITLUL II BUNURI SI SERVICII", "values": {"total_2026": "100"}}
+        ]
+      }
+    },
+    {
+      "page": 144,
+      "payload": {
+        "layout": "scan_annual_total",
+        "text": "CONSILIUL LOCAL AL MUNICIPIULUI CLUJ-NAPOCA Colegiul Ortodox Mitropolitul Nicolae Colan 5303102 Anexa 2A.15 la Hotararea nr. 49/2026 BUGETUL LOCAL PE ANUL 2026 - BUGET INDIVIDUAL Sursa de finantare: 02A (lei) 1/4",
+        "lines": [
+          {"raw_code": "5002A", "code": "50.02", "name": "TOTAL CHELTUIELI", "values": {"total_2026": "200"}},
+          {"raw_code": "S4.02A", "code": null, "name": "Alte servicii publice generale", "values": {"total_2026": "200"}},
+          {"raw_code": "20", "code": "20", "name": "TITLUL II BUNURI SI SERVICII", "values": {"total_2026": "200"}}
+        ]
+      }
+    },
+    {
+      "page": 145,
+      "payload": {
+        "layout": "scan_annual_total",
+        "text": "2/4 Denumirea indicatorului bugetar Cod rand Indicator bugetar Total",
+        "lines": [
+          {"raw_code": "20", "code": "20", "name": "TITLUL II BUNURI SI SERVICII", "values": {"total_2026": "201"}}
+        ]
+      }
+    }
+  ]
+}

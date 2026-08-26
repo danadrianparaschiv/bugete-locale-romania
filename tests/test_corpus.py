@@ -37,7 +37,7 @@ def test_export_rows_shape_and_verified(ab_ready, monkeypatch, tmp_path):
     r = rows[0]
     assert set(r) == {
         "municipality", "siruta", "county_code", "county", "year",
-        "document", "budget", "suffix", "section", "kind",
+        "document", "context_id", "institution", "budget", "suffix", "section", "kind",
         "code", "func_code", "name", "column", "value", "source", "verified",
         "verification_status", "validation_issues", "page",
     }

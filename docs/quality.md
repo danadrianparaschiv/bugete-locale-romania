@@ -494,6 +494,96 @@ nerezolvat când endpointul extern nu a fost disponibil. Acesta este un test
 de integrare/cost, nu o dovadă de recall: experimentul are numai 107 linii
 observate și `recall_measured=false`.
 
+### Pilot P2 controlat pe conversiile 2026 sub 70%
+
+La 26 august 2026 a fost rulat un pilot separat pe Arad, Botoșani și Buzău,
+cu `google:gemini-3.6-flash`, plafon dur de 3 USD pentru fiecare PDF și
+output-uri candidate în afara corpusului. Un candidat a fost publicat numai
+dacă procesa din nou toate paginile, creștea numărul absolut de celule
+numerice strict validate, reducea erorile, păstra structura workbook-ului și
+nu introducea erori de formule. Republicarea a trecut prin același gard atomic
+PDF/Excel/analiză/manifest.
+
+Costul de mai jos include atât prima citire izolată, cât și replay-ul de
+publicare. Câmpul `llm_cost_usd` din manifest descrie numai replay-ul final al
+bundle-ului și nu trebuie adunat singur pentru a reconstrui costul întregului
+experiment.
+
+| Municipiu | Linii strict validate | Celule numeric strict validate | Erori | Cost total pilot + publicare | Celule validate/USD |
+|---|---:|---:|---:|---:|---:|
+| Buzău | 856 → 863 | 3.250 → 3.304 (+54) | 112 → 79 | 0,2273 USD | 237,57 |
+| Botoșani | 4.206 → 4.271 | 13.904 → 14.121 (+217) | 2.839 → 2.009 | 1,2217 USD | 177,62 |
+| Arad | 4.793 → 4.862 | 15.476 → 15.619 (+143) | 2.161 → 1.598 | 1,2503 USD | 114,37 |
+| **Total** | **+141** | **+414** | **−1.426** | **2,6993 USD** | **153,37** |
+
+Au fost expuse și 1.383 de celule numerice suplimentare, dintre care 414 au
+obținut imediat statut strict verificat. De aceea procentul numeric strict
+verificat a crescut la Buzău (62,4% → 63,1%), dar a scăzut la Botoșani
+(63,6% → 62,3%) și Arad (76,6% → 75,2%): numitorul a crescut mai repede decât
+subsetul demonstrat. Acesta nu este un regres de precizie al celulelor marcate
+verificate; celulele noi fără dovadă suficientă rămân explicit neverificate.
+Niciunul dintre cele trei fișiere nu a trecut pragul de 70% al
+`observed_strict_line_rate`, iar `recall_measured=false` rămâne corect.
+
+Auditul de decizie pentru Cluj a găsit 11.829 probleme publice: 10.701
+duplicate cu valori diferite, 296 nepotriviri de nume, 277 probleme de cod,
+243 egalități ierarhice, 211 celule ilizibile și 101 identități globale.
+În același timp, 609 din cele 753 de pagini sunt deja mapate ca
+`scan_annual_total`. La randamentul pilotului, încă 3 USD ar proiecta numai
+aproximativ 460 de celule strict validate, fără să rezolve cauza dominantă a
+scorului Cluj: coduri legitime repetate între subdocumente/instituții sunt
+comparate în același context și marcate drept duplicate.
+
+Decizia este astfel **mapper/assembler înainte de LLM** pentru Cluj:
+
+- identifică limitele formularelor/subdocumentelor și păstrează instituția sau
+  ordonatorul în identitatea analitică;
+- extinde cheia de deduplicare cu acel context, fără a șterge automat rânduri;
+- adaugă fixture-uri consecutive care dovedesc atât repetarea legitimă, cât și
+  duplicatul real;
+- abia apoi rulează un pilot LLM țintit pe cele 211 celule ilizibile și pe
+  grupurile aritmetice rămase.
+
+### Rezultatul implementării pentru Cluj
+
+Secvența de mai sus a fost executată integral. Asamblorul detectează acum
+fiecare formular `BUGET INDIVIDUAL`, păstrează instituția și codul fiscal în
+`institution` și `context_id`, propagă capitolul funcțional pe paginile de
+continuare și folosește contextul în verificarea duplicatelor. Au fost
+identificate 147 de contexte (146 de instituții și un fallback sigur pe
+pagină), iar corpusul Cluj a trecut de la 39 la 156 de subdocumente. Fixture-ul
+de regresie acoperă atât aceeași poziție bugetară legitimă în două instituții,
+cât și un duplicat real în interiorul aceluiași formular.
+
+Pasul determinist, fără LLM, a produs cea mai mare parte a câștigului:
+
+- linii strict validate: 9.762/21.104 (46,3%) → 20.833/22.100 (94,3%);
+- celule numerice strict validate: 19.846/31.106 (63,8%) →
+  29.895/31.106 (96,1%);
+- duplicate cu valori diferite: 10.701 → 382;
+- probleme totale: 11.829 → 1.494.
+
+Recuperarea LLM a fost apoi limitată la paginile catastrofice și grupurile
+aritmetice rămase, cu plafon de 3 USD. Citirea izolată a costat 0,8217 USD, iar
+replay-ul de publicare din cache 0,0085 USD, pentru un cost complet de
+**0,8302 USD**. Câmpul `llm_cost_usd` din manifest păstrează numai cei
+0,0085 USD ai replay-ului bundle-ului publicat; nu reprezintă costul complet
+al experimentului.
+
+Bundle-ul publicat `7ffa514ed21af37f3e04704b` are 20.959/22.104 linii strict
+validate (94,8%) și 30.035/31.177 celule numerice strict validate (96,3%).
+Față de bundle-ul inițial, numărul absolut de celule numerice strict validate
+a crescut cu 10.189, erorile au scăzut de la 831 la 654, duplicatele de la
+10.701 la 382, iar celulele ilizibile de la 211 la 192. Au fost acceptate 138
+de reparații aritmetice; 73 de grupuri nerezolvate rămân marcate explicit,
+împreună cu avertismentele și dovezile de proveniență. Publicarea a avut loc
+numai după creșterea numărului absolut de linii și celule strict validate și
+după verificarea absenței erorilor de formule în workbook.
+
+Aceste procente sunt rate observate de validare, nu o măsurare directă a
+recall-ului față de un adevăr de referință complet; de aceea
+`recall_measured=false` rămâne neschimbat.
+
 ## Porți pentru ținta de 90%
 
 - ≥90% `validated_cell_recall` pentru fiecare familie de PDF suportată;

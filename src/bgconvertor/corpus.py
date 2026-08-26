@@ -4,7 +4,7 @@ The export is long-format (one row per code+column+value) so cross-
 municipality analysis is a groupby away, with provenance and verification
 carried on every row:
 
-    municipality, document, budget, suffix, section, kind, code, func_code,
+    municipality, document, context_id, institution, budget, suffix, section, kind, code, func_code,
     name, column, value, source (digital|ocr|llm), verified,
     verification_status, validation_issues, page
 
@@ -29,7 +29,7 @@ log = logging.getLogger("bgc.corpus")
 
 COLUMNS = [
     "municipality", "siruta", "county_code", "county", "year",
-    "document", "budget", "suffix", "section", "kind",
+    "document", "context_id", "institution", "budget", "suffix", "section", "kind",
     "code", "func_code", "name", "column", "value", "source", "verified",
     "verification_status", "validation_issues", "page",
 ]
@@ -94,7 +94,9 @@ def export_rows(config: RunConfig, pdf: Path):
             for column, value in ln.values.items():
                 yield {
                     **ident,
-                    "document": doc.title[:60],
+                    "document": doc.title[:160],
+                    "context_id": doc.context_id,
+                    "institution": doc.institution,
                     "budget": doc.budget,
                     "suffix": doc.suffix,
                     "section": ln.section,

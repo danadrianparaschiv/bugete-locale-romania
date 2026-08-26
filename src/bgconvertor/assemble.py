@@ -36,6 +36,8 @@ PMB_SOURCE = {"A": ("local", "02"), "G": ("own_revenue", "10"),
 COD_FISCAL_RE = re.compile(
     r"([A-ZĂÂÎȘȚ][A-ZĂÂÎȘȚ0-9 .,\-']{5,60}?)\s+COD\s+FISCAL\s+\d{6,9}"
 )
+INDIVIDUAL_BUDGET_RE = re.compile(r"\bBUGET\s+INDIVIDUAL\b", re.IGNORECASE)
+FISCAL_TOKEN_RE = re.compile(r"\b[0-9SOGB]{6,9}\b", re.IGNORECASE)
 SECTION_CANON = {
     "SECTIUNEA TOTAL": "TOTAL",
     "SECTIUNEA FUNCTIONARE": "FUNCTIONARE",
@@ -48,6 +50,56 @@ DIN_TOTAL_RE = re.compile(r"Din total capitol")
 
 def _norm_title(title: str) -> str:
     return re.sub(r"\s+", " ", title).strip().upper()
+
+
+def _individual_context(text: str, page: int) -> tuple[str, str] | None:
+    """Institution and stable context for a repeated individual-budget form.
+
+    Cluj concatenates hundreds of forms whose official document title is
+    identical.  The first page nevertheless carries the institution followed
+    by its fiscal code and ``BUGET INDIVIDUAL``.  OCR occasionally reads a
+    fiscal-code digit as S/O/G/B, so normalize only that tightly constrained
+    token.  The physical start page is an explicit fallback, never a guessed
+    institution identity.
+    """
+    marker = INDIVIDUAL_BUDGET_RE.search(text or "")
+    if marker is None:
+        return None
+    prefix = text[:marker.start()]
+    napoca = list(re.finditer(r"\b[A-ZĂÂÎȘȚ]*NAPOCA\b", prefix, re.IGNORECASE))
+    subject = prefix[napoca[-1].end():] if napoca else prefix[-180:]
+    subject = re.split(r"\bANEX[A-ZĂÂÎȘȚ]*\b", subject, maxsplit=1,
+                       flags=re.IGNORECASE)[0]
+    fiscal = list(FISCAL_TOKEN_RE.finditer(subject))
+    if fiscal:
+        token = fiscal[-1]
+        raw_id = token.group(0).upper().translate(
+            str.maketrans({"S": "5", "O": "0", "G": "6", "B": "8"})
+        )
+        institution = re.sub(r"\s+", " ", subject[:token.start()]).strip(" -.,;:")
+        if len(institution) < 4:
+            institution = f"Instituție cu CUI {raw_id}"
+        return institution[:100], f"cui:{raw_id}"
+    return f"Buget individual de la pagina {page}", f"page:{page}"
+
+
+def _ocr_indicator_code(raw_code: str | None, registry) -> str | None:
+    """Recover a nomenclator code carrying OCR lookalikes/source marker A.
+
+    Cluj prints the funding source directly after the suffix (``54.02A``).
+    Common OCR output is ``S4.02A`` or ``G8.02A.15.04``.  Accept the repair
+    only when the resulting code exists in the official registry.
+    """
+    if not raw_code or registry is None or not re.search(r"\d", raw_code):
+        return None
+    candidate = raw_code.upper().translate(
+        str.maketrans({"S": "5", "O": "0", "G": "6", "B": "8"})
+    )
+    candidate = re.sub(r"(?<=\.\d{2})A(?=\.|$)", "", candidate)
+    from .parsing import normalize_indicator_code
+
+    normalized = normalize_indicator_code(candidate)
+    return normalized if normalized and registry.exists(normalized) else None
 
 
 def _doc_meta(text: str) -> tuple[str, str, str] | None:
@@ -135,6 +187,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
         # institution — each CHANGE of institution starts a new document,
         # regardless of whether the page repeats a recognizable title
         text = payload.get("text") or ""
+        individual_context = _individual_context(text, page)
         inst_m = INSTITUTION_RE.search(text)
         inst = inst_m.group(1).strip()[:60] if inst_m else None
         if inst is None:
@@ -151,6 +204,9 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             cf_m = COD_FISCAL_RE.search(text)
             if cf_m and not cf_m.group(1).strip().startswith(_NOT_INSTITUTION):
                 inst = cf_m.group(1).strip()[:60]
+        context_id = None
+        if individual_context is not None:
+            inst, context_id = individual_context
         if inst and doc is not None and not meta:
             base = doc.title.split(" — ")[0]
             budget, suffix = inst_source or (doc.budget, doc.suffix)
@@ -160,13 +216,21 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             if inst:
                 title = f"{title} — {inst}"
             # some vendors repeat the document title in every page header
-            # (Oradea): an identical title continues the current document
-            if doc is None or _norm_title(title) != _norm_title(doc.title):
+            # (Oradea): an identical title continues the current document.
+            # ``BUGET INDIVIDUAL`` is different: every occurrence is the first
+            # page of a new institution form, even when the title is identical.
+            if (
+                doc is None
+                or individual_context is not None
+                or _norm_title(title) != _norm_title(doc.title)
+            ):
                 doc = BudgetDocument(
-                    title=title, budget=budget, suffix=suffix, pages=[], lines=[]
+                    title=title, budget=budget, suffix=suffix, pages=[], lines=[],
+                    context_id=context_id,
+                    institution=inst,
                 )
                 documents.append(doc)
-                section, region = None, "heading"
+                section, region, cap_context = None, "heading", None
         if doc is None:
             if not payload.get("lines"):
                 continue  # prose pages (HCL) before any budget document
@@ -174,10 +238,10 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 # scanned annexes rarely repeat a full title — open a document
                 doc = BudgetDocument(
                     title=f"Anexa (de la pagina {page})", budget="local",
-                    suffix="02", pages=[], lines=[],
+                    suffix="02", pages=[], lines=[], context_id=f"page:{page}",
                 )
                 documents.append(doc)
-                section, region = None, "heading"
+                section, region, cap_context = None, "heading", None
             else:
                 log.warning("page %d has lines before any document title — skipped", page)
                 continue
@@ -193,6 +257,10 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
             raw_code = raw.get("raw_code") or ""
             name = raw.get("name") or ""
+            if raw.get("code") is None:
+                repaired_code = _ocr_indicator_code(raw_code, registry)
+                if repaired_code is not None:
+                    raw["code"] = repaired_code
             out_of_scope = payload.get("layout") in (
                 "investment_list", "allocations_annex", "annex_other"
             )
@@ -357,6 +425,24 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                         from .parsing import normalize_indicator_code
 
                         line.func_code = normalize_indicator_code(m.group(1))
+
+            # Once a functional chapter is recognized, the rows below it are
+            # expense rows even when the form omits a separate TOTAL
+            # CHELTUIELI line.  This is the common Cluj individual-budget form.
+            if is_scanned and line.kind == "expense_functional" and line.code:
+                region = "expense"
+            if (
+                is_scanned
+                and cap_context
+                and line.code
+                and line.func_code is None
+                and line.kind != "expense_functional"
+                and registry is not None
+                and registry.get("expense_economic", line.code) is not None
+                and region == "expense"
+            ):
+                line.kind = "expense_economic"
+                line.func_code = cap_context
 
             # Vaslui-style headings carry the capitol as TEXT, without the
             # source digit: "CAPITOL 51 - ..." / "51.01.03 - Autorități
