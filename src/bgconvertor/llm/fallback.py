@@ -10,6 +10,10 @@ source="llm" and flows through the same validator as everything else.
 from __future__ import annotations
 
 import logging
+import re
+import unicodedata
+from copy import deepcopy
+from dataclasses import dataclass
 
 from pydantic import BaseModel, Field
 
@@ -103,8 +107,22 @@ ilizibilă sau acoperită de ștampilă = null.
 """
 
 
+@dataclass(frozen=True)
+class FallbackBand:
+    """One independently transcribed vertical table band on a dense page."""
+
+    index: int
+    y0: float
+    y1: float
+    row_count: int
+
+    @property
+    def height_fraction(self) -> float:
+        return max(0.05, min(1.0, self.y1 - self.y0))
+
+
 def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> list[str]:
-    """Keep every observed/page-specific column; use corpus frequency only as fallback.
+    """Infer the complete schema from this page only.
 
     The old global top-six rule silently dropped quarterly columns on wide
     tables. A paid page transcription must be asked for the full known schema.
@@ -120,13 +138,22 @@ def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> 
         for issue in line.get("cell_issues", [])
         if issue.get("column")
     )
+    # Mapper header inference is page-local and remains available even when
+    # the mapper produced zero rows.  Ignore identity/text columns.
+    observed.update(
+        column
+        for column in ((payload.get("mapping_context") or {}).get("columns") or {}).values()
+        if column not in {"name", "code", "func_code", "rowno", "ignore"}
+    )
     budget_year = payload.get("budget_year")
     observed.update(
         remap_role(column, budget_year)
         for column in LAYOUT_COLUMNS.get(payload.get("layout"), ())
     )
-    if not observed:
-        observed.update((corpus_columns or [])[:9])
+    # ``corpus_columns`` is retained for API compatibility with older callers,
+    # but deliberately ignored: another page's most common columns are not
+    # evidence for this page and previously dropped legitimate quarters.
+    _ = corpus_columns
     # Fixed semantic columns retain their historical order. Dynamic annual
     # and forecast columns follow chronologically, so a 2025 document asks
     # the provider for buget_2025, est2026..est2028 rather than 2026 labels.
@@ -146,10 +173,62 @@ def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> 
     return ordered[:12] or [default]
 
 
-def fallback_max_tokens(payload: dict, n_columns: int) -> int:
+def fallback_bands(ocr_payload: dict | None, max_rows: int = 32) -> list[FallbackBand]:
+    """Split OCR tables into bounded vertical bands using stored row boxes.
+
+    A full-page JSON transcription becomes unreliable on 60-100 row tables.
+    Docling already stores every row's vertical extent; chunk those extents so
+    each paid response is small.  Invalid/legacy coordinates fall back to one
+    full-page band, never guessed crops.
+    """
+    tables = (ocr_payload or {}).get("tables_rows_y") or []
+    bands: list[FallbackBand] = []
+    index = 0
+    for table in tables:
+        valid = [
+            (max(0.0, float(row[0])), min(1.0, float(row[1])))
+            for row in table
+            if isinstance(row, (list, tuple))
+            and len(row) == 2
+            and 0.0 <= float(row[0]) < float(row[1]) <= 1.0
+            and float(row[1]) - float(row[0]) < 0.95
+        ]
+        for start in range(0, len(valid), max_rows):
+            chunk = valid[start:start + max_rows]
+            if not chunk:
+                continue
+            bands.append(FallbackBand(
+                index=index,
+                y0=max(0.0, min(row[0] for row in chunk) - 0.015),
+                y1=min(1.0, max(row[1] for row in chunk) + 0.015),
+                row_count=len(chunk),
+            ))
+            index += 1
+    return bands or [FallbackBand(index=0, y0=0.0, y1=1.0, row_count=0)]
+
+
+def crop_fallback_band(image, band: FallbackBand):
+    if image is None or band.height_fraction >= 0.99:
+        return image
+    y0 = max(0, int(band.y0 * image.height))
+    y1 = min(image.height, int(band.y1 * image.height))
+    if y1 - y0 < 40:
+        return image
+    return image.crop((0, y0, image.width, y1))
+
+
+def fallback_max_tokens(
+    payload: dict,
+    n_columns: int,
+    estimated_rows: int | None = None,
+) -> int:
     estimated_rows = max(
-        len(payload.get("lines", [])),
-        payload.get("n_numeric_cells", 0) // max(1, n_columns),
+        estimated_rows or 0,
+        len(payload.get("lines", [])) if estimated_rows is None else 0,
+        (
+            payload.get("n_numeric_cells", 0) // max(1, n_columns)
+            if estimated_rows is None else 0
+        ),
     )
     return min(24000, max(4096, 768 + estimated_rows * (180 + 28 * n_columns)))
 
@@ -171,15 +250,23 @@ def extract_page_llm(
     columns: list[str],
     page: int,
     max_tokens: int | None = None,
+    model: str | None = None,
+    band: FallbackBand | None = None,
 ) -> dict:
     """Full-page transcription -> extraction-contract payload."""
     from ..parsing import NumberParseError, normalize_indicator_code, parse_ro_number
 
     cfg = client.config.llm
-    fb_model = cfg.fallback_model or cfg.repair_model
+    fb_model = model or cfg.fallback_model or cfg.repair_model
+    band_note = (
+        f"\nAcesta este segmentul vertical {band.index + 1} al paginii; "
+        "transcrie numai rândurile vizibile în acest segment.\n"
+        if band is not None else ""
+    )
     reading: PageReading = client.structured(
         "fallback_extract",
-        FALLBACK_PROMPT.format(columns=", ".join(f'"{c}"' for c in columns)),
+        FALLBACK_PROMPT.format(columns=", ".join(f'"{c}"' for c in columns))
+        + band_note,
         PageReading,
         model=fb_model,
         image=image,
@@ -215,6 +302,9 @@ def extract_page_llm(
             "year": None,
             "values": values,
             "source": f"llm:{fb_model}",
+            "value_sources": {
+                column: f"llm:{fb_model}" for column in values
+            },
         }
         if cell_issues:
             line["cell_issues"] = cell_issues
@@ -224,7 +314,181 @@ def extract_page_llm(
         "text": None,
         "layout": "llm_fallback",
         "note": reading.note,
+        "band": (
+            {"index": band.index, "y0": band.y0, "y1": band.y1}
+            if band is not None else None
+        ),
     }
+
+
+def extract_band_with_escalation(
+    client,
+    image,
+    columns: list[str],
+    page: int,
+    band: FallbackBand,
+    *,
+    max_tokens: int,
+    benefit_units: float,
+    primary_model: str,
+) -> dict:
+    """Run cheap transcription first and premium only after structural failure."""
+    cheap_payload = None
+    first_error = None
+    try:
+        cheap_payload = extract_page_llm(
+            client,
+            image,
+            columns,
+            page,
+            max_tokens=max_tokens,
+            model=primary_model,
+            band=band,
+        )
+    except Exception as exc:  # noqa: BLE001 - premium may still recover the band
+        first_error = exc
+
+    expected_good = max(1, min(3, (band.row_count or 8) // 8))
+    cheap_failed = fallback_payload_good_lines(cheap_payload) < expected_good
+    premium_payload = None
+    if cheap_failed:
+        from .escalation import premium_after_failure
+
+        premium = premium_after_failure(client, primary_model, benefit_units)
+        if premium:
+            try:
+                premium_payload = extract_page_llm(
+                    client,
+                    image,
+                    columns,
+                    page,
+                    max_tokens=max_tokens,
+                    model=premium,
+                    band=band,
+                )
+            except Exception as exc:  # noqa: BLE001
+                if first_error is None:
+                    first_error = exc
+
+    best = max(
+        (payload for payload in (cheap_payload, premium_payload) if payload),
+        key=fallback_payload_good_lines,
+        default=None,
+    )
+    if best is not None:
+        return best
+    if first_error is not None:
+        raise first_error
+    return {"lines": [], "text": None, "layout": "llm_fallback"}
+
+
+def merge_page_payloads(deterministic: dict | None, llm_payloads: list[dict]) -> dict | None:
+    """Merge LLM recovery into deterministic output at row and cell level.
+
+    Deterministic values always win conflicts.  LLM values fill absent or
+    explicitly unparseable cells, and LLM-only rows are appended.  This avoids
+    the old winner-takes-page behavior where a better row count could still
+    discard correct deterministic cells.
+    """
+    if deterministic is None and not llm_payloads:
+        return None
+    if deterministic is None:
+        base = {"lines": [], "text": None, "layout": "llm_fallback"}
+    else:
+        base = deepcopy(deterministic)
+    base.setdefault("lines", [])
+    stats = {"filled_cells": 0, "llm_only_rows": 0, "conflicts_ignored": 0}
+
+    by_exact: dict[tuple[str, str], list[dict]] = {}
+    by_code: dict[str, list[dict]] = {}
+    for line in base["lines"]:
+        code = _normalized_code(line)
+        if not code:
+            continue
+        section = _fold(line.get("section") or "")
+        by_exact.setdefault((code, section), []).append(line)
+        by_code.setdefault(code, []).append(line)
+
+    matched_counts: dict[int, int] = {}
+    for payload in llm_payloads:
+        for recovered in payload.get("lines", []):
+            code = _normalized_code(recovered)
+            section = _fold(recovered.get("section") or "")
+            candidates = by_exact.get((code, section), []) if code else []
+            if not candidates and code and len(by_code.get(code, [])) == 1:
+                candidates = by_code[code]
+            target = None
+            for candidate in candidates:
+                used = matched_counts.get(id(candidate), 0)
+                if used == 0:
+                    target = candidate
+                    matched_counts[id(candidate)] = 1
+                    break
+            if target is None:
+                appended = deepcopy(recovered)
+                source = appended.get("source") or "llm"
+                appended.setdefault(
+                    "value_sources",
+                    {column: source for column in (appended.get("values") or {})},
+                )
+                base["lines"].append(appended)
+                stats["llm_only_rows"] += 1
+                continue
+
+            target_values = target.setdefault("values", {})
+            target_issues = list(target.get("cell_issues") or [])
+            broken_columns = {issue.get("column") for issue in target_issues}
+            llm_source = recovered.get("source") or "llm"
+            value_sources = target.setdefault("value_sources", {})
+            deterministic_source = target.get("source") or (
+                "digital" if base.get("layout") == "digital_detail" else "ocr"
+            )
+            for column in target_values:
+                value_sources.setdefault(column, deterministic_source)
+            filled = False
+            for column, value in (recovered.get("values") or {}).items():
+                if column not in target_values or column in broken_columns:
+                    target_values[column] = value
+                    value_sources[column] = llm_source
+                    target_issues = [
+                        issue for issue in target_issues
+                        if issue.get("column") != column
+                    ]
+                    stats["filled_cells"] += 1
+                    filled = True
+                elif target_values[column] != value:
+                    stats["conflicts_ignored"] += 1
+            if filled:
+                target["source"] = "mixed"
+            if target_issues:
+                target["cell_issues"] = target_issues
+            else:
+                target.pop("cell_issues", None)
+
+    base["llm_merge"] = stats
+    return base
+
+
+def fallback_payload_good_lines(payload: dict | None) -> int:
+    return sum(
+        1
+        for line in (payload or {}).get("lines", [])
+        if line.get("code") and line.get("values")
+    )
+
+
+def _normalized_code(line: dict) -> str | None:
+    from ..parsing import normalize_indicator_code
+
+    return normalize_indicator_code(line.get("code") or line.get("raw_code"))
+
+
+def _fold(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    return re.sub(
+        r"\s+", " ",
+        "".join(char for char in normalized if not unicodedata.combining(char)).lower(),
+    ).strip()
 
 
 def needs_fallback(payload: dict | None) -> bool:
@@ -235,10 +499,16 @@ def needs_fallback(payload: dict | None) -> bool:
         "investment_list", "hcl_prose", "allocations_annex", "annex_other"
     ):
         return False  # out of nomenclator scope — side-sheet data, not repair
-    if payload.get("n_numeric_cells", 999) < 10:
-        return False  # nothing numeric on the page worth a paid transcription
     lines = payload.get("lines", [])
-    if len(lines) < 6:
+    if not lines:
+        # A zero-line table is the catastrophic mapper collapse this fallback
+        # exists to inspect.  Even zero OCR numeric tokens may mean OCR, not
+        # the printed table, failed; its tiny benefit score keeps it last.
+        return True
+    numeric_cells = int(payload.get("n_numeric_cells") or 0)
+    if numeric_cells < 10:
+        return False  # nothing numeric on a partially mapped page worth a paid call
+    good = fallback_payload_good_lines(payload)
+    if len(lines) < 6 and good > 0:
         return False  # tiny end-of-document tables aren't worth a paid call
-    good = sum(1 for ln in lines if ln.get("code") and ln.get("values"))
     return good < 3

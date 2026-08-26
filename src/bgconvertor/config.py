@@ -38,6 +38,10 @@ class LLMConfig(BaseModel):
     repair_model: str = "claude-sonnet-5"
     cell_model: str = "claude-haiku-4-5"  # transcription-only cell recovery
     fallback_model: str | None = None  # full-page transcription; None -> repair_model
+    # Optional second tier. It is never called first: only a failed cheap read
+    # with sufficient expected benefit may escalate while budget remains.
+    premium_model: str | None = None
+    premium_min_benefit_units: float = 6.0
     reasoning_effort: str | None = None  # compat vendors: cap hidden thinking (billed!)
     call_deadline_s: int = 1800  # hard per-call wait bound in worker pools
     batch: bool = False  # Batch API (-50%) for unattended repair/fallback runs
@@ -46,7 +50,7 @@ class LLMConfig(BaseModel):
     max_cost_usd: float = 1.00  # hard budget per run; raising it is a conscious act
     max_calls: int = 2000  # the dollar budget is the primary governor
     concurrency: int = 4  # parallel LLM calls (network-bound; thread pool)
-    prompt_version: str = "v2"  # bumped whenever a prompt file changes
+    prompt_version: str = "v3"  # banded fallback + independent-evidence schemas
 
 
 class RunConfig(BaseSettings):
@@ -113,6 +117,7 @@ class RunConfig(BaseSettings):
         "llm": ["render_scale", "llm.repair_model", "llm.prompt_version"],
         "llm_extract": [
             "render_scale", "llm.repair_model", "llm.fallback_model",
+            "llm.premium_model", "llm.premium_min_benefit_units",
             "llm.prompt_version",
         ],
     }

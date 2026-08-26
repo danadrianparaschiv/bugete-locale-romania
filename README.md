@@ -112,7 +112,10 @@ rulări — [docs/eval-modele.md](docs/eval-modele.md)):
   ~160 la flash și ~70 la implicit), dar recuperează mai puțin în
   absolut; potrivit când bugetul, nu acoperirea, e constrângerea.
 - Modelele premium (fable-5, opus-5) merită doar cu plafoane generoase pe
-  fișiere mici: la buget fix, costul lor per apel le lasă fără pagini.
+  fișiere mici dacă sunt folosite direct: la buget fix, costul lor per apel le
+  lasă fără pagini. Presetul **`mixt:flash+sonnet`** evită această problemă:
+  Gemini Flash citește primul, iar Sonnet este rezervat și apelat numai după o
+  citire eșuată cu beneficiu estimat suficient (necesită ambele chei API).
 
 Notă de cost — două capcane descoperite pe facturi reale: unii furnizori
 (Gemini) facturează tokenii interni de „gândire" fără să-i afișeze în

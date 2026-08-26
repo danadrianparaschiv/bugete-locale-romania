@@ -44,6 +44,9 @@ poate suprascrie artefactele corpusului.
 În exportul lung, `verified=true` înseamnă strict că linia nu are nicio
 problemă de validare, indiferent de severitate. Coloanele
 `verification_status` și `validation_issues` fac decizia auditabilă.
+`source` este proveniența valorii individuale din rândul lung, iar
+`code_source` este completat separat când numai codul a fost recitit de LLM;
+astfel un merge mixt nu atribuie întregul rând unui singur extractor.
 Analizele implicite folosesc numai aceste linii strict verificate. Problemele
 de tip `info` (de exemplu o transcriere fără demonstrație independentă) nu mai
 sunt promovate drept verificate.
@@ -472,17 +475,51 @@ este consumat și întărește autoritatea registrului de cost:
   estimat per dolar rezervat; planificarea este globală pe fișier, nu reluată
   independent pentru fiecare document asamblat;
 - transcrierea paginii întregi cere toate coloanele cunoscute ale layoutului
-  (maximum 12), nu un top global de șase care putea omite trimestrele, și
-  dimensionează adaptiv limita de output;
-- grupurile cu egalități părinte/copii au prioritate; recitirile celulelor fără
-  demonstrație aritmetică primesc o pondere redusă și rămân `unverified`;
+  (maximum 12), deduse din antetul și contextul paginii, nu un top global de
+  șase care putea omite trimestrele; paginile dense sunt împărțite în benzi de
+  maximum 32 de rânduri și dimensionează adaptiv limita de output;
+- o pagină cu tabel detectat și zero linii mapate rămâne eligibilă chiar dacă
+  OCR-ul nu a găsit tokeni numerici; beneficiul mic o ține la sfârșitul
+  plannerului, dar nu o mai face invizibilă;
+- output-ul LLM completează rânduri și celule lipsă fără a înlocui pagina:
+  valorile deterministe câștigă conflictele, iar proveniența este păstrată
+  separat pentru fiecare celulă;
+- același planner compară ierarhii, checksum-uri trimestriale, identități
+  globale și între secțiuni, coduri OCR invalide, duplicate conflictuale și
+  celule ilizibile. Codurile se acceptă numai dacă trec nomenclatorul,
+  concordanța numelui și gardul anti-coliziune; duplicatele se elimină numai
+  după două citiri independente identice;
+- orice reparație aritmetică cere o citire independentă completă pentru
+  fiecare rând și coloană care participă la egalitate, inclusiv termenii unei
+  formule omiși de OCR. Nicio valoare OCR veche și nicio absență tratată drept
+  zero nu pot participa la acceptare;
+- după toate mutațiile, validatoarele V1–V5 și duplicatele V7 sunt reconstruite
+  din documentul rezultat; o reparație locală nu poate ascunde o ierarhie sau
+  identitate nou ruptă;
+- presetul mixt rulează modelul economic primul. Un model premium este
+  rezervat worst-case de planner, dar este apelat numai dacă citirea ieftină
+  eșuează verificarea și beneficiul estimat depășește pragul configurat;
+- recitirile celulelor fără demonstrație aritmetică primesc o pondere redusă
+  și rămân `unverified`;
 - fiecare apel, fiecare retry și fiecare element Batch rezervă înainte costul
   worst-case și un slot de apel. Rezervările concurente, retry-urile mai mari
   și Batch nu pot trece împreună peste plafon; redările din cache nu consumă
   nici bani, nici sloturi API;
-- `runs/<fișier>/llm_plan.json` păstrează planul pentru fallback, repararea
-  sumelor și recitirile neconfirmate, inclusiv candidații amânați. Ledgerul
-  rămâne autoritatea dură chiar dacă o estimare a plannerului este imperfectă.
+- `runs/<fișier>/llm_plan.json` păstrează planul pe benzi și planul comun de
+  reparare țintită, cu numărul worst-case de apeluri (inclusiv escaladarea) și
+  candidații amânați. Ledgerul rămâne autoritatea dură chiar dacă o estimare a
+  plannerului este imperfectă.
+
+### Închiderea gap-urilor P2
+
+La 26 august 2026, toate gap-urile funcționale din planul P2 au fixture-uri
+offline și sunt conectate la calea reală `convert --llm repair`. Suita are 303
+de teste, inclusiv regresii pentru pagina cu zero linii, coloane locale,
+segmentarea tabelului dens, merge la nivel de celulă, citiri aritmetice
+incomplete, trimestre, identități, coduri, duplicate și escaladarea
+cheap-first. Această închidere este o verificare de comportament și siguranță;
+nu declară un câștig nou de recall în corpus până la o viitoare rulare
+măsurată și nu a consumat API pentru teste.
 
 Experimentul P2 din 25 august 2026 a avut un plafon separat autorizat de
 20 USD, dar nu a produs apeluri externe noi: cost incremental 0 USD. Pe

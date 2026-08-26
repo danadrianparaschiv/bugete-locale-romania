@@ -15,7 +15,7 @@ from bgconvertor.extract.scanned import map_payload
 from bgconvertor.model import ConversionResult
 from bgconvertor.nomenclator import load_registry
 from bgconvertor.runstore import RunStore
-from bgconvertor.validate import validate
+from bgconvertor.validate import revalidate, validate
 
 
 def _mk_store(tmp_path: Path) -> RunStore:
@@ -196,6 +196,26 @@ def test_validate_v3_row_checksum(tmp_path, registry):
     validate(result, registry)
     checks = [i.check for i in result.all_issues()]
     assert "V3_row_checksum" in checks
+
+
+def test_revalidate_replaces_stale_findings_after_repair(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line("000102", "TOTAL VENITURI", total="99.00",
+                  trim1="25.00", trim2="25.00", trim3="25.00", trim4="25.00"),
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    validate(result, registry)
+    line = result.documents[0].lines[0]
+    assert any(issue.check == "V3_row_checksum" for issue in line.issues)
+
+    line.values["total"] = line.values["trim1"] * 4
+    revalidate(result, registry)
+
+    assert not any(issue.check == "V3_row_checksum" for issue in line.issues)
 
 
 def test_validate_v4_hierarchy_breach_and_est_convention(tmp_path, registry):

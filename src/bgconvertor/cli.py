@@ -497,6 +497,8 @@ def models():
         repair = p.repair_model
         if p.fallback_model:
             repair += f" (+{p.fallback_model} pt. pagini)"
+        if p.premium_model:
+            repair += f" -> {p.premium_model} numai după eșec"
         t.add_row(name, repair, p.cell_model, f"{pin:g}/{pout:g}", p.description)
     console.print(t)
     console.print(
@@ -665,7 +667,12 @@ def convert(
         except ValueError as exc:
             console.print(f"[red]{exc}[/red]")
             raise typer.Exit(2) from None
-        preset_models = [p.repair_model, p.cell_model, p.fallback_model or p.repair_model]
+        preset_models = [
+            p.repair_model,
+            p.cell_model,
+            p.fallback_model or p.repair_model,
+            p.premium_model or p.repair_model,
+        ]
         if config.llm.batch and not all(m.startswith("claude-") for m in preset_models):
             console.print("[red]modul Batch API este disponibil doar pentru "
                           "modele Anthropic[/red]")
@@ -673,6 +680,8 @@ def convert(
         desc = f"reparare {p.repair_model}, celule {p.cell_model}"
         if p.fallback_model:
             desc += f", transcriere pagină {p.fallback_model}"
+        if p.premium_model:
+            desc += f", escaladare {p.premium_model} numai după eșec cu randament mare"
         console.print(f"model preset: [bold]{model_preset}[/bold] — {desc}")
     store = RunStore(config, pdf)
     n_pages = len(PdfReader(pdf).pages)
@@ -714,16 +723,17 @@ def convert(
 
     ledger = client = None
     if config.llm.mode in ("repair", "full"):
-        from collections import Counter
-
         from . import profilepdf
         from .llm.client import LLMClient
         from .llm.fallback import (
             FALLBACK_PROMPT,
-            extract_page_llm,
+            crop_fallback_band,
+            extract_band_with_escalation,
+            fallback_bands,
             fallback_benefit,
             fallback_columns,
             fallback_max_tokens,
+            merge_page_payloads,
             needs_fallback,
         )
         from .llm.ledger import Ledger, estimate_request_cost
@@ -745,23 +755,23 @@ def convert(
         ]
         fallback_plan = None
         if fallback_candidates_pages:
-            col_freq: Counter = Counter()
-            for p in selected:
-                pl = store.get("extract", p) or {}
-                col_freq.update({c for ln in pl.get("lines", []) for c in ln.get("values", {})})
-            corpus_columns = [column for column, _count in col_freq.most_common()]
-
             # Reserve only the demand the deterministic validation can already
             # see, capped at 40% of the file budget. If there is no repairable
             # arithmetic/cell work, full-page rescue may use the whole cap.
             preliminary_documents = assemble(store, selected, registry)
             preliminary = ConversionResult(pdf=pdf.name, documents=preliminary_documents)
             run_validate(preliminary, registry)
-            sum_signals = sum(
+            repair_signals = sum(
                 1
                 for document in preliminary.documents
                 for line in document.lines
-                if any(issue.check == "V4_hierarchy" for issue in line.issues)
+                if any(
+                    issue.check in {
+                        "V1_code", "V3_row_checksum", "V4_hierarchy", "V5_identity"
+                    }
+                    or (issue.check == "V7_hygiene" and "duplicate" in issue.message)
+                    for issue in line.issues
+                )
             )
             cell_pages = {
                 line.page
@@ -786,52 +796,111 @@ def convert(
             )
             repair_reserve = min(
                 ledger.remaining_cost_usd * 0.4,
-                sum_signals * repair_unit_cost + len(cell_pages) * cell_unit_cost,
+                repair_signals * repair_unit_cost + len(cell_pages) * cell_unit_cost,
             )
             fallback_budget = max(0.0, ledger.remaining_cost_usd - repair_reserve)
 
-            prepared = {}
+            prepared: dict[int, dict] = {}
             candidates = []
             fb_model = config.llm.fallback_model or config.llm.repair_model
             for page in fallback_candidates_pages:
                 payload = store.get("extract", page) or {}
-                columns = fallback_columns(payload, corpus_columns)
-                max_tokens = fallback_max_tokens(payload, len(columns))
-                prompt = FALLBACK_PROMPT.format(
-                    columns=", ".join(f'"{column}"' for column in columns)
+                columns = fallback_columns(payload)
+                ocr_candidates = [
+                    store.get(stage, page)
+                    for stage in ("ocr_recovery", "ocr", "ocr_native")
+                ]
+                ocr_payload = max(
+                    (candidate for candidate in ocr_candidates if candidate),
+                    key=lambda candidate: sum(
+                        len(table) for table in candidate.get("tables_rows_y", [])
+                    ),
+                    default=None,
                 )
-                prepared[page] = (columns, max_tokens)
-                candidates.append(RecoveryCandidate(
-                    key=f"fallback:p{page}",
-                    kind="fallback_extract",
-                    page=page,
-                    benefit_units=fallback_benefit(payload),
-                    estimated_cost_usd=estimate_request_cost(
+                bands = fallback_bands(ocr_payload)
+                total_rows = sum(band.row_count for band in bands)
+                page_benefit = fallback_benefit(payload)
+                prepared[page] = {"columns": columns, "bands": {}}
+                for band in bands:
+                    row_share = (
+                        band.row_count / total_rows if total_rows else 1.0 / len(bands)
+                    )
+                    benefit = page_benefit * row_share
+                    max_tokens = fallback_max_tokens(
+                        payload,
+                        len(columns),
+                        estimated_rows=band.row_count or None,
+                    )
+                    band_note = (
+                        f"\nAcesta este segmentul vertical {band.index + 1} al paginii; "
+                        "transcrie numai rândurile vizibile în acest segment.\n"
+                    )
+                    prompt = FALLBACK_PROMPT.format(
+                        columns=", ".join(f'"{column}"' for column in columns)
+                    ) + band_note
+                    image_pixels = int(2_100_000 * band.height_fraction)
+                    primary_cost = estimate_request_cost(
                         fb_model,
                         len(prompt),
                         max_tokens,
-                        image_pixels=2_100_000,
-                    ),
-                    detail=(
-                        f"{payload.get('n_numeric_cells', 0)} OCR numeric tokens; "
-                        f"{len(columns)} requested columns"
-                    ),
-                ))
+                        image_pixels=image_pixels,
+                    )
+                    premium = (
+                        config.llm.premium_model
+                        if config.llm.premium_model
+                        and config.llm.premium_model != fb_model
+                        and benefit >= config.llm.premium_min_benefit_units
+                        else None
+                    )
+                    premium_cost = (
+                        estimate_request_cost(
+                            premium,
+                            len(prompt),
+                            max_tokens,
+                            image_pixels=image_pixels,
+                        )
+                        if premium else 0.0
+                    )
+                    key = f"fallback:p{page}:b{band.index}"
+                    prepared[page]["bands"][band.index] = {
+                        "band": band,
+                        "max_tokens": max_tokens,
+                        "benefit": benefit,
+                        "premium": premium,
+                        "key": key,
+                    }
+                    candidates.append(RecoveryCandidate(
+                        key=key,
+                        kind="fallback_extract_band",
+                        page=page,
+                        benefit_units=benefit,
+                        estimated_cost_usd=primary_cost + premium_cost,
+                        estimated_calls=2 if premium else 1,
+                        detail=(
+                            f"band {band.index + 1}/{len(bands)}, {band.row_count or '?'} rows; "
+                            f"{len(columns)} page-local columns"
+                            + (f"; {premium} reserved only after cheap failure" if premium else "")
+                        ),
+                    ))
             fallback_plan = select_candidates(
                 candidates,
                 fallback_budget,
                 max_calls=ledger.remaining_calls,
             )
-            fallback_pages = [candidate.page for candidate in fallback_plan.selected]
+            selected_fallback_keys = {
+                candidate.key for candidate in fallback_plan.selected
+            }
+            fallback_pages = sorted({candidate.page for candidate in fallback_plan.selected})
             _stage_banner(
                 "Extractie LLM pagina-intreaga",
+                f"{len(fallback_plan.selected)}/{len(candidates)} benzi din "
                 f"{len(fallback_pages)}/{len(fallback_candidates_pages)} pagini selectate "
                 "după câștigul estimat per dolar",
             )
             console.print(
                 f"  rezervare worst-case selectată: ~${fallback_plan.estimated_cost_usd:.2f} · "
                 f"rezervat pentru reparații țintite: ~${repair_reserve:.2f} · "
-                f"{len(fallback_plan.skipped)} pagini amânate de planner"
+                f"{len(fallback_plan.skipped)} benzi amânate de planner"
             )
 
             def llm_page(p: int):
@@ -839,14 +908,30 @@ def convert(
                 rot = (store.get("orient", p) or {}).get("rotation", 0)
                 if rot:
                     img = img.rotate(rot, expand=True)
-                columns, max_tokens = prepared[p]
-                return extract_page_llm(
-                    client,
-                    img,
-                    columns,
-                    p,
-                    max_tokens=max_tokens,
-                )
+                columns = prepared[p]["columns"]
+                recovered = []
+                last_error = None
+                for entry in prepared[p]["bands"].values():
+                    if entry["key"] not in selected_fallback_keys:
+                        continue
+                    band = entry["band"]
+                    crop = crop_fallback_band(img, band)
+                    try:
+                        recovered.append(extract_band_with_escalation(
+                            client,
+                            crop,
+                            columns,
+                            p,
+                            band,
+                            max_tokens=entry["max_tokens"],
+                            benefit_units=entry["benefit"],
+                            primary_model=fb_model,
+                        ))
+                    except Exception as exc:  # noqa: BLE001 - band-local failure
+                        last_error = exc
+                if not recovered and last_error is not None:
+                    raise last_error
+                return merge_page_payloads(None, recovered)
 
             if fallback_pages:
                 run_stage(
@@ -895,6 +980,7 @@ def convert(
             repair_unparseable,
         )
         from .llm.planner import select_candidates
+        from .llm.targeted import estimate_targeted_candidates, repair_targeted
 
         sum_candidates = [
             candidate
@@ -906,27 +992,47 @@ def convert(
                 job_key_prefix=f"doc:{document_index}|",
             )
         ]
-        sum_plan = select_candidates(
-            sum_candidates,
+        targeted_candidates = [
+            candidate
+            for document_index, document in enumerate(result.documents)
+            for candidate in estimate_targeted_candidates(
+                document,
+                registry,
+                config.llm,
+                job_key_prefix=f"doc:{document_index}|",
+            )
+        ]
+        cell_candidates = [
+            candidate
+            for document_index, document in enumerate(result.documents)
+            for candidate in estimate_unparseable_candidates(
+                document,
+                config.llm,
+                job_key_prefix=f"doc:{document_index}|",
+            )
+        ]
+        repair_candidates = [*sum_candidates, *targeted_candidates, *cell_candidates]
+        repair_plan = select_candidates(
+            repair_candidates,
             ledger.remaining_cost_usd,
             max_calls=ledger.remaining_calls,
         )
-        allowed_sum_jobs = {candidate.key for candidate in sum_plan.selected}
+        allowed_jobs = {candidate.key for candidate in repair_plan.selected}
         _stage_banner(
             "Reparare LLM",
-            f"{len(sum_plan.selected)}/{len(sum_candidates)} grupuri cu sume rupte "
-            "selectate global + celule ilizibile; "
-            "o corectie se aplica DOAR daca suma re-citita bate",
+            f"{len(repair_plan.selected)}/{len(repair_candidates)} reparații selectate "
+            "global: ierarhii, trimestre, identități, coduri, duplicate și celule; "
+            "aritmetica se aplică numai din citiri independente complete",
         )
-        if sum_plan.skipped:
+        if repair_plan.skipped:
             result.issues.append(Issue(
                 check="V6_repair",
                 severity="info",
-                page=sum_plan.skipped[0].page,
+                page=repair_plan.skipped[0].page,
                 message=(
-                    f"file-wide budget planner selected {len(sum_plan.selected)} sum groups "
-                    f"(~${sum_plan.estimated_cost_usd:.3f} reserved worst-case) and deferred "
-                    f"{len(sum_plan.skipped)} lower-yield groups"
+                    f"file-wide budget planner selected {len(repair_plan.selected)} jobs "
+                    f"(~${repair_plan.estimated_cost_usd:.3f} reserved worst-case) and "
+                    f"deferred {len(repair_plan.skipped)} lower-yield jobs"
                 ),
             ))
         plan_path = store.root / "llm_plan.json"
@@ -934,7 +1040,7 @@ def convert(
             "schema_version": 1,
             "public_file_cap_usd": config.llm.max_cost_usd,
         }
-        plan_record["sum_repair"] = sum_plan.as_dict()
+        plan_record["targeted_repair"] = repair_plan.as_dict()
         plan_path.write_text(json.dumps(plan_record, ensure_ascii=False, indent=2) + "\n")
 
         def row_locator(p: int, codes: set) -> tuple | None:
@@ -955,52 +1061,36 @@ def convert(
             return img.rotate(rot, expand=True) if rot else img
 
         for document_index, doc in enumerate(result.documents):
+            result.issues.extend(repair_targeted(
+                doc,
+                registry,
+                client,
+                page_image,
+                allowed_job_keys=allowed_jobs,
+                job_key_prefix=f"doc:{document_index}|",
+            ))
             result.issues.extend(
                 repair_document(
                     doc,
                     client,
                     page_image,
                     row_locator=row_locator,
-                    allowed_job_keys=allowed_sum_jobs,
+                    allowed_job_keys=allowed_jobs,
                     job_key_prefix=f"doc:{document_index}|",
+                    registry=registry,
                 )
             )
-        cell_candidates = [
-            candidate
-            for document_index, document in enumerate(result.documents)
-            for candidate in estimate_unparseable_candidates(
-                document,
-                config.llm,
-                job_key_prefix=f"doc:{document_index}|",
-            )
-        ]
-        cell_plan = select_candidates(
-            cell_candidates,
-            ledger.remaining_cost_usd,
-            max_calls=ledger.remaining_calls,
-        )
-        allowed_cell_jobs = {candidate.key for candidate in cell_plan.selected}
-        if cell_plan.skipped:
-            result.issues.append(Issue(
-                check="V6_repair",
-                severity="info",
-                page=cell_plan.skipped[0].page,
-                message=(
-                    f"file-wide budget planner selected {len(cell_plan.selected)} "
-                    f"unparseable-cell pages and deferred {len(cell_plan.skipped)} "
-                    "lower-confidence pages"
-                ),
-            ))
-        plan_record["unparseable_cell"] = cell_plan.as_dict()
-        plan_path.write_text(json.dumps(plan_record, ensure_ascii=False, indent=2) + "\n")
         for document_index, doc in enumerate(result.documents):
             result.issues.extend(repair_unparseable(
                 doc,
                 client,
                 page_image,
-                allowed_job_keys=allowed_cell_jobs,
+                allowed_job_keys=allowed_jobs,
                 job_key_prefix=f"doc:{document_index}|",
             ))
+        from .validate import revalidate
+
+        revalidate(result, registry)
         console.print(ledger.summary())
 
     publication_record = None

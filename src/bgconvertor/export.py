@@ -173,7 +173,9 @@ def _data_sheet(wb: Workbook, name: str, doc: BudgetDocument, lines) -> None:
             else:
                 v = ln.values.get(col)
                 row.append(float(v) if v is not None else None)
-        row.append(ln.source)
+        row.append(
+            f"{ln.source}; cod={ln.code_source}" if ln.code_source else ln.source
+        )
         row.append("; ".join(i.message for i in ln.issues) or None)
         _append_values(ws, row)
 
@@ -255,9 +257,10 @@ def _summary_sheet(
             ("SHA-256 PDF sursa", publication.get("source_pdf_sha256")),
         ])
     llm_models = sorted({
-        ln.source.split(":", 1)[1] if ":" in ln.source else "model neînregistrat"
+        source.split(":", 1)[1] if ":" in source else "model neînregistrat"
         for doc in result.documents for ln in doc.lines
-        if ln.source.startswith("llm")
+        for source in ln.provenance_sources
+        if source.startswith("llm")
     })
     if llm_models:
         rows.append(("Modele LLM folosite", ", ".join(llm_models)))

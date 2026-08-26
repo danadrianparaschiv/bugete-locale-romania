@@ -66,6 +66,7 @@ def repair_document(
     row_locator=None,  # (page, raw_codes) -> (y0_frac, y1_frac) | None
     allowed_job_keys: set[str] | None = None,
     job_key_prefix: str = "",
+    registry=None,
 ) -> list[Issue]:
     """Attempt LLM repair of sum-breach groups in one document.
 
@@ -103,18 +104,37 @@ def repair_document(
             _line, _broken, group, missing, columns = job
             prompt = _group_prompt(group, missing, columns, labels)
             max_tokens = _group_max_tokens(len(group) + len(missing), len(columns))
+            benefit = _sum_job_benefit(job)
+            primary_cost = estimate_request_cost(
+                model,
+                len(prompt),
+                max_tokens,
+                image_pixels=image_pixels,
+                batch=batch_pricing,
+            )
+            premium = (
+                concurrency.premium_model
+                if concurrency.premium_model
+                and concurrency.premium_model != model
+                and benefit >= concurrency.premium_min_benefit_units
+                else None
+            )
+            premium_cost = (
+                estimate_request_cost(
+                    premium,
+                    len(prompt),
+                    max_tokens,
+                    image_pixels=image_pixels,
+                )
+                if premium else 0.0
+            )
             candidates.append(RecoveryCandidate(
                 key=_qualified_sum_job_key(job, job_key_prefix),
                 kind="sum_repair",
                 page=job[0].page,
-                benefit_units=_sum_job_benefit(job),
-                estimated_cost_usd=estimate_request_cost(
-                    model,
-                    len(prompt),
-                    max_tokens,
-                    image_pixels=image_pixels,
-                    batch=batch_pricing,
-                ),
+                benefit_units=benefit,
+                estimated_cost_usd=primary_cost + premium_cost,
+                estimated_calls=2 if premium else 1,
                 detail=f"{len(group)} observed rows, {len(missing)} missing, "
                 f"{len(columns)} broken columns",
             ))
@@ -142,7 +162,7 @@ def repair_document(
 
     # Phase B: network reads, in parallel (calls are independent; the ledger
     # is thread-safe and BudgetExceeded short-circuits the remaining jobs)
-    def _read(job):
+    def _read(job, model: str | None = None):
         line, _broken, group, missing, columns = job
         pages = sorted({ln.page for ln in group})[:3]
         images = [page_image_fn(p) for p in pages]
@@ -158,6 +178,7 @@ def repair_document(
         return _read_group(
             client, _stack_images(images),
             group, missing, columns, labels,
+            model=model,
             max_tokens=_group_max_tokens(len(group) + len(missing), len(columns)),
         )
 
@@ -222,6 +243,22 @@ def repair_document(
                     message=f"repair stopped: {reading}",
                 ))
             continue
+        primary_model = getattr(concurrency, "repair_model", None)
+        from .escalation import premium_after_failure
+
+        premium_model = premium_after_failure(
+            client,
+            primary_model or "",
+            _sum_job_benefit((line, broken, group, missing, columns)),
+        )
+        escalated = False
+        if isinstance(reading, Exception) and premium_model:
+            try:
+                reading = _read((line, broken, group, missing, columns), premium_model)
+                primary_model = premium_model
+                escalated = True
+            except Exception as exc:  # noqa: BLE001 - reported per job
+                reading = exc
         if isinstance(reading, Exception):
             log.warning("repair call failed for %s p%s: %r", line.code, line.page, reading)
             repair_log.append(Issue(
@@ -229,17 +266,40 @@ def repair_document(
                 message=f"repair call failed ({type(reading).__name__}) — group left UNRESOLVED",
             ))
             continue
+        premium_reading = reading if escalated else None
         for column in columns:
-            repair_model = getattr(concurrency, "repair_model", None)
+            repair_model = primary_model
+            column_escalated = escalated
             applied, recovered = _apply_if_consistent(
                 group, missing, reading, column,
                 repair_source=f"llm:{repair_model}" if repair_model else "llm",
             )
+            if not applied and premium_model:
+                if premium_reading is None:
+                    try:
+                        premium_reading = _read(
+                            (line, broken, group, missing, columns), premium_model
+                        )
+                    except Exception as exc:  # noqa: BLE001
+                        premium_reading = exc
+                if not isinstance(premium_reading, Exception):
+                    applied, recovered = _apply_if_consistent(
+                        group, missing, premium_reading, column,
+                        repair_source=f"llm:{premium_model}",
+                    )
+                    if applied:
+                        repair_model = premium_model
+                        escalated = True
+                        column_escalated = True
             for new_line in recovered:
                 new_line.kind = line.kind
                 new_line.section = line.section
                 new_line.func_code = line.func_code
                 new_line.page = line.page
+                if registry is not None:
+                    entry = registry.get(new_line.kind, new_line.code)
+                    if entry is not None:
+                        new_line.name = entry.name
                 doc.lines.append(new_line)
                 key = (line.section, line.kind, line.func_code, new_line.code)
                 by_code.setdefault(key, new_line)
@@ -250,6 +310,7 @@ def repair_document(
                 message=(
                     f"LLM re-read {len(group)} rows for {line.code} {column}: "
                     + ("sum now consistent — applied" if applied else "still inconsistent — UNRESOLVED")
+                    + (f" (premium escalation: {repair_model})" if column_escalated else "")
                 ),
             ))
             if applied:
@@ -367,8 +428,8 @@ def repair_unparseable(
                 except NumberParseError:
                     continue
                 if isinstance(parsed, Decimal):
-                    ln.values[issue.column] = parsed
-                    ln.source = f"llm:{cell_model}" if cell_model else "llm"
+                    repair_source = f"llm:{cell_model}" if cell_model else "llm"
+                    ln.set_value_with_source(issue.column, parsed, repair_source)
                     ln.issues.remove(issue)
                     ln.issues.append(Issue(
                         check="V6_repair", severity="info", page=page,
@@ -516,19 +577,36 @@ def estimate_sum_repair_candidates(
         _line, _broken, group, missing, columns = job
         prompt = _group_prompt(group, missing, columns, labels)
         max_tokens = _group_max_tokens(len(group) + len(missing), len(columns))
+        benefit = _sum_job_benefit(job)
+        primary_cost = estimate_request_cost(
+            llm_config.repair_model,
+            len(prompt),
+            max_tokens,
+            image_pixels=image_pixels,
+        )
+        premium = (
+            llm_config.premium_model
+            if llm_config.premium_model
+            and llm_config.premium_model != llm_config.repair_model
+            and benefit >= llm_config.premium_min_benefit_units
+            else None
+        )
+        premium_cost = (
+            estimate_request_cost(
+                premium, len(prompt), max_tokens, image_pixels=image_pixels
+            )
+            if premium else 0.0
+        )
         candidates.append(RecoveryCandidate(
             key=_qualified_sum_job_key(job, job_key_prefix),
             kind="sum_repair",
             page=job[0].page,
-            benefit_units=_sum_job_benefit(job),
-            estimated_cost_usd=estimate_request_cost(
-                llm_config.repair_model,
-                len(prompt),
-                max_tokens,
-                image_pixels=image_pixels,
-            ),
+            benefit_units=benefit,
+            estimated_cost_usd=primary_cost + premium_cost,
+            estimated_calls=2 if premium else 1,
             detail=f"{len(group)} observed rows, {len(missing)} missing, "
-            f"{len(columns)} broken columns",
+            f"{len(columns)} broken columns"
+            + (f"; {premium} reserved only after cheap failure" if premium else ""),
         ))
     return candidates
 
@@ -598,27 +676,49 @@ def _apply_if_consistent(
     formula) participate in the sum and, on success, become new lines.
     """
     from ..model import BudgetLine
+    from ..parsing import normalize_indicator_code
+
+    required_codes = [
+        normalize_indicator_code(line.code or line.raw_code)
+        for line in group
+    ] + [normalize_indicator_code(code) for code in missing]
+    if any(code is None for code in required_codes):
+        return False, []
+
+    rows_by_code: dict[str, RowReading] = {}
+    for row in reading.rows:
+        normalized = normalize_indicator_code(row.code)
+        if normalized is None or normalized in rows_by_code:
+            return False, []
+        rows_by_code[normalized] = row
+
+    # Never fill an absent model reading with the old OCR value. Every row in
+    # an accepted identity, including a formula term OCR omitted, must have
+    # exactly one independently re-read numeric cell for this column.
+    if any(code not in rows_by_code for code in required_codes):
+        return False, []
 
     new_values: dict[str, Decimal] = {}
-    for row in reading.rows:
-        raw = next((c.value for c in row.cells if c.column == column), None)
-        if raw in (None, "X"):
-            continue
+    for code in required_codes:
+        cells = [cell for cell in rows_by_code[code].cells if cell.column == column]
+        if len(cells) != 1 or cells[0].value in (None, "X"):
+            return False, []
         try:
-            parsed = parse_ro_number(raw, ocr=True)
+            parsed = parse_ro_number(cells[0].value, ocr=True)
         except NumberParseError:
             return False, []
-        if isinstance(parsed, Decimal):
-            new_values[row.code.replace(" ", "")] = parsed
+        if not isinstance(parsed, Decimal):
+            return False, []
+        new_values[code] = parsed
 
     def val(ln):
-        for key in (ln.code, ln.raw_code):
-            if key and key in new_values:
-                return new_values[key]
-        return ln.values.get(column, Decimal(0))
+        code = normalize_indicator_code(ln.code or ln.raw_code)
+        return new_values[code]
 
     parent, children = group[0], group[1:]
-    missing_vals = {c: new_values.get(c, Decimal(0)) for c in missing}
+    missing_vals = {
+        code: new_values[normalize_indicator_code(code)] for code in missing
+    }
     total_children = sum((val(c) for c in children), Decimal(0)) + sum(
         missing_vals.values(), Decimal(0)
     )
@@ -629,14 +729,13 @@ def _apply_if_consistent(
     for ln in group:
         v = val(ln)
         if ln.values.get(column) != v:
-            ln.values[column] = v
-            ln.source = repair_source
+            ln.set_value_with_source(column, v, repair_source)
     recovered = [
         BudgetLine(
             code=code, raw_code=code.replace(".", ""), name="(rând recuperat de LLM)",
             page=parent.page, values={column: v}, source=repair_source,
+            value_sources={column: repair_source},
         )
         for code, v in missing_vals.items()
-        if v != 0
     ]
     return True, recovered

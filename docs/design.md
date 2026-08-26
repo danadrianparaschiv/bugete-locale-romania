@@ -126,19 +126,30 @@ recitirile pentru repararea sumelor decupează imaginea la grupul de rânduri
 atunci când sunt disponibile bounding box-uri.
 
 P2 adaugă două niveluri distincte de control. Plannerul moale ordonează la
-nivelul întregului fișier fallback-urile, grupurile aritmetice și recitirile
-neconfirmate după beneficiul estimat per dolar și scrie decizia în
-`llm_plan.json`. Ledgerul este autoritatea dură: rezervă worst-case costul și
-un slot înainte de fiecare cerere, inclusiv retry și Batch, astfel încât
-apelurile concurente să nu depășească plafonul. Cache hits nu consumă sloturi
-API. Grupurile confirmabile aritmetic primesc prioritate; transcrierile fără o
-identitate independentă rămân marcate `unverified`.
+nivelul întregului fișier benzile de fallback, ierarhiile, checksum-urile
+trimestriale, identitățile, codurile, duplicatele și recitirile neconfirmate
+după beneficiul estimat per dolar și scrie decizia în `llm_plan.json`.
+Plannerul contabilizează worst-case și al doilea apel posibil. Ledgerul este
+autoritatea dură: rezervă costul și slotul fiecărei cereri reale înainte de
+lansare, inclusiv retry, Batch și escaladarea premium atunci când devine
+eligibilă, astfel încât apelurile concurente să nu depășească plafonul. Cache
+hits nu consumă sloturi API.
 
-Fallback-ul de pagină folosește schema completă cunoscută a layoutului, până
-la 12 coloane, și o limită de output adaptată volumului. Orice coloană pe care
-modelul o inventează în afara cererii este respinsă și semnalată, nu introdusă
-în date. Pentru artefactele corpusului, CLI refuză în continuare un plafon mai
-mare de 5 USD/PDF.
+Fallback-ul folosește schema paginii (până la 12 coloane) și împarte tabelele
+dense în benzi de cel mult 32 de rânduri. Rezultatul plătit este unit cu
+rezultatul determinist la nivel de rând/celulă: deterministul câștigă orice
+conflict, LLM-ul completează numai goluri și fiecare valoare păstrează propria
+proveniență. Orice coloană inventată este respinsă și semnalată.
+
+Pentru egalități, acceptarea nu poate folosi valori OCR nerecitite: fiecare
+rând și fiecare coloană participantă trebuie să apară exact o dată în citirea
+independentă completă. Pentru coduri și duplicate există porți separate de
+nomenclator/nume/coliziune, respectiv două citiri identice. Presetul mixt este
+cheap-first; premium-ul este permis doar după eșecul porții ieftine și peste
+pragul de beneficiu. La final, V1–V5 și duplicatele V7 sunt reconstruite din
+starea reparată, ca o corecție locală să nu ascundă o încălcare nouă. Pentru
+artefactele corpusului, CLI refuză în continuare un plafon mai mare de
+5 USD/PDF.
 
 ## Rezultate negative măsurate (păstrate intenționat)
 

@@ -94,6 +94,62 @@ def test_repair_handles_illegible_cells():
     assert doc.lines[0].issues
 
 
+def test_repair_rejects_when_any_participating_row_was_not_independently_read():
+    doc = _doc()
+    client = FakeClient([RowSetReading(rows=[
+        RowReading(code="74.02.05", cells=[CellValue(column="total_2026", value="58.295")]),
+        RowReading(code="74.02.05.01", cells=[CellValue(column="total_2026", value="55.553")]),
+        # The existing OCR value for 74.02.05.02 would make the sum hold, but
+        # acceptance must not reuse it when the model omitted that row.
+    ])])
+
+    log = repair_document(doc, client, page_image_fn=lambda _page: None)
+
+    assert doc.lines[0].values["total_2026"] == Decimal("59411")
+    assert doc.lines[0].issues
+    assert log[0].severity == "warning"
+
+
+def test_premium_escalation_runs_only_after_cheap_arithmetic_failure():
+    inconsistent = RowSetReading(rows=[
+        RowReading(code="74.02.05", cells=[CellValue(column="total_2026", value="59.411")]),
+        RowReading(code="74.02.05.01", cells=[CellValue(column="total_2026", value="55.553")]),
+        RowReading(code="74.02.05.02", cells=[CellValue(column="total_2026", value="2.742")]),
+    ])
+    consistent = RowSetReading(rows=[
+        RowReading(code="74.02.05", cells=[CellValue(column="total_2026", value="58.295")]),
+        RowReading(code="74.02.05.01", cells=[CellValue(column="total_2026", value="55.553")]),
+        RowReading(code="74.02.05.02", cells=[CellValue(column="total_2026", value="2.742")]),
+    ])
+
+    class TieredClient(FakeClient):
+        def __init__(self, threshold):
+            super().__init__([inconsistent, consistent])
+            self.config = RunConfig()
+            self.config.llm.premium_model = "claude-opus-5"
+            self.config.llm.premium_min_benefit_units = threshold
+            self.models = []
+
+        def structured(self, *args, **kwargs):
+            self.models.append(kwargs.get("model"))
+            return super().structured(*args, **kwargs)
+
+    high_value = TieredClient(threshold=3)
+    repaired = _doc()
+    logs = repair_document(repaired, high_value, page_image_fn=lambda _page: None)
+
+    assert high_value.models == [None, "claude-opus-5"]
+    assert repaired.lines[0].values["total_2026"] == Decimal("58295")
+    assert "premium escalation" in logs[0].message
+
+    low_value = TieredClient(threshold=4)
+    unresolved = _doc()
+    repair_document(unresolved, low_value, page_image_fn=lambda _page: None)
+
+    assert low_value.models == [None]
+    assert unresolved.lines[0].issues
+
+
 def test_repair_recovers_dropped_row_from_printed_formula():
     """OCR dropped 74.02.50; the printed formula names it, the model reads it."""
     from bgconvertor.llm.orchestrate import formula_children
