@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 from pathlib import Path
 
@@ -38,12 +39,15 @@ def test_export_rows_shape_and_verified(ab_ready, monkeypatch, tmp_path):
     assert set(r) == {
         "municipality", "siruta", "county_code", "county", "year",
         "document", "context_id", "institution", "budget", "suffix", "section", "kind",
-        "code", "code_source", "func_code", "name", "column", "value", "source", "verified",
-        "verification_status", "validation_issues", "page",
+        "code", "code_source", "func_code", "functional_code", "economic_code",
+        "name", "column", "value", "unit", "source", "verified",
+        "verification_status", "validation_evidence", "validation_issues", "page",
     }
     assert r["municipality"] == "Alba Iulia"  # resolved via SIRUTA manifest
     assert all(row["verified"] for row in rows)  # ab is 100% clean
     assert all(row["verification_status"] == "strictly_verified" for row in rows)
+    assert all(row["unit"] == "mii lei" for row in rows)
+    assert all("recall_measured" in json.loads(row["validation_evidence"]) for row in rows)
 
     out = tmp_path / "corpus.csv"
     stats = export(RunConfig(), [ab_ready], out)
@@ -71,3 +75,43 @@ def test_info_issue_is_not_exported_as_verified(monkeypatch, tmp_path):
     assert rows[0]["verification_status"] == "flagged"
     assert rows[0]["validation_issues"] == "V7_hygiene:info"
     assert rows[0]["source"] == "llm:gemini-3.6-flash"
+    evidence = json.loads(rows[0]["validation_evidence"])
+    assert evidence["status"] == "flagged"
+    assert evidence["cell_source"] == "llm:gemini-3.6-flash"
+    assert evidence["findings"][0]["check"] == "V7_hygiene"
+
+
+def test_export_rows_has_explicit_functional_and_economic_codes(monkeypatch, tmp_path):
+    lines = [
+        BudgetLine(
+            code="04.02", name="Cote", kind="revenue", page=1,
+            values={"total": Decimal("10")},
+        ),
+        BudgetLine(
+            code="65.02", name="Învățământ", kind="expense_functional", page=1,
+            values={"total": Decimal("8")},
+        ),
+        BudgetLine(
+            code="10.01", func_code="65.02", name="Salarii",
+            kind="expense_economic", page=1,
+            values={"total": Decimal("5")},
+        ),
+    ]
+    result = ConversionResult(
+        pdf="x.pdf",
+        documents=[BudgetDocument(
+            title="Buget", budget="local", suffix="02", pages=[1], lines=lines
+        )],
+    )
+    monkeypatch.setattr("bgconvertor.corpus.build_result", lambda config, pdf: result)
+
+    by_kind = {
+        row["kind"]: row
+        for row in export_rows(RunConfig(), tmp_path / "x.pdf")
+    }
+    assert by_kind["revenue"]["functional_code"] is None
+    assert by_kind["revenue"]["economic_code"] == "04.02"
+    assert by_kind["expense_functional"]["functional_code"] == "65.02"
+    assert by_kind["expense_functional"]["economic_code"] is None
+    assert by_kind["expense_economic"]["functional_code"] == "65.02"
+    assert by_kind["expense_economic"]["economic_code"] == "10.01"

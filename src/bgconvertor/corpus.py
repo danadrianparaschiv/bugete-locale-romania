@@ -4,9 +4,12 @@ The export is long-format (one row per code+column+value) so cross-
 municipality analysis is a groupby away, with provenance and verification
 carried on every row:
 
-    municipality, document, context_id, institution, budget, suffix, section, kind, code, code_source, func_code,
-    name, column, value, source (digital|ocr|llm), verified,
-    verification_status, validation_issues, page
+    year, SIRUTA, municipality, document, budget, section,
+    functional_code, economic_code, column, value, unit, page, source,
+    verification_status, validation_evidence
+
+Legacy ``code`` and ``func_code`` columns remain alongside the explicit
+classification fields so existing consumers can migrate without ambiguity.
 
 verified=True means no validator emitted an error, warning, or information
 issue for the line.  It is an observed consistency flag, not a recall claim:
@@ -30,9 +33,72 @@ log = logging.getLogger("bgc.corpus")
 COLUMNS = [
     "municipality", "siruta", "county_code", "county", "year",
     "document", "context_id", "institution", "budget", "suffix", "section", "kind",
-    "code", "code_source", "func_code", "name", "column", "value", "source", "verified",
-    "verification_status", "validation_issues", "page",
+    "code", "code_source", "func_code", "functional_code", "economic_code",
+    "name", "column", "value", "unit", "source", "verified",
+    "verification_status", "validation_evidence", "validation_issues", "page",
 ]
+
+FACT_UNIT = "mii lei"
+
+
+def _classification_codes(line) -> tuple[str | None, str | None]:
+    """Return the explicit functional/economic code pair for one fact.
+
+    Revenue indicators belong to the economic classification.  Functional
+    expense rows carry only a functional code, while detailed economic
+    expense rows carry their parent functional context plus their own
+    economic code.
+    """
+    if line.kind == "expense_functional":
+        return line.code, None
+    if line.kind == "expense_economic":
+        return line.func_code, line.code
+    if line.kind == "revenue":
+        return None, line.code
+    return line.func_code, None
+
+
+def _validation_evidence(line, column: str, cell_source: str) -> str:
+    """Compact positive and negative evidence for one exported numeric fact.
+
+    Validators historically stored only findings.  This contract also states
+    which positive controls the fact passed.  The evidence deliberately does
+    not claim PDF recall: a clean extracted cell says nothing about an absent
+    row or page.
+    """
+    relevant = [
+        issue for issue in line.issues
+        if issue.column is None or issue.column == column
+    ]
+    findings = [
+        {
+            "check": issue.check,
+            "severity": issue.severity,
+            "message": issue.message,
+            "column": issue.column,
+        }
+        for issue in line.issues
+    ]
+    passed = []
+    failed_checks = {issue.check for issue in relevant}
+    if "V1_code" not in failed_checks:
+        passed.append("V1_code_or_recognized_rollup")
+    checksum_columns = {"total", "trim1", "trim2", "trim3", "trim4"}
+    if checksum_columns <= set(line.values) and column in checksum_columns:
+        if "V3_row_checksum" not in failed_checks:
+            passed.append("V3_row_checksum")
+    if not line.issues:
+        passed.append("strict_line_validation")
+    evidence = {
+        "schema_version": 1,
+        "status": "strictly_verified" if not line.issues else "flagged",
+        "cell_source": cell_source,
+        "code_source": line.code_source or line.source,
+        "passed": passed,
+        "findings": findings,
+        "recall_measured": False,
+    }
+    return json.dumps(evidence, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
 def _identity(pdf: Path) -> dict:
@@ -91,7 +157,9 @@ def export_rows(config: RunConfig, pdf: Path):
             issue_summary = "; ".join(
                 f"{i.check}:{i.severity}" for i in ln.issues
             )
+            functional_code, economic_code = _classification_codes(ln)
             for column, value in ln.values.items():
+                cell_source = ln.value_sources.get(column, ln.source)
                 yield {
                     **ident,
                     "document": doc.title[:160],
@@ -104,12 +172,18 @@ def export_rows(config: RunConfig, pdf: Path):
                     "code": ln.code,
                     "code_source": ln.code_source,
                     "func_code": ln.func_code,
+                    "functional_code": functional_code,
+                    "economic_code": economic_code,
                     "name": ln.name[:120],
                     "column": column,
                     "value": str(value),
-                    "source": ln.value_sources.get(column, ln.source),
+                    "unit": FACT_UNIT,
+                    "source": cell_source,
                     "verified": verified,
                     "verification_status": "strictly_verified" if verified else "flagged",
+                    "validation_evidence": _validation_evidence(
+                        ln, column, cell_source
+                    ),
                     "validation_issues": issue_summary,
                     "page": ln.page,
                 }

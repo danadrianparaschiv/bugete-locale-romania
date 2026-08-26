@@ -14,13 +14,30 @@
   {% endfor %}
 </div>
 {% endmacro %}
+{% macro chart_quality(q, source="plan") %}
+{% if q %}
+<p class="chart-quality" data-chart-quality="{{ source }}">
+  <strong>Acoperire:</strong> {{ q.coverage_note }}.
+  <strong>Încredere:</strong>
+  {% if q.confidence == "strictly_verified_cells" %}
+    numai celule extrase strict verificate; recall-ul PDF nu este măsurat.
+  {% elif q.confidence == "official_structured_validated" %}
+    raport Forexebug structurat, fără probleme de control sau coduri necunoscute.
+  {% else %}
+    raport Forexebug structurat, cu {{ q.problems or 0 }} probleme și
+    {{ q.unknown_codes or 0 }} coduri neenumerate marcate.
+  {% endif %}
+</p>
+{% endif %}
+{% endmacro %}
 {% block content %}
 <p><a href="{{ base }}/index.html">← toate municipiile</a></p>
 <h1>{{ city.name }} <span class="sub">· județul {{ city.county }} · {{ year }}</span></h1>
 
 <p class="sub">SIRUTA {{ city.siruta }}
   {%- if city.populatie %} · {{ mii(city.populatie) }} locuitori{% if city.populatie_data %} ({{ city.populatie_data }}){% endif %}{% endif %}
-  {%- if city.suprafata_km2 %} · {{ city.suprafata_km2 }} km²{% endif %}</p>
+  {%- if city.suprafata_km2 %} · {{ city.suprafata_km2 }} km²{% endif %}
+  {%- if city.nuts2_code %} · regiunea {{ city.nuts2_name }} (NUTS 2 {{ city.nuts2_code }}){% endif %}</p>
 
 {% if city.plan_comparison_eligible %}
 <div class="cards">
@@ -178,6 +195,7 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
     <div class="ig-card">
       <div class="bars" id="ig-ven-bars"></div>
       <div class="detail" id="ig-ven-detail" aria-live="polite"></div>
+      {{ chart_quality(city.plan_chart_quality.get("venituri"), "venituri") }}
     </div>
   </div>
   {% endif %}
@@ -191,12 +209,14 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
   <div class="ig-card">
     <div class="bars" id="ig-bars"></div>
     <div class="detail" id="ig-detail" aria-live="polite"></div>
+    {{ chart_quality(city.plan_chart_quality.get("cheltuieli"), "cheltuieli") }}
   </div>
 
   <div class="ig-card" style="margin-top:1rem">
     <h3 class="ig-h" style="margin-top:0">Din fiecare 100 de lei planificați</h3>
     <div class="hundred" id="ig-hundred"></div>
     <div class="hlegend" id="ig-hundred-legend"></div>
+    {{ chart_quality(city.plan_chart_quality.get("100_lei"), "100-lei") }}
   </div>
 
   {% if a.infografic.trim %}
@@ -205,7 +225,8 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
     <div class="ig-card"><div id="ig-trim"></div>
       <div class="hlegend"><span><i style="background:#1a7f37"></i>funcționare</span>
         <span><i style="background:#b8860b"></i>dezvoltare</span>
-        <span><i style="background:#0b57d0"></i>venituri</span></div></div>
+        <span><i style="background:#0b57d0"></i>venituri</span></div>
+      {{ chart_quality(city.plan_chart_quality.get("trim"), "ritm-trimestrial") }}</div>
   </div>
   {% endif %}
 
@@ -213,7 +234,8 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
   <div id="ig-sec-ani">
     <h3 class="ig-h">Estimările multianuale</h3>
     <div class="ig-card"><div id="ig-ani"></div>
-      <p class="note" style="border:none;padding:0;margin-top:.5rem" id="ig-ani-note"></p></div>
+      <p class="note" style="border:none;padding:0;margin-top:.5rem" id="ig-ani-note"></p>
+      {{ chart_quality(city.plan_chart_quality.get("ani"), "estimari-multianuale") }}</div>
   </div>
   {% endif %}
 
@@ -258,7 +280,8 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
 
   {% if t.capitole %}
   <h3 class="ig-h">Plăți pe capitole, cumulat</h3>
-  <div class="ig-card">{{ capitole_bars(t.capitole, "#1a7f37") }}</div>
+  <div class="ig-card">{{ capitole_bars(t.capitole, "#1a7f37") }}
+    {{ chart_quality(city.execution_chart_quality.get(q), "executie-t" ~ q) }}</div>
   {% endif %}
   {% else %}
   <div class="ig-card">
@@ -292,7 +315,8 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
   până la 31 mai anul următor, este documentul care confirmă aceste cifre.</p>
   {% if t4.capitole %}
   <h3 class="ig-h">Plăți pe capitole, tot anul</h3>
-  <div class="ig-card">{{ capitole_bars(t4.capitole, "#1a7f37") }}</div>
+  <div class="ig-card">{{ capitole_bars(t4.capitole, "#1a7f37") }}
+    {{ chart_quality(city.execution_chart_quality.get(4), "executie-an") }}</div>
   {% endif %}
   {% else %}
   <div class="ig-card">

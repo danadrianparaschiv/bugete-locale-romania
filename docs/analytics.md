@@ -5,8 +5,9 @@ sursele. Produsul rezultat are trei straturi explicite:
 
 1. **fapte extrase** — totalurile și capitolele din `analysis.json`, publicate
    numai din bundle-uri PDF/Excel/manifest coerente;
-2. **date augmentate** — populația rezidentă RPL2021, suprafața și execuția
-   Forexebug, asociate prin SIRUTA + an și păstrate cu sursa lor;
+2. **date augmentate** — populația rezidentă RPL2021, suprafața, execuția
+   Forexebug, inflația HICP și clasificarea regională NUTS 2024, asociate prin
+   chei stabile și păstrate cu sursa, versiunea, data și licența lor;
 3. **indicatori derivați** — lei/locuitor, densitate, sold, variație an-la-an
    și rang. Aceștia nu sunt fapte din PDF și pot fi recalculați din coloanele
    de intrare.
@@ -22,9 +23,10 @@ uv run bgconvertor corpus analytics \
   --out-dir analytics
 ```
 
-Comanda citește numai fișierele comise din `data/` și
-`reference/municipii.json`; nu rulează OCR și nu face apeluri LLM. Costul API
-este 0 USD. Produce:
+Comanda citește numai fișierele comise din `data/`,
+`reference/municipii.json`, `reference/inflation_hicp.json` și
+`reference/regions_nuts2024.json`; nu rulează OCR și nu face apeluri LLM.
+Costul API este 0 USD. Produce:
 
 - `analytics.json` — schema completă, surse, acoperire, municipiu-an și
   capitolele de cheltuieli disponibile;
@@ -42,6 +44,29 @@ aceeași vizualizare cu bare interactive. Selectarea unui capitol arată codul,
 valoarea și ponderea lui în total; pentru venituri se păstrează și eticheta
 sursei locale, de la stat sau din fonduri UE. Nu se afișează niveluri de detaliu
 care nu există în liniile verificate ale documentului.
+
+Fiecare grafic are imediat sub el două informații distincte: **acoperirea**
+(ponderea totalului sau numărul celulelor necesare seriilor afișate) și
+**încrederea** (celule PDF strict verificate ori raport Forexebug structurat).
+Nota repetă explicit că acoperirea graficului nu este recall-ul întregului PDF.
+
+## Contractul tabelului lung
+
+`corpus.csv` și varianta Parquet păstrează câte un rând pentru fiecare fapt
+numeric. Contractul analitic explicit este:
+
+`year, siruta, municipality, document, budget, section, functional_code,
+economic_code, column, value, unit, page, source, verification_status,
+validation_evidence`.
+
+`functional_code` este capitolul funcțional al cheltuielii;
+`economic_code` este indicatorul de venit sau codul economic al cheltuielii.
+Pentru un rând economic de cheltuieli sunt completate ambele. `unit` este
+stocat pe fiecare fapt (`mii lei`), iar `validation_evidence` este JSON
+compact: sursa celulei și a codului, controalele pozitive trecute, constatările
+aplicabile și faptul că recall-ul nu este măsurat. Coloanele istorice `code`,
+`func_code`, `verified` și `validation_issues` rămân temporar pentru
+compatibilitate.
 
 ## Contractul de eligibilitate
 
@@ -90,14 +115,32 @@ Suprafața este o augmentare Wikidata și este folosită numai pentru densitate,
 nu pentru eligibilitatea clasamentului bugetar. Data și descrierea sursei sunt
 publicate separat.
 
+## Inflație și clasificări regionale
+
+`reference/inflation_hicp.json` publică seria Eurostat HICP pentru România,
+toate produsele, rata medie anuală de schimbare. Asocierea este numai după
+`year`. Pentru 2026 nu există încă o observație anuală completă, așadar rândul
+analitic publică `inflation_status=full_year_not_available` și nu calculează o
+variație reală. Când observația există, câmpurile
+`planned_revenue_yoy_real_pct` și `planned_expense_yoy_real_pct` deflatează
+variația nominală între ani consecutivi; valorile bugetare extrase rămân
+neschimbate.
+
+`reference/regions_nuts2024.json` mapează codul județului din manifest la
+NUTS 1, NUTS 2 și NUTS 3 conform setului oficial Eurostat GISCO NUTS 2024.
+Fișierele analitice materializează codurile și denumirile pe fiecare
+municipiu-an, astfel încât gruparea regională nu depinde de potrivirea fragilă
+a denumirilor. Ambele referințe declară versiunea, URL-ul sursei, data
+descărcării, licența de reutilizare și cheile de asociere.
+
 ## Interpretare și limite
 
 - Toate valorile bugetare absolute din fișierele analitice și din paginile și
   graficele municipiilor sunt afișate în **mii lei**. Indicatorii per capita
   rămân în **lei/locuitor**, iar vizualizarea „din fiecare 100 de lei” rămâne în
   lei deoarece exprimă o pondere, nu o valoare bugetară absolută.
-- Valorile bugetare sunt nominale; variațiile între ani nu sunt ajustate cu
-  inflația.
+- Valorile bugetare de bază rămân nominale. Variația reală este un indicator
+  derivat separat și apare numai pentru ani cu HICP mediu anual observat.
 - Bugetul aprobat este un plan, execuția este mișcarea efectivă de bani. Cele
   două nu trebuie adunate și nu sunt interschimbabile.
 - Per capita normalizează mărimea populației, dar nu face automat comparabile

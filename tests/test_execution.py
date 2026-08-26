@@ -189,6 +189,9 @@ def test_city_page_has_one_tab_per_view(tmp_path):
     assert "Anul 2026 nu este încheiat" in page
     # empty quarters are dimmed, not hidden
     assert page.count('data-empty="1"') == 4  # T1, T3, T4 and the annual view
+    assert 'data-chart-quality="executie-t2"' in page
+    assert "raport Forexebug structurat" in page
+    assert "<strong>Acoperire:</strong>" in page
     # the tabs close the page: nothing follows them inside the content block
     assert page.index("Calitatea conversiei") < page.index("Bugetul și execuția lui")
 

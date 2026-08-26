@@ -1798,9 +1798,9 @@ def corpus_analytics(
 ):
     """Construiește indicatori comparabili și un Excel analitic cu surse explicite.
 
-    Valorile extrase, augmentările (populație/suprafață) și formulele derivate
-    rămân straturi distincte. Intrările neeligibile apar în date cu motivul
-    excluderii, dar nu intră în clasamente.
+    Valorile extrase, augmentările (populație, suprafață, execuție, inflație
+    și NUTS) și formulele derivate rămân straturi distincte. Intrările
+    neeligibile apar în date cu motivul excluderii, dar nu intră în clasamente.
     """
     from .analytics import build_from_data, write_outputs
 

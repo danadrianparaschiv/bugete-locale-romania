@@ -21,10 +21,11 @@ reședință de județ (codificate SIRUTA, cu sursa fiecărui fișier) alături
 de fișierele Excel convertite; site-ul generat publică o pagină de analiză
 pentru fiecare buget convertit.
 
-Datele augmentate (populație, suprafață, execuție bugetară și viitoare surse
-de referință) se leagă prin SIRUTA + an și rămân separate de faptele extrase
-din PDF. Nu suprascriu valori din document; analizele implicite folosesc doar
-linii strict verificate și afișează acoperirea disponibilă.
+Datele augmentate (populație, suprafață, execuție bugetară, inflație HICP și
+clasificări regionale NUTS 2024) se leagă prin chei stabile și rămân separate
+de faptele extrase din PDF. Nu suprascriu valori din document; analizele
+implicite folosesc doar linii strict verificate și afișează acoperirea și
+încrederea lângă fiecare grafic.
 
 ## Cum funcționează — trei straturi
 
@@ -156,10 +157,12 @@ P3 publică un set analitic separat (`analytics.json`, `.csv`, `.xlsx`) și
 comparații pe site. Fiecare municipiu-an păstrează intrările extrase,
 augmentările și indicatorii derivați în câmpuri distincte; intrările
 necomparabile rămân vizibile cu motivul excluderii. Populația folosită drept
-numitor este cohorta unică RPL2021 INS, asociată prin SIRUTA. Contractul și
-limitele sunt în [docs/analytics.md](docs/analytics.md). Toate tabelele din
-site pot fi sortate crescător sau descrescător după fiecare coloană, inclusiv
-după valori numerice și date.
+numitor este cohorta unică RPL2021 INS, asociată prin SIRUTA. Regiunile sunt
+NUTS 2024, asociate prin codul județului; inflația este rata medie anuală HICP
+observată, asociată prin an și niciodată înlocuită cu prognoze. Contractul și
+limitele sunt în [docs/analytics.md](docs/analytics.md). Toate tabelele din site
+pot fi sortate crescător sau descrescător după fiecare coloană, inclusiv după
+valori numerice și date.
 
 ## Corpusul
 

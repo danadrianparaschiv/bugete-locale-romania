@@ -35,8 +35,110 @@ def _ro_date(iso: str | None) -> str | None:
 REPO_RAW = "https://github.com/danadrianparaschiv/bugete-locale-romania/raw/main"
 
 
+def _execution_chart_quality(block) -> dict:
+    """Coverage/confidence note for one structured Forexebug chart."""
+    def get(key, default=None):
+        if isinstance(block, dict):
+            return block.get(key, default)
+        return getattr(block, key, default)
+
+    chapters = get("capitole", []) or []
+    total = get("cheltuieli")
+    covered = sum(
+        item.get("val", 0) if isinstance(item, dict) else item.val
+        for item in chapters
+    )
+    coverage = round(covered / total * 100, 1) if total else None
+    problems = get("probleme", []) or []
+    unknown = get("coduri_neenumerate", 0) or 0
+    confidence = (
+        "official_structured_validated"
+        if not problems and not unknown
+        else "official_structured_flagged"
+    )
+    return {
+        "coverage_pct": coverage,
+        "coverage_note": (
+            f"capitolele afișate însumează {coverage:.1f}% din plățile raportate"
+            if coverage is not None else
+            "totalul necesar calculului de acoperire nu este disponibil"
+        ),
+        "confidence": confidence,
+        "problems": len(problems),
+        "unknown_codes": unknown,
+    }
+
+
+def _plan_chart_quality(infographic: dict | None) -> dict:
+    """Use embedded chart metadata, backfilling it for legacy analyses."""
+    if not infographic:
+        return {}
+    quality = dict(infographic.get("chart_quality") or {})
+    confidence = "strictly_verified_cells"
+
+    revenues = infographic.get("venituri") or {}
+    if revenues and "venituri" not in quality:
+        coverage = revenues.get("acoperire_pct")
+        quality["venituri"] = {
+            "coverage_pct": coverage,
+            "coverage_note": (
+                f"sursele afișate însumează {coverage:.1f}% din totalul veniturilor"
+                if coverage is not None else "acoperirea numerică nu este disponibilă"
+            ),
+            "confidence": confidence,
+            "recall_measured": False,
+        }
+
+    chapters = infographic.get("capitole") or []
+    total = infographic.get("total_cheltuieli")
+    if chapters and total:
+        coverage = round(sum(item.get("val", 0) for item in chapters) / total * 100, 1)
+        default = {
+            "coverage_pct": coverage,
+            "coverage_note": (
+                f"capitolele afișate însumează {coverage:.1f}% din totalul cheltuielilor"
+            ),
+            "confidence": confidence,
+            "recall_measured": False,
+        }
+        quality.setdefault("cheltuieli", default)
+        quality.setdefault("100_lei", dict(default))
+
+    trim = infographic.get("trim") or {}
+    if trim and "trim" not in quality:
+        series = [values for values in trim.values() if values]
+        cells = sum(len(values) for values in series)
+        quality["trim"] = {
+            "coverage_pct": 100.0,
+            "coverage_note": f"{cells} din {cells} valori necesare seriilor afișate sunt prezente",
+            "confidence": confidence,
+            "recall_measured": False,
+        }
+
+    years = infographic.get("ani") or {}
+    if years and "ani" not in quality:
+        series = [
+            values for key, values in years.items()
+            if key != "years" and isinstance(values, list)
+        ]
+        cells = sum(len(values) for values in series)
+        quality["ani"] = {
+            "coverage_pct": 100.0,
+            "coverage_note": f"{cells} din {cells} valori necesare seriilor afișate sunt prezente",
+            "confidence": confidence,
+            "recall_measured": False,
+        }
+    return quality
+
+
 def _row(city: City, cy: CityYear, analytics: AnalyticsRow) -> dict:
     """Flatten one city-year of the aggregate into what templates expect."""
+    region = city.regional_classification
+    execution_quality = {
+        int(block.get("trimestru")): _execution_chart_quality(block)
+        for block in (cy.executie.trimestre if cy.executie else [])
+        if block.get("trimestru")
+    }
     return {
         "siruta": city.siruta,
         "name": city.name,
@@ -45,7 +147,15 @@ def _row(city: City, cy: CityYear, analytics: AnalyticsRow) -> dict:
         "populatie": city.populatie,
         "populatie_data": _ro_date(city.populatie_data),
         "suprafata_km2": city.suprafata_km2,
+        "regional_classification_version": (
+            region.dataset_version if region else None
+        ),
+        "nuts2_code": region.nuts2_code if region else None,
+        "nuts2_name": region.nuts2_name if region else None,
+        "nuts3_code": region.nuts3_code if region else None,
         "density_per_km2": analytics.density_per_km2,
+        "hicp_annual_average_rate_pct": analytics.hicp_annual_average_rate_pct,
+        "inflation_status": analytics.inflation_status,
         "plan_comparison_eligible": analytics.plan_comparison_eligible,
         "plan_exclusion_reason": analytics.plan_exclusion_reason,
         "planned_revenue_lei_per_capita": analytics.planned_revenue_lei_per_capita,
@@ -53,6 +163,8 @@ def _row(city: City, cy: CityYear, analytics: AnalyticsRow) -> dict:
         "plan_expense_per_capita_rank": analytics.plan_expense_per_capita_rank,
         "plan_expense_rank_cohort": analytics.plan_expense_rank_cohort,
         "executie": cy.executie,
+        "execution_chart_quality": execution_quality,
+        "plan_chart_quality": _plan_chart_quality(cy.infografic),
         "status": cy.status,
         "artifact_status": cy.artifact_status,
         "artifact_issues": cy.artifact_issues,

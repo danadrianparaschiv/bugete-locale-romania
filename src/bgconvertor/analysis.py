@@ -17,7 +17,7 @@ from pathlib import Path
 from .model import ConversionResult
 from .years import annual_columns, estimate_columns, role_year
 
-ANALYSIS_SCHEMA_VERSION = 2
+ANALYSIS_SCHEMA_VERSION = 3
 
 TRIM_COLS = ("trim1", "trim2", "trim3", "trim4")
 
@@ -135,7 +135,7 @@ def infografic(result: ConversionResult) -> dict | None:
                 best = ln
         return best
 
-    out: dict = {"unitate": "mii lei"}
+    out: dict = {"unitate": "mii lei", "chart_quality": {}}
     tot_ch = total_row("expense_functional", ("50.02", "49.02"), "TOTAL")
     tot_ven = total_row("revenue", (), "TOTAL")
     total_cheltuieli = float(_line_total(tot_ch)) if tot_ch else None
@@ -157,6 +157,14 @@ def infografic(result: ConversionResult) -> dict | None:
         if 90 <= acoperire <= 110:
             out["venituri"] = {"total": total_venituri, "surse": surse,
                                "acoperire_pct": round(acoperire, 1)}
+            out["chart_quality"]["venituri"] = {
+                "coverage_pct": round(acoperire, 1),
+                "coverage_note": (
+                    f"sursele afișate însumează {acoperire:.1f}% din totalul veniturilor"
+                ),
+                "confidence": "strictly_verified_cells",
+                "recall_measured": False,
+            }
 
     # capitole with functionare/dezvoltare split, quarters, and subchapters
     def by_code(kind, length, section):
@@ -201,6 +209,16 @@ def infografic(result: ConversionResult) -> dict | None:
         if 90 <= acoperire <= 110:
             out["capitole"] = capitole
             out["total_cheltuieli"] = total_cheltuieli
+            quality = {
+                "coverage_pct": round(acoperire, 1),
+                "coverage_note": (
+                    f"capitolele afișate însumează {acoperire:.1f}% din totalul cheltuielilor"
+                ),
+                "confidence": "strictly_verified_cells",
+                "recall_measured": False,
+            }
+            out["chart_quality"]["cheltuieli"] = quality
+            out["chart_quality"]["100_lei"] = dict(quality)
 
     # sections + quarterly rhythm from the section total rows
     fu = total_row("expense_functional", ("50.02", "49.02"), "FUNCTIONARE")
@@ -214,6 +232,15 @@ def infografic(result: ConversionResult) -> dict | None:
             out["trim"] = {"functionare": trim_f, "dezvoltare": trim_d}
             if trim_v:
                 out["trim"]["venituri"] = trim_v
+            series = 3 if trim_v else 2
+            out["chart_quality"]["trim"] = {
+                "coverage_pct": 100.0,
+                "coverage_note": (
+                    f"{series * 4} din {series * 4} celule trimestriale necesare sunt prezente"
+                ),
+                "confidence": "strictly_verified_cells",
+                "recall_measured": False,
+            }
 
     # multi-year projections from the printed estimate columns
     if tot_ch is not None:
@@ -231,6 +258,16 @@ def infografic(result: ConversionResult) -> dict | None:
             }
             if est_v and total_venituri is not None:
                 out["ani"]["venituri"] = [total_venituri, *est_v]
+            series = 2 if "venituri" in out["ani"] else 1
+            cells = series * len(out["ani"]["years"])
+            out["chart_quality"]["ani"] = {
+                "coverage_pct": 100.0,
+                "coverage_note": (
+                    f"{cells} din {cells} valori necesare seriilor afișate sunt prezente"
+                ),
+                "confidence": "strictly_verified_cells",
+                "recall_measured": False,
+            }
 
     # a chart-worthy snapshot needs at least the expense breakdown
     return out if "capitole" in out else None

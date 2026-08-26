@@ -63,6 +63,11 @@ def test_infografic_blocks():
     assert ig["trim"]["venituri"] == [400, 300, 200, 100]
     assert ig["ani"]["cheltuieli"] == [1000, 900, 850, 800]
     assert ig["ani"]["years"] == [2026, 2027, 2028, 2029]
+    assert ig["chart_quality"]["venituri"]["coverage_pct"] == 100.0
+    assert ig["chart_quality"]["cheltuieli"]["coverage_pct"] == 100.0
+    assert ig["chart_quality"]["100_lei"]["confidence"] == "strictly_verified_cells"
+    assert ig["chart_quality"]["trim"]["coverage_pct"] == 100.0
+    assert ig["chart_quality"]["ani"]["recall_measured"] is False
 
 
 def test_infografic_projection_years_are_dynamic():
