@@ -1,0 +1,28 @@
+{
+ "schema_version": 1,
+ "dataset_version": "Eurostat prc_hicp_ainr, updated 2026-07-17",
+ "source": {
+  "description": "Eurostat HICP all-items, annual average rate of change for Romania. Observed calendar-year inflation, not a forecast.",
+  "dataset_code": "prc_hicp_ainr",
+  "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_ainr/default/table?lang=en",
+  "api_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_ainr?lang=en&geo=RO&unit=RCH_A_AVG&coicop18=TOTAL",
+  "retrieved_at": "2026-08-26",
+  "license": "Eurostat free re-use policy / CC BY 4.0; source attribution required",
+  "license_url": "https://ec.europa.eu/eurostat/help/copyright-notice",
+  "join_keys": ["year"],
+  "geography": "RO",
+  "unit": "percent"
+ },
+ "observations": {
+  "2016": {"annual_average_rate_pct": -1.1},
+  "2017": {"annual_average_rate_pct": 1.1},
+  "2018": {"annual_average_rate_pct": 4.1},
+  "2019": {"annual_average_rate_pct": 3.9},
+  "2020": {"annual_average_rate_pct": 2.3},
+  "2021": {"annual_average_rate_pct": 4.1},
+  "2022": {"annual_average_rate_pct": 12.0},
+  "2023": {"annual_average_rate_pct": 9.7},
+  "2024": {"annual_average_rate_pct": 5.8},
+  "2025": {"annual_average_rate_pct": 6.8}
+ }
+}

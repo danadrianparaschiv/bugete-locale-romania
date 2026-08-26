@@ -103,7 +103,7 @@ def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     assert not (out / "2025" / "city" / "1017.html").exists()
 
     data = json.loads((out / "data" / "corpus.json").read_text())
-    assert data["schema_version"] == agg.SCHEMA_VERSION == 3
+    assert data["schema_version"] == agg.SCHEMA_VERSION == 4
     assert data["years"] == [2026, 2025]
     assert data["cities"][0]["years"]["2026"]["totals_mii_lei"]["cheltuieli"] == 120.0
 
@@ -198,6 +198,14 @@ def test_city_page_uses_mii_lei_for_every_absolute_budget_value(tmp_path):
     assert "mil. lei" not in page
     assert "milioane lei" not in page
     assert "/ 1000" not in page
+    for chart in (
+        "venituri", "cheltuieli", "100-lei", "ritm-trimestrial",
+        "estimari-multianuale",
+    ):
+        assert f'data-chart-quality="{chart}"' in page
+    assert page.count("<strong>Acoperire:</strong>") == 5
+    assert page.count("<strong>Încredere:</strong>") == 5
+    assert "recall-ul PDF nu este măsurat" in page
 
 
 def test_reference_populates_city_meta(data_root, tmp_path):
@@ -209,17 +217,48 @@ def test_reference_populates_city_meta(data_root, tmp_path):
             "populatie": 64227, "populatie_data": "2021-12-01", "suprafata_km2": 103.65,
         }},
     }))
+    (ref / "regions_nuts2024.json").write_text(json.dumps({
+        "schema_version": 1,
+        "dataset_version": "NUTS 2024",
+        "source": {"url": "https://eurostat.test/nuts", "join_keys": ["county_code"]},
+        "nuts1": {"RO1": "Macroregiunea Unu"},
+        "nuts2": {"RO12": "Centru"},
+        "counties": {"01": {
+            "name": "Alba", "nuts1_code": "RO1", "nuts2_code": "RO12",
+            "nuts3_code": "RO121",
+        }},
+    }))
+    (ref / "inflation_hicp.json").write_text(json.dumps({
+        "schema_version": 1,
+        "dataset_version": "test",
+        "source": {"url": "https://eurostat.test/hicp", "join_keys": ["year"]},
+        "observations": {"2026": {"annual_average_rate_pct": 3.0}},
+    }))
     corpus = agg.build_aggregate(data_root)
     assert corpus.cities[0].populatie == 64227
     assert corpus.cities[0].populatie_data == "2021-12-01"
     assert corpus.cities[0].suprafata_km2 == 103.65
+    assert corpus.cities[0].regional_classification.nuts2_code == "RO12"
+    assert corpus.cities[0].regional_classification.nuts3_code == "RO121"
+    assert corpus.inflation["2026"].annual_average_rate_pct == 3.0
     assert corpus.augmentation_sources["populatie"]["url"] == "https://ins.test"
+    assert corpus.augmentation_sources["regional_classification"]["join_keys"] == [
+        "county_code"
+    ]
+    assert corpus.augmentation_sources["inflation"]["join_keys"] == ["year"]
+
+    row = build_analytics(corpus).year_rows(2026)[0]
+    assert row.nuts1_code == "RO1" and row.nuts2_name == "Centru"
+    assert row.nuts3_code == "RO121"
+    assert row.hicp_annual_average_rate_pct == 3.0
+    assert row.inflation_status == "final"
 
     out = tmp_path / "site"
     build_all(data_root, out, base_url="/repo")
     page = (out / "city" / "1017.html").read_text()
     assert "SIRUTA 1017" in page
     assert "64.227 locuitori (01.12.2021)" in page and "103.65 km²" in page
+    assert "regiunea Centru (NUTS 2 RO12)" in page
     # ordered layout: identity, adoption, conversion quality and downloads,
     # then the tabbed budget / execution views closing the page
     assert page.index("SIRUTA 1017") < page.index("Adoptarea bugetului") \
@@ -329,6 +368,72 @@ def test_public_population_reference_uses_one_census_cohort():
     assert "Tabel-1.22.xlsx" in payload["sursa"]["populatie"]["fisier_url"]
 
 
+def test_public_regional_and_inflation_references_are_complete():
+    from pathlib import Path
+
+    root = Path(__file__).parents[1]
+    manifest = json.loads((root / "data" / "2026" / "manifest.json").read_text())
+    county_names = {
+        entry["county_code"]: entry["county_name"]
+        for entry in manifest["entries"]
+    }
+    regions = json.loads((root / "reference" / "regions_nuts2024.json").read_text())
+    assert regions["dataset_version"] == "NUTS 2024"
+    assert set(regions["counties"]) == set(county_names)
+    assert {
+        code: item["name"] for code, item in regions["counties"].items()
+    } == county_names
+    assert len({item["nuts3_code"] for item in regions["counties"].values()}) == 42
+    assert regions["source"]["join_keys"] == ["county_code"]
+    assert regions["source"]["license"]
+
+    inflation = json.loads((root / "reference" / "inflation_hicp.json").read_text())
+    assert inflation["source"]["join_keys"] == ["year"]
+    assert inflation["source"]["license"]
+    assert inflation["observations"]["2024"]["annual_average_rate_pct"] == 5.8
+    assert inflation["observations"]["2025"]["annual_average_rate_pct"] == 6.8
+    assert "2026" not in inflation["observations"]  # no full-year observation yet
+
+
+def test_bucharest_identity_wins_over_the_ilfov_manifest_alias(data_root):
+    manifest_path = data_root / "2026" / "manifest.json"
+    payload = json.loads(manifest_path.read_text())
+    source = payload["entries"][0]
+    payload["entries"] = [
+        {
+            **source,
+            "county_code": "25", "county_name": "Ilfov",
+            "capital_siruta": "179132", "capital_name": "București",
+        },
+        {
+            **source,
+            "county_code": "42", "county_name": "București",
+            "capital_siruta": "179132", "capital_name": "București",
+        },
+    ]
+    manifest_path.write_text(json.dumps(payload))
+
+    (data_root.parent / "reference").mkdir()
+    (data_root.parent / "reference" / "regions_nuts2024.json").write_text(json.dumps({
+        "schema_version": 1,
+        "dataset_version": "NUTS 2024",
+        "source": {},
+        "nuts1": {"RO3": "Macroregiunea Trei"},
+        "nuts2": {"RO32": "București-Ilfov"},
+        "counties": {
+            "25": {"name": "Ilfov", "nuts1_code": "RO3", "nuts2_code": "RO32", "nuts3_code": "RO322"},
+            "42": {"name": "București", "nuts1_code": "RO3", "nuts2_code": "RO32", "nuts3_code": "RO321"},
+        },
+    }))
+
+    city = next(
+        item for item in agg.build_aggregate(data_root).cities
+        if item.siruta == "179132"
+    )
+    assert city.county == "București" and city.county_code == "42"
+    assert city.regional_classification.nuts3_code == "RO321"
+
+
 def test_execution_rank_uses_one_reporting_period(data_root):
     corpus = agg.build_aggregate(data_root)
     first = corpus.cities[0]
@@ -350,3 +455,27 @@ def test_execution_rank_uses_one_reporting_period(data_root):
     assert rows["2"].execution_comparison_eligible is False
     assert rows["2"].execution_exclusion_reason == "perioada_executie_necomparabila"
     assert rows["2"].execution_expense_per_capita_rank is None
+
+
+def test_real_year_over_year_change_requires_observed_inflation(tmp_path):
+    data_root = tmp_path / "data"
+    _write_year(data_root, 2025, converted=True, totals=(100.0, 100.0))
+    _write_year(data_root, 2026, converted=True, totals=(121.0, 110.0))
+    reference = tmp_path / "reference"
+    reference.mkdir()
+    (reference / "municipii.json").write_text(json.dumps({
+        "sursa": {},
+        "municipii": {"1017": {"populatie": 100, "populatie_data": "2021-12-01"}},
+    }))
+    (reference / "inflation_hicp.json").write_text(json.dumps({
+        "schema_version": 1,
+        "dataset_version": "test",
+        "source": {"join_keys": ["year"]},
+        "observations": {"2026": {"annual_average_rate_pct": 10.0}},
+    }))
+
+    current = build_analytics(agg.build_aggregate(data_root)).year_rows(2026)[0]
+    assert current.planned_revenue_yoy_pct == 21.0
+    assert current.planned_revenue_yoy_real_pct == 10.0
+    assert current.planned_expense_yoy_pct == 10.0
+    assert current.planned_expense_yoy_real_pct == 0.0

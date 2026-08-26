@@ -9,6 +9,7 @@ suspect plan totals are never silently ranked as zero.
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -18,9 +19,9 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from pydantic import BaseModel, Field
 
-from .aggregate import City, CityYear, Corpus, build_aggregate
+from .aggregate import City, CityYear, Corpus, InflationObservation, build_aggregate
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 MII_LEI_TO_LEI = 1000.0
 
 
@@ -64,6 +65,17 @@ class AnalyticsRow(BaseModel):
     expense_execution_pct: float | None = None
     planned_revenue_yoy_pct: float | None = None
     planned_expense_yoy_pct: float | None = None
+    regional_classification_version: str | None = None
+    nuts1_code: str | None = None
+    nuts1_name: str | None = None
+    nuts2_code: str | None = None
+    nuts2_name: str | None = None
+    nuts3_code: str | None = None
+    nuts3_name: str | None = None
+    hicp_annual_average_rate_pct: float | None = None
+    inflation_status: str = "full_year_not_available"
+    planned_revenue_yoy_real_pct: float | None = None
+    planned_expense_yoy_real_pct: float | None = None
 
 
 class ChapterRow(BaseModel):
@@ -133,6 +145,13 @@ def _pct_change(previous: float | None, current: float | None) -> float | None:
     return round((current - previous) / previous * 100, 2)
 
 
+def _real_change(nominal_change: float | None, inflation: float | None) -> float | None:
+    """Deflate a nominal year-over-year change by observed annual HICP."""
+    if nominal_change is None or inflation is None:
+        return None
+    return round(((1 + nominal_change / 100) / (1 + inflation / 100) - 1) * 100, 2)
+
+
 def _rank(
     rows: list[AnalyticsRow], value_field: str, rank_field: str, cohort_field: str,
     eligible_field: str,
@@ -148,7 +167,12 @@ def _rank(
         setattr(row, cohort_field, len(candidates))
 
 
-def _row(city: City, year: int, cy: CityYear) -> AnalyticsRow:
+def _row(
+    city: City,
+    year: int,
+    cy: CityYear,
+    inflation: InflationObservation | None,
+) -> AnalyticsRow:
     plan_reason = _plan_exclusion(city, cy)
     execution_reason = _execution_exclusion(city, cy)
     population = city.populatie
@@ -158,6 +182,7 @@ def _row(city: City, year: int, cy: CityYear) -> AnalyticsRow:
     plan_eligible = plan_reason is None
     execution_eligible = execution_reason is None
     execution = cy.executie
+    region = city.regional_classification
 
     row = AnalyticsRow(
         year=year,
@@ -189,6 +214,17 @@ def _row(city: City, year: int, cy: CityYear) -> AnalyticsRow:
         expense_execution_pct=(
             execution.pct_cheltuieli if execution and plan_eligible else None
         ),
+        regional_classification_version=(region.dataset_version if region else None),
+        nuts1_code=region.nuts1_code if region else None,
+        nuts1_name=region.nuts1_name if region else None,
+        nuts2_code=region.nuts2_code if region else None,
+        nuts2_name=region.nuts2_name if region else None,
+        nuts3_code=region.nuts3_code if region else None,
+        nuts3_name=region.nuts3_name if region else None,
+        hicp_annual_average_rate_pct=(
+            inflation.annual_average_rate_pct if inflation else None
+        ),
+        inflation_status=inflation.status if inflation else "full_year_not_available",
     )
     if plan_eligible and planned_revenue is not None and planned_expense is not None:
         row.planned_balance_mii_lei = round(planned_revenue - planned_expense, 3)
@@ -223,7 +259,7 @@ def _row(city: City, year: int, cy: CityYear) -> AnalyticsRow:
 
 def build_analytics(corpus: Corpus) -> AnalyticsDataset:
     rows = [
-        _row(city, int(year), cy)
+        _row(city, int(year), cy, corpus.inflation.get(str(year)))
         for city in corpus.cities
         for year, cy in city.years.items()
     ]
@@ -242,6 +278,15 @@ def build_analytics(corpus: Corpus) -> AnalyticsDataset:
                     row.planned_expense_yoy_pct = _pct_change(
                         previous.planned_expense_mii_lei, row.planned_expense_mii_lei
                     )
+                    if row.year == previous.year + 1:
+                        row.planned_revenue_yoy_real_pct = _real_change(
+                            row.planned_revenue_yoy_pct,
+                            row.hicp_annual_average_rate_pct,
+                        )
+                        row.planned_expense_yoy_real_pct = _real_change(
+                            row.planned_expense_yoy_pct,
+                            row.hicp_annual_average_rate_pct,
+                        )
                 previous = row
 
     for year in corpus.years:
@@ -439,6 +484,10 @@ def write_workbook(dataset: AnalyticsDataset, path: Path) -> Path:
         "Rang cheltuieli efective/loc", "Cohortă rang execuție", "% execuție venituri",
         "% execuție cheltuieli", "Δ venituri plan %", "Δ cheltuieli plan %",
         "Eligibil execuție", "Motiv excludere execuție",
+        "Versiune clasificare regională", "NUTS1 cod", "NUTS1 nume",
+        "NUTS2 cod", "NUTS2 nume", "NUTS3 cod", "NUTS3 nume",
+        "Inflație HICP medie anuală %", "Stare inflație",
+        "Δ real venituri plan %", "Δ real cheltuieli plan %",
     ]
     ws.append(headers)
     for row_number, row in enumerate(dataset.rows, start=2):
@@ -468,13 +517,19 @@ def write_workbook(dataset: AnalyticsDataset, path: Path) -> Path:
             row.planned_revenue_yoy_pct, row.planned_expense_yoy_pct,
             "da" if row.execution_comparison_eligible else "nu",
             row.execution_exclusion_reason,
+            row.regional_classification_version,
+            row.nuts1_code, row.nuts1_name, row.nuts2_code, row.nuts2_name,
+            row.nuts3_code, row.nuts3_name,
+            row.hicp_annual_average_rate_pct, row.inflation_status,
+            row.planned_revenue_yoy_real_pct, row.planned_expense_yoy_real_pct,
         ])
     _style_sheet(ws, {
         1: 8, 2: 12, 3: 24, 4: 20, 5: 14, 6: 32, 7: 16, 8: 14, 9: 14,
         10: 14, 11: 16, 12: 14, 13: 16, 14: 19, 15: 20, 16: 18, 17: 18,
         18: 20, 19: 18, 20: 20, 21: 16, 22: 16, 23: 16, 24: 20, 25: 21,
         26: 18, 27: 21, 28: 22, 29: 19, 30: 23, 31: 18, 32: 19, 33: 20,
-        34: 18, 35: 20, 36: 17, 37: 34,
+        34: 18, 35: 20, 36: 17, 37: 34, 38: 22, 39: 12, 40: 24,
+        41: 12, 42: 24, 43: 12, 44: 24, 45: 21, 46: 26, 47: 20, 48: 22,
     })
     _add_table(ws, "MunicipiiAnalytics")
     formats = {
@@ -484,6 +539,7 @@ def write_workbook(dataset: AnalyticsDataset, path: Path) -> Path:
         **{column: "#,##0.00" for column in range(24, 30)},
         30: "0", 31: "0",
         **{column: "0.00" for column in range(32, 36)},
+        45: "0.00", 47: "0.00", 48: "0.00",
     }
     for column, number_format in formats.items():
         for cells in ws.iter_cols(min_col=column, max_col=column, min_row=2):
@@ -509,7 +565,11 @@ def write_workbook(dataset: AnalyticsDataset, path: Path) -> Path:
     for layer, metadata in dataset.sources.items():
         if isinstance(metadata, dict):
             for key, value in metadata.items():
-                sources.append([layer, key, value])
+                cell_value = (
+                    json.dumps(value, ensure_ascii=False, sort_keys=True)
+                    if isinstance(value, (dict, list)) else value
+                )
+                sources.append([layer, key, cell_value])
         else:
             sources.append([layer, "descriere", metadata])
     _style_sheet(sources, {1: 22, 2: 24, 3: 92})

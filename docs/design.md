@@ -171,13 +171,17 @@ fie prezentat drept acoperire completă.
 ## Analitice și augmentare
 
 Analiza transversală este o proiecție separată a agregatului public, nu o
-extensie a `analysis.json`. `analytics.py` leagă populația, suprafața și
-execuția prin SIRUTA + an, calculează indicatorii derivați și publică pentru
-fiecare rând eligibilitatea și motivul excluderii. Rangurile se calculează
-numai pentru totaluri publice coerente și publică dimensiunea cohortei.
+extensie a `analysis.json`. `analytics.py` leagă populația și execuția prin
+SIRUTA + an, clasificarea NUTS 2024 prin codul județului și inflația HICP prin
+an. Calculează indicatorii derivați și publică pentru fiecare rând
+eligibilitatea și motivul excluderii. Rangurile se calculează numai pentru
+totaluri publice coerente și publică dimensiunea cohortei. Creșterea reală
+este calculată numai când există rata medie anuală HICP observată pentru anul
+curent; prognozele nu umplu lipsa.
 
 Site-ul și exporturile JSON/CSV/Excel sunt construite din același obiect
 `AnalyticsDataset`; astfel pagina nu poate afișa un clasament diferit de
-fișierul descărcabil. Proveniența augmentărilor este propagată din
-`reference/municipii.json`, în timp ce faptele extrase rămân în bundle-ul
-PDF/Excel/analysis. Contractul complet este în [analytics.md](analytics.md).
+fișierul descărcabil. Proveniența augmentărilor este propagată din fișierele
+versionate din `reference/`, cu sursă, dată, licență și chei de asociere, în
+timp ce faptele extrase rămân în bundle-ul PDF/Excel/analysis. Contractul
+complet este în [analytics.md](analytics.md).

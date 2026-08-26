@@ -35,13 +35,25 @@ class Manifest:
         self.root = path.parent
 
     def cities(self) -> list[CityEntry]:
-        out = []
-        seen_paths: set[str] = set()
+        # Preserve manifest order while choosing one canonical identity for a
+        # shared file.  Ilfov and municipality București deliberately point at
+        # the same PDF; code 42 is the document owner's identity and must win
+        # over the Ilfov alias for SIRUTA/NUTS joins.
+        by_path: dict[str, dict] = {}
+        order: list[str] = []
         for e in self.data.get("entries", []):
             rel = e.get("path")
-            if not rel or rel in seen_paths:
-                continue  # Ilfov/Bucharest share one file — count it once
-            seen_paths.add(rel)
+            if not rel:
+                continue
+            if rel not in by_path:
+                by_path[rel] = e
+                order.append(rel)
+            elif str(e.get("county_code")) == "42":
+                by_path[rel] = e
+
+        out = []
+        for rel in order:
+            e = by_path[rel]
             out.append(CityEntry(
                 siruta=str(e.get("capital_siruta")),
                 name=e.get("capital_name", "?"),

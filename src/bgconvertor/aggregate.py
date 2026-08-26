@@ -24,7 +24,7 @@ from .manifest import CityEntry, Manifest
 
 log = logging.getLogger("bgc.aggregate")
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 GITHUB_FILE_LIMIT = 100 * 1024 * 1024  # files over this are not in git (see .gitignore)
 # execution above this share of the approved plan means the plan figure is
 # partial (bad scan), not that the city overspent — rectifications explain
@@ -110,6 +110,23 @@ class CityYear(BaseModel):
     files: Files = Field(default_factory=Files)
 
 
+class RegionalClassification(BaseModel):
+    dataset_version: str
+    nuts1_code: str
+    nuts1_name: str
+    nuts2_code: str
+    nuts2_name: str
+    nuts3_code: str
+    nuts3_name: str
+
+
+class InflationObservation(BaseModel):
+    year: int
+    measure: str = "HICP all-items annual average rate of change"
+    annual_average_rate_pct: float
+    status: str = "final"
+
+
 class City(BaseModel):
     siruta: str
     name: str
@@ -118,6 +135,7 @@ class City(BaseModel):
     populatie: int | None = None  # RPL2021; reference/municipii.json
     populatie_data: str | None = None
     suprafata_km2: float | None = None
+    regional_classification: RegionalClassification | None = None
     years: dict[str, CityYear] = Field(default_factory=dict)  # keyed by str(year)
 
 
@@ -125,6 +143,7 @@ class Corpus(BaseModel):
     schema_version: int = SCHEMA_VERSION
     years: list[int] = Field(default_factory=list)  # newest first
     augmentation_sources: dict = Field(default_factory=dict)
+    inflation: dict[str, InflationObservation] = Field(default_factory=dict)
     cities: list[City] = Field(default_factory=list)
 
     def year_rows(self, year: int) -> list[tuple[City, CityYear]]:
@@ -268,25 +287,67 @@ def _add_plan_share(e: Executie, plan: dict[str, float]) -> None:
                 put(block, f"pct_{key}", round(share, 1))
 
 
-def _load_reference(repo_root: Path) -> tuple[dict, dict]:
-    """Return (SIRUTA municipality values, source metadata).
+def _load_references(repo_root: Path) -> tuple[dict, dict, dict, dict]:
+    """Return municipality, regional, inflation and source reference layers.
 
     Augmentation is deliberately loaded as a separate reference layer.  The
     source block is preserved in the public aggregate so downstream analytics
-    can identify the denominator without treating it as a fact extracted from
-    a budget PDF.
+    can identify every join and version without treating it as a fact extracted
+    from a budget PDF.
     """
-    path = repo_root / "reference" / "municipii.json"
-    if not path.exists():
-        return {}, {}
-    payload = json.loads(path.read_text())
-    return payload.get("municipii", {}), payload.get("sursa", {})
+    reference_root = repo_root / "reference"
+    municipalities: dict = {}
+    regions: dict = {}
+    inflation: dict = {}
+    sources: dict = {}
+
+    municipality_path = reference_root / "municipii.json"
+    if municipality_path.exists():
+        payload = json.loads(municipality_path.read_text())
+        municipalities = payload.get("municipii", {})
+        sources.update(payload.get("sursa", {}))
+
+    regions_path = reference_root / "regions_nuts2024.json"
+    if regions_path.exists():
+        payload = json.loads(regions_path.read_text())
+        version = payload["dataset_version"]
+        nuts1 = payload.get("nuts1", {})
+        nuts2 = payload.get("nuts2", {})
+        for county_code, item in payload.get("counties", {}).items():
+            regions[county_code] = {
+                "dataset_version": version,
+                "nuts1_code": item["nuts1_code"],
+                "nuts1_name": nuts1[item["nuts1_code"]],
+                "nuts2_code": item["nuts2_code"],
+                "nuts2_name": nuts2[item["nuts2_code"]],
+                "nuts3_code": item["nuts3_code"],
+                "nuts3_name": item["name"],
+            }
+        sources["regional_classification"] = {
+            "schema_version": payload.get("schema_version"),
+            "dataset_version": version,
+            **payload.get("source", {}),
+        }
+
+    inflation_path = reference_root / "inflation_hicp.json"
+    if inflation_path.exists():
+        payload = json.loads(inflation_path.read_text())
+        for year, item in payload.get("observations", {}).items():
+            inflation[year] = InflationObservation(year=int(year), **item)
+        sources["inflation"] = {
+            "schema_version": payload.get("schema_version"),
+            "dataset_version": payload.get("dataset_version"),
+            **payload.get("source", {}),
+        }
+    return municipalities, regions, inflation, sources
 
 
 def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
     """Merge per-year manifests into one city-keyed corpus, newest year first."""
     ordered = sorted(manifests, key=lambda m: m.year, reverse=True)
-    reference, reference_sources = _load_reference(ordered[0].root.parent.parent)
+    reference, regions, inflation, reference_sources = _load_references(
+        ordered[0].root.parent.parent
+    )
     cities: dict[str, City] = {}
     for m in ordered:
         for c in m.cities():
@@ -297,7 +358,16 @@ def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
                 populatie=ref.get("populatie"),
                 populatie_data=ref.get("populatie_data"),
                 suprafata_km2=ref.get("suprafata_km2"),
+                regional_classification=regions.get(c.county_code),
             ))
+            # The governing manifest deliberately lists the Bucharest PDF for
+            # both Ilfov (whose county seat is Bucharest) and municipality code
+            # 42.  Both rows share one SIRUTA, so the municipality's own
+            # identity and NUTS 3 region must win over the Ilfov alias.
+            if c.county_code == "42" and city.county_code != "42":
+                city.county = c.county_name
+                city.county_code = c.county_code
+                city.regional_classification = regions.get(c.county_code)
             cy = city_year(m, c)
             # scale and plan share need the city's identity data, known here
             cy.scara_corectata = _fix_scale(cy, city.populatie)
@@ -307,6 +377,7 @@ def aggregate_manifests(manifests: list[Manifest]) -> Corpus:
     return Corpus(
         years=[m.year for m in ordered],
         augmentation_sources=reference_sources,
+        inflation=inflation,
         cities=sorted(cities.values(), key=lambda c: (c.county_code, c.name)),
     )
 
