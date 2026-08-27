@@ -1,0 +1,46 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1266,
+    "lines_strictly_verified": 672,
+    "pct_lines_strictly_verified": 53.1,
+    "numeric_cells": 4201,
+    "numeric_cells_strictly_verified": 2410,
+    "pct_numeric_cells_strictly_verified": 57.4,
+    "scope": {
+      "pages_expected": 87,
+      "pages_selected": 87,
+      "pages_processed": 87,
+      "complete_pdf": true
+    },
+    "pct_clean": 53.1,
+    "errors": 539,
+    "warnings": 725,
+    "info": 11,
+    "documents": 2
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 223517.0,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 1972.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "7e79f1498607548bdb8850ba",
+    "source_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
+    "source_format": "pdf",
+    "source_pdf_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4"
+  }
+}

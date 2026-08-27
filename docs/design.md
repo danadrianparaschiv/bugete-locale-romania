@@ -5,8 +5,9 @@ istoricul complet, inclusiv măsurătorile și direcțiile abandonate).
 
 ## Problema
 
-Bugetele locale românești sunt publicate ca anexe PDF la hotărârile de
-consiliu: unele generate digital, cu grile trasate, multe scanate — rotite
+Bugetele locale românești sunt publicate în principal ca anexe PDF la
+hotărârile de consiliu; câteva administrații oferă și XLS/XLSX nativ. Unele
+PDF-uri sunt generate digital, cu grile trasate, multe sunt scanate — rotite
 în oricare din cele patru orientări, cu ștampile peste cifre, tipărite de
 o duzină de furnizori diferiți de software bugetar cu machete de tabel
 incompatibile, în două convenții locale de scriere a numerelor. Datele din
@@ -38,7 +39,8 @@ de partea noastră.
 ## Pipeline
 
 ```
-profile -> [digital grid | orient -> OCR(docling) -> layout mappers]
+[native XLS/XLSX reader | profile -> digital grid | orient -> OCR(docling)]
+        -> layout mappers / normalized page payloads
         -> assemble (documents, institutions, sections, code semantics)
         -> validate (nomenclator + arithmetic)      -> Excel + dataset
         -> LLM tiers (fallback / sum-repair / cell recovery), re-validate
@@ -55,6 +57,13 @@ Workerii publică JSON-ul prin înlocuire atomică în același director, astfel
 încât procesul părinte care urmărește progresul vede versiunea veche sau cea
 nouă, niciodată un fișier parțial. Un artefact legacy gol/trunchiat este tratat
 ca un cache miss și se reconstruiește; nu poate opri conversia întregului PDF.
+
+Ramura Excel nativă citește valorile afișate fără să recalculeze sau să
+modifice registrul oficial, păstrează codurile numerice cu zerouri inițiale și
+normalizează explicit lei → mii lei. Foile sunt transformate în același
+contract intermediar ca o pagină PDF; de acolo înainte, asamblarea, validarea,
+analiza, exportul și auditul sunt identice. Sursa originală `buget_orig.xls[x]`
+și rezultatul public `budget_file.xlsx` au roluri și hash-uri distincte.
 
 ## Registrul de machete (layouts)
 
@@ -97,7 +106,7 @@ sunt aplicate efectiv opțiunilor Docling și fac parte din cheia cache-ului.
 
 Problemele sunt tipizate (`V1` validitatea codului … `V7` igienă), cu
 severități, iar fiecare linie poartă proveniența: pagina, sursa
-(`digital`/`ocr`/`llm`). În export, `verified=true` înseamnă că linia nu
+(`digital`/`ocr`/`native_excel`/`llm`). În export, `verified=true` înseamnă că linia nu
 poartă nicio problemă, inclusiv `warning` sau `info`. Metrica agregată
 `observed_strict_line_rate` are ca numitor numai liniile extrase și declară
 explicit `recall_measured=false`; nu poate demonstra rândurile absente.
@@ -108,7 +117,7 @@ Contractul complet este în [quality.md](quality.md).
 În corpus, Excelul, `analysis.json` și blocul `conversion` din manifest sunt
 un singur bundle versionat. Excelul și analiza sunt produse în fișiere
 temporare cu același ID; manifestul, scris atomic ultimul, înregistrează
-SHA-256-ul sursei și al ambelor artefacte. Un eșec restaurează versiunea
+SHA-256-ul sursei, formatul ei și hash-urile ambelor artefacte. Un eșec restaurează versiunea
 anterioară. `bgconvertor corpus audit` recalculează hash-urile și compară
 metricile din toate cele trei locuri; agregatul refuză orice bundle
 inconsistent. Conversiile cu `--pages` sunt experimente și nu pot înlocui

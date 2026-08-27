@@ -254,8 +254,15 @@ def _summary_sheet(
         rows.extend([
             ("Schema publicare", publication.get("schema_version")),
             ("Bundle conversie", publication.get("bundle_id")),
-            ("SHA-256 PDF sursa", publication.get("source_pdf_sha256")),
+            (
+                "SHA-256 sursa",
+                publication.get("source_sha256")
+                or publication.get("source_pdf_sha256"),
+            ),
+            ("Format sursa", publication.get("source_format") or "pdf"),
         ])
+        if publication.get("source_pdf_sha256"):
+            rows.append(("SHA-256 PDF sursa", publication["source_pdf_sha256"]))
     llm_models = sorted({
         source.split(":", 1)[1] if ":" in source else "model neînregistrat"
         for doc in result.documents for ln in doc.lines

@@ -173,7 +173,7 @@ def test_failed_manifest_commit_restores_previous_artifacts(tmp_path, monkeypatc
 
 def test_incomplete_pdf_cannot_be_published(tmp_path):
     _, pdf, manifest = _tree(tmp_path)
-    with pytest.raises(ValueError, match="complete-PDF"):
+    with pytest.raises(ValueError, match="complete-source"):
         publish_corpus_result(_result(complete=False), pdf, pdf.with_suffix(".xlsx"), manifest)
     assert not pdf.with_suffix(".xlsx").exists()
     assert not pdf.with_name("analysis.json").exists()
@@ -195,6 +195,43 @@ def test_public_bundle_enforces_five_dollar_external_cost_cap(tmp_path):
         publish_corpus_result(
             _result(), pdf, pdf.with_suffix(".xlsx"), manifest, llm_cost_usd=5.01
         )
+
+
+def test_native_excel_source_publishes_to_distinct_normalized_workbook(tmp_path):
+    data = tmp_path / "data"
+    city_dir = data / "2024" / "23-ialomita" / "92658-slobozia"
+    city_dir.mkdir(parents=True)
+    source = city_dir / "buget_orig.xlsx"
+    source.write_bytes(b"official-native-workbook-fixture")
+    manifest_path = data / "2024" / "manifest.json"
+    manifest_path.write_text(json.dumps({
+        "year": 2024,
+        "entries": [{
+            "county_code": "23",
+            "county_name": "Ialomita",
+            "capital_siruta": "92658",
+            "capital_name": "Slobozia",
+            "path": "23-ialomita/92658-slobozia/buget_orig.xlsx",
+            "source_format": "xlsx",
+        }],
+    }))
+    manifest = Manifest(manifest_path)
+    normalized = city_dir / "budget_file.xlsx"
+
+    publish_corpus_result(_result(), source, normalized, manifest)
+
+    fresh = Manifest(manifest_path)
+    city = fresh.cities()[0]
+    artifacts = city.entry["conversion"]["artifacts"]
+    assert city.workbook == normalized
+    assert artifacts["source_format"] == "xlsx"
+    assert artifacts["source_sha256"] == file_sha256(source)
+    assert "source_pdf_sha256" not in artifacts
+    assert audit_city(fresh, city).status == "verified"
+    year = build_aggregate(data).cities[0].years["2024"]
+    assert year.files.pdf is None
+    assert year.files.source.endswith("buget_orig.xlsx")
+    assert year.files.xlsx.endswith("budget_file.xlsx")
 
 
 def test_pdf_text_starting_with_equals_is_exported_as_literal_text(tmp_path):

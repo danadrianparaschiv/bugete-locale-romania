@@ -1,0 +1,2638 @@
+{
+  "schema_version": 2,
+  "year": 2024,
+  "audited_on": "2026-08-26",
+  "scope": "41 county-seat municipalities plus Bucharest",
+  "identifier_source": {
+    "title": "SIRUTA 2025",
+    "publisher": "Institutul Național de Statistică",
+    "url": "https://data.gov.ro/dataset/siruta-2025"
+  },
+  "nomenclator": {
+    "effective_year": 2024,
+    "path": "../../reference/nomenclator/2024/registry.json",
+    "publisher": "Ministerul Finanțelor",
+    "source_page": "https://mfinante.gov.ro/domenii/buget/clasificatiile-bugetare",
+    "sources": {
+      "Anexanr2_05082024.xls": "e64a653a891b4c6a767335365756d40ec7bb91c2f66a791851a1d823e85588ab",
+      "Anexanr10_26112024.xls": "1050754db1ba2e688b318330c9e9bf002d68456658d4238772d3158f541f94a4",
+      "AnexanrIec_10122024.xls": "c9436d1ffe8ecda0a4fbd3bc28289f4e3362d98c0e4022d161380728a96b456a"
+    }
+  },
+  "raw_pdf_policy": "excluded_from_git_with_committed_urls_checksums_and_derived_bundles",
+  "entries": [
+    {
+      "county_code": "01",
+      "county_name": "Alba",
+      "capital_siruta": "1017",
+      "capital_name": "Alba Iulia",
+      "path": "01-alba/1017-alba-iulia/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.apulum.ro/ro/pdf6/buget_local_16022024.pdf",
+      "record_url": "https://www.apulum.ro/index.php/primaria/buget_detaliu/8159",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:01:31+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 5,
+          "lines": 875,
+          "lines_strictly_verified": 602,
+          "pct_lines_strictly_verified": 68.8,
+          "numeric_cells": 3432,
+          "numeric_cells_strictly_verified": 2103,
+          "pct_numeric_cells_strictly_verified": 61.3,
+          "scope": {
+            "pages_expected": 86,
+            "pages_selected": 86,
+            "pages_processed": 86,
+            "complete_pdf": true
+          },
+          "errors": 356,
+          "warnings": 15,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "dd11091015e865fb7cb73710",
+          "source_sha256": "2ca6f78faced967877b940be169fef3b609052d4b8a32823da7343490f9e202c",
+          "source_format": "pdf",
+          "source_pdf_sha256": "2ca6f78faced967877b940be169fef3b609052d4b8a32823da7343490f9e202c",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "b1fca2d4fc9a61f77d59db4d2177c208a56a1f1296c8e2db07880ff0328dbc82",
+            "bytes": 93093
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "07089bb36077d24f3c617fd7fc7304dbf0269bcca26a233e1a76b909bdb277ef",
+            "bytes": 1191
+          }
+        },
+        "lines": 875,
+        "pct_clean": 68.8,
+        "errors": 356,
+        "warnings": 15,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "02",
+      "county_name": "Arad",
+      "capital_siruta": "9262",
+      "capital_name": "Arad",
+      "path": "02-arad/9262-arad/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariaarad.ro/dm_arad/2024/hotarari.nsf/910C4DA4F25ECF79C2258ACC00391925/$FILE/106%20H%20din%2014%2002%202024.pdf?Open=",
+      "record_url": "https://www.primariaarad.ro/dm_arad/2024/hotarari.nsf/910C4DA4F25ECF79C2258ACC00391925",
+      "conversion": {
+        "status": "converted",
+        "at": "2026-08-27T00:48:33+03:00",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 35,
+          "lines_strictly_verified": 35,
+          "pct_lines_strictly_verified": 100.0,
+          "numeric_cells": 35,
+          "numeric_cells_strictly_verified": 35,
+          "pct_numeric_cells_strictly_verified": 100.0,
+          "scope": {
+            "pages_expected": 10,
+            "pages_selected": 10,
+            "pages_processed": 10,
+            "complete_pdf": true
+          },
+          "errors": 0,
+          "warnings": 0,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "c5d84ebf152c5fe2d4e3d787",
+          "source_sha256": "9880703546e9dd3339932c6228ec8b67b4093184390ac6ea58b376cade181241",
+          "source_format": "pdf",
+          "source_pdf_sha256": "9880703546e9dd3339932c6228ec8b67b4093184390ac6ea58b376cade181241",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "2c34097c77f00728f668f3ab52ffb0eda74ff080be322871d2788123fe496b21",
+            "bytes": 10397
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "2fe55cbf33ed36f23dc4a0bb1ae62418109bd8e5898b9cb5ef3dc09634498efe",
+            "bytes": 4862
+          }
+        },
+        "lines": 35,
+        "pct_clean": 100.0,
+        "errors": 0,
+        "warnings": 0,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "03",
+      "county_name": "Argeș",
+      "capital_siruta": "13169",
+      "capital_name": "Pitești",
+      "path": "03-arges/13169-pitesti/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariapitesti.ro/uploads/pages/files/52_HCL_buget_Mun._Pitesti_20241.pdf",
+      "record_url": "https://www.primariapitesti.ro/februarie-2024-edinta-extraordinara-08022024-p2045",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:30:01+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 6,
+          "lines": 4065,
+          "lines_strictly_verified": 2392,
+          "pct_lines_strictly_verified": 58.8,
+          "numeric_cells": 22190,
+          "numeric_cells_strictly_verified": 14312,
+          "pct_numeric_cells_strictly_verified": 64.5,
+          "scope": {
+            "pages_expected": 125,
+            "pages_selected": 125,
+            "pages_processed": 125,
+            "complete_pdf": true
+          },
+          "errors": 434,
+          "warnings": 1609,
+          "info": 10
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "9e8c372170c178d425ae201e",
+          "source_sha256": "7c3d132eb80b1361cf294eb6f62dd5e0a5715b97ac171222e7294fb80490c7e3",
+          "source_format": "pdf",
+          "source_pdf_sha256": "7c3d132eb80b1361cf294eb6f62dd5e0a5715b97ac171222e7294fb80490c7e3",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "cd972912672406ad09a89048cb1290dcd57dc6f6ce2d90dfbf5f1eb481a2878c",
+            "bytes": 394106
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "dfcebe023cd0a1e5397420ffb8c8db33b056265242a7e56f024b9d8cd534bd4a",
+            "bytes": 2216
+          }
+        },
+        "lines": 4065,
+        "pct_clean": 58.8,
+        "errors": 434,
+        "warnings": 1609,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "04",
+      "county_name": "Bacău",
+      "capital_siruta": "20297",
+      "capital_name": "Bacău",
+      "path": "04-bacau/20297-bacau/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://municipiulbacau.ro/wp-content/uploads/2024/02/Buget-2024-scanate-SITE.pdf",
+      "record_url": "https://municipiulbacau.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:58:57+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 25,
+          "lines": 2119,
+          "lines_strictly_verified": 1613,
+          "pct_lines_strictly_verified": 76.1,
+          "numeric_cells": 5160,
+          "numeric_cells_strictly_verified": 4077,
+          "pct_numeric_cells_strictly_verified": 79.0,
+          "scope": {
+            "pages_expected": 123,
+            "pages_selected": 123,
+            "pages_processed": 123,
+            "complete_pdf": true
+          },
+          "errors": 613,
+          "warnings": 209,
+          "info": 1
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "0644da63e74a6fcd66f49f51",
+          "source_sha256": "2535f8eafc50ccb81d270bb3c904bca5271da4f6c8fd718bf273d13bc2a79dd4",
+          "source_format": "pdf",
+          "source_pdf_sha256": "2535f8eafc50ccb81d270bb3c904bca5271da4f6c8fd718bf273d13bc2a79dd4",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "71c4af1e5f67ed182ddea496086efdd82b8e557906bc2350a573c612abeab36f",
+            "bytes": 237285
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "b150876abfaafc29b50dc28c515f9982a47085026bc6e382aad277cce695d481",
+            "bytes": 2218
+          }
+        },
+        "lines": 2119,
+        "pct_clean": 76.1,
+        "errors": 613,
+        "warnings": 209,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "05",
+      "county_name": "Bihor",
+      "capital_siruta": "26564",
+      "capital_name": "Oradea",
+      "path": "05-bihor/26564-oradea/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://oradea.ro/wp-content/uploads/2024/02/Buget-Local-09.02.2024.pdf",
+      "record_url": "https://oradea.ro/primaria-oradea/informatii-financiare/buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:59:04+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1258,
+          "lines_strictly_verified": 1192,
+          "pct_lines_strictly_verified": 94.8,
+          "numeric_cells": 6772,
+          "numeric_cells_strictly_verified": 6286,
+          "pct_numeric_cells_strictly_verified": 92.8,
+          "scope": {
+            "pages_expected": 46,
+            "pages_selected": 46,
+            "pages_processed": 46,
+            "complete_pdf": true
+          },
+          "errors": 198,
+          "warnings": 32,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "82909268ff64a071df233eac",
+          "source_sha256": "5a0911c5dd8933d54644d08d2ba10f4f25cf9f34b382d8d294fc2cf3291b8754",
+          "source_format": "pdf",
+          "source_pdf_sha256": "5a0911c5dd8933d54644d08d2ba10f4f25cf9f34b382d8d294fc2cf3291b8754",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "db94bada204f26c1ae38aacdabcd41081b4d64bbc2b6e99571fdfc78f93093e9",
+            "bytes": 125471
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "29ba938ebe6f3e5495a4ca1b815b4ca52e1c75455977d8d0ddca0468e89c992e",
+            "bytes": 9725
+          }
+        },
+        "lines": 1258,
+        "pct_clean": 94.8,
+        "errors": 198,
+        "warnings": 32,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "06",
+      "county_name": "Bistrița-Năsăud",
+      "capital_siruta": "32394",
+      "capital_name": "Bistrița",
+      "path": "06-bistrita-nasaud/32394-bistrita/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://arhiva.primariabistrita.ro/Arhiva%20documente/Consiliul%20Local/Documente%20sedinta/2024/Documente%20de%20sedinta%2028.03.2024/03.-Compl.PH-rectificare-buget.1.zip",
+      "archive_member": "03. Compl.PH rectificare buget.1/anexe/Anexa 2 la PH rectificare.pdf",
+      "record_url": "https://arhiva.primariabistrita.ro/Arhiva%20documente/Consiliul%20Local/Documente%20sedinta/2024/Documente%20de%20sedinta%2028.03.2024/",
+      "notes": "Prima rectificare aprobată este folosită deoarece anexa inițială nu mai este expusă; anexa locală detaliată este extrasă reproductibil din arhiva oficială a ședinței.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T07:32:27+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 5,
+          "lines": 1747,
+          "lines_strictly_verified": 632,
+          "pct_lines_strictly_verified": 36.2,
+          "numeric_cells": 4132,
+          "numeric_cells_strictly_verified": 1983,
+          "pct_numeric_cells_strictly_verified": 48.0,
+          "scope": {
+            "pages_expected": 160,
+            "pages_selected": 160,
+            "pages_processed": 160,
+            "complete_pdf": true
+          },
+          "errors": 126,
+          "warnings": 1051,
+          "info": 16
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "53e3580db36c46fdf25d3526",
+          "source_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a",
+          "source_format": "pdf",
+          "source_pdf_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "f3c13c6e4eabd995433cdd6da96d0ef7e838be7aecc7ac7a18c397ab92e251db",
+            "bytes": 192022
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "f514ea9ee81528b5cbbe5aed1d36313f93963741474e198c6fb617878338fe74",
+            "bytes": 2272
+          }
+        },
+        "lines": 1747,
+        "pct_clean": 36.2,
+        "errors": 126,
+        "warnings": 1051,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "07",
+      "county_name": "Botoșani",
+      "capital_siruta": "35731",
+      "capital_name": "Botoșani",
+      "path": "07-botosani/35731-botosani/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariabt.ro/storage/formidable/9/HCL_63_2024-2.pdf",
+      "record_url": "https://primariabt.ro/monitorul-oficial-local/hotararile-autoritatii-deliberative/hotararile-consiliului-local/",
+      "notes": "Anexa detaliată la HCL 63/12.02.2024 înlocuiește anunțul sumar al proiectului de buget.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T01:25:11+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 53,
+          "lines": 5657,
+          "lines_strictly_verified": 4430,
+          "pct_lines_strictly_verified": 78.3,
+          "numeric_cells": 16283,
+          "numeric_cells_strictly_verified": 11991,
+          "pct_numeric_cells_strictly_verified": 73.6,
+          "scope": {
+            "pages_expected": 248,
+            "pages_selected": 248,
+            "pages_processed": 248,
+            "complete_pdf": true
+          },
+          "errors": 2454,
+          "warnings": 788,
+          "info": 20
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "3799a4c2d162aed17ae5281f",
+          "source_sha256": "3ffc54008ac121201b7589b79da9cd99a5ffbb7565f3fcef4dba3de896ebf888",
+          "source_format": "pdf",
+          "source_pdf_sha256": "3ffc54008ac121201b7589b79da9cd99a5ffbb7565f3fcef4dba3de896ebf888",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "efd3fffca33941f66a01a9af29ef1ef7210e87787a5170b9e7b2e838f96597bb",
+            "bytes": 593021
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "7dd5a58b9b2d824815b4c0a1e24ff90933eaea63f90c153e3e86e2dd8a4bfb98",
+            "bytes": 2114
+          }
+        },
+        "lines": 5657,
+        "pct_clean": 78.3,
+        "errors": 2454,
+        "warnings": 788,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "08",
+      "county_name": "Brașov",
+      "capital_siruta": "40198",
+      "capital_name": "Brașov",
+      "path": "08-brasov/40198-brasov/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://extranet.brasovcity.ro/Registratura/Fileo.aspx?an=an&id_fisier=5427&id_registratura=1&nr=308891&registru=HOT",
+      "record_url": "https://www.brasovcity.ro/consiliul-local/registru-hcl/2024/72/aprobarea-bugetului-uat-municipiul-brasov-pe-anul-2024/NzI/MTIuMDIuMjAyNA",
+      "notes": "Anexa nr. 1 a HCL 72/2024 este bugetul local detaliat (sursa 02). Anexa nr. 2, publicată separat, privește instituțiile finanțate din venituri proprii și nu este folosită drept buget local principal.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T07:34:25+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1690,
+          "lines_strictly_verified": 1515,
+          "pct_lines_strictly_verified": 89.6,
+          "numeric_cells": 5869,
+          "numeric_cells_strictly_verified": 5451,
+          "pct_numeric_cells_strictly_verified": 92.9,
+          "scope": {
+            "pages_expected": 60,
+            "pages_selected": 60,
+            "pages_processed": 60,
+            "complete_pdf": true
+          },
+          "errors": 126,
+          "warnings": 122,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "a846014f879265e48ea1ef95",
+          "source_sha256": "73955ad912bf9a63a4e3dd4f4a7c25e58b12fe35ee7e8e2dff4f97e2ba816090",
+          "source_format": "pdf",
+          "source_pdf_sha256": "73955ad912bf9a63a4e3dd4f4a7c25e58b12fe35ee7e8e2dff4f97e2ba816090",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "877696519a72837cd2470116897921f14af07c97b7f4fd2f1f25611cb447d55c",
+            "bytes": 137504
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "e4208c64517704fd3c29e277a0594b086bfaeafc8e85c2c42b42e45f922fc289",
+            "bytes": 2307
+          }
+        },
+        "lines": 1690,
+        "pct_clean": 89.6,
+        "errors": 126,
+        "warnings": 122,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "09",
+      "county_name": "Brăila",
+      "capital_siruta": "42682",
+      "capital_name": "Brăila",
+      "path": "09-braila/42682-braila/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariabraila.ro/wp-content/uploads/2018/documentePDF/Buget/2024/BUGET%202024/Buget%20local%20HCLM%20%20nr.%2063%20din%2012.02.2024.pdf",
+      "record_url": "https://www.primariabraila.ro/monitor-oficial-local/documente-si-informatii-financiare/bugetul-si-programul-de-investitii",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T08:07:08+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 43,
+          "lines": 8237,
+          "lines_strictly_verified": 5417,
+          "pct_lines_strictly_verified": 65.8,
+          "numeric_cells": 16943,
+          "numeric_cells_strictly_verified": 11039,
+          "pct_numeric_cells_strictly_verified": 65.2,
+          "scope": {
+            "pages_expected": 291,
+            "pages_selected": 291,
+            "pages_processed": 291,
+            "complete_pdf": true
+          },
+          "errors": 2899,
+          "warnings": 1370,
+          "info": 10
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "48c2dc6a38efc231bc768a01",
+          "source_sha256": "bbe9ffb934969ff8536dbe65fae720d1cf22e62e06a9643702afd029897c27d3",
+          "source_format": "pdf",
+          "source_pdf_sha256": "bbe9ffb934969ff8536dbe65fae720d1cf22e62e06a9643702afd029897c27d3",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "842d5e85a39eabf56607a2b6a386e55dcc73c905398dfb4b0842eadcf2d587a2",
+            "bytes": 770038
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "e36a2ebacb78b326a4df0fe7f791cac41908382b2eed8d9219b12613d1bfc653",
+            "bytes": 7488
+          }
+        },
+        "lines": 8237,
+        "pct_clean": 65.8,
+        "errors": 2899,
+        "warnings": 1370,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "10",
+      "county_name": "Buzău",
+      "capital_siruta": "44818",
+      "capital_name": "Buzău",
+      "path": "10-buzau/44818-buzau/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariabuzau.ro/wp-content/uploads/2024/02/1-Buget-local-detaliat.pdf",
+      "record_url": "https://primariabuzau.ro/monitorul-oficial-local/buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T08:24:22+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 902,
+          "lines_strictly_verified": 526,
+          "pct_lines_strictly_verified": 58.3,
+          "numeric_cells": 3284,
+          "numeric_cells_strictly_verified": 1962,
+          "pct_numeric_cells_strictly_verified": 59.7,
+          "scope": {
+            "pages_expected": 46,
+            "pages_selected": 46,
+            "pages_processed": 46,
+            "complete_pdf": true
+          },
+          "errors": 187,
+          "warnings": 307,
+          "info": 1
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "2c11aa89aac4a0bdefda156d",
+          "source_sha256": "29e1c44f97a92f8c93a4e61135e7038185f41d2c9f3605e0b7f32e9904ec48fa",
+          "source_format": "pdf",
+          "source_pdf_sha256": "29e1c44f97a92f8c93a4e61135e7038185f41d2c9f3605e0b7f32e9904ec48fa",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "3b8705a652a5f5da813d045c5ff55be92e3a3eb4d1586bd8ee2ac34688267b94",
+            "bytes": 97014
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "6224b5a8497e8a96d3fe72f8c5e7d28958bc709cf43271045e02e8e326cb41fb",
+            "bytes": 1764
+          }
+        },
+        "lines": 902,
+        "pct_clean": 58.3,
+        "errors": 187,
+        "warnings": 307,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "11",
+      "county_name": "Caraș-Severin",
+      "capital_siruta": "50790",
+      "capital_name": "Reșița",
+      "path": "11-caras-severin/50790-resita/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://www.primariaresita.ro/portal/cs/resita/portal.nsf/AllByUNID/3937D63E22DA21F2C2258BB90030CF2B/$FILE/bugetul%20local.pdf",
+      "record_url": "https://www.primariaresita.ro/",
+      "notes": "Buget local rectificat aprobat și publicat la 25.09.2024; anexa inițială nu mai are o adresă oficială stabilă.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T08:24:29+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1197,
+          "lines_strictly_verified": 1140,
+          "pct_lines_strictly_verified": 95.2,
+          "numeric_cells": 6420,
+          "numeric_cells_strictly_verified": 6000,
+          "pct_numeric_cells_strictly_verified": 93.5,
+          "scope": {
+            "pages_expected": 42,
+            "pages_selected": 42,
+            "pages_processed": 42,
+            "complete_pdf": true
+          },
+          "errors": 127,
+          "warnings": 24,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "63f61051ea58044276e1b967",
+          "source_sha256": "8c47ce1b2d434eecce862fc295fcd30b18ea2dd79e48bf9de1e48779eace62ed",
+          "source_format": "pdf",
+          "source_pdf_sha256": "8c47ce1b2d434eecce862fc295fcd30b18ea2dd79e48bf9de1e48779eace62ed",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "b892a0e8e389e4d527e67a410e537cadc64953767204a04bdae7611554d5bf4a",
+            "bytes": 117351
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "1dca985f2f9727d05f1487d213e035495131a6dbc33dfab3313d13c157a892ab",
+            "bytes": 8072
+          }
+        },
+        "lines": 1197,
+        "pct_clean": 95.2,
+        "errors": 127,
+        "warnings": 24,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "12",
+      "county_name": "Călărași",
+      "capital_siruta": "92569",
+      "capital_name": "Călărași",
+      "path": "12-calarasi/92569-calarasi/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariacalarasi.ro/wp-content/tabele/buget-surse-financiare/bugetul-municipiului-Calarasi-2024.pdf",
+      "record_url": "https://primariacalarasi.ro/monitorul-oficial-local/documente-si-informatii-financiare/buget-pe-surse-financiare/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T08:52:08+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 1266,
+          "lines_strictly_verified": 672,
+          "pct_lines_strictly_verified": 53.1,
+          "numeric_cells": 4201,
+          "numeric_cells_strictly_verified": 2410,
+          "pct_numeric_cells_strictly_verified": 57.4,
+          "scope": {
+            "pages_expected": 87,
+            "pages_selected": 87,
+            "pages_processed": 87,
+            "complete_pdf": true
+          },
+          "errors": 539,
+          "warnings": 725,
+          "info": 11
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "7e79f1498607548bdb8850ba",
+          "source_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
+          "source_format": "pdf",
+          "source_pdf_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "3a407e297901aed0d43e91beeffb62a918d2515bd4bef2a9a449c0abbc621235",
+            "bytes": 216458
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "5a5e020626d18c83b54327531852ff47d15509cbd6b0e49404737fe58e6a7a6b",
+            "bytes": 1284
+          }
+        },
+        "lines": 1266,
+        "pct_clean": 53.1,
+        "errors": 539,
+        "warnings": 725,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "13",
+      "county_name": "Cluj",
+      "capital_siruta": "54975",
+      "capital_name": "Cluj-Napoca",
+      "path": "13-cluj/54975-cluj-napoca/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://files.primariaclujnapoca.ro/2024/01/12/2a.pdf",
+      "record_url": "https://primariaclujnapoca.ro/cetateni/dezbatere-publica/proiectul-de-buget-al-municipiului-cluj-napoca-pentru-anul-2024-2/",
+      "notes": "Anexa 2A detaliată, publicată oficial în format PDF și arhivă deschisă; HCL 48/2024 confirmă aprobarea ulterioară.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T08:57:47+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1495,
+          "lines_strictly_verified": 1266,
+          "pct_lines_strictly_verified": 84.7,
+          "numeric_cells": 1487,
+          "numeric_cells_strictly_verified": 1268,
+          "pct_numeric_cells_strictly_verified": 85.3,
+          "scope": {
+            "pages_expected": 37,
+            "pages_selected": 37,
+            "pages_processed": 37,
+            "complete_pdf": true
+          },
+          "errors": 70,
+          "warnings": 194,
+          "info": 2
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "beabe24469ff462135aa46c4",
+          "source_sha256": "faf4bc5d4dcbb231858c9403f4aa18122429175a7b852ad0593ff992f3201e47",
+          "source_format": "pdf",
+          "source_pdf_sha256": "faf4bc5d4dcbb231858c9403f4aa18122429175a7b852ad0593ff992f3201e47",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "20654389a6d273e812a6ed43bca783ad84bc6fc07813a5f59d2f92c3cfccfedb",
+            "bytes": 102421
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "e279a25a32141dfb4c79bf75e8cad3a8197c5c341ed58d23791d659cf33c3822",
+            "bytes": 1862
+          }
+        },
+        "lines": 1495,
+        "pct_clean": 84.7,
+        "errors": 70,
+        "warnings": 194,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "14",
+      "county_name": "Constanța",
+      "capital_siruta": "60419",
+      "capital_name": "Constanța",
+      "path": "14-constanta/60419-constanta/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primaria-constanta.ro/wp-content/uploads/custom-folders/Buget-pe-surse-financiare/16.-Buget-Municipal-2024.pdf",
+      "record_url": "https://primaria-constanta.ro/pagina-pmc/informatii-de-interes-public/buget/buget-pe-surse-financiare/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T09:46:02+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 4,
+          "lines": 3502,
+          "lines_strictly_verified": 2633,
+          "pct_lines_strictly_verified": 75.2,
+          "numeric_cells": 8221,
+          "numeric_cells_strictly_verified": 6286,
+          "pct_numeric_cells_strictly_verified": 76.5,
+          "scope": {
+            "pages_expected": 318,
+            "pages_selected": 318,
+            "pages_processed": 318,
+            "complete_pdf": true
+          },
+          "errors": 376,
+          "warnings": 687,
+          "info": 17
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "532562bb06766d42c8a4da4d",
+          "source_sha256": "a1cb02650e53c699aa24aafe13acf943e05c3d3320de737473352980b19fdbde",
+          "source_format": "pdf",
+          "source_pdf_sha256": "a1cb02650e53c699aa24aafe13acf943e05c3d3320de737473352980b19fdbde",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "35587b1f875fcf41cfe9189888cfd90892b29dc2b392c8731c16c588833fa584",
+            "bytes": 360492
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "ac85d12360a7b575a419f081348db059cba905d50b27d73b3cf494c03f8ec210",
+            "bytes": 2453
+          }
+        },
+        "lines": 3502,
+        "pct_clean": 75.2,
+        "errors": 376,
+        "warnings": 687,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "15",
+      "county_name": "Covasna",
+      "capital_siruta": "63394",
+      "capital_name": "Sfântu Gheorghe",
+      "path": "15-covasna/63394-sfantu-gheorghe/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.sfantugheorgheinfo.ro/uploads/buget-initial-1713429607.pdf",
+      "record_url": "https://www.sfantugheorgheinfo.ro/documente-si-informatii-financiare/buget-original",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T09:48:27+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1752,
+          "lines_strictly_verified": 1617,
+          "pct_lines_strictly_verified": 92.3,
+          "numeric_cells": 1766,
+          "numeric_cells_strictly_verified": 1631,
+          "pct_numeric_cells_strictly_verified": 92.4,
+          "scope": {
+            "pages_expected": 40,
+            "pages_selected": 40,
+            "pages_processed": 40,
+            "complete_pdf": true
+          },
+          "errors": 44,
+          "warnings": 96,
+          "info": 4
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "287f990445d3eece1a302469",
+          "source_sha256": "473885e43668145081a930011515954a676e9af1d1889edb1d73e598d9f2b509",
+          "source_format": "pdf",
+          "source_pdf_sha256": "473885e43668145081a930011515954a676e9af1d1889edb1d73e598d9f2b509",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "20f80d16917f7c4b816a1eb8eb9f08603a593a7fe15a64c26fdea7d8bfefdecb",
+            "bytes": 109444
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "d94498d8bfd2797d88d0847f539207aab0f08e93affc117be8e41251715dd901",
+            "bytes": 1969
+          }
+        },
+        "lines": 1752,
+        "pct_clean": 92.3,
+        "errors": 44,
+        "warnings": 96,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "16",
+      "county_name": "Dâmbovița",
+      "capital_siruta": "65342",
+      "capital_name": "Târgoviște",
+      "path": "16-dambovita/65342-targoviste/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://pmtgv.ro/MonitorPMT/Hotarari/2024/Anexe%20HCL/Anexe%20HCL%20nr.%2050/Anexa%201.pdf",
+      "record_url": "https://pmtgv.ro/DirEPMT/BUGET/buget.html",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T09:48:41+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1218,
+          "lines_strictly_verified": 1216,
+          "pct_lines_strictly_verified": 99.8,
+          "numeric_cells": 11277,
+          "numeric_cells_strictly_verified": 11259,
+          "pct_numeric_cells_strictly_verified": 99.8,
+          "scope": {
+            "pages_expected": 41,
+            "pages_selected": 41,
+            "pages_processed": 41,
+            "complete_pdf": true
+          },
+          "errors": 0,
+          "warnings": 2,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "d7634715902cedf17ba7ff60",
+          "source_sha256": "eac6e20098f1378b4193f8c27d54b3ad02cd870915c41ee4aaed4c56c299566b",
+          "source_format": "pdf",
+          "source_pdf_sha256": "eac6e20098f1378b4193f8c27d54b3ad02cd870915c41ee4aaed4c56c299566b",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "8089e3908a16ac9b2d060abe5054722c2d17b17751ded55fc6f6ad4ed098926e",
+            "bytes": 112040
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "de2e5ac760443fbfa615b29416f47e236b424c03dbfdd1631c7aa84166c7e57f",
+            "bytes": 12531
+          }
+        },
+        "lines": 1218,
+        "pct_clean": 99.8,
+        "errors": 0,
+        "warnings": 2,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "17",
+      "county_name": "Dolj",
+      "capital_siruta": "69900",
+      "capital_name": "Craiova",
+      "path": "17-dolj/69900-craiova/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariacraiova.ro/ro/info/65e8197131170722280503.pdf",
+      "record_url": "https://www.primariacraiova.ro/ro/a/2795/bugetul-pe-anul-2024",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T09:48:57+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1544,
+          "lines_strictly_verified": 1544,
+          "pct_lines_strictly_verified": 100.0,
+          "numeric_cells": 14223,
+          "numeric_cells_strictly_verified": 14223,
+          "pct_numeric_cells_strictly_verified": 100.0,
+          "scope": {
+            "pages_expected": 51,
+            "pages_selected": 51,
+            "pages_processed": 51,
+            "complete_pdf": true
+          },
+          "errors": 2,
+          "warnings": 0,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "6906eff096b0e459cce335eb",
+          "source_sha256": "378b4af25bb523ce76d9f8f84cc5592afa59531ff28a50a05ac6653797edde85",
+          "source_format": "pdf",
+          "source_pdf_sha256": "378b4af25bb523ce76d9f8f84cc5592afa59531ff28a50a05ac6653797edde85",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "c1f2908a087db83ecf84cd2c8211693f2be692cc8444f1594c41a58f4583cb23",
+            "bytes": 152519
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "b0841e41fbfdce9f9f5927b866136f63f559d4b46a2cb88ae8fb866d32872298",
+            "bytes": 14698
+          }
+        },
+        "lines": 1544,
+        "pct_clean": 100.0,
+        "errors": 2,
+        "warnings": 0,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "18",
+      "county_name": "Galați",
+      "capital_siruta": "75098",
+      "capital_name": "Galați",
+      "path": "18-galati/75098-galati/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/7191DA8A81727337C2258AD10024F81E/$FILE/HCL_53.pdf",
+      "record_url": "https://www.primariagalati.ro/dm_galati/hotarari.nsf/7191DA8A81727337C2258AD10024F81E",
+      "notes": "HCL 53/08.02.2024 și anexele bugetului general, publicate în registrul oficial al municipiului.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T10:01:06+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 907,
+          "lines_strictly_verified": 800,
+          "pct_lines_strictly_verified": 88.2,
+          "numeric_cells": 2631,
+          "numeric_cells_strictly_verified": 2255,
+          "pct_numeric_cells_strictly_verified": 85.7,
+          "scope": {
+            "pages_expected": 70,
+            "pages_selected": 70,
+            "pages_processed": 70,
+            "complete_pdf": true
+          },
+          "errors": 60,
+          "warnings": 103,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "9eaee1be5e3dae2f6ef9ee81",
+          "source_sha256": "2ad47e7c72a211ce23cdec7caf3d54012aa8e96886fe5cbcd669894a3029eea6",
+          "source_format": "pdf",
+          "source_pdf_sha256": "2ad47e7c72a211ce23cdec7caf3d54012aa8e96886fe5cbcd669894a3029eea6",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "0d32ca74052c287bcd23d29fa0e1f1f9aab3c9295ff9d5240c93f37f2f8821b7",
+            "bytes": 94339
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "0c34194637b20c9bb3accd966503245b8e284608a08f93b50a47c3b77e63321e",
+            "bytes": 7510
+          }
+        },
+        "lines": 907,
+        "pct_clean": 88.2,
+        "errors": 60,
+        "warnings": 103,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "19",
+      "county_name": "Giurgiu",
+      "capital_siruta": "100521",
+      "capital_name": "Giurgiu",
+      "path": "19-giurgiu/100521-giurgiu/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://primariagiurgiu.ro/storage/formidable/277/HCL-24-fs.pdf",
+      "record_url": "https://primariagiurgiu.ro/monitorul-oficial-local/documente-si-informatii-financiare/bugetul-din-toate-sursele-de-finantare/2024-bugetul-din-toate-sursele-de-finantare-hcl/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T10:06:11+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 316,
+          "lines_strictly_verified": 240,
+          "pct_lines_strictly_verified": 75.9,
+          "numeric_cells": 691,
+          "numeric_cells_strictly_verified": 471,
+          "pct_numeric_cells_strictly_verified": 68.2,
+          "scope": {
+            "pages_expected": 28,
+            "pages_selected": 28,
+            "pages_processed": 28,
+            "complete_pdf": true
+          },
+          "errors": 90,
+          "warnings": 24,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "e6227d80a6ba1108947aed64",
+          "source_sha256": "ac6c59f805bbfcd6c3749cf879b6d44520535fefe2a3f45bdfb9c9c4ecc14738",
+          "source_format": "pdf",
+          "source_pdf_sha256": "ac6c59f805bbfcd6c3749cf879b6d44520535fefe2a3f45bdfb9c9c4ecc14738",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "fefbc4341d2d84fcab12095f3cec5a423f830906c535178aca332348069cd258",
+            "bytes": 40167
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "53d5f8517f4e89125c2c4ae890da78f997c9663d65cfd0e6ddfa34cd87cf9e26",
+            "bytes": 1188
+          }
+        },
+        "lines": 316,
+        "pct_clean": 75.9,
+        "errors": 90,
+        "warnings": 24,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "20",
+      "county_name": "Gorj",
+      "capital_siruta": "77812",
+      "capital_name": "Târgu Jiu",
+      "path": "20-gorj/77812-targu-jiu/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://targujiu.ro/dm_tgjiu/portal.nsf/atasament/7268D2385DDA3AD3C2258AF20031CB08/$FILE/Buget%20rectificat%20R%206-%2026.03.2024.pdf",
+      "record_url": "https://targujiu.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T11:20:47+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 34,
+          "lines": 1422,
+          "lines_strictly_verified": 1180,
+          "pct_lines_strictly_verified": 83.0,
+          "numeric_cells": 2578,
+          "numeric_cells_strictly_verified": 2116,
+          "pct_numeric_cells_strictly_verified": 82.1,
+          "scope": {
+            "pages_expected": 113,
+            "pages_selected": 113,
+            "pages_processed": 113,
+            "complete_pdf": true
+          },
+          "errors": 312,
+          "warnings": 105,
+          "info": 1
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "0ce45b10cf3551207d331fe3",
+          "source_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f",
+          "source_format": "pdf",
+          "source_pdf_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "77f92805f7a6fd0c4efd6d768a56df1793b286d7de04af08f1ee45d543330819",
+            "bytes": 148573
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "a1ab16c889aebf8da471a60963be3c60a3d68d02fbf62abe8250e6c9db23eec8",
+            "bytes": 2247
+          }
+        },
+        "lines": 1422,
+        "pct_clean": 83.0,
+        "errors": 312,
+        "warnings": 105,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "21",
+      "county_name": "Harghita",
+      "capital_siruta": "83320",
+      "capital_name": "Miercurea Ciuc",
+      "path": "21-harghita/83320-miercurea-ciuc/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://szereda.ro/files/documents/20240212%20anexa%2001%20buget%2002.pdf",
+      "record_url": "https://szereda.ro/ro/buget",
+      "notes": "Anexa 01 cu bugetul local detaliat înlocuiește anexa 11, care conținea numai matricea generală consolidată.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T11:44:25+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 598,
+          "lines_strictly_verified": 517,
+          "pct_lines_strictly_verified": 86.5,
+          "numeric_cells": 3021,
+          "numeric_cells_strictly_verified": 2650,
+          "pct_numeric_cells_strictly_verified": 87.7,
+          "scope": {
+            "pages_expected": 53,
+            "pages_selected": 53,
+            "pages_processed": 53,
+            "complete_pdf": true
+          },
+          "errors": 96,
+          "warnings": 31,
+          "info": 8
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "059c54cd27dd4de2f3dda4f6",
+          "source_sha256": "b90cfcea74edba04dc9fd0bc80c62fd7ba72734c4e32599dddea76206099884b",
+          "source_format": "pdf",
+          "source_pdf_sha256": "b90cfcea74edba04dc9fd0bc80c62fd7ba72734c4e32599dddea76206099884b",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "0246f97a5058ee466f176eeb259f81ff366b7c7473bff3d04c67cd2cfe533547",
+            "bytes": 69180
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "b835e7e12508179325465db671ebc7ce4f4e7471cb24c9e7d8dfe04cd83966b9",
+            "bytes": 2328
+          }
+        },
+        "lines": 598,
+        "pct_clean": 86.5,
+        "errors": 96,
+        "warnings": 31,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "22",
+      "county_name": "Hunedoara",
+      "capital_siruta": "86687",
+      "capital_name": "Deva",
+      "path": "22-hunedoara/86687-deva/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariadeva.ro/images/uploads/documente/hcl_44.pdf",
+      "record_url": "https://www.primariadeva.ro/index.php/informatii_publice/buget",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T12:57:26+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 27,
+          "lines": 4885,
+          "lines_strictly_verified": 2341,
+          "pct_lines_strictly_verified": 47.9,
+          "numeric_cells": 20251,
+          "numeric_cells_strictly_verified": 9463,
+          "pct_numeric_cells_strictly_verified": 46.7,
+          "scope": {
+            "pages_expected": 284,
+            "pages_selected": 284,
+            "pages_processed": 284,
+            "complete_pdf": true
+          },
+          "errors": 3382,
+          "warnings": 675,
+          "info": 18
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "f3f0386caa63fa6fa23e96d0",
+          "source_sha256": "77225434318c5e6411cdc9efc0df496cc245ee11a506a93eae620846050d728a",
+          "source_format": "pdf",
+          "source_pdf_sha256": "77225434318c5e6411cdc9efc0df496cc245ee11a506a93eae620846050d728a",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "6b7e5903af2b2e1d31a36e5f777fdb0b3d07ab8df94f13452bedf5d8b68818ab",
+            "bytes": 616606
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "d015b4611bf00cdb0b7f09fc6f52af46bf4c7bed29c4c782a49e6f4e5c5c2c2c",
+            "bytes": 2284
+          }
+        },
+        "lines": 4885,
+        "pct_clean": 47.9,
+        "errors": 3382,
+        "warnings": 675,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "23",
+      "county_name": "Ialomița",
+      "capital_siruta": "92658",
+      "capital_name": "Slobozia",
+      "path": "23-ialomita/92658-slobozia/buget_orig.xlsx",
+      "source_format": "xlsx",
+      "document_status": "approved_initial",
+      "source_url": "https://municipiulslobozia.ro/wp-content/uploads/2024/10/RaportBuget_02A_2024.xlsx",
+      "record_url": "https://municipiulslobozia.ro/informatii-de-interes-public/surse-financiare-buget/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:09:40+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 539,
+          "lines_strictly_verified": 484,
+          "pct_lines_strictly_verified": 89.8,
+          "numeric_cells": 542,
+          "numeric_cells_strictly_verified": 487,
+          "pct_numeric_cells_strictly_verified": 89.9,
+          "scope": {
+            "pages_expected": 1,
+            "pages_selected": 1,
+            "pages_processed": 1,
+            "complete_pdf": true
+          },
+          "errors": 12,
+          "warnings": 43,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "d948efd1a152c0a7d0f1455d",
+          "source_sha256": "4192b4c87411310f3fb7884413a51b91a873a792fcd3e18b0b6569220e80f447",
+          "source_format": "xlsx",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "4536714ed04bf14c9e8c8405f8b2fe349bc148811f34b2ea557bb555c881a2ef",
+            "bytes": 40588
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "7a48b36e4c77f445776095cfff237f495bd331ada0e1006f59b329fbad7c25db",
+            "bytes": 11095
+          }
+        },
+        "lines": 539,
+        "pct_clean": 89.8,
+        "errors": 12,
+        "warnings": 43,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "24",
+      "county_name": "Iași",
+      "capital_siruta": "95060",
+      "capital_name": "Iași",
+      "path": "24-iasi/95060-iasi/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_parts": [
+        "https://www.primaria-iasi.ro/dm_iasi/hotarari.nsf/50115949CFE2E611C2258AD30029EC25/$FILE/HCL_26_2024.pdf?Open=",
+        "https://www.primaria-iasi.ro/dm_iasi/portal.nsf/atasament/4430FC507CA62DCEC2258AD8004244D5/$FILE/anunt.pdf?Open="
+      ],
+      "record_url": "https://www.primaria-iasi.ro/dm_iasi/hotarari.nsf/50115949CFE2E611C2258AD30029EC25",
+      "notes": "HCL 26/12.02.2024 și publicația oficială detaliată; totalurile anexei detaliate coincid cu totalurile aprobate în HCL.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:00:07+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 4,
+          "lines": 6499,
+          "lines_strictly_verified": 6132,
+          "pct_lines_strictly_verified": 94.4,
+          "numeric_cells": 16195,
+          "numeric_cells_strictly_verified": 14724,
+          "pct_numeric_cells_strictly_verified": 90.9,
+          "scope": {
+            "pages_expected": 258,
+            "pages_selected": 258,
+            "pages_processed": 258,
+            "complete_pdf": true
+          },
+          "errors": 345,
+          "warnings": 238,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "1798da74ead24dd6e7998a53",
+          "source_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f",
+          "source_format": "pdf",
+          "source_pdf_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "ad2828712038b1ea275552f524e6a4761de00991fc5b40185b3bb8fc3f2acc89",
+            "bytes": 343673
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "bee8a01827189c72f9d11c324ac06afadc4cdf2fba24077976bdf0aa398be662",
+            "bytes": 1737
+          }
+        },
+        "lines": 6499,
+        "pct_clean": 94.4,
+        "errors": 345,
+        "warnings": 238,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "25",
+      "county_name": "Ilfov",
+      "capital_siruta": "179132",
+      "capital_name": "București",
+      "path": "25-ilfov/179132-bucuresti/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://doc.pmb.ro/institutii/cgmb/buget/docs/2024/20240409/pdf/1.1.1.pdf",
+      "record_url": "https://www.pmb.ro/buget/arhiva/get-anual-buget-list/2024/87",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:15:57+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 5,
+          "lines": 1997,
+          "lines_strictly_verified": 1670,
+          "pct_lines_strictly_verified": 83.6,
+          "numeric_cells": 3807,
+          "numeric_cells_strictly_verified": 3222,
+          "pct_numeric_cells_strictly_verified": 84.6,
+          "scope": {
+            "pages_expected": 105,
+            "pages_selected": 105,
+            "pages_processed": 105,
+            "complete_pdf": true
+          },
+          "errors": 192,
+          "warnings": 289,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "24f77cfd1cdbc2440ce64752",
+          "source_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f",
+          "source_format": "pdf",
+          "source_pdf_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "276ebacdc3c896b7782fad1b5f0141251e0c7afcb0c59a91fb13659a84047de3",
+            "bytes": 130003
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "f605dde18cb49dd84836037ae5d0eff274025261e51ca7026ee841c44f67d047",
+            "bytes": 2178
+          }
+        },
+        "lines": 1997,
+        "pct_clean": 83.6,
+        "errors": 192,
+        "warnings": 289,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "26",
+      "county_name": "Maramureș",
+      "capital_siruta": "106318",
+      "capital_name": "Baia Mare",
+      "path": "26-maramures/106318-baia-mare/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.baiamare.ro/Baiamare/Raportari%20financiare/An%202024/proiect_bugete_2024.pdf",
+      "record_url": "https://www.baiamare.ro/ro/Administratie/Administratia-Publica-Locala/Buget-Local-si-Raportari-financiare/Pentru-anul-2024/Proiect-privind-Bugetul-Municipiului-Baia-Mare-pentru-anul-2024/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:20:40+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 1204,
+          "lines_strictly_verified": 1012,
+          "pct_lines_strictly_verified": 84.1,
+          "numeric_cells": 1772,
+          "numeric_cells_strictly_verified": 1582,
+          "pct_numeric_cells_strictly_verified": 89.3,
+          "scope": {
+            "pages_expected": 42,
+            "pages_selected": 42,
+            "pages_processed": 42,
+            "complete_pdf": true
+          },
+          "errors": 42,
+          "warnings": 159,
+          "info": 7
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "460a0e5488297ea579bd130e",
+          "source_sha256": "958a83d90e0ad669e77ef66dc801580aa842d57d2ee3a1ed3e0d005f98857be5",
+          "source_format": "pdf",
+          "source_pdf_sha256": "958a83d90e0ad669e77ef66dc801580aa842d57d2ee3a1ed3e0d005f98857be5",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "38661dc55c9b0f2673a2c24dfb424aa39c7ae63f85808ce553982d961cec6f2d",
+            "bytes": 95640
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "5eb3367b6ac481d2074fba652dfc2615bbd841170c2044d4ff315a2466e90f35",
+            "bytes": 2262
+          }
+        },
+        "lines": 1204,
+        "pct_clean": 84.1,
+        "errors": 42,
+        "warnings": 159,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "27",
+      "county_name": "Mehedinți",
+      "capital_siruta": "109773",
+      "capital_name": "Drobeta-Turnu Severin",
+      "path": "27-mehedinti/109773-drobeta-turnu-severin/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "not_found",
+      "record_url": "https://emol.ro/drobeta-turnuseverin-mh/registru-hcl/142687/",
+      "notes": "Registrul eMOL confirmă HCL 39/12.02.2024, dar nu publică documentul sau anexele bugetare; nu a fost identificată o anexă municipală 2024 descărcabilă din alt registru oficial.",
+      "conversion": {
+        "status": "missing_pdf"
+      }
+    },
+    {
+      "county_code": "28",
+      "county_name": "Mureș",
+      "capital_siruta": "114319",
+      "capital_name": "Târgu Mureș",
+      "path": "28-mures/114319-targu-mures/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "official_proposal",
+      "source_url": "https://www.tirgumures.ro/buget2024/Anexa%201%20-%20Buget%20local%20-%20Proiect%20buget%202024.pdf",
+      "record_url": "https://www.tirgumures.ro/index.php?Itemid=572&id=9483&lang=ro&option=com_content&view=article",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:21:19+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 374,
+          "lines_strictly_verified": 339,
+          "pct_lines_strictly_verified": 90.6,
+          "numeric_cells": 758,
+          "numeric_cells_strictly_verified": 688,
+          "pct_numeric_cells_strictly_verified": 90.8,
+          "scope": {
+            "pages_expected": 11,
+            "pages_selected": 11,
+            "pages_processed": 11,
+            "complete_pdf": true
+          },
+          "errors": 30,
+          "warnings": 13,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "8b5eded1ef643ad9a06e92cf",
+          "source_sha256": "d57cfed1bfb05a9c8d63dd4e71007e3c8a89ad5c58460959643ab57e8ec43f01",
+          "source_format": "pdf",
+          "source_pdf_sha256": "d57cfed1bfb05a9c8d63dd4e71007e3c8a89ad5c58460959643ab57e8ec43f01",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "ca1d776f8f5bb4a8582a838438c5c05c476b821ad1885aaf5ff54afc656d68ca",
+            "bytes": 29783
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "4f68bb2590fd3cdcb47a3d15c6a19863744266136f0324cbde9f10dad8fdd4ba",
+            "bytes": 1564
+          }
+        },
+        "lines": 374,
+        "pct_clean": 90.6,
+        "errors": 30,
+        "warnings": 13,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "29",
+      "county_name": "Neamț",
+      "capital_siruta": "120726",
+      "capital_name": "Piatra-Neamț",
+      "path": "29-neamt/120726-piatra-neamt/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariapn.ro/documents/10179/5635149/buget_local_2024.pdf",
+      "record_url": "https://www.primariapn.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:35:02+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 3,
+          "lines": 1085,
+          "lines_strictly_verified": 948,
+          "pct_lines_strictly_verified": 87.4,
+          "numeric_cells": 2211,
+          "numeric_cells_strictly_verified": 1818,
+          "pct_numeric_cells_strictly_verified": 82.2,
+          "scope": {
+            "pages_expected": 71,
+            "pages_selected": 71,
+            "pages_processed": 71,
+            "complete_pdf": true
+          },
+          "errors": 100,
+          "warnings": 103,
+          "info": 6
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "9b8e965c035d7561488a8e16",
+          "source_sha256": "f9f4aa18e93ac41666927a57e0b53ab3864bb0b2e731664dc50954ac03083478",
+          "source_format": "pdf",
+          "source_pdf_sha256": "f9f4aa18e93ac41666927a57e0b53ab3864bb0b2e731664dc50954ac03083478",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "61b8fb540a12e4baa197e79eaa0749627d8d0101bfae6b45680277bdeca5e238",
+            "bytes": 100781
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "cbce5b97a7f6c4d5422579deccbcb06e70a02183e7ef2966e198c8ae1a2afe81",
+            "bytes": 2056
+          }
+        },
+        "lines": 1085,
+        "pct_clean": 87.4,
+        "errors": 100,
+        "warnings": 103,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "30",
+      "county_name": "Olt",
+      "capital_siruta": "125347",
+      "capital_name": "Slatina",
+      "path": "30-olt/125347-slatina/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "http://www.primariaslatina.ro/images/dispozitii/h_18_070224.pdf",
+      "record_url": "http://www.primariaslatina.ro/hotarari_dispozitii_2024-H-pag12.html",
+      "notes": "HCL 18/07.02.2024 cu bugetul local inițial și anexele detaliate de investiții, recuperată din registrul HCL oficial.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T14:48:51+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 2037,
+          "lines_strictly_verified": 2036,
+          "pct_lines_strictly_verified": 100.0,
+          "numeric_cells": 2267,
+          "numeric_cells_strictly_verified": 2265,
+          "pct_numeric_cells_strictly_verified": 99.9,
+          "scope": {
+            "pages_expected": 142,
+            "pages_selected": 142,
+            "pages_processed": 142,
+            "complete_pdf": true
+          },
+          "errors": 6,
+          "warnings": 1,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "34475830f52c6082d810c5d6",
+          "source_sha256": "d34ef9a59fe9657bac3dbf1a5327e34f08122677e712790b7c8e22b4c0bbdfa3",
+          "source_format": "pdf",
+          "source_pdf_sha256": "d34ef9a59fe9657bac3dbf1a5327e34f08122677e712790b7c8e22b4c0bbdfa3",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "abd71ef63226886d3112c5da7fca61166a521b927f0b519cb04bf7f7978e6c8c",
+            "bytes": 103664
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "5300c2c72d3ae635486fa7600d83552c489869c8275673f4b1ed2f3a1dc943d2",
+            "bytes": 2241
+          }
+        },
+        "lines": 2037,
+        "pct_clean": 100.0,
+        "errors": 6,
+        "warnings": 1,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "31",
+      "county_name": "Prahova",
+      "capital_siruta": "130534",
+      "capital_name": "Ploiești",
+      "path": "31-prahova/130534-ploiesti/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://ploiesti.ro/wp-content/uploads/hcl-pdf/HCL-2024-025-A.pdf",
+      "record_url": "https://ploiesti.ro/hotarari/hcl-25-2024/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T15:50:56+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 4,
+          "lines": 1838,
+          "lines_strictly_verified": 1702,
+          "pct_lines_strictly_verified": 92.6,
+          "numeric_cells": 6326,
+          "numeric_cells_strictly_verified": 5721,
+          "pct_numeric_cells_strictly_verified": 90.4,
+          "scope": {
+            "pages_expected": 269,
+            "pages_selected": 269,
+            "pages_processed": 269,
+            "complete_pdf": true
+          },
+          "errors": 101,
+          "warnings": 101,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "fb221cdc4572b99436ca3014",
+          "source_sha256": "7a1ba74ec929a95ca6c2ba6c8ea244e96c66ff539933a79d3d56135cf38e3f00",
+          "source_format": "pdf",
+          "source_pdf_sha256": "7a1ba74ec929a95ca6c2ba6c8ea244e96c66ff539933a79d3d56135cf38e3f00",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "4b75a2e8c9e7ece9d06c1e18040ea4c60184bc098427e0387e160478539a9cdd",
+            "bytes": 188506
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "7f5c0f869def605af84210fe525607d11b2e8082c1c02d2b10149c0aaff1d1f6",
+            "bytes": 2257
+          }
+        },
+        "lines": 1838,
+        "pct_clean": 92.6,
+        "errors": 101,
+        "warnings": 101,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "32",
+      "county_name": "Satu Mare",
+      "capital_siruta": "136483",
+      "capital_name": "Satu Mare",
+      "path": "32-satu-mare/136483-satu-mare/buget_orig.xlsx",
+      "source_format": "xlsx",
+      "document_status": "approved_initial",
+      "source_url": "https://www.primariasm.ro/storage/directia-economica/bilant-general/consolidat-05022024.xlsx",
+      "record_url": "https://www.primariasm.ro/bugetul-general-consolidat",
+      "notes": "Bugetul general consolidat la aprobarea inițială din 05.02.2024; coloana «Bugetul local» este publicată nativ în Excel și păstrată byte-for-byte.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:29:17+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 52,
+          "lines_strictly_verified": 52,
+          "pct_lines_strictly_verified": 100.0,
+          "numeric_cells": 52,
+          "numeric_cells_strictly_verified": 52,
+          "pct_numeric_cells_strictly_verified": 100.0,
+          "scope": {
+            "pages_expected": 1,
+            "pages_selected": 1,
+            "pages_processed": 1,
+            "complete_pdf": true
+          },
+          "errors": 0,
+          "warnings": 0,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "f4a93a90db7861406e3826b6",
+          "source_sha256": "5bc126eabdce3369f2c70c152af6d2b81f40cdd95ab743ab5cdcead844453360",
+          "source_format": "xlsx",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "1343a7a82c3e2ad187a903f4793ffc3cbaac684cd0f9e27f6b28c1b7f2701d63",
+            "bytes": 11251
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "340f9fbea3d2cb6343ad02b8381468f6eefd3ccf6d60065cdb311b43eef95200",
+            "bytes": 6586
+          }
+        },
+        "lines": 52,
+        "pct_clean": 100.0,
+        "errors": 0,
+        "warnings": 0,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "33",
+      "county_name": "Sălaj",
+      "capital_siruta": "139704",
+      "capital_name": "Zalău",
+      "path": "33-salaj/139704-zalau/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.zalausj.ro/portal/zalau/portal.nsf/AllByUNID/2780078AE4B321A9C2258AC300433697/$FILE/2024.pdf",
+      "record_url": "https://www.zalausj.ro/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T15:55:39+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 807,
+          "lines_strictly_verified": 325,
+          "pct_lines_strictly_verified": 40.3,
+          "numeric_cells": 2517,
+          "numeric_cells_strictly_verified": 1264,
+          "pct_numeric_cells_strictly_verified": 50.2,
+          "scope": {
+            "pages_expected": 50,
+            "pages_selected": 50,
+            "pages_processed": 50,
+            "complete_pdf": true
+          },
+          "errors": 1223,
+          "warnings": 137,
+          "info": 16
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "7086e4ac0d5a828613854a14",
+          "source_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4",
+          "source_format": "pdf",
+          "source_pdf_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "7d31c9c6379d99ff57e2a667ac60edbdc7567566e202f45132cbbb94b6443539",
+            "bytes": 137826
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "9491d91f6854b44fa1b5febb85f922b36f9dcf64f02dda3addbaaa004cd32ba9",
+            "bytes": 1723
+          }
+        },
+        "lines": 807,
+        "pct_clean": 40.3,
+        "errors": 1223,
+        "warnings": 137,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "34",
+      "county_name": "Sibiu",
+      "capital_siruta": "143450",
+      "capital_name": "Sibiu",
+      "path": "34-sibiu/143450-sibiu/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.sibiu.ro/ro2/pdf/Bilant_executie/Bugetul_local_al_mun_Sibiu_pe_anul_2024.pdf",
+      "record_url": "https://sibiu.ro/primaria/buget",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T15:56:39+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 11,
+          "lines": 1069,
+          "lines_strictly_verified": 616,
+          "pct_lines_strictly_verified": 57.6,
+          "numeric_cells": 3298,
+          "numeric_cells_strictly_verified": 2138,
+          "pct_numeric_cells_strictly_verified": 64.8,
+          "scope": {
+            "pages_expected": 98,
+            "pages_selected": 98,
+            "pages_processed": 98,
+            "complete_pdf": true
+          },
+          "errors": 1064,
+          "warnings": 198,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "deef88e49abf0e9338bfc279",
+          "source_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
+          "source_format": "pdf",
+          "source_pdf_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "9ac5aa68d0a849666247c11fc367a153886dda8231a41b5650a43d3e5ed1f768",
+            "bytes": 187963
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "c3b66c9fb4d95e8d188f492a074f24a7ca4c92a9363e5f488aaf0ea847abc854",
+            "bytes": 2248
+          }
+        },
+        "lines": 1069,
+        "pct_clean": 57.6,
+        "errors": 1064,
+        "warnings": 198,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "35",
+      "county_name": "Suceava",
+      "capital_siruta": "146263",
+      "capital_name": "Suceava",
+      "path": "35-suceava/146263-suceava/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://eportal.primariasv.ro/dm_suceava/site.nsf/6FF8FE11077B0C01C2258AD10037DBD4/$FILE/BUGETUL%20LOCAL%20PE%20ANUL%202024.pdf",
+      "record_url": "https://www.primariasv.ro/dm_suceava/site.nsf/pagini/buget%2Blocal-000016E2",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T16:03:31+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 1736,
+          "lines_strictly_verified": 1605,
+          "pct_lines_strictly_verified": 92.5,
+          "numeric_cells": 5245,
+          "numeric_cells_strictly_verified": 4625,
+          "pct_numeric_cells_strictly_verified": 88.2,
+          "scope": {
+            "pages_expected": 114,
+            "pages_selected": 114,
+            "pages_processed": 114,
+            "complete_pdf": true
+          },
+          "errors": 109,
+          "warnings": 99,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "b01f6d059974cdfdc4c6d52b",
+          "source_sha256": "bc1d752f85827c7d5a0e0b91deea3587cb09fb3c963a57e71d0364734ee67651",
+          "source_format": "pdf",
+          "source_pdf_sha256": "bc1d752f85827c7d5a0e0b91deea3587cb09fb3c963a57e71d0364734ee67651",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "a59a84f424ab786e2ec747685d0b8953e456a5a7c765e30c4899b64c50d8d014",
+            "bytes": 145548
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "a1b62767f7384c819c077d3117506d7d880e16636660cefe46245a911e801780",
+            "bytes": 2314
+          }
+        },
+        "lines": 1736,
+        "pct_clean": 92.5,
+        "errors": 109,
+        "warnings": 99,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "36",
+      "county_name": "Teleorman",
+      "capital_siruta": "151790",
+      "capital_name": "Alexandria",
+      "path": "36-teleorman/151790-alexandria/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://alexandria.ro/storage/formidable/14/buget-local-total.pdf",
+      "record_url": "https://alexandria.ro/informatii-de-interes-public/buget-pe-surse-financiare/",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T16:03:39+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 871,
+          "lines_strictly_verified": 827,
+          "pct_lines_strictly_verified": 94.9,
+          "numeric_cells": 4716,
+          "numeric_cells_strictly_verified": 4365,
+          "pct_numeric_cells_strictly_verified": 92.6,
+          "scope": {
+            "pages_expected": 30,
+            "pages_selected": 30,
+            "pages_processed": 30,
+            "complete_pdf": true
+          },
+          "errors": 110,
+          "warnings": 18,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "bce055ad83aaa9ff53f049a8",
+          "source_sha256": "550a814adb632d3d3e59636827fccae57a818cf6868a2265d3b34377f027cc98",
+          "source_format": "pdf",
+          "source_pdf_sha256": "550a814adb632d3d3e59636827fccae57a818cf6868a2265d3b34377f027cc98",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "c10aa66cc617e8c0e0790b6b12b72c56f25ac241b6c9117dd534dbaaf76e6b52",
+            "bytes": 84231
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "7fcc815564e107e0975ca46593381a76ee9777a5605b645d0147987bd2c448f2",
+            "bytes": 8753
+          }
+        },
+        "lines": 871,
+        "pct_clean": 94.9,
+        "errors": 110,
+        "warnings": 18,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "37",
+      "county_name": "Timiș",
+      "capital_siruta": "155243",
+      "capital_name": "Timișoara",
+      "path": "37-timis/155243-timisoara/buget_orig.xlsx",
+      "source_format": "xlsx",
+      "document_status": "official_proposal",
+      "source_url": "https://d37frk053gnamp.cloudfront.net/buget/proiect-2024/Anexa%202%20sursa%20A.xlsx",
+      "record_url": "https://buget.primariatm.ro/2024",
+      "notes": "Anexa 2, sursa 02A, publicată nativ în Excel pe portalul oficial al proiectului de buget 2024; formatul sursă este păstrat byte-for-byte.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T00:09:45+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 588,
+          "lines_strictly_verified": 564,
+          "pct_lines_strictly_verified": 95.9,
+          "numeric_cells": 626,
+          "numeric_cells_strictly_verified": 602,
+          "pct_numeric_cells_strictly_verified": 96.2,
+          "scope": {
+            "pages_expected": 2,
+            "pages_selected": 2,
+            "pages_processed": 2,
+            "complete_pdf": true
+          },
+          "errors": 14,
+          "warnings": 10,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "2866ad27fe9744be06080d04",
+          "source_sha256": "a33e75ba5354fb66025af95761fe4ae606ba5e56626729607e0fc8f76af6a034",
+          "source_format": "xlsx",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "66c71a79fbc92099e787796b2037565d40fd42c3494c034db06ad4cd05c134ee",
+            "bytes": 44158
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "35d3cfd5cac7600eeabab2fae1310f6f3463d0611c76b12453c46fbda9f455d1",
+            "bytes": 11703
+          }
+        },
+        "lines": 588,
+        "pct_clean": 95.9,
+        "errors": 14,
+        "warnings": 10,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "38",
+      "county_name": "Tulcea",
+      "capital_siruta": "159614",
+      "capital_name": "Tulcea",
+      "path": "38-tulcea/159614-tulcea/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://tulcea.cityon.ro/File/DownloadBinaryFileOnTenantOrHost/d398c0dc-a2ad-cd47-4991-3a1106f19225",
+      "record_url": "https://tulcea.cityon.ro/MonitorulOficialLocal/FisaDocumentGeneral/83666",
+      "notes": "HCL 44/13.02.2024 și anexele bugetului inițial, recuperate prin ruta publică folosită de vizualizatorul portalului CityOn.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T16:16:03+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 2,
+          "lines": 979,
+          "lines_strictly_verified": 794,
+          "pct_lines_strictly_verified": 81.1,
+          "numeric_cells": 1355,
+          "numeric_cells_strictly_verified": 1171,
+          "pct_numeric_cells_strictly_verified": 86.4,
+          "scope": {
+            "pages_expected": 58,
+            "pages_selected": 58,
+            "pages_processed": 58,
+            "complete_pdf": true
+          },
+          "errors": 70,
+          "warnings": 118,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "cca67fe43459c39a53d94ba2",
+          "source_sha256": "203377d7e9f66b5ec1c4edd31aeefd8701cc5bd4375fe79d75d5f7cf7263c936",
+          "source_format": "pdf",
+          "source_pdf_sha256": "203377d7e9f66b5ec1c4edd31aeefd8701cc5bd4375fe79d75d5f7cf7263c936",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "87db39c5a509055ea3ee42e74cc62c7963fb83cc9cf4d0a9fddf7db5410c4bfe",
+            "bytes": 91184
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "f02e8ddd12775f30f9e5dfb349724dcc2e2f92bc1674f1df263ee37f86ab0b32",
+            "bytes": 2211
+          }
+        },
+        "lines": 979,
+        "pct_clean": 81.1,
+        "errors": 70,
+        "warnings": 118,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "39",
+      "county_name": "Vaslui",
+      "capital_siruta": "161945",
+      "capital_name": "Vaslui",
+      "path": "39-vaslui/161945-vaslui/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_rectification",
+      "source_url": "https://primariavaslui.ro/wp-content/uploads/2026/07/HCL-NR.-51_28.03.2024_PRIVIND-RECTIFICAREA-BUGETULUI-LOCAL-AL-MUN.-VASLUI-ETAPA-MARTIE-2024.pdf",
+      "record_url": "https://primariavaslui.ro/rectificari-bugetare/",
+      "notes": "Cea mai timpurie rectificare aprobată cu pachet detaliat complet, HCL 51/28.03.2024, este folosită deoarece anexa inițială nu mai este expusă separat.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T17:05:48+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 6,
+          "lines": 2313,
+          "lines_strictly_verified": 1165,
+          "pct_lines_strictly_verified": 50.4,
+          "numeric_cells": 4632,
+          "numeric_cells_strictly_verified": 2968,
+          "pct_numeric_cells_strictly_verified": 64.1,
+          "scope": {
+            "pages_expected": 101,
+            "pages_selected": 101,
+            "pages_processed": 101,
+            "complete_pdf": true
+          },
+          "errors": 354,
+          "warnings": 1119,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "1c843c5e512be946cca999e7",
+          "source_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f",
+          "source_format": "pdf",
+          "source_pdf_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "e255dfeefea7986813845bbbf959f75560d2d40306ee430491ad55bf630b7c31",
+            "bytes": 215259
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "9c2f9643bc32c2810162f119ba49e95a2078c719a914459b0a3873a6201295b3",
+            "bytes": 2529
+          }
+        },
+        "lines": 2313,
+        "pct_clean": 50.4,
+        "errors": 354,
+        "warnings": 1119,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "40",
+      "county_name": "Vâlcea",
+      "capital_siruta": "167473",
+      "capital_name": "Râmnicu Vâlcea",
+      "path": "40-valcea/167473-ramnicu-valcea/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://dm.primariavl.ro/dm/2024/hotarari.nsf/vwHotarariByAn/182509FE801942F1C2258AC30048CA35/$FILE/28.Aprobare%20buget%20local%20si%20liste%20investitii%20pe%20anul%202024.pdf",
+      "record_url": "https://hcl.usr.ro/ramnicu_valcea/2024/h28",
+      "notes": "HCL 28/09.02.2024 și anexele complete, descărcate de pe registrul oficial Lotus al municipiului.",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T17:38:02+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 1,
+          "lines": 338,
+          "lines_strictly_verified": 294,
+          "pct_lines_strictly_verified": 87.0,
+          "numeric_cells": 968,
+          "numeric_cells_strictly_verified": 871,
+          "pct_numeric_cells_strictly_verified": 90.0,
+          "scope": {
+            "pages_expected": 70,
+            "pages_selected": 70,
+            "pages_processed": 70,
+            "complete_pdf": true
+          },
+          "errors": 20,
+          "warnings": 31,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "bceaa774593b361f70783a89",
+          "source_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d",
+          "source_format": "pdf",
+          "source_pdf_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "272f6cac070e8da05bebde3d0cdc61902d38640258279150ef6b903303af74cb",
+            "bytes": 47690
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "1f34ecef9db92c07d4d4b703c89cabe80d5f55a1936204b8482b50e3994c083c",
+            "bytes": 1399
+          }
+        },
+        "lines": 338,
+        "pct_clean": 87.0,
+        "errors": 20,
+        "warnings": 31,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "41",
+      "county_name": "Vrancea",
+      "capital_siruta": "174744",
+      "capital_name": "Focșani",
+      "path": "41-vrancea/174744-focsani/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://www.focsani.info/fisiere/pagini_fisiere/hcl%2079%20buget%202024.pdf",
+      "record_url": "https://www.focsani.info/pagina/buget-pe-anul-2024",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T19:08:06+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 16,
+          "lines": 418,
+          "lines_strictly_verified": 294,
+          "pct_lines_strictly_verified": 70.3,
+          "numeric_cells": 1317,
+          "numeric_cells_strictly_verified": 812,
+          "pct_numeric_cells_strictly_verified": 61.7,
+          "scope": {
+            "pages_expected": 287,
+            "pages_selected": 287,
+            "pages_processed": 287,
+            "complete_pdf": true
+          },
+          "errors": 128,
+          "warnings": 87,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "326f900e323b2b67212316a1",
+          "source_sha256": "a1d423da9affb716ef4dd243ab025a557785374163b05259076f7c2a6e2b7337",
+          "source_format": "pdf",
+          "source_pdf_sha256": "a1d423da9affb716ef4dd243ab025a557785374163b05259076f7c2a6e2b7337",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "0d5b73951c8cd1076231dafce832360a163e5e0635adabd7492f239d57a77f34",
+            "bytes": 58924
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "8f08c84a4141d0c368cd4e58c2588d339a39af2d335b5c51f1a99e3a7b359ef8",
+            "bytes": 1282
+          }
+        },
+        "lines": 418,
+        "pct_clean": 70.3,
+        "errors": 128,
+        "warnings": 87,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    },
+    {
+      "county_code": "42",
+      "county_name": "București",
+      "capital_siruta": "179132",
+      "capital_name": "București",
+      "path": "42-bucuresti/179132-bucuresti/budget_file.pdf",
+      "source_format": "pdf",
+      "document_status": "approved_initial",
+      "source_url": "https://doc.pmb.ro/institutii/cgmb/buget/docs/2024/20240409/pdf/1.1.1.pdf",
+      "record_url": "https://www.pmb.ro/buget/arhiva/get-anual-buget-list/2024/87",
+      "copy_from": "25-ilfov/179132-bucuresti/budget_file.pdf",
+      "conversion": {
+        "status": "converted",
+        "workbook": "budget_file.xlsx",
+        "analysis": "analysis.json",
+        "at": "2026-08-27T19:10:17+03:00",
+        "tool_version": "0.1.0",
+        "quality": {
+          "schema_version": 2,
+          "metric": "observed_strict_line_rate",
+          "recall_measured": false,
+          "documents": 5,
+          "lines": 1997,
+          "lines_strictly_verified": 1670,
+          "pct_lines_strictly_verified": 83.6,
+          "numeric_cells": 3807,
+          "numeric_cells_strictly_verified": 3222,
+          "pct_numeric_cells_strictly_verified": 84.6,
+          "scope": {
+            "pages_expected": 105,
+            "pages_selected": 105,
+            "pages_processed": 105,
+            "complete_pdf": true
+          },
+          "errors": 192,
+          "warnings": 289,
+          "info": 0
+        },
+        "artifacts": {
+          "schema_version": 1,
+          "bundle_id": "24f77cfd1cdbc2440ce64752",
+          "source_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f",
+          "source_format": "pdf",
+          "source_pdf_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f",
+          "workbook": {
+            "path": "budget_file.xlsx",
+            "sha256": "65b8b485525f48a2fe0a319cbc39cfc7b82273523a07a9f30bed2bb23127ffd7",
+            "bytes": 130003
+          },
+          "analysis": {
+            "path": "analysis.json",
+            "sha256": "f605dde18cb49dd84836037ae5d0eff274025261e51ca7026ee841c44f67d047",
+            "bytes": 2178
+          }
+        },
+        "lines": 1997,
+        "pct_clean": 83.6,
+        "errors": 192,
+        "warnings": 289,
+        "llm_cost_usd": 0.0,
+        "llm_cost_scope": "current_run_incremental",
+        "llm_lifetime_cost_usd": 0.0
+      }
+    }
+  ]
+}

@@ -130,7 +130,9 @@ de publicare P0. Vor fi înlocuite la următoarea conversie completă.</p>
 
 <p style="margin-top:1.25rem">
   {% if city.xlsx_rel %}<a href="{{ raw }}/{{ city.xlsx_rel }}">Descarcă Excel</a> · {% endif %}
-  {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>{% elif city.source_url %}<a href="{{ city.source_url }}">PDF sursă</a>{% endif %}
+  {% if city.pdf_rel %}<a href="{{ raw }}/{{ city.pdf_rel }}">PDF sursă</a>
+  {% elif city.source_rel %}<a href="{{ raw }}/{{ city.source_rel }}">Excel sursă</a>
+  {% elif city.source_url %}<a href="{{ city.source_url }}">Sursă oficială{% if city.source_format %} ({{ city.source_format | upper }}){% endif %}</a>{% endif %}
 </p>
 
 {# ---- planul aprobat și execuția, ca vizualizări separate; secțiunea finală ---- #}

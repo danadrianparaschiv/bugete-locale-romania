@@ -1,6 +1,6 @@
 """Mapper tests on synthetic text grids (no OCR involved)."""
 
-from bgconvertor.extract.scanned import map_payload, map_table
+from bgconvertor.extract.scanned import map_payload, map_prose_budget_summary, map_table
 
 
 def _grid(rows):
@@ -77,6 +77,44 @@ def test_budget_and_forecast_years_are_taken_from_the_document():
         "est2027": "102",
         "est2028": "103",
     }
+
+
+def test_official_prose_summary_maps_only_explicit_budget_facts():
+    text = (
+        "Veniturile bugetului local pentru anul 2024 sunt în valoare de "
+        "990.419,40 mii lei. În sinteză, cheltuielile bugetului local pe "
+        "anul 2024, în valoare de 1.027.262,03 mii lei, se prezintă astfel: "
+        "Autorități publice și acțiuni externe în suma de 62.685,13 mii lei, "
+        "din care: secțiunea funcționare: 55.813,13 mii lei; secțiunea "
+        "dezvoltare: 6.872 mii lei; o categorie nepublicată 12.000 mii lei."
+    )
+    lines = map_prose_budget_summary(text, 2024)
+    indexed = {(line["code"], line["section"]): line for line in lines}
+
+    assert indexed[("00.01.02", "TOTAL")]["values"] == {"total_2024": "990419.40"}
+    assert indexed[("49.02", "TOTAL")]["values"] == {"total_2024": "1027262.03"}
+    assert indexed[("51.02", "TOTAL")]["values"] == {"total_2024": "62685.13"}
+    assert indexed[("51.02", "FUNCTIONARE")]["values"] == {
+        "total_2024": "55813.13"
+    }
+    assert indexed[("51.02", "DEZVOLTARE")]["values"] == {"total_2024": "6872"}
+    assert all(line["source"] == "official_prose" for line in lines)
+    assert len(lines) == 5
+
+
+def test_official_prose_summary_is_selected_for_a_text_only_page():
+    payload = map_payload({
+        "text": (
+            "Învățământ în suma de 158.175,40 mii lei, din care: secțiunea "
+            "funcționare: 52.953,40 mii lei; secțiunea dezvoltare: "
+            "105.222 mii lei"
+        ),
+        "tables_raw": [],
+    }, budget_year=2024)
+
+    assert payload["layout"] == "official_prose_summary"
+    assert payload["mapping_stats"]["source_value_cells"] == 3
+    assert len(payload["lines"]) == 3
 
 
 def test_economic_codes_are_not_mistaken_for_transposed_year_rows():

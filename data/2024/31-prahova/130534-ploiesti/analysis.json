@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1838,
+    "lines_strictly_verified": 1702,
+    "pct_lines_strictly_verified": 92.6,
+    "numeric_cells": 6326,
+    "numeric_cells_strictly_verified": 5721,
+    "pct_numeric_cells_strictly_verified": 90.4,
+    "scope": {
+      "pages_expected": 269,
+      "pages_selected": 269,
+      "pages_processed": 269,
+      "complete_pdf": true
+    },
+    "pct_clean": 92.6,
+    "errors": 101,
+    "warnings": 101,
+    "info": 0,
+    "documents": 4
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "INVÄTÄMÂNT",
+      "total": 139157.54
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 108285.5
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURÄRI ŞI ASISTENTÃ SOCIALÃ",
+      "total": 104850.0
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURÃ, RECREERE ŞI RELIGIE",
+      "total": 88311.04
+    },
+    {
+      "code": "81.02",
+      "name": "COMBUSTIBILISI ENERGIE",
+      "total": 88300.0
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 88087.15
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITÃTI PUBLICE ŞI ACTIUNI EXTERNE Cheltuieli de personal",
+      "total": 68104.16
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII ŞI DEZV. PUBLICÃ",
+      "total": 66857.0
+    },
+    {
+      "code": "66.02",
+      "name": "SÄNÁTATE",
+      "total": 56573.87
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICÃ ŞI SIGURANTÃ NATIONALÃ",
+      "total": 27352.75
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "fb221cdc4572b99436ca3014",
+    "source_sha256": "7a1ba74ec929a95ca6c2ba6c8ea244e96c66ff539933a79d3d56135cf38e3f00",
+    "source_format": "pdf",
+    "source_pdf_sha256": "7a1ba74ec929a95ca6c2ba6c8ea244e96c66ff539933a79d3d56135cf38e3f00"
+  }
+}

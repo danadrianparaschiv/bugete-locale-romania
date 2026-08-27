@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 4065,
+    "lines_strictly_verified": 2392,
+    "pct_lines_strictly_verified": 58.8,
+    "numeric_cells": 22190,
+    "numeric_cells_strictly_verified": 14312,
+    "pct_numeric_cells_strictly_verified": 64.5,
+    "scope": {
+      "pages_expected": 125,
+      "pages_selected": 125,
+      "pages_processed": 125,
+      "complete_pdf": true
+    },
+    "pct_clean": 58.8,
+    "errors": 434,
+    "warnings": 1609,
+    "info": 10,
+    "documents": 6
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 25589192857.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 296108.6
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 106223.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 84415.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 68163.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 52292.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 51037.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 35500.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 25273.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 5151.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "9e8c372170c178d425ae201e",
+    "source_sha256": "7c3d132eb80b1361cf294eb6f62dd5e0a5715b97ac171222e7294fb80490c7e3",
+    "source_format": "pdf",
+    "source_pdf_sha256": "7c3d132eb80b1361cf294eb6f62dd5e0a5715b97ac171222e7294fb80490c7e3"
+  }
+}

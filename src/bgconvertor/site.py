@@ -177,6 +177,8 @@ def _row(city: City, cy: CityYear, analytics: AnalyticsRow) -> dict:
         "analysis": cy.has_analysis,
         "source_url": cy.files.source_url,
         "pdf_rel": cy.files.pdf,
+        "source_rel": cy.files.source,
+        "source_format": cy.files.source_format,
         "xlsx_rel": cy.files.xlsx,
         "debate_date": _ro_date(cy.timeline.debate_date),
         "debate_url": cy.timeline.debate_url,

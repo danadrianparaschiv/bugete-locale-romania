@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1422,
+    "lines_strictly_verified": 1180,
+    "pct_lines_strictly_verified": 83.0,
+    "numeric_cells": 2578,
+    "numeric_cells_strictly_verified": 2116,
+    "pct_numeric_cells_strictly_verified": 82.1,
+    "scope": {
+      "pages_expected": 113,
+      "pages_selected": 113,
+      "pages_processed": 113,
+      "complete_pdf": true
+    },
+    "pct_clean": 83.0,
+    "errors": 312,
+    "warnings": 105,
+    "info": 1,
+    "documents": 34
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 283422.01,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 169034.16
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 117436.03
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNIEXTERNE",
+      "total": 52514.45
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 50184.42
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 47252.64
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTUR1",
+      "total": 38153.55
+    },
+    {
+      "code": "67.10",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 22912.63
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULU]",
+      "total": 20967.39
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 18644.73
+    },
+    {
+      "code": "54.02",
+      "name": "ALTE SERVICII PUBLICE GENERALE",
+      "total": 4464.27
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "0ce45b10cf3551207d331fe3",
+    "source_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f",
+    "source_format": "pdf",
+    "source_pdf_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f"
+  }
+}

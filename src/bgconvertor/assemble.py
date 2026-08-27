@@ -592,7 +592,8 @@ def _pick_payload(store: RunStore, page: int):
     llm = store.get("llm_extract", page)
     if det is not None:
         if det.get("layout") in (
-            "investment_list", "allocations_annex", "annex_other", "hcl_prose"
+            "investment_list", "allocations_annex", "annex_other", "hcl_prose",
+            "official_prose_summary",
         ):
             return det  # deliberately out of scope — an LLM transcription adds noise
         if llm is None:

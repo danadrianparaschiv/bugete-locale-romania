@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1069,
+    "lines_strictly_verified": 616,
+    "pct_lines_strictly_verified": 57.6,
+    "numeric_cells": 3298,
+    "numeric_cells_strictly_verified": 2138,
+    "pct_numeric_cells_strictly_verified": 64.8,
+    "scope": {
+      "pages_expected": 98,
+      "pages_selected": 98,
+      "pages_processed": 98,
+      "complete_pdf": true
+    },
+    "pct_clean": 57.6,
+    "errors": 1064,
+    "warnings": 198,
+    "info": 0,
+    "documents": 11
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 380533.76,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "67.02",
+      "name": "CULTURA. RECREERE SI RELIGIE",
+      "total": 113343.04
+    },
+    {
+      "code": "67.10",
+      "name": "CULTURA. RECREERE Sl RELIGIE",
+      "total": 86194.0
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 82357.0
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 74725.0
+    },
+    {
+      "code": "70.02",
+      "name": "LOCUJNTE. SERVICII SI DEZVOLT ARE",
+      "total": 41266.0
+    },
+    {
+      "code": "54.02",
+      "name": "ALT E SERVICII PL~LICE GE .ERALE",
+      "total": 17885.55
+    },
+    {
+      "code": "61.10",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 16150.0
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 14563.0
+    },
+    {
+      "code": "65.10",
+      "name": "INVATAMANT",
+      "total": 6294.33
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTll PRIVIND DATORIA PUBLICA Sf TMPRUMUTURI",
+      "total": 3738.89
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "deef88e49abf0e9338bfc279",
+    "source_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
+    "source_format": "pdf",
+    "source_pdf_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df"
+  }
+}

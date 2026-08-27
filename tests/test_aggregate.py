@@ -87,6 +87,54 @@ def test_oversize_pdf_not_linked(data_root, monkeypatch):
     assert cy.files.source_url == "https://example.ro/2026.pdf"
 
 
+def test_native_excel_source_is_labeled_and_linked(data_root, tmp_path):
+    ydir = data_root / "2024"
+    city = ydir / "01-alba" / "1017-alba-iulia"
+    city.mkdir(parents=True)
+    (city / "buget_orig.xlsx").write_bytes(b"native-source")
+    (ydir / "manifest.json").write_text(json.dumps({
+        "year": 2024,
+        "entries": [{
+            "county_code": "01", "county_name": "Alba",
+            "capital_siruta": "1017", "capital_name": "Alba Iulia",
+            "path": "01-alba/1017-alba-iulia/buget_orig.xlsx",
+            "source_format": "xlsx",
+            "source_url": "https://example.ro/2024.xlsx",
+        }],
+    }))
+
+    corpus = agg.build_aggregate(data_root)
+    cy = corpus.cities[0].years["2024"]
+    assert cy.files.pdf is None
+    assert cy.files.source == "data/2024/01-alba/1017-alba-iulia/buget_orig.xlsx"
+    assert cy.files.source_format == "xlsx"
+
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+    index = (out / "2024" / "index.html").read_text()
+    assert "sursă xlsx" in index
+    assert "buget_orig.xlsx" in index
+
+
+def test_uncommitted_raw_pdf_policy_links_to_official_source(data_root, tmp_path):
+    manifest_path = data_root / "2026" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["raw_pdf_policy"] = \
+        "excluded_from_git_with_committed_urls_checksums_and_derived_bundles"
+    manifest_path.write_text(json.dumps(manifest))
+
+    corpus = agg.build_aggregate(data_root)
+    cy = corpus.cities[0].years["2026"]
+    assert cy.files.pdf is None
+    assert cy.files.source_url == "https://example.ro/2026.pdf"
+
+    out = tmp_path / "site"
+    build_all(data_root, out, base_url="/repo")
+    index = (out / "index.html").read_text()
+    assert 'href="https://example.ro/2026.pdf">sursă</a>' in index
+    assert "data/2026/01-alba/1017-alba-iulia/budget_file.pdf" not in index
+
+
 def test_build_all_writes_years_and_data_endpoint(data_root, tmp_path):
     out = tmp_path / "site"
     results = build_all(data_root, out, base_url="/repo")

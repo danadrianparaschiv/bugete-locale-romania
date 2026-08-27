@@ -1,0 +1,81 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 5657,
+    "lines_strictly_verified": 4430,
+    "pct_lines_strictly_verified": 78.3,
+    "numeric_cells": 16283,
+    "numeric_cells_strictly_verified": 11991,
+    "pct_numeric_cells_strictly_verified": 73.6,
+    "scope": {
+      "pages_expected": 248,
+      "pages_selected": 248,
+      "pages_processed": 248,
+      "complete_pdf": true
+    },
+    "pct_clean": 78.3,
+    "errors": 2454,
+    "warnings": 788,
+    "info": 20,
+    "documents": 53
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 312916.58
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 42409.93
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 42223.27
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 29042.71
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili şi energie",
+      "total": 10000.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate total capitol:",
+      "total": 9566.6
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 5110.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale Din total capitol:",
+      "total": 4807.23
+    },
+    {
+      "code": "56.02",
+      "name": "Transferuri cu caracter general intre diferite niveluri ale administra",
+      "total": 0.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "3799a4c2d162aed17ae5281f",
+    "source_sha256": "3ffc54008ac121201b7589b79da9cd99a5ffbb7565f3fcef4dba3de896ebf888",
+    "source_format": "pdf",
+    "source_pdf_sha256": "3ffc54008ac121201b7589b79da9cd99a5ffbb7565f3fcef4dba3de896ebf888"
+  }
+}

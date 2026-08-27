@@ -21,6 +21,7 @@ runs/
 /artifact-audit.json
 /eval-report.json
 /bundle-migration.json
+/:memory:.ses
 
 # OS noise
 .DS_Store
@@ -28,5 +29,10 @@ runs/
 # oversize corpus files (>100MB exceeds GitHub's hard limit) — fetched by
 # data/<year>/download.py; manifest marks them oversize
 data/2026/34-sibiu/143450-sibiu/budget_file.pdf
+
+# The 2024 corpus keeps every raw PDF outside Git history.  Official source
+# URLs, checksums and sizes are committed; normalized workbooks and analytics
+# remain versioned.  Native municipal Excel sources are intentionally kept.
+data/2024/**/budget_file.pdf
 site/
 evals/

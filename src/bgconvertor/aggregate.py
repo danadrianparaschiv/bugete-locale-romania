@@ -75,6 +75,8 @@ class Timeline(BaseModel):
 
 class Files(BaseModel):
     pdf: str | None = None  # repo-relative; None when oversize/uncommitted
+    source: str | None = None  # repo-relative native source (xls/xlsx)
+    source_format: str | None = None
     xlsx: str | None = None
     source_url: str | None = None
 
@@ -186,9 +188,19 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
     repo_root = manifest.root.parent.parent
     tl = c.entry.get("timeline") or {}
 
-    files = Files(source_url=c.entry.get("source_url"))
+    files = Files(
+        source_url=c.entry.get("source_url"),
+        source_format=c.source_format,
+    )
+    raw_pdfs_uncommitted = manifest.data.get("raw_pdf_policy") == (
+        "excluded_from_git_with_committed_urls_checksums_and_derived_bundles"
+    )
     if c.pdf.exists() and c.pdf.stat().st_size <= GITHUB_FILE_LIMIT:
-        files.pdf = str(c.pdf.relative_to(repo_root))
+        source_path = str(c.pdf.relative_to(repo_root))
+        if c.source_format == "pdf" and not raw_pdfs_uncommitted:
+            files.pdf = source_path
+        elif c.source_format != "pdf":
+            files.source = source_path
     cy = CityYear(
         status=conv.get("status") or "pending",
         timeline=Timeline(**{k: tl.get(k) for k in Timeline.model_fields}),
@@ -207,7 +219,7 @@ def city_year(manifest: Manifest, c: CityEntry) -> CityYear:
             # from another.  The official PDF/source link remains public.
             cy.status = "artifact_mismatch"
         else:
-            xlsx = c.pdf.with_name(conv.get("workbook") or c.pdf.with_suffix(".xlsx").name)
+            xlsx = c.pdf.with_name(conv.get("workbook") or c.workbook.name)
             if xlsx.exists():
                 files.xlsx = str(xlsx.relative_to(repo_root))
     if cy.status == "converted" and apath.exists():

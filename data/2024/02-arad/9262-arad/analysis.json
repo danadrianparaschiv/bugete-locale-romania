@@ -1,0 +1,198 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 35,
+    "lines_strictly_verified": 35,
+    "pct_lines_strictly_verified": 100.0,
+    "numeric_cells": 35,
+    "numeric_cells_strictly_verified": 35,
+    "pct_numeric_cells_strictly_verified": 100.0,
+    "scope": {
+      "pages_expected": 10,
+      "pages_selected": 10,
+      "pages_processed": 10,
+      "complete_pdf": true
+    },
+    "pct_clean": 100.0,
+    "errors": 0,
+    "warnings": 0,
+    "info": 0,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 990419.4,
+    "cheltuieli": 1027262.03
+  },
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 257401.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili și energie",
+      "total": 178839.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învățământ",
+      "total": 158175.4
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere și religie",
+      "total": 95974.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială",
+      "total": 85582.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protecția mediului",
+      "total": 67051.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice și acțiuni externe",
+      "total": 62685.13
+    },
+    {
+      "code": "70.02",
+      "name": "Locuințe, servicii și dezvoltare publică",
+      "total": 54201.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sănătate",
+      "total": 25105.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "total": 22229.0
+    }
+  ],
+  "infografic": {
+    "unitate": "mii lei",
+    "chart_quality": {
+      "cheltuieli": {
+        "coverage_pct": 99.4,
+        "coverage_note": "capitolele afișate însumează 99.4% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      },
+      "100_lei": {
+        "coverage_pct": 99.4,
+        "coverage_note": "capitolele afișate însumează 99.4% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      }
+    },
+    "capitole": [
+      {
+        "cod": "84.02",
+        "nume": "Transporturi",
+        "val": 257401.0,
+        "copii": [],
+        "func": 70803.0,
+        "dezv": 186598.0
+      },
+      {
+        "cod": "81.02",
+        "nume": "Combustibili și energie",
+        "val": 178839.0,
+        "copii": [],
+        "func": 50567.0,
+        "dezv": 128272.0
+      },
+      {
+        "cod": "65.02",
+        "nume": "Învățământ",
+        "val": 158175.4,
+        "copii": [],
+        "func": 52953.4,
+        "dezv": 105222.0
+      },
+      {
+        "cod": "67.02",
+        "nume": "Cultură, recreere și religie",
+        "val": 95974.0,
+        "copii": [],
+        "func": 71701.0,
+        "dezv": 24273.0
+      },
+      {
+        "cod": "68.02",
+        "nume": "Asigurări și asistență socială",
+        "val": 85582.0,
+        "copii": [],
+        "func": 84810.0,
+        "dezv": 772.0
+      },
+      {
+        "cod": "74.02",
+        "nume": "Protecția mediului",
+        "val": 67051.0,
+        "copii": [],
+        "func": 24422.0,
+        "dezv": 42629.0
+      },
+      {
+        "cod": "51.02",
+        "nume": "Autorități publice și acțiuni externe",
+        "val": 62685.13,
+        "copii": [],
+        "func": 55813.13,
+        "dezv": 6872.0
+      },
+      {
+        "cod": "70.02",
+        "nume": "Locuințe, servicii și dezvoltare publică",
+        "val": 54201.0,
+        "copii": [],
+        "func": 40644.0,
+        "dezv": 13557.0
+      },
+      {
+        "cod": "66.02",
+        "nume": "Sănătate",
+        "val": 25105.0,
+        "copii": [],
+        "func": 24707.0,
+        "dezv": 398.0
+      },
+      {
+        "cod": "55.02",
+        "nume": "Tranzacții privind datoria publică și împrumuturi",
+        "val": 22229.0,
+        "copii": [],
+        "func": 22229.0,
+        "dezv": 0.0
+      },
+      {
+        "cod": "61.02",
+        "nume": "Ordine publică și siguranță națională",
+        "val": 13665.0,
+        "copii": [],
+        "func": 13323.0,
+        "dezv": 342.0
+      }
+    ],
+    "total_cheltuieli": 1027262.03
+  },
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "c5d84ebf152c5fe2d4e3d787",
+    "source_sha256": "9880703546e9dd3339932c6228ec8b67b4093184390ac6ea58b376cade181241",
+    "source_format": "pdf",
+    "source_pdf_sha256": "9880703546e9dd3339932c6228ec8b67b4093184390ac6ea58b376cade181241"
+  }
+}

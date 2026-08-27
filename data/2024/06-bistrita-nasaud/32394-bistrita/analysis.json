@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1747,
+    "lines_strictly_verified": 632,
+    "pct_lines_strictly_verified": 36.2,
+    "numeric_cells": 4132,
+    "numeric_cells_strictly_verified": 1983,
+    "pct_numeric_cells_strictly_verified": 48.0,
+    "scope": {
+      "pages_expected": 160,
+      "pages_selected": 160,
+      "pages_processed": 160,
+      "complete_pdf": true
+    },
+    "pct_clean": 36.2,
+    "errors": 126,
+    "warnings": 1051,
+    "info": 16,
+    "documents": 5
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 586400.0,
+    "cheltuieli": 275840.0
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "Locuínte, servicii si dezvoltare publica",
+      "total": 188462.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 112497.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 109620.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 46240.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 43740.0
+    },
+    {
+      "code": "00.12",
+      "name": "C. VENITURI NEFISCALE",
+      "total": 30788.0
+    },
+    {
+      "code": "00.14",
+      "name": "C2. VANZARI DE BUNURI SI SERVICII",
+      "total": 28729.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 21319.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si împrumuturi",
+      "total": 11500.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 4085.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "53e3580db36c46fdf25d3526",
+    "source_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a",
+    "source_format": "pdf",
+    "source_pdf_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a"
+  }
+}

@@ -211,3 +211,33 @@ def test_no_derived_expense_total_is_invented():
     a = city_analysis(ConversionResult(pdf="x.pdf", documents=[doc]))
     assert a["totals_mii_lei"]["cheltuieli"] is None
     assert len(a["top_capitole"]) == 3
+
+
+def test_exact_numeric_heading_can_supply_verified_expense_total():
+    r = _result()
+    expense_total = next(
+        line for line in r.documents[0].lines
+        if line.kind == "expense_functional" and line.name == "TOTAL CHELTUIELI"
+    )
+    expense_total.kind = "heading"
+    expense_total.code = None
+    expense_total.raw_code = None
+
+    analysis = city_analysis(r)
+    assert analysis["totals_mii_lei"]["cheltuieli"] == 1000
+    assert analysis["infografic"]["total_cheltuieli"] == 1000
+
+
+def test_subtotal_heading_is_not_mistaken_for_grand_total():
+    r = _result()
+    r.documents[0].lines.append(
+        BudgetLine(
+            code=None,
+            name="TOTAL CHELTUIELI CURENTE",
+            kind="heading",
+            page=1,
+            section="TOTAL",
+            values={"total": Decimal("9999")},
+        )
+    )
+    assert city_analysis(r)["totals_mii_lei"]["cheltuieli"] == 1000

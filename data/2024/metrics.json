@@ -1,0 +1,36 @@
+{
+  "chapter_tables": 39,
+  "complete_scopes": 41,
+  "converted_entries": 41,
+  "corpus_audit": {
+    "converted": 110,
+    "entries": 125,
+    "inconsistent": 0,
+    "trusted": 110
+  },
+  "entries": 42,
+  "entries_at_least_70": 31,
+  "entries_at_least_90": 14,
+  "entries_below_70": 10,
+  "full_chart_blocks": 11,
+  "generated_on": "2026-08-27",
+  "lines": 73428,
+  "llm_cost_usd": 0.0,
+  "median_strict_line_rate": 84.7,
+  "municipal_pages": 40,
+  "native_excel_sources": 3,
+  "numeric_cells": 223278,
+  "pages_expected": 4174,
+  "pdf_sources": 38,
+  "plan_comparison_eligible": 24,
+  "schema_version": 1,
+  "strict_lines": 56049,
+  "strict_numeric_cells": 171868,
+  "trusted_plan_analyses": 40,
+  "unavailable_entries": 1,
+  "unavailable_municipalities": [
+    "Drobeta-Turnu Severin"
+  ],
+  "verified_sources": 41,
+  "year": 2024
+}

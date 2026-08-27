@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1204,
+    "lines_strictly_verified": 1012,
+    "pct_lines_strictly_verified": 84.1,
+    "numeric_cells": 1772,
+    "numeric_cells_strictly_verified": 1582,
+    "pct_numeric_cells_strictly_verified": 89.3,
+    "scope": {
+      "pages_expected": 42,
+      "pages_selected": 42,
+      "pages_processed": 42,
+      "complete_pdf": true
+    },
+    "pct_clean": 84.1,
+    "errors": 42,
+    "warnings": 159,
+    "info": 7,
+    "documents": 2
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 782636.0,
+    "cheltuieli": 792557.0
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 159420.0
+    },
+    {
+      "code": "66.10",
+      "name": "Sanatate",
+      "total": 69804.0
+    },
+    {
+      "code": "00.10",
+      "name": "A4. IMPOZITE SI TAXE PE BUNURI SI SERVICII",
+      "total": 67756.0
+    },
+    {
+      "code": "00.12",
+      "name": "C. VENITURI NEFISCALE",
+      "total": 39353.0
+    },
+    {
+      "code": "70.10",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 29620.0
+    },
+    {
+      "code": "00.14",
+      "name": "C2. VANZARI DE BUNURI SI SERVICII",
+      "total": 26524.0
+    },
+    {
+      "code": "67.10",
+      "name": "Cultura, recreere si religie (67.10.03+67.10.05+67.10.50)",
+      "total": 19424.0
+    },
+    {
+      "code": "00.13",
+      "name": "C1. VENITURI DIN PROPRIETATE",
+      "total": 12829.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 10494.5
+    },
+    {
+      "code": "65.10",
+      "name": "Invatamant",
+      "total": 9875.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "460a0e5488297ea579bd130e",
+    "source_sha256": "958a83d90e0ad669e77ef66dc801580aa842d57d2ee3a1ed3e0d005f98857be5",
+    "source_format": "pdf",
+    "source_pdf_sha256": "958a83d90e0ad669e77ef66dc801580aa842d57d2ee3a1ed3e0d005f98857be5"
+  }
+}

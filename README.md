@@ -1,10 +1,11 @@
 # Bugete locale România
 
 Bugetele locale ale municipiilor reședință de județ, extrase din PDF-urile
-oficiale în Excel și format analizabil — cu proveniență și verificări explicite.
+sau fișierele Excel oficiale în format Excel normalizat și analizabil — cu
+proveniență și verificări explicite.
 
 Acest depozit conține un corpus deschis al bugetelor locale din România
-(PDF-uri oficiale + fișiere Excel/seturi de date validate, codificate
+(surse oficiale PDF/XLS/XLSX + fișiere Excel/seturi de date validate, codificate
 SIRUTA) și **bgconvertor**, instrumentul care îl construiește: convertește
 PDF-urile bugetare în date validate, gata de analiză — chiar și atunci
 când PDF-ul este o scanare rotită și ștampilată, scoasă la copiator.
@@ -16,10 +17,12 @@ bugetul însuși trebuie să o respecte (sume trimestriale, ierarhii de
 capitole, identități între secțiuni). Ce nu poate fi verificat este
 *marcat, niciodată ghicit*.
 
-`data/<an>/` conține PDF-urile bugetare oficiale ale municipiilor
-reședință de județ (codificate SIRUTA, cu sursa fiecărui fișier) alături
-de fișierele Excel convertite; site-ul generat publică o pagină de analiză
-pentru fiecare buget convertit.
+`data/<an>/` conține sursele bugetare oficiale ale municipiilor reședință de
+județ (codificate SIRUTA, cu sursa fiecărui fișier) alături de fișierele Excel
+normalizate; site-ul generat publică o pagină de analiză pentru fiecare buget
+convertit. PDF-urile brute din ediția 2024 sunt reproductibile din manifest,
+dar excluse din istoricul Git; sursele Excel native sunt păstrate byte-for-byte
+ca `buget_orig.xls[x]`.
 
 Datele augmentate (populație, suprafață, execuție bugetară, inflație HICP și
 clasificări regionale NUTS 2024) se leagă prin chei stabile și rămân separate
@@ -64,6 +67,9 @@ uv run bgconvertor triage data/2026/01-alba/1017-alba-iulia/budget_file.pdf
 
 # conversie (complet offline — nu necesită cheie API)
 uv run bgconvertor convert data/2026/01-alba/1017-alba-iulia/budget_file.pdf
+
+# aceeași comandă normalizează o sursă Excel oficială; LLM nu este implicat
+uv run bgconvertor convert data/2024/37-timis/155243-timisoara/buget_orig.xlsx
 
 # cu OCR paralel și reparare LLM (necesită ANTHROPIC_API_KEY, vezi .env.example)
 uv run bgconvertor convert <pdf> --workers 4 --llm repair --max-llm-cost 3.00
@@ -166,13 +172,23 @@ valori numerice și date.
 
 ## Corpusul
 
-`data/2026/` — PDF-urile bugetare oficiale ale celor 41 de municipii
-reședință de județ plus București, organizate ca
-`<județ>-<slug>/<siruta>-<oraș>/budget_file.pdf`, cu un manifest (surse,
-sume de control, status). Un fișier depășește limita de 100MB a GitHub și
-este descărcat de `data/2026/download.py`. Documentele sunt acte
-administrative publice; atribuirea fiecărui fișier este în manifest și în
-[NOTICE](NOTICE).
+`data/2024/`, `data/2025/` și `data/2026/` — trei ediții ale bugetelor
+oficiale pentru cele 41 de municipii reședință de județ plus București,
+organizate ca `<județ>-<slug>/<siruta>-<oraș>/`. Fiecare ediție are un manifest
+cu URL-ul oficial, formatul, versiunea documentului, statusul și sumele de
+control. Politica de achiziție și inventarul reproductibil al ediției 2024 sunt
+în [data/2024/README.md](data/2024/README.md) și
+[data/2024/SOURCES.md](data/2024/SOURCES.md). Documentele sunt acte
+administrative publice; atribuirea este păstrată și în [NOTICE](NOTICE).
+
+<!-- BEGIN GENERATED:2024_ROOT_METRICS -->
+Ediția 2024 este procesată cap-coadă pentru toate cele 41 de intrări cu sursă
+oficială disponibilă: 73.428 de linii extrase, mediană strictă observată de
+84,7%, 40 de pagini municipale de analiză, 24 de municipiu-ani eligibili
+pentru comparația planului și 0 USD cost API. Drobeta-Turnu Severin este
+singura lipsă declarată. Aceste cifre măsoară ieșirea și consistența ei, nu
+recall exhaustiv; tabelul auditat și limitele sunt în README-ul ediției.
+<!-- END GENERATED:2024_ROOT_METRICS -->
 
 ## Extinderea la un format nou
 

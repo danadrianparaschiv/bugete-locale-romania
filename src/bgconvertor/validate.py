@@ -203,7 +203,14 @@ def _check_hierarchy(doc: BudgetDocument, registry: Registry) -> None:
             if parent and parent in by_code:
                 children_of[parent].append(ln)
         for parent, children in children_of.items():
-            _compare_sum(by_code[parent], children, "V4_hierarchy")
+            parent_line = by_code[parent]
+            # A native municipal workbook copies numeric cells without OCR.
+            # Locally-authored sheets commonly publish selected non-zero
+            # descendants rather than a complete hierarchy; their partial sum
+            # is coverage evidence, not evidence that the machine-readable
+            # parent cell is wrong. Code/name and cross-section checks still run.
+            if parent_line.source not in ("native_excel", "official_prose"):
+                _compare_sum(parent_line, children, "V4_hierarchy")
 
         if kind == "expense_economic":
             section, _, func = key
@@ -212,13 +219,21 @@ def _check_hierarchy(doc: BudgetDocument, registry: Registry) -> None:
                 ln for c, ln in by_code.items()
                 if c in {"10", "20", "30", "40", "50", "51", "55", "56", "57", "58", "59", "60", "61", "65"}
             ]
-            if "01" in by_code and comp:
+            if (
+                "01" in by_code
+                and comp
+                and by_code["01"].source not in ("native_excel", "official_prose")
+            ):
                 _compare_sum(by_code["01"], comp, "V4_hierarchy")
             # capitol total (functional row) = sum of top-level grupa rows
             # (85 is negative in the classification and sums as printed)
             grupa_lines = [ln for c, ln in by_code.items() if c in ECON_GRUPE]
             cap_line = groups.get((section, "expense_functional", None), {}).get(func)
-            if cap_line and grupa_lines:
+            if (
+                cap_line
+                and grupa_lines
+                and cap_line.source not in ("native_excel", "official_prose")
+            ):
                 _compare_sum(cap_line, grupa_lines, "V4_hierarchy")
 
 

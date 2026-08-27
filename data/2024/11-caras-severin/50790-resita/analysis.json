@@ -1,0 +1,352 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1197,
+    "lines_strictly_verified": 1140,
+    "pct_lines_strictly_verified": 95.2,
+    "numeric_cells": 6420,
+    "numeric_cells_strictly_verified": 6000,
+    "pct_numeric_cells_strictly_verified": 93.5,
+    "scope": {
+      "pages_expected": 42,
+      "pages_selected": 42,
+      "pages_processed": 42,
+      "complete_pdf": true
+    },
+    "pct_clean": 95.2,
+    "errors": 127,
+    "warnings": 24,
+    "info": 0,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 633645.31
+  },
+  "top_capitole": [
+    {
+      "code": "70.02",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 485803.89
+    },
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 36786.0
+    },
+    {
+      "code": "51.02",
+      "name": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+      "total": 31727.87
+    },
+    {
+      "code": "67.02",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 22404.85
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 17550.7
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 17179.0
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+      "total": 6527.5
+    },
+    {
+      "code": "61.02",
+      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+      "total": 5325.0
+    },
+    {
+      "code": "66.02",
+      "name": "SANATATE",
+      "total": 4790.0
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 4501.0
+    }
+  ],
+  "infografic": {
+    "unitate": "mii lei",
+    "chart_quality": {
+      "cheltuieli": {
+        "coverage_pct": 100.0,
+        "coverage_note": "capitolele afișate însumează 100.0% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      },
+      "100_lei": {
+        "coverage_pct": 100.0,
+        "coverage_note": "capitolele afișate însumează 100.0% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      },
+      "ani": {
+        "coverage_pct": 100.0,
+        "coverage_note": "4 din 4 valori necesare seriilor afișate sunt prezente",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      }
+    },
+    "capitole": [
+      {
+        "cod": "70.02",
+        "nume": "LOCUINTE, SERVICII SI DEZVOLTARE",
+        "val": 485803.89,
+        "copii": [
+          {
+            "nume": "Alte servicii in domeniile locuintelor, serviciilor si dezvoltarii com",
+            "val": 468641.58
+          },
+          {
+            "nume": "Locuinte",
+            "val": 12512.31
+          },
+          {
+            "nume": "Iluminat public si electrificari",
+            "val": 4650.0
+          }
+        ],
+        "trim": [
+          100149.05,
+          77154.34,
+          164605.24,
+          143895.26
+        ]
+      },
+      {
+        "cod": "68.02",
+        "nume": "ASIGURARI SI ASISTENTA SOCIALA",
+        "val": 36786.0,
+        "copii": [
+          {
+            "nume": "Asistenta sociala in caz de boli si invaliditati",
+            "val": 26437.0
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul asigurarilor si asistentei sociale",
+            "val": 9929.0
+          },
+          {
+            "nume": "Prevenirea excluderii sociale",
+            "val": 420.0
+          }
+        ],
+        "trim": [
+          11285.2,
+          11230.3,
+          9608.05,
+          4662.45
+        ]
+      },
+      {
+        "cod": "51.02",
+        "nume": "AUTORITATI PUBLICE SI ACTIUNI EXTERNE",
+        "val": 31727.87,
+        "copii": [
+          {
+            "nume": "Autoritati executive si legislative",
+            "val": 31727.87
+          }
+        ],
+        "trim": [
+          9579.0,
+          7504.57,
+          8798.7,
+          5845.6
+        ]
+      },
+      {
+        "cod": "67.02",
+        "nume": "CULTURA, RECREERE SI RELIGIE",
+        "val": 22404.85,
+        "copii": [
+          {
+            "nume": "Servicii recreative si sportive",
+            "val": 15981.95
+          },
+          {
+            "nume": "Alte servicii in domenile culturii, recreeri si religiei",
+            "val": 6210.4
+          },
+          {
+            "nume": "Servicii religioase",
+            "val": 212.5
+          }
+        ],
+        "trim": [
+          7985.5,
+          5871.3,
+          5149.55,
+          3398.5
+        ]
+      },
+      {
+        "cod": "65.02",
+        "nume": "INVATAMANT",
+        "val": 17550.7,
+        "copii": [
+          {
+            "nume": "Invatamant secundar",
+            "val": 10532.91
+          },
+          {
+            "nume": "Alte cheltuieli in domeniul invatamantului",
+            "val": 3777.0
+          },
+          {
+            "nume": "Invatamant prescolar si primar",
+            "val": 2272.39
+          },
+          {
+            "nume": "Invatamant anteprescolar",
+            "val": 968.4
+          }
+        ],
+        "trim": [
+          5058.97,
+          5237.79,
+          4044.76,
+          3209.18
+        ]
+      },
+      {
+        "cod": "84.02",
+        "nume": "TRANSPORTURI",
+        "val": 17179.0,
+        "copii": [
+          {
+            "nume": "Transport rutier",
+            "val": 17179.0
+          }
+        ],
+        "trim": [
+          8716.2,
+          4759.7,
+          4010.1,
+          -307.0
+        ]
+      },
+      {
+        "cod": "55.02",
+        "nume": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+        "val": 6527.5,
+        "copii": [],
+        "trim": [
+          2900.0,
+          1300.0,
+          1700.0,
+          627.5
+        ]
+      },
+      {
+        "cod": "61.02",
+        "nume": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
+        "val": 5325.0,
+        "copii": [
+          {
+            "nume": "Ordine publica",
+            "val": 5325.0
+          }
+        ],
+        "trim": [
+          2175.0,
+          1293.5,
+          922.75,
+          933.75
+        ]
+      },
+      {
+        "cod": "66.02",
+        "nume": "SANATATE",
+        "val": 4790.0,
+        "copii": [
+          {
+            "nume": "Servicii de sanatate publica",
+            "val": 4790.0
+          }
+        ],
+        "trim": [
+          1848.0,
+          1231.0,
+          968.0,
+          743.0
+        ]
+      },
+      {
+        "cod": "74.02",
+        "nume": "PROTECTIA MEDIULUI",
+        "val": 4501.0,
+        "copii": [
+          {
+            "nume": "Salubritate si gestiunea deseurilor",
+            "val": 3700.0
+          },
+          {
+            "nume": "Reducerea si controlul poluarii",
+            "val": 801.0
+          }
+        ],
+        "trim": [
+          2001.0,
+          1000.0,
+          1000.0,
+          500.0
+        ]
+      },
+      {
+        "cod": "54.02",
+        "nume": "ALTE SERVICII PUBLICE GENERALE",
+        "val": 1049.5,
+        "copii": [
+          {
+            "nume": "Servicii publice comunitare de evidenta a persoanelor",
+            "val": 1049.5
+          }
+        ],
+        "trim": [
+          339.0,
+          296.5,
+          223.0,
+          191.0
+        ]
+      }
+    ],
+    "total_cheltuieli": 633645.31,
+    "ani": {
+      "years": [
+        2023,
+        2024,
+        2026,
+        2027
+      ],
+      "cheltuieli": [
+        633645.31,
+        654943.92,
+        534465.8,
+        203521.15
+      ]
+    }
+  },
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "63f61051ea58044276e1b967",
+    "source_sha256": "8c47ce1b2d434eecce862fc295fcd30b18ea2dd79e48bf9de1e48779eace62ed",
+    "source_format": "pdf",
+    "source_pdf_sha256": "8c47ce1b2d434eecce862fc295fcd30b18ea2dd79e48bf9de1e48779eace62ed"
+  }
+}
