@@ -42,11 +42,16 @@ def publication_identity(result: ConversionResult, pdf: Path) -> dict[str, Any]:
     h.update(f"publication:{PUBLICATION_SCHEMA_VERSION}:".encode())
     h.update(source_sha.encode())
     h.update(_canonical_result(result))
-    return {
+    identity = {
         "schema_version": PUBLICATION_SCHEMA_VERSION,
         "bundle_id": h.hexdigest()[:24],
-        "source_pdf_sha256": source_sha,
+        "source_sha256": source_sha,
+        "source_format": pdf.suffix.lower().lstrip("."),
     }
+    # Backward compatibility for every existing public PDF bundle.
+    if pdf.suffix.lower() == ".pdf":
+        identity["source_pdf_sha256"] = source_sha
+    return identity
 
 
 def _quality_fields(result: ConversionResult) -> dict[str, Any]:
@@ -104,13 +109,13 @@ def publish_corpus_result(
 ) -> dict[str, Any]:
     """Publish workbook + analysis + manifest as one auditable bundle.
 
-    Only a complete-PDF result may enter the public corpus.  The two artifact
+    Only a complete-source result may enter the public corpus.  The two artifact
     files are staged before any public path changes; the manifest is written
     last and acts as the bundle's commit record.
     """
     stats = result.stats()
     if not stats["scope"]["complete_pdf"]:
-        raise ValueError("public corpus publication requires a complete-PDF conversion")
+        raise ValueError("public corpus publication requires a complete-source conversion")
     if not any(document.suffix == "02" for document in result.documents):
         raise ValueError(
             "public corpus publication requires a main local-budget document "
@@ -402,7 +407,7 @@ def audit_city(manifest: Manifest, city: CityEntry) -> ArtifactAudit:
         )
 
     issues: list[AuditIssue] = []
-    workbook = city.pdf.with_name(conv.get("workbook") or city.pdf.with_suffix(".xlsx").name)
+    workbook = city.pdf.with_name(conv.get("workbook") or city.workbook.name)
     analysis_path = city.pdf.with_name(conv.get("analysis") or "analysis.json")
     workbook_rows = _read_workbook_summary(workbook, issues)
     analysis = _read_analysis(analysis_path, issues)
@@ -436,10 +441,19 @@ def audit_city(manifest: Manifest, city: CityEntry) -> ArtifactAudit:
         if workbook_rows.get("Bundle conversie") != bundle_id:
             _issue(issues, "error", "bundle_mismatch", "workbook bundle id does not match")
 
-        source_sha = artifacts.get("source_pdf_sha256")
-        if analysis.get("publication", {}).get("source_pdf_sha256") != source_sha:
+        source_sha = artifacts.get("source_sha256") or artifacts.get("source_pdf_sha256")
+        analysis_publication = analysis.get("publication", {})
+        analysis_source_sha = (
+            analysis_publication.get("source_sha256")
+            or analysis_publication.get("source_pdf_sha256")
+        )
+        if analysis_source_sha != source_sha:
             _issue(issues, "error", "source_hash_mismatch", "analysis source hash differs")
-        if workbook_rows.get("SHA-256 PDF sursa") != source_sha:
+        workbook_source_sha = (
+            workbook_rows.get("SHA-256 sursa")
+            or workbook_rows.get("SHA-256 PDF sursa")
+        )
+        if workbook_source_sha != source_sha:
             _issue(issues, "error", "source_hash_mismatch", "workbook source hash differs")
 
         for label, path, record in (
@@ -456,14 +470,14 @@ def audit_city(manifest: Manifest, city: CityEntry) -> ArtifactAudit:
         _verify_hash(analysis_path, (artifacts.get("analysis") or {}).get("sha256"),
                      "analysis", issues)
         if city.pdf.exists():
-            _verify_hash(city.pdf, source_sha, "source PDF", issues)
+            _verify_hash(city.pdf, source_sha, "source", issues)
         elif source_sha:
             _issue(
                 issues, "warning", "source_unavailable",
-                "source PDF is not checked out; recorded hash could not be verified",
+                "source artifact is not checked out; recorded hash could not be verified",
             )
         else:
-            _issue(issues, "error", "missing_hash", "missing source PDF sha256")
+            _issue(issues, "error", "missing_hash", "missing source sha256")
     else:
         _issue(
             issues, "warning", "legacy_metadata",
@@ -478,7 +492,7 @@ def audit_city(manifest: Manifest, city: CityEntry) -> ArtifactAudit:
 
 
 def audit_data(data_root: Path) -> list[ArtifactAudit]:
-    """Audit every unique converted PDF under data/<year>/manifest.json."""
+    """Audit every unique converted source under data/<year>/manifest.json."""
     results = []
     for path in sorted(data_root.glob("[0-9][0-9][0-9][0-9]/manifest.json")):
         manifest = Manifest(path)

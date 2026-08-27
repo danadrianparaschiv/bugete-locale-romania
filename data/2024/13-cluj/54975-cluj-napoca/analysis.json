@@ -1,0 +1,71 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1495,
+    "lines_strictly_verified": 1266,
+    "pct_lines_strictly_verified": 84.7,
+    "numeric_cells": 1487,
+    "numeric_cells_strictly_verified": 1268,
+    "pct_numeric_cells_strictly_verified": 85.3,
+    "scope": {
+      "pages_expected": 37,
+      "pages_selected": 37,
+      "pages_processed": 37,
+      "complete_pdf": true
+    },
+    "pct_clean": 84.7,
+    "errors": 70,
+    "warnings": 194,
+    "info": 2,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 2563356898.0,
+    "cheltuieli": 2996612800.0
+  },
+  "top_capitole": [
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 560975000.0
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 73000000.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 60881000.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 34912000.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 14672000.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "total": 300000.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "beabe24469ff462135aa46c4",
+    "source_sha256": "faf4bc5d4dcbb231858c9403f4aa18122429175a7b852ad0593ff992f3201e47",
+    "source_format": "pdf",
+    "source_pdf_sha256": "faf4bc5d4dcbb231858c9403f4aa18122429175a7b852ad0593ff992f3201e47"
+  }
+}

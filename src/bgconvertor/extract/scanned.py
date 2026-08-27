@@ -10,6 +10,7 @@ from __future__ import annotations
 import io
 import logging
 import re
+import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
@@ -21,6 +22,127 @@ log = logging.getLogger("bgc.extract.scanned")
 
 # re-exported for tests and callers
 map_table = map_grid
+
+
+PROSE_FUNCTIONAL_CHAPTERS = {
+    "autoritati publice si actiuni externe": ("51.02", "Autorități publice și acțiuni externe"),
+    "tranzactii privind datoria publica si imprumuturi": (
+        "55.02",
+        "Tranzacții privind datoria publică și împrumuturi",
+    ),
+    "ordine publica si siguranta nationala": (
+        "61.02",
+        "Ordine publică și siguranță națională",
+    ),
+    "invatamant": ("65.02", "Învățământ"),
+    "sanatate": ("66.02", "Sănătate"),
+    "cultura, recreere, religie": ("67.02", "Cultură, recreere și religie"),
+    "asigurari si asistenta sociala": ("68.02", "Asigurări și asistență socială"),
+    "locuinte, servicii si dezvoltare publica": (
+        "70.02",
+        "Locuințe, servicii și dezvoltare publică",
+    ),
+    "protectia mediului": ("74.02", "Protecția mediului"),
+    "combustibil si energie": ("81.02", "Combustibili și energie"),
+    "transporturi": ("84.02", "Transporturi"),
+}
+
+
+def _fold_prose(text: str) -> str:
+    normalized = unicodedata.normalize("NFKD", text)
+    return "".join(
+        character for character in normalized
+        if not unicodedata.combining(character)
+    ).lower()
+
+
+def _prose_number(raw: str) -> str:
+    from ..parsing import parse_ro_number
+
+    return str(parse_ro_number(raw, ocr=False))
+
+
+def map_prose_budget_summary(text: str, budget_year: int) -> list[dict]:
+    """Map explicit facts in an official Romanian budget prose summary.
+
+    Some HCL publications omit their machine-readable annexes but reproduce
+    the approved local-budget totals and functional chapters in the decision
+    report.  This deliberately narrow parser accepts only the conventional
+    ``in suma de ... mii lei, din care`` sentence and known MF functional
+    chapter names.  It never derives the unlisted residual between the
+    printed grand total and the printed chapters.
+    """
+    folded = re.sub(r"\s+", " ", _fold_prose(text or "")).strip()
+    if not folded:
+        return []
+
+    column = f"total_{budget_year}"
+    lines: list[dict] = []
+
+    revenue = re.search(
+        rf"veniturile bugetului local pentru anul {budget_year} sunt in "
+        r"valoare de (?P<value>[\d.]+(?:,\d+)?) mii lei",
+        folded,
+    )
+    if revenue:
+        lines.append({
+            "raw_code": "000102",
+            "code": "00.01.02",
+            "func_code": None,
+            "name": "TOTAL VENITURI",
+            "row_no": None,
+            "section": "TOTAL",
+            "year": budget_year,
+            "values": {column: _prose_number(revenue.group("value"))},
+            "source": "official_prose",
+        })
+
+    expense = re.search(
+        rf"cheltuielile bugetului local pe anul {budget_year}, in valoare de "
+        r"(?P<value>[\d.]+(?:,\d+)?) mii lei",
+        folded,
+    )
+    if expense:
+        lines.append({
+            "raw_code": "4902",
+            "code": "49.02",
+            "func_code": None,
+            "name": "TOTAL CHELTUIELI",
+            "row_no": None,
+            "section": "TOTAL",
+            "year": budget_year,
+            "values": {column: _prose_number(expense.group("value"))},
+            "source": "official_prose",
+        })
+
+    number = r"[\d.]+(?:,\d+)?"
+    for label, (code, official_name) in PROSE_FUNCTIONAL_CHAPTERS.items():
+        match = re.search(
+            rf"{re.escape(label)} in suma de (?P<total>{number}) mii lei, "
+            rf"din care: sectiunea functionare: (?P<functionare>{number}) mii lei; "
+            rf"sectiunea dezvoltare: (?P<dezvoltare>{number}) mii lei",
+            folded,
+        )
+        if not match:
+            continue
+        raw_code = code.replace(".", "")
+        for section, group in (
+            ("TOTAL", "total"),
+            ("FUNCTIONARE", "functionare"),
+            ("DEZVOLTARE", "dezvoltare"),
+        ):
+            lines.append({
+                "raw_code": raw_code,
+                "code": code,
+                "func_code": None,
+                "name": official_name,
+                "row_no": None,
+                "section": section,
+                "year": budget_year,
+                "values": {column: _prose_number(match.group(group))},
+                "source": "official_prose",
+            })
+    return lines
 
 
 @lru_cache(maxsize=16)
@@ -255,6 +377,13 @@ def map_payload(
                     seen.add(cell)
                     header_texts.append(cell.strip())
     text = " ".join(filter(None, [ocr_payload.get("text"), *header_texts])) or None
+    prose_lines = (
+        map_prose_budget_summary(text, budget_year)
+        if text and budget_year and not lines and not ocr_payload.get("tables_raw")
+        else []
+    )
+    if prose_lines:
+        lines = prose_lines
     # classification sees the first grid rows even when header detection
     # missed them (procurement lists have unrecognized header vocabulary)
     cls_text = " ".join(
@@ -276,10 +405,15 @@ def map_payload(
         len(line.get("values") or {}) + len(line.get("cell_issues") or [])
         for line in lines
     )
+    if prose_lines:
+        source_value_cells = mapped_value_cells
     return {
         "lines": lines,
         "text": text,
-        "layout": _guess_layout(lines, cls_text, mapping_context),
+        "layout": (
+            "official_prose_summary"
+            if prose_lines else _guess_layout(lines, cls_text, mapping_context)
+        ),
         "rotation_applied": ocr_payload.get("rotation_applied", 0),
         "confidence_grade": ocr_payload.get("confidence_grade"),
         "n_tables": len(ocr_payload.get("tables_raw", [])),

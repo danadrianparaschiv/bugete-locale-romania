@@ -1,0 +1,56 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 374,
+    "lines_strictly_verified": 339,
+    "pct_lines_strictly_verified": 90.6,
+    "numeric_cells": 758,
+    "numeric_cells_strictly_verified": 688,
+    "pct_numeric_cells_strictly_verified": 90.8,
+    "scope": {
+      "pages_expected": 11,
+      "pages_selected": 11,
+      "pages_processed": 11,
+      "complete_pdf": true
+    },
+    "pct_clean": 90.6,
+    "errors": 30,
+    "warnings": 13,
+    "info": 0,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 604574000.0,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 18818000.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si împrumuturi",
+      "total": 4505000.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 650000.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "8b5eded1ef643ad9a06e92cf",
+    "source_sha256": "d57cfed1bfb05a9c8d63dd4e71007e3c8a89ad5c58460959643ab57e8ec43f01",
+    "source_format": "pdf",
+    "source_pdf_sha256": "d57cfed1bfb05a9c8d63dd4e71007e3c8a89ad5c58460959643ab57e8ec43f01"
+  }
+}

@@ -158,6 +158,23 @@ def _fmt_minutes(seconds: float) -> str:
     return f"~{seconds / 60:.0f} min"
 
 
+def _subprocess_error(stdout: str, stderr: str, returncode: int) -> str:
+    """Keep the diagnostic, not a model-download progress bar, in manifests."""
+    lines = [line.strip() for line in (stdout + "\n" + stderr).splitlines() if line.strip()]
+    noise = ("Loading weights:", "Downloading:", "Fetching ")
+    meaningful = [
+        line for line in lines
+        if not line.startswith(noise) and not ("%|" in line and "it/s" in line)
+    ]
+    if not meaningful:
+        return f"exit {returncode}"
+    preferred = [
+        line for line in meaningful
+        if any(marker in line.lower() for marker in ("error", "exception", "traceback", "failed"))
+    ]
+    return (preferred[-1] if preferred else meaningful[-1])[-500:]
+
+
 def _print_plan(store: RunStore, pdf: Path, digital: list[int], scanned: list[int]) -> None:
     """Upfront summary: what will run, what is already cached, rough ETA."""
     todo_orient = [p for p in scanned if store.get("orient", p) is None]
@@ -600,7 +617,7 @@ def triage(pdf: Path = typer.Argument(..., exists=True, readable=True)):
 
 @app.command()
 def report(pdf: Path = typer.Argument(..., exists=True)):
-    """Raport de calitate + cost pentru un PDF, din depozitul său de rulări."""
+    """Raport de calitate + cost pentru o sursă, din depozitul său de rulări."""
     config = _config()
     store = RunStore(config, pdf)
     table = Table(title=f"report: {pdf.name}")
@@ -626,7 +643,11 @@ def report(pdf: Path = typer.Argument(..., exists=True)):
                       f"${sum(r['cost_usd'] for r in recs):.2f}")
         for purpose, n in by_purpose.most_common():
             console.print(f"  {purpose}: {n} calls, ${cost_by_purpose[purpose]:.2f}")
-    xlsx = pdf.with_suffix(".xlsx")
+    xlsx = (
+        pdf.with_name("budget_file.xlsx")
+        if pdf.suffix.lower() in {".xls", ".xlsx"}
+        else pdf.with_suffix(".xlsx")
+    )
     if xlsx.exists():
         console.print(f"workbook: [bold]{xlsx}[/bold] (see 'Sumar calitate' sheet)")
 
@@ -653,6 +674,7 @@ def convert(
     from .assemble import assemble
     from .model import ConversionResult, Issue
     from .validate import validate as run_validate
+    from .years import infer_budget_year_from_path
 
     config = _config()
     if llm:
@@ -683,6 +705,70 @@ def convert(
         if p.premium_model:
             desc += f", escaladare {p.premium_model} numai după eșec cu randament mare"
         console.print(f"model preset: [bold]{model_preset}[/bold] — {desc}")
+
+    if pdf.suffix.lower() in {".xls", ".xlsx"}:
+        from . import export as export_mod
+        from .manifest import find_manifest
+        from .native_workbook import convert_workbook
+        from .publication import publish_corpus_result
+        from .years import infer_budget_year_from_path
+
+        if pages:
+            console.print(
+                "[red]--pages este disponibil numai pentru PDF; un registru Excel "
+                "public se procesează integral[/red]"
+            )
+            raise typer.Exit(2)
+        if config.llm.mode != "off":
+            console.print(
+                "[yellow]sursa este Excel nativ: repararea LLM nu este necesară și "
+                "a fost dezactivată[/yellow]"
+            )
+            config.llm.mode = "off"
+        budget_year = infer_budget_year_from_path(pdf)
+        if budget_year is None:
+            console.print("[red]anul bugetar nu poate fi dedus din cale[/red]")
+            raise typer.Exit(2)
+        registry = nom.load_registry_for_year(config.reference_dir, budget_year)
+        out_path = out or pdf.with_name("budget_file.xlsx")
+        governing_manifest = find_manifest(pdf.parent)
+        corpus_target = (
+            governing_manifest is not None
+            and out_path.resolve() == pdf.with_name("budget_file.xlsx").resolve()
+        )
+        console.print(
+            f"[bold]bgconvertor[/bold] · {pdf.name} · Excel nativ · "
+            "LLM: [dim]off — ingestie deterministă[/dim]"
+        )
+        result = convert_workbook(pdf, budget_year, registry)
+        if not result.documents:
+            console.print("[red]niciun document bugetar nu a fost identificat[/red]")
+            raise typer.Exit(1)
+        if corpus_target:
+            publication_record = publish_corpus_result(
+                result,
+                pdf,
+                out_path,
+                governing_manifest,
+                llm_cost_usd=0.0,
+                llm_lifetime_cost_usd=0.0,
+            )
+        else:
+            export_mod.export(result, out_path)
+            publication_record = None
+        stats = result.stats()
+        console.print(
+            f"[bold green]✓ scris {out_path}[/bold green] · "
+            f"{stats['lines']} linii · "
+            f"{stats['pct_lines_strictly_verified']}% strict verificate"
+        )
+        if publication_record is not None:
+            console.print(
+                f"[dim]analysis: {publication_record['analysis']} · "
+                f"bundle: {publication_record['artifacts']['bundle_id']}[/dim]"
+            )
+        return
+
     store = RunStore(config, pdf)
     n_pages = len(PdfReader(pdf).pages)
     selected = parse_pages(pages, n_pages)
@@ -719,7 +805,8 @@ def convert(
         + " -> Excel; totul e reluabil (cache per pagina)[/dim]"
     )
     _run_extraction(config, store, pdf, selected, workers=workers)
-    registry = nom.load_registry(config.reference_dir)
+    budget_year = infer_budget_year_from_path(pdf)
+    registry = nom.load_registry_for_year(config.reference_dir, budget_year)
 
     ledger = client = None
     if config.llm.mode in ("repair", "full"):
@@ -1284,7 +1371,7 @@ def batch(
     """Convertește corpusul oraș cu oraș, în grupuri, scriind statusul în manifest.
 
     Fiecare oraș rulează în propriul proces (fail-soft); fișierul Excel ajunge
-    lângă PDF-ul său; blocul `conversion` din manifest înregistrează statusul,
+    lângă sursa sa; blocul `conversion` din manifest înregistrează statusul,
     calitatea și costul. Poate fi întrerupt și reluat în siguranță — totul se reia.
     """
     import datetime as dt
@@ -1320,7 +1407,7 @@ def batch(
         console.print(f"\n[bold cyan]— grupul {i // group + 1}: "
                       f"{', '.join(c.name for c in chunk)}[/bold cyan]")
         for city in chunk:
-            out_xlsx = city.pdf.with_suffix(".xlsx")
+            out_xlsx = city.workbook
             cmd = [sys.executable, "-m", "bgconvertor.cli", "convert", str(city.pdf),
                    "--workers", str(workers), "--out", str(out_xlsx)]
             if llm != "off":
@@ -1330,8 +1417,7 @@ def batch(
             console.print(f"  [bold]{city.name}[/bold] ({city.siruta}) …")
             proc = subprocess.run(cmd, capture_output=True, text=True)
             if proc.returncode != 0:
-                tail = (proc.stdout + proc.stderr)[-400:]
-                error = tail.splitlines()[-1] if tail else f"exit {proc.returncode}"
+                error = _subprocess_error(proc.stdout, proc.stderr, proc.returncode)
                 previous = (city.entry.get("conversion") or {}).get("status")
                 if previous == "converted":
                     # A failed refresh must not unpublish the last audited bundle.
@@ -1640,9 +1726,9 @@ def corpus_migrate_bundles(
             records.append({
                 "year": candidate.year, "siruta": candidate.siruta,
                 "municipality": candidate.municipality, "status": "failed",
-                "seconds": 0.0, "error": "source PDF missing",
+                "seconds": 0.0, "error": "source file missing",
             })
-            console.print("[red]PDF lipsă[/red]")
+            console.print("[red]sursă lipsă[/red]")
             continue
 
         command = [
@@ -1651,7 +1737,11 @@ def corpus_migrate_bundles(
             "convert", str(candidate.pdf),
             "--workers", str(workers),
             "--llm", "off",
-            "--out", str(candidate.pdf.with_suffix(".xlsx")),
+            "--out", str(
+                candidate.pdf.with_name("budget_file.xlsx")
+                if candidate.pdf.suffix.lower() in {".xls", ".xlsx"}
+                else candidate.pdf.with_suffix(".xlsx")
+            ),
         ]
         if candidate.preset:
             command.extend(["--model-preset", candidate.preset])
@@ -1672,8 +1762,7 @@ def corpus_migrate_bundles(
             else:
                 error = f"post-publication audit: {audit.status if audit else 'entry missing'}"
         else:
-            output = (proc.stdout + proc.stderr).strip().splitlines()
-            error = output[-1][-500:] if output else f"exit {proc.returncode}"
+            error = _subprocess_error(proc.stdout, proc.stderr, proc.returncode)
         records.append({
             "year": candidate.year, "siruta": candidate.siruta,
             "municipality": candidate.municipality, "status": status,
@@ -1719,7 +1808,7 @@ def corpus_export(
     config = _config()
     files = [p for p in (pdfs or []) if p.exists()] or corpus.discover_pdfs(config, Path.cwd())
     if not files:
-        console.print("[red]no converted PDFs found (run `convert` first)[/red]")
+        console.print("[red]no converted sources found (run `convert` first)[/red]")
         raise typer.Exit(1)
     _stage_banner("Export corpus", f"{len(files)} fisiere -> {out}")
     r = corpus.export(config, files, out)

@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 2313,
+    "lines_strictly_verified": 1165,
+    "pct_lines_strictly_verified": 50.4,
+    "numeric_cells": 4632,
+    "numeric_cells_strictly_verified": 2968,
+    "pct_numeric_cells_strictly_verified": 64.1,
+    "scope": {
+      "pages_expected": 101,
+      "pages_selected": 101,
+      "pages_processed": 101,
+      "complete_pdf": true
+    },
+    "pct_clean": 50.4,
+    "errors": 354,
+    "warnings": 1119,
+    "info": 0,
+    "documents": 6
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 449341000.0,
+    "cheltuieli": 493563080.0
+  },
+  "top_capitole": [
+    {
+      "code": "84.02",
+      "name": "Transporturi - din care titlurile:",
+      "total": 194801000.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuințe, servicii și dezvoltare publică - din care titlurile:",
+      "total": 63247080.0
+    },
+    {
+      "code": "65.02",
+      "name": "Învățământ - din care titlurile:",
+      "total": 61247000.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurări și asistență socială - din care titlurile:",
+      "total": 48726000.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autorități publice și acțiuni externe - din care titlurile:",
+      "total": 37385000.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protecția mediului - din care titlurile:",
+      "total": 33338000.0
+    },
+    {
+      "code": "00.01",
+      "name": "VENITURILE SECTIUNII DE FUNCTIONARE",
+      "total": 32001000.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultură, recreere și religie - din care titlurile:",
+      "total": 31728000.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publică și siguranță națională - din care titlurile:",
+      "total": 14333000.0
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publică și siguranță națională - din care titlurile:",
+      "total": 13675000.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "1c843c5e512be946cca999e7",
+    "source_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f",
+    "source_format": "pdf",
+    "source_pdf_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f"
+  }
+}

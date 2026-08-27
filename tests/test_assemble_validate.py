@@ -236,6 +236,53 @@ def test_validate_v4_hierarchy_breach_and_est_convention(tmp_path, registry):
     assert v4[0].column == "total"
 
 
+def test_official_prose_total_is_not_invalidated_by_an_explicitly_partial_summary(
+    tmp_path, registry
+):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL — sinteză oficială",
+        "layout": "official_prose_summary",
+        "lines": [
+            {**_line("4902", "TOTAL CHELTUIELI", section="TOTAL", total_2024="100"),
+             "source": "official_prose"},
+            {**_line("6502", "Învățământ", section="TOTAL", total_2024="80"),
+             "source": "official_prose"},
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1], registry))
+    validate(result, registry)
+
+    total = next(line for line in result.documents[0].lines if line.code == "49.02")
+    assert not any(issue.check == "V4_hierarchy" for issue in total.issues)
+
+
+def test_native_excel_partial_hierarchy_does_not_invalidate_source_cell(
+    tmp_path, registry
+):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT DE TEST",
+        "lines": [
+            _line("0302", "Impozit pe venit", total="10.00"),
+            _line(
+                "030218",
+                "Impozitul pe veniturile din transferul proprietatilor",
+                total="7.00",
+            ),
+        ],
+    })
+    result = ConversionResult(pdf="d", documents=assemble(store, [1]))
+    for line in result.documents[0].lines:
+        line.source = "native_excel"
+        line.value_sources = {column: "native_excel" for column in line.values}
+
+    validate(result, registry)
+
+    assert not any(issue.check == "V4_hierarchy" for issue in result.all_issues())
+    assert result.documents[0].lines[0].strictly_verified
+
+
 def test_validate_v5_identity(tmp_path, registry):
     store = _mk_store(tmp_path)
     store.put("extract", 1, {

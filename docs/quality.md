@@ -65,6 +65,30 @@ exportate, inclusiv totalurile și markerii de secțiune fără cod normalizat.
 Aceștia rămân `heading` pentru a nu fi confundați cu o clasificație în
 analize, dar nu mai dispar din numitorul de calitate al Excelului.
 
+## Snapshot auditat al ediției 2024
+
+<!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
+Conversia deterministă din 27 august 2026 acoperă toate cele 41 de intrări cu
+sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
+complet și 0 USD cost API. A produs 73.428 de linii, dintre care 56.049 strict
+verificate, și 223.278 de celule numerice, dintre care 171.868 strict
+verificate. Mediana ratei stricte pe intrare este 84,7%; 14/41 intrări sunt la
+cel puțin 90%, 31/41 la cel puțin 70%, iar 10 rămân sub 70%.
+
+Acest snapshot nu schimbă semantica metricii: numitorul conține numai ieșirea
+extrasă. Toate bundle-urile publică `recall_measured=false`, iar cifrele nu
+pot fi prezentate drept recall complet. Pe partea analitică, ediția produce
+40 de pagini municipale, 24 de municipiu-ani eligibili pentru comparația
+planului, 39 de tabele de capitole și 11 blocuri complete de grafice. Graficele
+rămase sunt retrase când capitolele strict verificate nu acoperă 90–110% din
+totalul tipărit, în loc să fie completate prin estimare.
+
+Auditul final `corpus audit data --strict --require-modern` trece pentru
+110/110 conversii existente din edițiile 2024–2026 și găsește zero bundle-uri
+inconsistente. Achiziția și rezultatele detaliate sunt documentate în
+[`data/2024/README.md`](../data/2024/README.md).
+<!-- END GENERATED:2024_QUALITY_METRICS -->
+
 ## Bundle public atomic și auditabil
 
 O conversie completă din arborele `data/` publică împreună:
@@ -74,7 +98,7 @@ O conversie completă din arborele `data/` publică împreună:
 - blocul `conversion` al intrării din `manifest.json`.
 
 Excelul și analiza sunt scrise întâi în fișiere temporare. Ambele încorporează
-același `bundle_id`, derivat determinist din SHA-256-ul PDF-ului și rezultatul
+același `bundle_id`, derivat determinist din SHA-256-ul sursei și rezultatul
 conversiei. Manifestul este commit point-ul și se scrie ultimul, atomic; el
 înregistrează SHA-256 și dimensiunea fiecărui artefact, SHA-256-ul sursei,
 schema de calitate, scope-ul și costul LLM incremental al rulării
@@ -95,9 +119,9 @@ uv run bgconvertor corpus audit data --strict --require-modern
 ```
 
 Auditorul compară metricile din toate cele trei artefacte, bundle ID-urile,
-hash-urile, dimensiunile și legătura cu PDF-ul sursă. Agregatul și site-ul nu
+hash-urile, dimensiunile și legătura cu sursa PDF/XLS/XLSX. Agregatul și site-ul nu
 mai expun analize sau linkuri Excel pentru o conversie `artifact_mismatch`;
-PDF-ul oficial și URL-ul sursei rămân disponibile.
+sursa oficială și URL-ul ei rămân disponibile.
 
 ## Baseline-ul de migrare P0
 

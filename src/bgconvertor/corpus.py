@@ -25,7 +25,7 @@ from pathlib import Path
 
 from .config import RunConfig
 from .model import ConversionResult
-from .nomenclator import load_registry
+from .nomenclator import load_registry_for_year
 from .runstore import RunStore
 
 log = logging.getLogger("bgc.corpus")
@@ -127,12 +127,24 @@ def _municipality(pdf: Path) -> str:
 
 
 def build_result(config: RunConfig, pdf: Path) -> ConversionResult:
+    from .years import infer_budget_year_from_path
+
+    budget_year = infer_budget_year_from_path(pdf)
+    registry = load_registry_for_year(
+        config.reference_dir, budget_year
+    )
+    if pdf.suffix.lower() in {".xls", ".xlsx"}:
+        if budget_year is None:
+            raise ValueError(f"cannot infer budget year from native source path: {pdf}")
+        from .native_workbook import convert_workbook
+
+        return convert_workbook(pdf, budget_year, registry)
+
     from pypdf import PdfReader
 
     from .assemble import assemble
     from .validate import validate
 
-    registry = load_registry(config.reference_dir)
     store = RunStore(config, pdf)
     pages = list(range(1, len(PdfReader(pdf).pages) + 1))
     result = ConversionResult(
@@ -250,17 +262,30 @@ def report(config: RunConfig, pdfs: list[Path]) -> list[dict]:
 
 
 def discover_pdfs(config: RunConfig, root: Path) -> list[Path]:
-    """PDFs (flat and corpus-tree) that have extraction artifacts."""
-    from .manifest import default_manifest
+    """Converted PDF/native-Excel sources discoverable from committed state.
+
+    The historical function name is retained for API compatibility. Corpus
+    manifests, rather than a single newest-year manifest, define the public
+    source list; ad-hoc root-level PDFs remain discoverable through run cache.
+    """
+    from .manifest import Manifest
     from .runstore import store_key
 
     candidates = sorted(root.glob("*.pdf"))
-    m = default_manifest(root)
-    if m:
-        candidates += [c.pdf for c in m.cities() if c.pdf.exists()]
     found = []
     for pdf in candidates:
         stage_dir = config.runs_dir / store_key(pdf) / "extract"
         if stage_dir.is_dir() and any(stage_dir.glob("p*.json")):
             found.append(pdf)
-    return found
+
+    data_root = root if root.name == "data" else root / "data"
+    manifests = sorted(data_root.glob("[0-9][0-9][0-9][0-9]/manifest.json"))
+    for manifest_path in manifests:
+        manifest = Manifest(manifest_path)
+        for city in manifest.cities():
+            if not city.pdf.exists():
+                continue
+            if (city.entry.get("conversion") or {}).get("status") != "converted":
+                continue
+            found.append(city.pdf)
+    return list(dict.fromkeys(found))

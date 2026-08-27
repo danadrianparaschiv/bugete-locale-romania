@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from bgconvertor.config import RunConfig
-from bgconvertor.corpus import build_result, export, export_rows
+from bgconvertor.corpus import build_result, discover_pdfs, export, export_rows
 from bgconvertor.model import BudgetDocument, BudgetLine, ConversionResult, Issue
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -115,3 +115,42 @@ def test_export_rows_has_explicit_functional_and_economic_codes(monkeypatch, tmp
     assert by_kind["expense_functional"]["economic_code"] is None
     assert by_kind["expense_economic"]["functional_code"] == "65.02"
     assert by_kind["expense_economic"]["economic_code"] == "10.01"
+
+
+def test_build_result_dispatches_native_excel_through_shared_converter(monkeypatch, tmp_path):
+    source = tmp_path / "data/2024/01-alba/1017-alba-iulia/buget_orig.xlsx"
+    source.parent.mkdir(parents=True)
+    source.write_bytes(b"placeholder")
+    expected = ConversionResult(pdf=source.name, documents=[])
+
+    monkeypatch.setattr("bgconvertor.corpus.load_registry_for_year", lambda *_: object())
+    monkeypatch.setattr(
+        "bgconvertor.native_workbook.convert_workbook",
+        lambda path, year, registry: expected if path == source and year == 2024 else None,
+    )
+
+    assert build_result(RunConfig(), source) is expected
+
+
+def test_discovery_includes_converted_sources_from_all_years(tmp_path):
+    data = tmp_path / "data"
+    expected = []
+    for year, suffix in ((2024, ".xlsx"), (2025, ".pdf")):
+        city = data / str(year) / "01-alba" / "1017-alba-iulia"
+        city.mkdir(parents=True)
+        name = "buget_orig.xlsx" if suffix == ".xlsx" else "budget_file.pdf"
+        source = city / name
+        source.write_bytes(b"source")
+        expected.append(source)
+        (data / str(year) / "manifest.json").write_text(json.dumps({
+            "year": year,
+            "entries": [{
+                "county_code": "01", "county_name": "Alba",
+                "capital_siruta": "1017", "capital_name": "Alba Iulia",
+                "path": f"01-alba/1017-alba-iulia/{name}",
+                "source_format": suffix.lstrip("."),
+                "conversion": {"status": "converted"},
+            }],
+        }))
+
+    assert discover_pdfs(RunConfig(), tmp_path) == expected

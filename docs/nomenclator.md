@@ -9,6 +9,17 @@ datele din pagină și reconstruiește registrul local
 (`reference/nomenclator/registry.json`). Oglinda de pe data.gov.ro este
 înghețată la 2018; nu o folosi.
 
+Validarea istorică nu folosește automat registrul curent. Când există
+`reference/nomenclator/<an>/registry.json`, comenzile `convert`, `batch`,
+`corpus export` și auditul selectează instantaneul anului din calea
+`data/<an>/`. Pentru 2024 sunt păstrate local anexele oficiale XLS publicate de
+Ministerul Finanțelor și hash-urile lor; registrul rezultat conține 2.106
+poziții. Cititorul acceptă atât XLS, cât și XLSX și identifică foile după
+conținut, nu după un nume fragil. În lipsa unui instantaneu istoric, fluxurile
+legacy păstrează compatibilitatea cu registrul curent, dar emit un avertisment;
+o ediție publică nouă nu trebuie acceptată la audit înainte de adăugarea
+instantaneului anului respectiv.
+
 ## Gramatica codurilor
 
 - **Venituri**: `cc.SS[.ss[.pp]]` — capitol, subcapitol, paragraf; al

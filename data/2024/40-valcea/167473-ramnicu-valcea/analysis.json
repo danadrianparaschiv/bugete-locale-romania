@@ -1,0 +1,51 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 338,
+    "lines_strictly_verified": 294,
+    "pct_lines_strictly_verified": 87.0,
+    "numeric_cells": 968,
+    "numeric_cells_strictly_verified": 871,
+    "pct_numeric_cells_strictly_verified": 90.0,
+    "scope": {
+      "pages_expected": 70,
+      "pages_selected": 70,
+      "pages_processed": 70,
+      "complete_pdf": true
+    },
+    "pct_clean": 87.0,
+    "errors": 20,
+    "warnings": 31,
+    "info": 0,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 554815.87,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 65103.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 600.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "bceaa774593b361f70783a89",
+    "source_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d",
+    "source_format": "pdf",
+    "source_pdf_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d"
+  }
+}

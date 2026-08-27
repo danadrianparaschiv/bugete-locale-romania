@@ -48,3 +48,19 @@ def test_set_status_successive_updates(tmp_path):
     m.set_status(city, status="converted", pct_clean=99.5)
     conv = json.loads(p.read_text())["entries"][0]["conversion"]
     assert conv == {"status": "converted", "pct_clean": 99.5}
+
+
+def test_successful_conversion_clears_obsolete_failure_diagnostics(tmp_path):
+    p = _write_manifest(tmp_path)
+    m = Manifest(p)
+    city = m.cities()[0]
+    m.set_status(
+        city,
+        status="failed",
+        error="old exception",
+        last_attempt_error="old exception",
+    )
+    m.set_status(city, status="converted", pct_clean=100.0)
+
+    conv = json.loads(p.read_text())["entries"][0]["conversion"]
+    assert conv == {"status": "converted", "pct_clean": 100.0}

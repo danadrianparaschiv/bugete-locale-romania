@@ -404,7 +404,7 @@ def write_csv(dataset: AnalyticsDataset, path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     fields = list(AnalyticsRow.model_fields)
     with NamedTemporaryFile("w", encoding="utf-8", newline="", dir=path.parent, delete=False) as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for row in dataset.rows:
             writer.writerow(row.model_dump())

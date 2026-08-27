@@ -1,0 +1,86 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1997,
+    "lines_strictly_verified": 1670,
+    "pct_lines_strictly_verified": 83.6,
+    "numeric_cells": 3807,
+    "numeric_cells_strictly_verified": 3222,
+    "pct_numeric_cells_strictly_verified": 84.6,
+    "scope": {
+      "pages_expected": 105,
+      "pages_selected": 105,
+      "pages_processed": 105,
+      "complete_pdf": true
+    },
+    "pct_clean": 83.6,
+    "errors": 192,
+    "warnings": 289,
+    "info": 0,
+    "documents": 5
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 7891248.0,
+    "cheltuieli": 7891248.0
+  },
+  "top_capitole": [
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 883560.0
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 543549.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 293154.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului",
+      "total": 150549.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 32762.0
+    },
+    {
+      "code": "54.10",
+      "name": "Servicii publice comunitare de evidenta a persoanelor",
+      "total": 12619.0
+    },
+    {
+      "code": "83.02",
+      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
+      "total": 4506.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 500.0
+    },
+    {
+      "code": "60.02",
+      "name": "Aparare nationala",
+      "total": 482.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "24f77cfd1cdbc2440ce64752",
+    "source_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f",
+    "source_format": "pdf",
+    "source_pdf_sha256": "d982e82177133ca082af8f70b81dc492ac1f84feeb703d74e943f9cbf5690d2f"
+  }
+}

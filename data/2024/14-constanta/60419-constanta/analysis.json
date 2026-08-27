@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 3502,
+    "lines_strictly_verified": 2633,
+    "pct_lines_strictly_verified": 75.2,
+    "numeric_cells": 8221,
+    "numeric_cells_strictly_verified": 6286,
+    "pct_numeric_cells_strictly_verified": 76.5,
+    "scope": {
+      "pages_expected": 318,
+      "pages_selected": 318,
+      "pages_processed": 318,
+      "complete_pdf": true
+    },
+    "pct_clean": 75.2,
+    "errors": 376,
+    "warnings": 687,
+    "info": 17,
+    "documents": 4
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 2271441.0,
+    "cheltuieli": 2292515.0
+  },
+  "top_capitole": [
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie Din total capitol:",
+      "total": 603962.0
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului Din total capitol:",
+      "total": 235409.0
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica Din total capitol:",
+      "total": 210151.0
+    },
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe Din total capitol:",
+      "total": 135622.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate Din total capitol:",
+      "total": 94070.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi Din total capitol:",
+      "total": 87466.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala Din total capitol:",
+      "total": 57895.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzacții privind datoria publică și împrumuturi",
+      "total": 16674.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice Din total capitol:",
+      "total": 3859.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca Din total capitol:",
+      "total": 2043.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "532562bb06766d42c8a4da4d",
+    "source_sha256": "a1cb02650e53c699aa24aafe13acf943e05c3d3320de737473352980b19fdbde",
+    "source_format": "pdf",
+    "source_pdf_sha256": "a1cb02650e53c699aa24aafe13acf943e05c3d3320de737473352980b19fdbde"
+  }
+}

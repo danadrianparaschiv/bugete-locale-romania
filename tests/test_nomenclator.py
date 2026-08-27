@@ -6,6 +6,8 @@ def test_normalize_code():
     assert nom.normalize_code("66.02.07 *") == ("66.02.07", "*")
     assert nom.normalize_code(" 04.02.01 ") == ("04.02.01", "")
     assert nom.normalize_code("30.02.08 *)") == ("30.02.08", "*)")
+    assert nom.normalize_code("58 06 01") == ("58.06.01", "")
+    assert nom.normalize_code("51.0") == ("51", "")
 
 
 def test_parent_code():
@@ -54,6 +56,46 @@ def test_registry_roundtrip(reference_dir, tmp_path):
     loaded = nom.Registry.model_validate_json(path.read_text())
     assert loaded.stats() == reg.stats()
     assert loaded.get("expense_economic", "10.01.01").name == "Salarii de baza"
+
+
+def test_2024_registry_uses_the_historical_official_annexes(reference_dir):
+    historical = reference_dir / "2024"
+    reg = nom.build_registry(historical)
+
+    assert reg.effective_year == 2024
+    assert len(reg.entries) == 2106
+    assert reg.stats() == {
+        "local/revenue": 418,
+        "local/expense_functional": 141,
+        "own_revenue/revenue": 367,
+        "own_revenue/expense_functional": 187,
+        "all/expense_economic": 993,
+        "rollups": 37,
+        "identities": 26,
+    }
+    assert reg.sources == {
+        "Anexanr2_05082024.xls": "e64a653a891b4c6a767335365756d40ec7bb91c2f66a791851a1d823e85588ab",
+        "Anexanr10_26112024.xls": "1050754db1ba2e688b318330c9e9bf002d68456658d4238772d3158f541f94a4",
+        "AnexanrIec_10122024.xls": "c9436d1ffe8ecda0a4fbd3bc28289f4e3362d98c0e4022d161380728a96b456a",
+    }
+
+    # Rows annotated with an amendment date and the few space-delimited codes
+    # in the MF workbook must remain valid entries.
+    assert reg.get("revenue", "04.02.07") is not None
+    assert reg.get("expense_economic", "58.06.01") is not None
+    assert "extinse" in reg.get("expense_economic", "56.25").name
+
+    # These codes were introduced after the 2024 snapshot.  A 2026 registry
+    # would incorrectly accept them in a historical budget.
+    assert not reg.exists("54.02.18", "expense_functional")
+    assert not reg.exists("66", "expense_economic")
+
+
+def test_registry_selection_prefers_a_year_snapshot(reference_dir):
+    historical = nom.reference_dir_for_year(reference_dir, 2024)
+    assert historical == reference_dir / "2024"
+    assert nom.load_registry_for_year(reference_dir, 2024).effective_year == 2024
+    assert nom.reference_dir_for_year(reference_dir, 2026) == reference_dir
 
 
 def test_identities_reference_known_codes(reference_dir):

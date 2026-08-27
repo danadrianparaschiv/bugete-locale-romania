@@ -1,0 +1,76 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 1085,
+    "lines_strictly_verified": 948,
+    "pct_lines_strictly_verified": 87.4,
+    "numeric_cells": 2211,
+    "numeric_cells_strictly_verified": 1818,
+    "pct_numeric_cells_strictly_verified": 82.2,
+    "scope": {
+      "pages_expected": 71,
+      "pages_selected": 71,
+      "pages_processed": 71,
+      "complete_pdf": true
+    },
+    "pct_clean": 87.4,
+    "errors": 100,
+    "warnings": 103,
+    "info": 6,
+    "documents": 3
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 542338.66,
+    "cheltuieli": 553874.83
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe Din total capitol:",
+      "total": 68075.99
+    },
+    {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie Din total capitol:",
+      "total": 35552.68
+    },
+    {
+      "code": "74.02",
+      "name": "Protectia mediului Din total capitol:",
+      "total": 12023.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzacții privind datoria publică şi imprumuturi",
+      "total": 7885.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate Din total capitol:",
+      "total": 5958.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 350.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca Din total capitol:",
+      "total": 0.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "9b8e965c035d7561488a8e16",
+    "source_sha256": "f9f4aa18e93ac41666927a57e0b53ab3864bb0b2e731664dc50954ac03083478",
+    "source_format": "pdf",
+    "source_pdf_sha256": "f9f4aa18e93ac41666927a57e0b53ab3864bb0b2e731664dc50954ac03083478"
+  }
+}

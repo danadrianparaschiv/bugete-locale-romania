@@ -13,11 +13,13 @@ Date ale terților incluse în acest depozit:
    Anexele publicate precizează că nu reprezintă temei legal.
    Actualizare cu `bgconvertor nomenclator update`.
 
-2. data/<an>/**/budget_file.pdf — documente bugetare oficiale ale
-   administrațiilor locale (anexe la HCL), acte administrative publice
-   publicate de municipiile respective. Sursele și datele de preluare
-   pentru fiecare fișier sunt în data/<an>/manifest.json și
-   data/<an>/SOURCES.md.
+2. data/<an>/**/budget_file.pdf și data/<an>/**/buget_orig.xls[x] — documente
+   bugetare oficiale ale administrațiilor locale (anexe la HCL), acte
+   administrative publice publicate de municipiile respective. Sursele și
+   datele de preluare pentru fiecare fișier sunt în data/<an>/manifest.json și
+   data/<an>/SOURCES.md. PDF-urile brute ale ediției 2024 sunt excluse din Git
+   și pot fi reproduse din URL-urile și sumele SHA-256 publicate; fișierele
+   Excel native ale aceleiași ediții sunt păstrate byte-for-byte.
 
 3. Codurile teritoriale SIRUTA — Institutul Național de Statistică,
    https://data.gov.ro/dataset/siruta-2025

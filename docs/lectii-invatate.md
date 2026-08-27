@@ -1,7 +1,7 @@
-# Lecții învățate: procesarea bugetelor locale 2025–2026
+# Lecții învățate: procesarea bugetelor locale 2024–2026
 
-Retrospectiva primelor două ediții ale corpusului — ce am aflat
-convertind bugetele municipiilor reședință de județ pe 2026 și 2025, și
+Retrospectiva primelor trei ediții ale corpusului — ce am aflat
+convertind bugetele municipiilor reședință de județ pe 2026, 2025 și 2024, și
 de ce să ținem cont când repetăm exercițiul pentru 2027. Toate cifrele
 provin din conversiile și evaluările efectuate (manifeste,
 `evals/rezultate.csv`, istoricul git).
@@ -197,7 +197,54 @@ propusă: o valoare 2026 nereparată a cărei pereche 2025 e verificată
 poate fi prioritizată pentru re-citire prin plauzibilitate (fără a fi
 vreodată corectată automat).
 
-## 7. Checklist pentru campania 2027
+## 7. Ce a adăugat ediția 2024: achiziție istorică reproductibilă
+
+Colectarea retroactivă a pornit la peste doi ani de la publicare. Din cele 42
+de intrări (41 reședințe plus București), 41 au o sursă oficială verificată:
+38 PDF-uri și trei registre Excel native. Arhivele oficiale au permis
+recuperarea anexelor pentru Bistrița, Slatina și Vaslui, iar API-ul public și
+vizualizatorul CityOn au rezolvat HCL 44 cu anexele Tulcei. Pentru
+Drobeta-Turnu Severin, eMOL confirmă aprobarea prin HCL 39/12.02.2024, dar nu
+publică documentul sau anexele; aceasta rămâne singura lipsă declarată în
+manifest, fără înlocuire cu un document aproximativ. Inventarul complet,
+inclusiv versiunea documentului și pagina de înregistrare, este în
+`data/2024/SOURCES.md`.
+
+Șase lecții noi:
+
+- **Un nomenclator curent nu este dovadă istorică.** Anexele MF aflate în
+  vigoare în 2024 au fost recuperate ca XLS, fixate prin SHA-256 și compilate
+  într-un registru separat cu 2.106 poziții. Anul din calea corpusului selectează
+  registrul; astfel un cod adăugat ulterior nu validează retroactiv o celulă.
+- **„Excel nativ” nu înseamnă o singură schemă.** Slobozia și Timișoara
+  publică foi apropiate de formularul MF; Satu Mare publică un buget general
+  consolidat în care codurile de rând nu sunt coduri de clasificație. Cititorul
+  selectează numai coloana explicită `Bugetul local`, mapează capitolele prin
+  numele oficial și nu inventează clasificări pentru rândurile narative.
+- **Sursa și rezultatul trebuie păstrate separat.** `buget_orig.xls[x]` rămâne
+  registrul municipal byte-for-byte; `budget_file.xlsx` este proiecția
+  normalizată în mii lei. Ambele au hash separat în bundle.
+- **PDF-urile brute nu trebuie să umfle istoricul Git.** Cele aproximativ 372 MB
+  sunt reproduse de downloader din URL-uri oficiale și verificate față de
+  `checksums.sha256`; site-ul trimite la sursa oficială, nu la o cale GitHub
+  inexistentă. Numai sursele Excel native și ieșirile normalizate sunt
+  versionate.
+<!-- BEGIN GENERATED:2024_LESSONS_METRICS -->
+- **Achiziția completă nu înseamnă automat calitate uniformă.** Conversia
+  deterministă a tuturor celor 41 de intrări disponibile a produs 73.428 de
+  linii la 0 USD, dar mediana ratei stricte observate este 84,7% și 10
+  intrări rămân sub 70%. Bistrița, Zalău, Deva și Vaslui trebuie tratate ca
+  ținte de mapper sau recuperare, nu mascate prin media corpusului. Procentul
+  rămâne consistență pe ieșirea extrasă, nu recall complet.
+- **Absența graficului este și ea un rezultat de calitate.** Ediția publică 40
+  de pagini municipale și 39 de tabele de capitole, dar numai 11 blocuri
+  complete de grafice trec poarta de acoperire 90–110% față de totalul
+  tipărit. Analiticele transversale păstrează 24 de municipiu-ani eligibili
+  pentru comparația planului; restul rămân vizibili cu motivul excluderii, fără
+  estimări care să umple golurile.
+<!-- END GENERATED:2024_LESSONS_METRICS -->
+
+## 8. Checklist pentru campania 2027
 
 1. Așteaptă legea bugetului de stat; pornește colectarea la 1–2
    săptămâni după — recolta e concentrată în ~3 săptămâni.
@@ -231,10 +278,12 @@ vreodată corectată automat).
 
 ---
 
+<!-- BEGIN GENERATED:2024_LESSONS_FOOTER -->
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
-actualizare: 24 august 2026, la 32/41 orașe pe 2026 și 37/42 pe 2025, după
-reconcilierea costurilor, auditul P0 al artefactelor publice și recuperarea
-machetelor MF «Formular 11» (Baia Mare: 0 → 691 linii extrase). Lecția
-«fișierul mic nu e anexa» a mai primit două exemple: Ploiești publicase
-doar textul HCL, iar Satu Mare un comunicat de presă — în ambele cazuri
-documentul bugetar propriu-zis lipsește, oricât de bun ar fi convertorul.*
+actualizare: 27 august 2026, după implementarea cap-coadă a ediției 2024:
+41/42 intrări convertite, 40 de pagini municipale de analiză, 73.428 de linii,
+0 USD cost API și o singură sursă indisponibilă declarată. Auditul public trece
+pentru toate cele 110 conversii existente din 2024–2026, fără neconcordanțe de
+bundle; rezultatele detaliate și limitele metricilor sunt în
+[`data/2024/README.md`](../data/2024/README.md).*
+<!-- END GENERATED:2024_LESSONS_FOOTER -->

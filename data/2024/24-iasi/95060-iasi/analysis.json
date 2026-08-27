@@ -1,0 +1,66 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 6499,
+    "lines_strictly_verified": 6132,
+    "pct_lines_strictly_verified": 94.4,
+    "numeric_cells": 16195,
+    "numeric_cells_strictly_verified": 14724,
+    "pct_numeric_cells_strictly_verified": 90.9,
+    "scope": {
+      "pages_expected": 258,
+      "pages_selected": 258,
+      "pages_processed": 258,
+      "complete_pdf": true
+    },
+    "pct_clean": 94.4,
+    "errors": 345,
+    "warnings": 238,
+    "info": 0,
+    "documents": 4
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": 1729806.14,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 44457.9
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 38987.05
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi",
+      "total": 35671.0
+    },
+    {
+      "code": "87.02",
+      "name": "Alte actiuni economice",
+      "total": 14270.0
+    },
+    {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 0.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "1798da74ead24dd6e7998a53",
+    "source_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f",
+    "source_format": "pdf",
+    "source_pdf_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f"
+  }
+}

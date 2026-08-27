@@ -1,8 +1,9 @@
 """The data/<year>/manifest.json is the corpus's identity source.
 
 Each entry names a county-seat municipality by its official SIRUTA code,
-its source URL, and its PDF path; batch conversion writes its status back
-here so the manifest doubles as the corpus's progress ledger.
+its source URL, and its source path (PDF or native Excel); batch conversion
+writes its status back here so the manifest doubles as the corpus's progress
+ledger.
 """
 
 from __future__ import annotations
@@ -23,8 +24,23 @@ class CityEntry:
     name: str
     county_code: str
     county_name: str
-    pdf: Path  # absolute path
+    pdf: Path  # absolute source path (legacy attribute name; PDF or native Excel)
     entry: dict  # raw manifest entry (mutated by status updates)
+
+    @property
+    def source_format(self) -> str:
+        return str(self.entry.get("source_format") or self.pdf.suffix.lstrip(".")).lower()
+
+    @property
+    def workbook(self) -> Path:
+        """Normalized public workbook, distinct from a native source workbook."""
+        if self.source_format in {"xls", "xlsx"}:
+            return self.pdf.with_name("budget_file.xlsx")
+        return self.pdf.with_suffix(".xlsx")
+
+    @property
+    def analysis(self) -> Path:
+        return self.pdf.with_name("analysis.json")
 
 
 class Manifest:
@@ -82,6 +98,17 @@ class Manifest:
     def set_status(self, city: CityEntry, **fields) -> None:
         # Merge onto a fresh read of the file: a long-lived process (batch)
         # must not clobber fields another process added since our load.
+        def merge_conversion(existing: dict) -> dict:
+            conversion = dict(existing)
+            conversion.update(city.entry.get("conversion") or {})
+            conversion.update(fields)
+            if fields.get("status") == "converted":
+                # Failure diagnostics describe an obsolete attempt once a
+                # complete public bundle has been committed successfully.
+                conversion.pop("error", None)
+                conversion.pop("last_attempt_error", None)
+            return conversion
+
         try:
             fresh = json.loads(self.path.read_text())
         except (OSError, json.JSONDecodeError):
@@ -90,14 +117,13 @@ class Manifest:
             rel = city.entry.get("path")
             for e in fresh.get("entries", []):
                 if e.get("path") == rel:
-                    conv = dict(e.get("conversion") or {})
-                    conv.update(city.entry.get("conversion") or {})
-                    conv.update(fields)
-                    e["conversion"] = conv
+                    e["conversion"] = merge_conversion(e.get("conversion") or {})
                     city.entry = e  # keep later updates on the fresh dict
             self.data = fresh
         else:
-            city.entry.setdefault("conversion", {}).update(fields)
+            city.entry["conversion"] = merge_conversion(
+                city.entry.get("conversion") or {}
+            )
         self.save()
 
     def save(self) -> None:

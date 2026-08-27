@@ -1,0 +1,66 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 902,
+    "lines_strictly_verified": 526,
+    "pct_lines_strictly_verified": 58.3,
+    "numeric_cells": 3284,
+    "numeric_cells_strictly_verified": 1962,
+    "pct_numeric_cells_strictly_verified": 59.7,
+    "scope": {
+      "pages_expected": 46,
+      "pages_selected": 46,
+      "pages_processed": 46,
+      "complete_pdf": true
+    },
+    "pct_clean": 58.3,
+    "errors": 187,
+    "warnings": 307,
+    "info": 1,
+    "documents": 1
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": 689774.0
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 70110.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 26670.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 15271.0
+    },
+    {
+      "code": "55.02",
+      "name": "Tranzactii privind datoria publica si imprumuturi ()",
+      "total": 9600.0
+    },
+    {
+      "code": "80.02",
+      "name": "Actiuni generale economice, comerciale si de munca",
+      "total": 715.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "2c11aa89aac4a0bdefda156d",
+    "source_sha256": "29e1c44f97a92f8c93a4e61135e7038185f41d2c9f3605e0b7f32e9904ec48fa",
+    "source_format": "pdf",
+    "source_pdf_sha256": "29e1c44f97a92f8c93a4e61135e7038185f41d2c9f3605e0b7f32e9904ec48fa"
+  }
+}

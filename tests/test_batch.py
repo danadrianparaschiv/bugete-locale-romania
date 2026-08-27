@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel
 
+from bgconvertor.cli import _subprocess_error
 from bgconvertor.config import RunConfig
 from bgconvertor.llm.batch import batch_structured
 from bgconvertor.llm.client import LLMClient
@@ -10,6 +11,12 @@ from bgconvertor.llm.ledger import Ledger
 
 class Out(BaseModel):
     ok: bool
+
+
+def test_subprocess_error_ignores_trailing_model_progress():
+    stderr = "RuntimeError: recursive mutex lock failed\nLoading weights: 100%|###| 770/770 [00:00<00:00, 1it/s]"
+    assert _subprocess_error("", stderr, 1) == \
+        "RuntimeError: recursive mutex lock failed"
 
 
 def test_batch_all_cached_needs_no_api(tmp_path):

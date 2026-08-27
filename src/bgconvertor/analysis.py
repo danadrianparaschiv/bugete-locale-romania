@@ -58,6 +58,9 @@ def _is_total_venituri(ln) -> bool:
     Layouts print it as ``000102``, ``00.01`` or ``0001``; matching the raw
     string alone silently missed every dotted variant, which is most of them.
     """
+    normalized_name = " ".join(ln.name.upper().split())
+    if ln.kind == "heading":
+        return normalized_name == "TOTAL VENITURI"
     if ln.kind != "revenue":
         return False
     digits = (ln.raw_code or "").replace(".", "")
@@ -65,6 +68,9 @@ def _is_total_venituri(ln) -> bool:
 
 
 def _is_total_cheltuieli(ln) -> bool:
+    normalized_name = " ".join(ln.name.upper().split())
+    if ln.kind == "heading":
+        return normalized_name == "TOTAL CHELTUIELI"
     return (ln.kind == "expense_functional"
             and ln.code in ("50.02", "50.10", "49.02", "49.10")
             and "CHELTUIELI" in ln.name.upper())
@@ -105,29 +111,31 @@ def infografic(result: ConversionResult) -> dict | None:
     is ever estimated to fill a gap.
     """
     docs = [d for d in result.documents if d.suffix == "02"]
-    verified = [
-        ln for d in docs for ln in d.lines
-        if ln.kind != "heading" and ln.code and ln.strictly_verified
-    ]
+    verified = [ln for d in docs for ln in d.lines if ln.strictly_verified]
     if not verified:
         return None
 
     def rows(pred):
         return [ln for ln in verified if pred(ln)]
 
-    def total_row(kind, codes, section):
+    def total_row(kind, section):
         """Largest matching total row in a section — layouts repeat it per page."""
         best = None
         for ln in verified:
-            if ln.kind != kind:
-                continue
             if not (_is_total_section(ln) if section == "TOTAL"
                     else (ln.section or "").strip().upper() == section):
                 continue
-            # the grand-total code also lands on "Partea a N-a ..." headings in
-            # some layouts; those are subtotals, not the total
-            match = _is_total_venituri(ln) if kind == "revenue" else (
-                ln.code in codes and not ln.name.lstrip().lower().startswith("partea"))
+            if kind == "revenue":
+                match = _is_total_venituri(ln)
+            elif ln.kind == "heading":
+                match = _is_total_cheltuieli(ln)
+            else:
+                match = (
+                    ln.kind == "expense_functional"
+                    and ln.code in ("50.02", "50.10", "49.02", "49.10")
+                    and not ln.name.lstrip().lower().startswith("partea")
+                    and (section != "TOTAL" or _is_total_cheltuieli(ln))
+                )
             v = _line_total(ln)
             if not match or v is None or float(v) <= 0:
                 continue
@@ -136,8 +144,8 @@ def infografic(result: ConversionResult) -> dict | None:
         return best
 
     out: dict = {"unitate": "mii lei", "chart_quality": {}}
-    tot_ch = total_row("expense_functional", ("50.02", "49.02"), "TOTAL")
-    tot_ven = total_row("revenue", (), "TOTAL")
+    tot_ch = total_row("expense", "TOTAL")
+    tot_ven = total_row("revenue", "TOTAL")
     total_cheltuieli = float(_line_total(tot_ch)) if tot_ch else None
     total_venituri = float(_line_total(tot_ven)) if tot_ven else None
 
@@ -221,8 +229,8 @@ def infografic(result: ConversionResult) -> dict | None:
             out["chart_quality"]["100_lei"] = dict(quality)
 
     # sections + quarterly rhythm from the section total rows
-    fu = total_row("expense_functional", ("50.02", "49.02"), "FUNCTIONARE")
-    dv = total_row("expense_functional", ("50.02", "49.02"), "DEZVOLTARE")
+    fu = total_row("expense", "FUNCTIONARE")
+    dv = total_row("expense", "DEZVOLTARE")
     if fu is not None and dv is not None:
         out["sectiuni"] = {"functionare": float(_line_total(fu)),
                            "dezvoltare": float(_line_total(dv))}
@@ -284,7 +292,12 @@ def city_analysis(result: ConversionResult) -> dict:
         for doc in result.documents
         if doc.suffix == "02"
         for ln in doc.lines
-        if ln.kind != "heading" and ln.code and ln.strictly_verified
+        if ln.strictly_verified
+        and (
+            (ln.kind != "heading" and ln.code)
+            or _is_total_venituri(ln)
+            or _is_total_cheltuieli(ln)
+        )
     ]
 
     def first_total(pred) -> float | None:

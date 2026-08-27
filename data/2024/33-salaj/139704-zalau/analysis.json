@@ -1,0 +1,66 @@
+{
+  "schema_version": 3,
+  "quality": {
+    "schema_version": 2,
+    "metric": "observed_strict_line_rate",
+    "recall_measured": false,
+    "lines": 807,
+    "lines_strictly_verified": 325,
+    "pct_lines_strictly_verified": 40.3,
+    "numeric_cells": 2517,
+    "numeric_cells_strictly_verified": 1264,
+    "pct_numeric_cells_strictly_verified": 50.2,
+    "scope": {
+      "pages_expected": 50,
+      "pages_selected": 50,
+      "pages_processed": 50,
+      "complete_pdf": true
+    },
+    "pct_clean": 40.3,
+    "errors": 1223,
+    "warnings": 137,
+    "info": 16,
+    "documents": 2
+  },
+  "llm_models": [],
+  "totals_mii_lei": {
+    "venituri": null,
+    "cheltuieli": null
+  },
+  "top_capitole": [
+    {
+      "code": "51.02",
+      "name": "Autoritati publice si actiuni externe",
+      "total": 32542.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranţa naţionala",
+      "total": 7440.0
+    },
+    {
+      "code": "54.10",
+      "name": "Alte servicii publice generale",
+      "total": 5613.91
+    },
+    {
+      "code": "54.02",
+      "name": "Alté servicii publice generale",
+      "total": 3902.0
+    },
+    {
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 3807.0
+    }
+  ],
+  "infografic": null,
+  "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
+  "publication": {
+    "schema_version": 1,
+    "bundle_id": "7086e4ac0d5a828613854a14",
+    "source_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4",
+    "source_format": "pdf",
+    "source_pdf_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4"
+  }
+}
