@@ -384,6 +384,15 @@ def _run_extraction(
         preliminary_page = None
         poor_pages: list[int] = []
         for page in scanned_pages:
+            # A current extraction artifact already records the selected OCR
+            # candidate.  Re-running adaptive OCR would violate the CLI's
+            # cache-only/instant resume contract and can add minutes before a
+            # targeted LLM pass.  Adaptive recovery is only discovery work for
+            # pages whose cheap mapping artifact is missing or stale.
+            if store.get("extract", page) is not None:
+                preliminary_context = store.get("extract", page).get("mapping_context")
+                preliminary_page = page
+                continue
             if preliminary_page != page - 1:
                 preliminary_context = None
             preliminary = scanned.map_payload(

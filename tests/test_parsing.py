@@ -130,6 +130,26 @@ class TestUSFormatOCR:
         assert parse_ro_number("1O5.000", ocr=True) == Decimal("105000")
         assert parse_ro_number("69,600.000", ocr=True) == Decimal("69600000")
 
+    @pytest.mark.parametrize(
+        "raw, expected",
+        [
+            ("617,OC", Decimal("617.00")),
+            ("0.C0", Decimal("0.00")),
+            ("10:678,OC", Decimal("10678.00")),
+            ("2.923;00", Decimal("2923.00")),
+            ("99:362,06", Decimal("99362.06")),
+            ("12.754,0(", Decimal("12754.00")),
+            ("11.034,2î", Decimal("11034.25")),
+            ("11.034,2'", Decimal("11034.25")),
+        ],
+    )
+    def test_numeric_column_repairs_decimal_c_and_separator_glyphs(self, raw, expected):
+        assert parse_ro_number(raw, ocr=True) == expected
+
+    def test_decimal_c_repair_does_not_turn_code_like_garbage_into_a_number(self):
+        with pytest.raises(NumberParseError):
+            parse_ro_number("41.02C", ocr=True)
+
 
 def test_source_letter_suffix_stripped():
     from bgconvertor.parsing import normalize_indicator_code

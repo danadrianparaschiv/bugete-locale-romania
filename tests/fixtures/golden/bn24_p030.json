@@ -1,0 +1,21 @@
+{
+  "id": "bn24_p030",
+  "pdf": "data/2024/06-bistrita-nasaud/32394-bistrita/budget_file.pdf",
+  "page": 30,
+  "layout": "scan_detail_economic",
+  "budget": "local",
+  "source_type": "scanned",
+  "source_grid": "grids/bn24_p030.json",
+  "hazards": [
+    "continuation_page",
+    "missing_estimate_year_header",
+    "ocr_digit_confusion"
+  ],
+  "anchors": [
+    {"raw_code": "100117", "column": "total_2024", "value": "105.00"},
+    {"raw_code": "100117", "column": "trim4", "value": "10.00"},
+    {"raw_code": "20", "column": "total_2024", "value": "295.00"},
+    {"raw_code": "20", "column": "est2026", "value": "310.00"}
+  ],
+  "notes": "Sanitized OCR grid from the official 2024 Bistrița continuation page. It locks section propagation and the seven populated budget/estimate columns without committing the source PDF."
+}

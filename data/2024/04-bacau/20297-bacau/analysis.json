@@ -1,24 +1,26 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 2119,
-    "lines_strictly_verified": 1613,
-    "pct_lines_strictly_verified": 76.1,
-    "numeric_cells": 5160,
-    "numeric_cells_strictly_verified": 4077,
-    "pct_numeric_cells_strictly_verified": 79.0,
+    "lines": 1911,
+    "lines_strictly_verified": 1396,
+    "pct_lines_strictly_verified": 73.1,
+    "numeric_cells": 4658,
+    "numeric_cells_strictly_verified": 3564,
+    "pct_numeric_cells_strictly_verified": 76.5,
+    "annex_lines": 256,
+    "annex_numeric_cells": 674,
     "scope": {
       "pages_expected": 123,
       "pages_selected": 123,
       "pages_processed": 123,
       "complete_pdf": true
     },
-    "pct_clean": 76.1,
-    "errors": 613,
-    "warnings": 209,
+    "pct_clean": 73.1,
+    "errors": 617,
+    "warnings": 219,
     "info": 1,
     "documents": 25
   },
@@ -83,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "0644da63e74a6fcd66f49f51",
+    "bundle_id": "bebd72c92a8c45277229c445",
     "source_sha256": "2535f8eafc50ccb81d270bb3c904bca5271da4f6c8fd718bf273d13bc2a79dd4",
     "source_format": "pdf",
     "source_pdf_sha256": "2535f8eafc50ccb81d270bb3c904bca5271da4f6c8fd718bf273d13bc2a79dd4"

@@ -1,42 +1,49 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 907,
-    "lines_strictly_verified": 800,
-    "pct_lines_strictly_verified": 88.2,
-    "numeric_cells": 2631,
-    "numeric_cells_strictly_verified": 2255,
-    "pct_numeric_cells_strictly_verified": 85.7,
+    "lines": 681,
+    "lines_strictly_verified": 431,
+    "pct_lines_strictly_verified": 63.3,
+    "numeric_cells": 2466,
+    "numeric_cells_strictly_verified": 1866,
+    "pct_numeric_cells_strictly_verified": 75.7,
+    "annex_lines": 649,
+    "annex_numeric_cells": 1530,
     "scope": {
       "pages_expected": 70,
       "pages_selected": 70,
       "pages_processed": 70,
       "complete_pdf": true
     },
-    "pct_clean": 88.2,
-    "errors": 60,
-    "warnings": 103,
+    "pct_clean": 63.3,
+    "errors": 398,
+    "warnings": 163,
     "info": 0,
     "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 524948.0,
     "cheltuieli": 399391.3
   },
   "top_capitole": [
     {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 133400.0
+    },
+    {
+      "code": "68.02",
+      "name": "Asigurari si asistenta sociala",
+      "total": 120430.0
+    },
+    {
       "code": "67.02",
       "name": "Cultura, recreere si religie",
       "total": 74656.0
-    },
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 70740.0
     },
     {
       "code": "74.10",
@@ -47,6 +54,11 @@
       "code": "67.10",
       "name": "Cultura, recreere si religie",
       "total": 52282.0
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 42194.0
     },
     {
       "code": "55.02",
@@ -64,244 +76,16 @@
       "total": 25001.0
     },
     {
-      "code": "84.10",
-      "name": "Transporturi",
-      "total": 13461.13
-    },
-    {
-      "code": "65.10",
-      "name": "Invatamant",
-      "total": 8379.87
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 7600.0
+      "code": "66.02",
+      "name": "Sanatate",
+      "total": 22900.0
     }
   ],
-  "infografic": {
-    "unitate": "mii lei",
-    "chart_quality": {
-      "cheltuieli": {
-        "coverage_pct": 98.0,
-        "coverage_note": "capitolele afișate însumează 98.0% din totalul cheltuielilor",
-        "confidence": "strictly_verified_cells",
-        "recall_measured": false
-      },
-      "100_lei": {
-        "coverage_pct": 98.0,
-        "coverage_note": "capitolele afișate însumează 98.0% din totalul cheltuielilor",
-        "confidence": "strictly_verified_cells",
-        "recall_measured": false
-      },
-      "ani": {
-        "coverage_pct": 100.0,
-        "coverage_note": "3 din 3 valori necesare seriilor afișate sunt prezente",
-        "confidence": "strictly_verified_cells",
-        "recall_measured": false
-      }
-    },
-    "capitole": [
-      {
-        "cod": "67.02",
-        "nume": "Cultura, recreere si religie",
-        "val": 74656.0,
-        "copii": [
-          {
-            "nume": "Servicii recreative si sportive",
-            "val": 51000.0
-          },
-          {
-            "nume": "Alte servicii in domeniile culturii, recreeri si religiei",
-            "val": 3156.0
-          },
-          {
-            "nume": "Servicii religioase",
-            "val": 3000.0
-          }
-        ]
-      },
-      {
-        "cod": "65.02",
-        "nume": "Invatamant",
-        "val": 70740.0,
-        "copii": [
-          {
-            "nume": "Alte cheltuieli in domeniul invatamantului",
-            "val": 35608.0
-          },
-          {
-            "nume": "Invatamant secundar",
-            "val": 28905.0
-          },
-          {
-            "nume": "Invatamant anteprescolar",
-            "val": 4663.0
-          },
-          {
-            "nume": "Invatamant prescolar si primar",
-            "val": 1564.0
-          }
-        ]
-      },
-      {
-        "cod": "74.10",
-        "nume": "Protectia mediului",
-        "val": 64985.3,
-        "copii": [
-          {
-            "nume": "Salubritate si gestiunea deseurilor",
-            "val": 64985.3
-          }
-        ]
-      },
-      {
-        "cod": "67.10",
-        "nume": "Cultura, recreere si religie",
-        "val": 52282.0,
-        "copii": [
-          {
-            "nume": "Servicii recreative si sportive",
-            "val": 30288.0
-          },
-          {
-            "nume": "Servicii culturale",
-            "val": 21994.0
-          }
-        ]
-      },
-      {
-        "cod": "55.02",
-        "nume": "Tranzactii privind datoria publica si imprumuturi",
-        "val": 40500.0,
-        "copii": []
-      },
-      {
-        "cod": "61.02",
-        "nume": "Ordine publica si siguranta nationala",
-        "val": 25930.0,
-        "copii": [
-          {
-            "nume": "Ordine publica",
-            "val": 25000.0
-          },
-          {
-            "nume": "Protectie civila si protectia contra incendiilor",
-            "val": 890.0
-          },
-          {
-            "nume": "Alte cheltuieli in domeniul ordinii publice si sigurantei nationale",
-            "val": 40.0
-          }
-        ]
-      },
-      {
-        "cod": "61.10",
-        "nume": "Ordine publica si siguranta nationala",
-        "val": 25001.0,
-        "copii": [
-          {
-            "nume": "Ordine publica",
-            "val": 25001.0
-          }
-        ]
-      },
-      {
-        "cod": "84.10",
-        "nume": "Transporturi",
-        "val": 13461.13,
-        "copii": []
-      },
-      {
-        "cod": "65.10",
-        "nume": "Invatamant",
-        "val": 8379.87,
-        "copii": [
-          {
-            "nume": "Invatamant prescolar si primar",
-            "val": 4608.0
-          },
-          {
-            "nume": "Invatamant secundar",
-            "val": 3317.87
-          },
-          {
-            "nume": "Servicii auxiliare pentru educatie",
-            "val": 407.0
-          },
-          {
-            "nume": "Invatamant postliceal",
-            "val": 47.0
-          }
-        ]
-      },
-      {
-        "cod": "54.02",
-        "nume": "Alte servicii publice generale",
-        "val": 7600.0,
-        "copii": [
-          {
-            "nume": "Fond de rezerva bugetara la dispozitia autoritatilor locale",
-            "val": 4000.0
-          },
-          {
-            "nume": "Servicii publice comunitare de evidenta a persoanelor",
-            "val": 3600.0
-          }
-        ]
-      },
-      {
-        "cod": "68.10",
-        "nume": "Asigurari si asistenta sociala",
-        "val": 3991.0,
-        "copii": [
-          {
-            "nume": "Unitati de asistenta medico-sociale",
-            "val": 3991.0
-          }
-        ]
-      },
-      {
-        "cod": "70.10",
-        "nume": "Locuinte, servicii si dezvoltare publica",
-        "val": 3660.0,
-        "copii": [
-          {
-            "nume": "Alte servicii in domeniile locuintelor, serviciilor si dezvoltarii com",
-            "val": 3660.0
-          }
-        ]
-      },
-      {
-        "cod": "81.02",
-        "nume": "Combustibili si energie",
-        "val": 255.0,
-        "copii": [
-          {
-            "nume": "Energie termica",
-            "val": 255.0
-          }
-        ]
-      }
-    ],
-    "total_cheltuieli": 399391.3,
-    "ani": {
-      "years": [
-        2024,
-        2025,
-        2026
-      ],
-      "cheltuieli": [
-        399391.3,
-        454532.0,
-        436509.0
-      ]
-    }
-  },
+  "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "9eaee1be5e3dae2f6ef9ee81",
+    "bundle_id": "a271a000f0ba350e27accfd0",
     "source_sha256": "2ad47e7c72a211ce23cdec7caf3d54012aa8e96886fe5cbcd669894a3029eea6",
     "source_format": "pdf",
     "source_pdf_sha256": "2ad47e7c72a211ce23cdec7caf3d54012aa8e96886fe5cbcd669894a3029eea6"

@@ -57,7 +57,20 @@ uv run bgconvertor batch data/2024 --llm off --workers 8 --only pending
 
 # verifică faptul că Excel, analysis.json și manifestul descriu aceeași rulare
 uv run bgconvertor corpus audit data --strict --require-modern
+
+# verifică offline matricea baseline → rezultat și ledgerul pilotului P2
+uv run python data/2024/quality_campaign.py --check
 ```
+
+Campania din 28 august 2026 a republicat determinist întregul corpus și a
+acceptat recuperarea LLM numai pentru Brăila, Deva și Zalău, după ce numărul de
+celule numerice strict verificate a crescut în workbook-ul candidat. Fiecare
+pilot a avut plafon 3 USD, sub plafonul public de 5 USD/PDF. Configurația,
+baseline-ul, rezultatul, câștigul per dolar și costul real sunt în raportul
+[`QUALITY.md`](QUALITY.md) și în
+[`quality-campaign.json`](quality-campaign.json); cele patru grile OCR
+sanitizate folosite ca regresii sunt în `tests/fixtures/golden/`. PDF-urile
+brute rămân în afara istoricului Git.
 
 Pentru o sursă Excel nativă, `buget_orig.xls[x]` rămâne artefactul oficial,
 iar `budget_file.xlsx` este ieșirea normalizată. Valorile tipărite în lei sunt
@@ -69,8 +82,9 @@ hash-uri separate în bundle-ul public.
 ## Rezultatul publicat
 
 <!-- BEGIN GENERATED:2024_EDITION_METRICS -->
-Rularea deterministă din 27 august 2026 a convertit toate cele 41 de intrări
-cu sursă disponibilă, fără apeluri LLM și cu 0 USD cost API. București apare în
+Rularea de calitate finalizată la 28 august 2026 a convertit toate cele 41 de intrări
+cu sursă disponibilă. Nucleul este determinist; trei recuperări P2 acceptate
+(Brăila, Deva și Zalău) au costat în total 2,213 USD. București apare în
 manifest atât ca reședință pentru Ilfov, cât și în poziția separată a
 municipiului București; cele două intrări folosesc aceeași sursă verificată și
 au produs bundle-uri identice ca date. Drobeta-Turnu Severin rămâne singura
@@ -83,16 +97,18 @@ intrare fără document publicabil.
 | PDF / Excel nativ | 38 / 3 |
 | Scope-uri de pagină procesate complet | 41/41 |
 | Pagini PDF din scope-urile manifestului | 4.174 |
-| Linii extrase / strict verificate | 73.428 / 56.049 |
-| Celule numerice / strict verificate | 223.278 / 171.868 |
-| Mediana `observed_strict_line_rate` | 84,7% |
-| Intrări cu rată strictă ≥90% / ≥70% | 14 / 31 |
+| Linii extrase / strict verificate | 66.341 / 48.601 |
+| Celule numerice / strict verificate | 225.660 / 173.706 |
+| Mediana `observed_strict_line_rate` | 81,6% |
+| Intrări cu rată strictă ≥90% / ≥70% | 13 / 28 |
 | Pagini municipale cu analiză publică | 40 |
-| Municipiu-ani eligibili pentru comparația planului | 24 |
-| Cost API incremental | 0 USD |
+| Municipiu-ani eligibili pentru comparația planului | 27 |
+| Pilot P2: fișiere / apeluri API facturabile | 3 / 438 |
+| Câștig P2 în celule numerice strict verificate | +1.515 |
+| Cost API real / buget experimental | 2,213 / 20 USD |
 
 Cele 40 de pagini municipale provin din 41 de intrări convertite deoarece
-București este duplicat intenționat în manifest. 39 de intrări au un tabel de
+București este duplicat intenționat în manifest. 38 de intrări au un tabel de
 capitole, iar 11 trec și poarta de acoperire necesară blocului complet de
 grafice. Lipsa unui grafic nu este umplută prin estimare: pagina păstrează
 tabelul disponibil și avertismentul de acoperire.
@@ -101,6 +117,13 @@ Aceste procente sunt rate de consistență pentru liniile și celulele deja
 extrase, nu `validated_cell_recall`. Niciun etalon exhaustiv nu există încă
 pentru toate cele 41 de documente; prin urmare ediția declară explicit
 `recall_measured=false` și nu pretinde 90% recall la nivel de corpus. Poarta
+de calitate folosește schema 3: anexele și listele de investiții sunt raportate
+separat și nu mai pot umfla numitorul bugetar. Cele patru pagini dificile
+Bistrița p30, Brăila p167, Deva p226 și Zalău p24 sunt fixate ca fixture-uri
+offline. Matricea completă, inclusiv baseline-ul, câștigul per dolar și
+deciziile de publicare, este în `QUALITY.md` și `quality-campaign.json`.
+
+Poarta
 `corpus audit data --strict --require-modern` verifică însă că toate cele 110
 conversii existente din corpusul 2024–2026 sunt bundle-uri moderne coerente,
 fără nicio neconcordanță între Excel, analiză și manifest.

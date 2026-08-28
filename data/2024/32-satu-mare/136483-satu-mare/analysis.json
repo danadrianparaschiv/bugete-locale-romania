@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 52,
@@ -10,6 +10,8 @@
     "numeric_cells": 52,
     "numeric_cells_strictly_verified": 52,
     "pct_numeric_cells_strictly_verified": 100.0,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 1,
       "pages_selected": 1,

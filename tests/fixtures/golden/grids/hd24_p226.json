@@ -1,0 +1,14 @@
+{
+  "text": "Prevederi anuale buget 2024 Prevederi trimestriale Estimari",
+  "grid": [
+    ["", "", "Prevederi anuale buget 2024", "Prevederi trimestriale buget 2024", "Prevederi trimestriale buget 2024", "Prevederi trimestriale buget 2024", "Prevederi trimestriale buget 2024", "", "", ""],
+    ["Cod", "Denumire indicator", "TOTAL credite bugetare", "Trim I", "Trim.II", "Trim.III", "Trim.IV", "Estimari 2025", "Estimari 2026", "Estimari 2027"],
+    ["A", "B", "1=3+4+5+6", "3", "4", "5", "6", "7", "8", "9"],
+    ["5801", "Programe din Fondul European de Dezvoltare Regionala", "10,797.71", "9,564.30", "1.731.41", "", "", "", "", ""],
+    ["61", "PROIECTE CU FINANTARE DIN SUMELE AFERENTE PNRR", "31101.49", "3.403.56", "6.884,49", "10 (173.35]", "600Fこ01", "30.995.21", "29,10", ""],
+    ["6141", "Fonduri din imprumut rambursabil", "26 135.71", "2839.34", "5,792.22", "8 471 93", "9.032.22", "", "", ""],
+    ["6163", "Sume aferente TVA", "4.943.78", "564.22", "1.092.27", "1.001.42", "1012", "", "", ""],
+    ["71", "TITLUL XV ACTIVE NEFINANCIARE", "23.632.77", "22.932.77", "", "", "70010", "15.000.00", "1500000", "15.000,00"],
+    ["7101", "Active fixe", "23.632.77", "22.932.77", "", "", "70010", "", "", ""]
+  ]
+}

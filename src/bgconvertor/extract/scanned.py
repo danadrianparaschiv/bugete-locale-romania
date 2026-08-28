@@ -465,6 +465,16 @@ def choose_best_payload(candidates: list[tuple[str, dict]]) -> dict:
     """Select a deterministic/native OCR candidate by mapped-cell quality."""
     if not candidates:
         raise ValueError("at least one OCR candidate is required")
+    # A genuinely blank/prose page scores 1.0 because no table extraction is
+    # required.  That same score must not let an empty adaptive OCR candidate
+    # defeat a baseline that mapped real budget cells on the *same* page.
+    productive = [
+        candidate for candidate in candidates
+        if (candidate[1].get("lines") or int(
+            (candidate[1].get("mapping_stats") or {}).get("mapped_value_cells") or 0
+        ))
+    ]
+    ranked_candidates = productive or candidates
     ranked = [
         (
             structural_score(payload),
@@ -473,7 +483,7 @@ def choose_best_payload(candidates: list[tuple[str, dict]]) -> dict:
             name,
             payload,
         )
-        for index, (name, payload) in enumerate(candidates)
+        for index, (name, payload) in enumerate(ranked_candidates)
     ]
     score, _, _, name, winner = max(ranked)
     winner["candidate_selection"] = {
@@ -490,12 +500,13 @@ def choose_best_payload(candidates: list[tuple[str, dict]]) -> dict:
 # -- page-level layout classification ---------------------------------------
 
 INVEST_HINT = re.compile(
-    r"valoare actualizata|executat la|rest de executat|credite de angajament|"
+    r"valoare actualizata|executat la|rest de executat|"
     r"surse de finantare|denumire.{0,20}obiectiv|neetichetat|nr\.? si data|"
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
     r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv|"
     r"n[aeo]mi\w*.{0,20}(?:obiect|ebiact|osiect).{0,30}(?:invest|imvest|invet|irvoet)"
 )
+COMMITMENT_CREDIT_HINT = re.compile(r"credite de angajament")
 ALLOC_HINT = re.compile(
     r"unitati administrativ|repartizarea pe comune|pe localitati|"
     r"fondul de salarii|numarul de personal|finantare\s*burse|"
@@ -503,15 +514,34 @@ ALLOC_HINT = re.compile(
     r"(?:unitat|unltat).{0,100}(?:particular|confesional).{0,80}(?:burse|buget|bufet)"
 )
 INVEST_TAG = re.compile(r"^-?\s*(verde|maro|mixt|neutru|neetichetat)\b")
+BUDGET_GRID_HINT = re.compile(
+    r"cod\s*(?:ul\s*)?indicator|prevederi\s*(?:anuale|trimestriale)|"
+    r"\btrim\.?\s*(?:i|ii|iii|iv|1|2|3|4)\b|estimari|"
+    r"buget\w*\s+(?:local\w*\s+)?detaliat"
+)
 
 
 def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> str:
-    if INVEST_HINT.search(fold(text or "")):
+    folded_text = fold(text or "")
+    # Ordinary budget forms may include a "Credite de angajament" column.
+    # Explicit budget-grid vocabulary (especially Cod indicator + DETALIAT)
+    # is stronger evidence than that single investment-list phrase.
+    if INVEST_HINT.search(folded_text):
         return "investment_list"
-    if context and int(context.get("n_cols") or 0) >= 12:
+    if (
+        COMMITMENT_CREDIT_HINT.search(folded_text)
+        and not BUDGET_GRID_HINT.search(folded_text)
+    ):
+        return "investment_list"
+    if (
+        context
+        and int(context.get("n_cols") or 0) >= 12
+        and not BUDGET_GRID_HINT.search(folded_text)
+    ):
         # Budget nomenclator tables top out at ten columns. Cluj's 15-column
         # programme pages are investment side sheets even when OCR destroys
-        # every recognisable word in the heading.
+        # every recognisable word in the heading.  Some ordinary forms do
+        # have 12 columns, however, so explicit budget-table vocabulary wins.
         return "investment_list"
     if context and context.get("family") == "annual_total":
         return "scan_annual_total"

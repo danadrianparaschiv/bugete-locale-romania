@@ -54,32 +54,44 @@ sunt promovate drept verificate.
 Totalurile municipale, clasamentul capitolelor și vizualizările publice folosesc
 suplimentar numai documentul principal de buget local, identificat prin sufixul
 `.02`. Anexele `.10` (activități finanțate integral din venituri proprii) și
-celelalte surse de finanțare rămân în Excel și în metricile de calitate, dar nu
-pot deveni totalul sau structura bugetului întregului municipiu. Dacă bundle-ul
+listele de investiții rămân în Excel, dar schema de calitate 3 le exclude din
+numitorul bugetar și le publică separat ca `annex_lines` și
+`annex_numeric_cells`. Ele nu pot deveni totalul sau structura bugetului
+întregului municipiu. Dacă bundle-ul
 nu conține niciun document `.02`, analiza lasă intenționat aceste câmpuri goale,
 iar publicarea în corpus este refuzată. Astfel, o anexă secundară nu mai poate
 înlocui accidental bugetul local principal.
 
-Schema de calitate 2 numără la `numeric_cells` toate valorile numerice
-exportate, inclusiv totalurile și markerii de secțiune fără cod normalizat.
-Aceștia rămân `heading` pentru a nu fi confundați cu o clasificație în
-analize, dar nu mai dispar din numitorul de calitate al Excelului.
+Schema de calitate 3 numără la `numeric_cells` toate valorile numerice bugetare
+exportate, inclusiv totalurile și markerii de secțiune fără cod normalizat,
+dar nu anexele separate. Markerii rămân `heading` pentru a nu fi confundați cu
+o clasificație în analize, fără să dispară din numitorul bugetar. Schimbarea de
+schemă face comparațiile istorice de procente insuficiente de unele singure;
+campaniile publică și numărul absolut de celule strict verificate.
 
 ## Snapshot auditat al ediției 2024
 
 <!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
-Conversia deterministă din 27 august 2026 acoperă toate cele 41 de intrări cu
+Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele 41 de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și 0 USD cost API. A produs 73.428 de linii, dintre care 56.049 strict
-verificate, și 223.278 de celule numerice, dintre care 171.868 strict
-verificate. Mediana ratei stricte pe intrare este 84,7%; 14/41 intrări sunt la
-cel puțin 90%, 31/41 la cel puțin 70%, iar 10 rămân sub 70%.
+complet și 2,213 USD cost API real. A produs 66.341 de linii, dintre care 48.601 strict
+verificate, și 225.660 de celule numerice, dintre care 173.706 strict
+verificate. Mediana ratei stricte pe intrare este 81,6%; 13/41 intrări sunt la
+cel puțin 90%, 28/41 la cel puțin 70%, iar 13 rămân sub 70%.
 
-Acest snapshot nu schimbă semantica metricii: numitorul conține numai ieșirea
-extrasă. Toate bundle-urile publică `recall_measured=false`, iar cifrele nu
+Schema de calitate 3 elimină din numitor anexele și listele de investiții, pe
+care le raportează separat. Recuperarea paginilor anterior omise poate mări
+numitorul și micșora procentul chiar când apar mai multe celule corecte; de
+aceea matricea publică urmărește și numărul absolut de celule strict verificate.
+Pilotul P2 a acceptat 3 fișiere și a adăugat
+1.515 astfel de celule pentru
+2,213 USD, sub plafonul de 3 USD/fișier și
+bugetul experimental de 20 USD.
+
+Toate bundle-urile publică `recall_measured=false`, iar cifrele nu
 pot fi prezentate drept recall complet. Pe partea analitică, ediția produce
-40 de pagini municipale, 24 de municipiu-ani eligibili pentru comparația
-planului, 39 de tabele de capitole și 11 blocuri complete de grafice. Graficele
+40 de pagini municipale, 27 de municipiu-ani eligibili pentru comparația
+planului, 38 de tabele de capitole și 11 blocuri complete de grafice. Graficele
 rămase sunt retrase când capitolele strict verificate nu acoperă 90–110% din
 totalul tipărit, în loc să fie completate prin estimare.
 

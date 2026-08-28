@@ -1,0 +1,525 @@
+{
+  "completed_on": "2026-08-28",
+  "cross_year_re_read": {
+    "generated_from": "pre-recovery 2024 and 2025 public corpus exports",
+    "path": "recovery-candidates.csv",
+    "rows": 792,
+    "semantics": "priority-only outlier list; no candidate value is accepted or used to overwrite an extracted budget fact",
+    "signature_counts": {
+      "decimal_shift": 36,
+      "outlier": 756
+    },
+    "target_municipalities": [
+      "Brăila",
+      "Deva"
+    ],
+    "target_rows": 104
+  },
+  "implementation": {
+    "deterministic_changes": [
+      "productive OCR candidates outrank empty high-scoring candidates",
+      "ten-column grids with a collapsed remainder column retain all quarters",
+      "OCR decimal glyphs are repaired only in numeric suffixes",
+      "continuation sections and functional header context propagate safely",
+      "annex and investment tables do not pad budget quality"
+    ],
+    "extract_version": 48,
+    "golden_pages": [
+      "Bistrița p30",
+      "Brăila p167",
+      "Deva p226",
+      "Zalău p24"
+    ]
+  },
+  "metric_note": "The baseline used quality schema 2. Final bundles use schema 3, which excludes annex side-sheet rows from the budget denominator and reports them separately. Recovered rows can enlarge the denominator, so absolute verified-cell counts and golden recall are reported beside percentages.",
+  "objective": "improve every 2024 entry below 70% without overstating recall",
+  "policy": {
+    "acceptance_gate": "publish only when strictly verified numeric cells increase",
+    "authorized_experiment_budget_usd": 20.0,
+    "pilot_per_file_cap_usd": 3.0,
+    "public_per_file_hard_cap_usd": 5.0,
+    "raw_pdf_policy": "excluded_from_git"
+  },
+  "schema_version": 1,
+  "summary": {
+    "accepted_pilots": 3,
+    "actual_spend_usd": 2.213,
+    "baseline_targets_below_70": 10,
+    "billable_api_calls": 438,
+    "cross_year_candidates": 792,
+    "final_targets_below_70": 8,
+    "pilot_files": 3,
+    "pilot_strict_numeric_cell_gain": 1515,
+    "remaining_experiment_budget_usd": 17.787
+  },
+  "targets": [
+    {
+      "baseline": {
+        "line_rate_pct": 68.8,
+        "lines": 875,
+        "numeric_cell_rate_pct": 61.3,
+        "numeric_cells": 3432,
+        "quality_schema_version": 2,
+        "strict_lines": 602,
+        "strict_numeric_cells": 2103
+      },
+      "bundle_id": "aa386d812582269aa8defc60",
+      "change": {
+        "line_rate_points": -4.8,
+        "lines": -461,
+        "numeric_cell_rate_points": 9.1,
+        "numeric_cells": -811,
+        "strict_lines": -337,
+        "strict_numeric_cells": -259
+      },
+      "county_code": "01",
+      "final": {
+        "annex_lines": 499,
+        "annex_numeric_cells": 1167,
+        "errors": 292,
+        "line_rate_pct": 64.0,
+        "lines": 414,
+        "numeric_cell_rate_pct": 70.4,
+        "numeric_cells": 2621,
+        "quality_schema_version": 3,
+        "strict_lines": 265,
+        "strict_numeric_cells": 1844,
+        "warnings": 23
+      },
+      "issue_family": "scanned_grid_and_numeric_ocr",
+      "municipality": "Alba Iulia",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 58.8,
+        "lines": 4065,
+        "numeric_cell_rate_pct": 64.5,
+        "numeric_cells": 22190,
+        "quality_schema_version": 2,
+        "strict_lines": 2392,
+        "strict_numeric_cells": 14312
+      },
+      "bundle_id": "7f5f1772013e9c6f9e9827b4",
+      "change": {
+        "line_rate_points": 19.1,
+        "lines": -992,
+        "numeric_cell_rate_points": 19.2,
+        "numeric_cells": -3226,
+        "strict_lines": 2,
+        "strict_numeric_cells": 1564
+      },
+      "county_code": "03",
+      "final": {
+        "annex_lines": 998,
+        "annex_numeric_cells": 3934,
+        "errors": 487,
+        "line_rate_pct": 77.9,
+        "lines": 3073,
+        "numeric_cell_rate_pct": 83.7,
+        "numeric_cells": 18964,
+        "quality_schema_version": 3,
+        "strict_lines": 2394,
+        "strict_numeric_cells": 15876,
+        "warnings": 510
+      },
+      "issue_family": "continuation_headers_and_functional_context",
+      "municipality": "Pitești",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 36.2,
+        "lines": 1747,
+        "numeric_cell_rate_pct": 48.0,
+        "numeric_cells": 4132,
+        "quality_schema_version": 2,
+        "strict_lines": 632,
+        "strict_numeric_cells": 1983
+      },
+      "bundle_id": "7c75293c06188f0fec85a641",
+      "change": {
+        "line_rate_points": 54.1,
+        "lines": -1,
+        "numeric_cell_rate_points": 42.4,
+        "numeric_cells": 1191,
+        "strict_lines": 945,
+        "strict_numeric_cells": 2830
+      },
+      "county_code": "06",
+      "final": {
+        "annex_lines": 0,
+        "annex_numeric_cells": 0,
+        "errors": 208,
+        "line_rate_pct": 90.3,
+        "lines": 1746,
+        "numeric_cell_rate_pct": 90.4,
+        "numeric_cells": 5323,
+        "quality_schema_version": 3,
+        "strict_lines": 1577,
+        "strict_numeric_cells": 4813,
+        "warnings": 49
+      },
+      "issue_family": "continuation_sections_and_candidate_selection",
+      "municipality": "Bistrița",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 65.8,
+        "lines": 8237,
+        "numeric_cell_rate_pct": 65.2,
+        "numeric_cells": 16943,
+        "quality_schema_version": 2,
+        "strict_lines": 5417,
+        "strict_numeric_cells": 11039
+      },
+      "bundle_id": "d054fa6cd15343a343fe5392",
+      "change": {
+        "line_rate_points": 0.4,
+        "lines": 283,
+        "numeric_cell_rate_points": -0.5,
+        "numeric_cells": 412,
+        "strict_lines": 220,
+        "strict_numeric_cells": 185
+      },
+      "county_code": "09",
+      "final": {
+        "annex_lines": 144,
+        "annex_numeric_cells": 339,
+        "errors": 2881,
+        "line_rate_pct": 66.2,
+        "lines": 8520,
+        "numeric_cell_rate_pct": 64.7,
+        "numeric_cells": 17355,
+        "quality_schema_version": 3,
+        "strict_lines": 5637,
+        "strict_numeric_cells": 11224,
+        "warnings": 1614
+      },
+      "issue_family": "dense_scanned_tables_and_merged_rows",
+      "municipality": "Brăila",
+      "recovery": {
+        "acceptance_reason": "strict_numeric_cells_increased",
+        "accepted": true,
+        "billable_calls": 184,
+        "cost_usd": 0.8311,
+        "deterministic": {
+          "errors": 2987,
+          "lines": 8489,
+          "numeric_cells": 17017,
+          "strict_lines": 5529,
+          "strict_numeric_cells": 10816
+        },
+        "file_cap_usd": 3.0,
+        "gain_per_usd": 490.9,
+        "model_preset": "google:gemini-3.6-flash",
+        "recovered": {
+          "errors": 2881,
+          "lines": 8520,
+          "numeric_cells": 17355,
+          "strict_lines": 5637,
+          "strict_numeric_cells": 11224
+        },
+        "strict_numeric_cell_gain": 408
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 58.3,
+        "lines": 902,
+        "numeric_cell_rate_pct": 59.7,
+        "numeric_cells": 3284,
+        "quality_schema_version": 2,
+        "strict_lines": 526,
+        "strict_numeric_cells": 1962
+      },
+      "bundle_id": "82ee2121db562dae74a0e3c5",
+      "change": {
+        "line_rate_points": -3.9,
+        "lines": -67,
+        "numeric_cell_rate_points": -2.2,
+        "numeric_cells": 0,
+        "strict_lines": -72,
+        "strict_numeric_cells": -73
+      },
+      "county_code": "10",
+      "final": {
+        "annex_lines": 0,
+        "annex_numeric_cells": 0,
+        "errors": 334,
+        "line_rate_pct": 54.4,
+        "lines": 835,
+        "numeric_cell_rate_pct": 57.5,
+        "numeric_cells": 3284,
+        "quality_schema_version": 3,
+        "strict_lines": 454,
+        "strict_numeric_cells": 1889,
+        "warnings": 312
+      },
+      "issue_family": "scanned_structure_and_numeric_ocr",
+      "municipality": "Buzău",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 53.1,
+        "lines": 1266,
+        "numeric_cell_rate_pct": 57.4,
+        "numeric_cells": 4201,
+        "quality_schema_version": 2,
+        "strict_lines": 672,
+        "strict_numeric_cells": 2410
+      },
+      "bundle_id": "df144de43330a1230a5c60aa",
+      "change": {
+        "line_rate_points": -10.5,
+        "lines": -200,
+        "numeric_cell_rate_points": -3.6,
+        "numeric_cells": 370,
+        "strict_lines": -218,
+        "strict_numeric_cells": 50
+      },
+      "county_code": "12",
+      "final": {
+        "annex_lines": 300,
+        "annex_numeric_cells": 428,
+        "errors": 678,
+        "line_rate_pct": 42.6,
+        "lines": 1066,
+        "numeric_cell_rate_pct": 53.8,
+        "numeric_cells": 4571,
+        "quality_schema_version": 3,
+        "strict_lines": 454,
+        "strict_numeric_cells": 2460,
+        "warnings": 755
+      },
+      "issue_family": "scanned_structure_and_numeric_ocr",
+      "municipality": "Călărași",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 47.9,
+        "lines": 4885,
+        "numeric_cell_rate_pct": 46.7,
+        "numeric_cells": 20251,
+        "quality_schema_version": 2,
+        "strict_lines": 2341,
+        "strict_numeric_cells": 9463
+      },
+      "bundle_id": "b16c2af17ff73bb7a5e95479",
+      "change": {
+        "line_rate_points": 4.7,
+        "lines": -729,
+        "numeric_cell_rate_points": 14.8,
+        "numeric_cells": 3268,
+        "strict_lines": -155,
+        "strict_numeric_cells": 4996
+      },
+      "county_code": "22",
+      "final": {
+        "annex_lines": 223,
+        "annex_numeric_cells": 831,
+        "errors": 3297,
+        "line_rate_pct": 52.6,
+        "lines": 4156,
+        "numeric_cell_rate_pct": 61.5,
+        "numeric_cells": 23519,
+        "quality_schema_version": 3,
+        "strict_lines": 2186,
+        "strict_numeric_cells": 14459,
+        "warnings": 1092
+      },
+      "issue_family": "low_contrast_scan_and_merged_cells",
+      "municipality": "Deva",
+      "recovery": {
+        "acceptance_reason": "strict_numeric_cells_increased",
+        "accepted": true,
+        "billable_calls": 143,
+        "cost_usd": 0.9009,
+        "deterministic": {
+          "errors": 3294,
+          "lines": 4064,
+          "numeric_cells": 22255,
+          "strict_lines": 2126,
+          "strict_numeric_cells": 13382
+        },
+        "file_cap_usd": 3.0,
+        "gain_per_usd": 1195.5,
+        "model_preset": "google:gemini-3.6-flash",
+        "recovered": {
+          "errors": 3297,
+          "lines": 4156,
+          "numeric_cells": 23519,
+          "strict_lines": 2186,
+          "strict_numeric_cells": 14459
+        },
+        "strict_numeric_cell_gain": 1077
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 40.3,
+        "lines": 807,
+        "numeric_cell_rate_pct": 50.2,
+        "numeric_cells": 2517,
+        "quality_schema_version": 2,
+        "strict_lines": 325,
+        "strict_numeric_cells": 1264
+      },
+      "bundle_id": "ab9ad5247a05880f5b71c36a",
+      "change": {
+        "line_rate_points": 17.2,
+        "lines": -30,
+        "numeric_cell_rate_points": 8.9,
+        "numeric_cells": 1071,
+        "strict_lines": 122,
+        "strict_numeric_cells": 857
+      },
+      "county_code": "33",
+      "final": {
+        "annex_lines": 0,
+        "annex_numeric_cells": 0,
+        "errors": 529,
+        "line_rate_pct": 57.5,
+        "lines": 777,
+        "numeric_cell_rate_pct": 59.1,
+        "numeric_cells": 3588,
+        "quality_schema_version": 3,
+        "strict_lines": 447,
+        "strict_numeric_cells": 2121,
+        "warnings": 242
+      },
+      "issue_family": "collapsed_remainder_column_and_decimal_glyphs",
+      "municipality": "Zalău",
+      "recovery": {
+        "acceptance_reason": "strict_numeric_cells_increased",
+        "accepted": true,
+        "billable_calls": 111,
+        "cost_usd": 0.481,
+        "deterministic": {
+          "errors": 572,
+          "lines": 810,
+          "numeric_cells": 3649,
+          "strict_lines": 443,
+          "strict_numeric_cells": 2091
+        },
+        "file_cap_usd": 3.0,
+        "gain_per_usd": 62.4,
+        "model_preset": "google:gemini-3.6-flash",
+        "recovered": {
+          "errors": 529,
+          "lines": 777,
+          "numeric_cells": 3588,
+          "strict_lines": 447,
+          "strict_numeric_cells": 2121
+        },
+        "strict_numeric_cell_gain": 30
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 57.6,
+        "lines": 1069,
+        "numeric_cell_rate_pct": 64.8,
+        "numeric_cells": 3298,
+        "quality_schema_version": 2,
+        "strict_lines": 616,
+        "strict_numeric_cells": 2138
+      },
+      "bundle_id": "060386443d6f8fe3ce751079",
+      "change": {
+        "line_rate_points": -9.6,
+        "lines": 241,
+        "numeric_cell_rate_points": -9.3,
+        "numeric_cells": 780,
+        "strict_lines": 13,
+        "strict_numeric_cells": 125
+      },
+      "county_code": "34",
+      "final": {
+        "annex_lines": 0,
+        "annex_numeric_cells": 0,
+        "errors": 2171,
+        "line_rate_pct": 48.0,
+        "lines": 1310,
+        "numeric_cell_rate_pct": 55.5,
+        "numeric_cells": 4078,
+        "quality_schema_version": 3,
+        "strict_lines": 629,
+        "strict_numeric_cells": 2263,
+        "warnings": 431
+      },
+      "issue_family": "recovered_rows_expand_observed_denominator",
+      "municipality": "Sibiu",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    },
+    {
+      "baseline": {
+        "line_rate_pct": 50.4,
+        "lines": 2313,
+        "numeric_cell_rate_pct": 64.1,
+        "numeric_cells": 4632,
+        "quality_schema_version": 2,
+        "strict_lines": 1165,
+        "strict_numeric_cells": 2968
+      },
+      "bundle_id": "7bdd65bc50adc7c0b274591d",
+      "change": {
+        "line_rate_points": 10.7,
+        "lines": -937,
+        "numeric_cell_rate_points": 7.5,
+        "numeric_cells": -1973,
+        "strict_lines": -324,
+        "strict_numeric_cells": -1063
+      },
+      "county_code": "39",
+      "final": {
+        "annex_lines": 938,
+        "annex_numeric_cells": 1997,
+        "errors": 212,
+        "line_rate_pct": 61.1,
+        "lines": 1376,
+        "numeric_cell_rate_pct": 71.6,
+        "numeric_cells": 2659,
+        "quality_schema_version": 3,
+        "strict_lines": 841,
+        "strict_numeric_cells": 1905,
+        "warnings": 392
+      },
+      "issue_family": "scanned_structure_and_numeric_ocr",
+      "municipality": "Vaslui",
+      "recovery": {
+        "accepted": false,
+        "cost_usd": 0.0,
+        "mode": "deterministic_only"
+      }
+    }
+  ],
+  "year": 2024
+}

@@ -46,10 +46,31 @@ SECTION_CANON = {
 REVENUE_TOTAL_RE = re.compile(r"^0001(\d{2})$")  # 000102 local, 000110 own-revenue
 EXPENSE_TOTAL_RAW = {"5002", "5010", "4902", "4910"}
 DIN_TOTAL_RE = re.compile(r"Din total capitol")
+_FUNCTIONAL_HEADER_RE = re.compile(
+    r"\b(CAPITOL(?:UL|UI)?|SUBCAPITOL(?:UL|UI)?|PARAGRAF(?:UL|UI)?)\b",
+    re.IGNORECASE,
+)
+_HEADER_CODE_RE = re.compile(r"\b[0-9SOGB]{4,8}\b", re.IGNORECASE)
 
 
 def _norm_title(title: str) -> str:
     return re.sub(r"\s+", " ", title).strip().upper()
+
+
+def _canonical_section(label: str | None) -> str | None:
+    """Normalize both explicit section rows and formula-bearing headings."""
+    if not label:
+        return None
+    upper = label.upper()
+    has_function = "FUNCTIONARE" in upper
+    has_development = "DEZVOLTARE" in upper
+    if has_function and has_development:
+        return "TOTAL"
+    if has_function:
+        return "FUNCTIONARE"
+    if has_development:
+        return "DEZVOLTARE"
+    return SECTION_CANON.get(upper, label)
 
 
 def _individual_context(text: str, page: int) -> tuple[str, str] | None:
@@ -100,6 +121,57 @@ def _ocr_indicator_code(raw_code: str | None, registry) -> str | None:
 
     normalized = normalize_indicator_code(candidate)
     return normalized if normalized and registry.exists(normalized) else None
+
+
+def _header_functional_context(text: str, suffix: str, registry) -> str | None:
+    """Read the most specific functional code printed in a page header.
+
+    Economic-detail forms often print only bare economic codes in the table,
+    while the functional chapter/subchapter/paragraph appears above it.  OCR
+    yields both complete forms (``65020301``) and a short paragraph
+    (``0103``) following ``Capitolul 5102``.  Adopt only candidates present
+    in the official functional registry.
+    """
+    if not text or registry is None:
+        return None
+    from .parsing import normalize_indicator_code
+
+    chapter: str | None = None
+    candidates: list[str] = []
+    matches = list(_FUNCTIONAL_HEADER_RE.finditer(text))
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else match.end() + 100
+        window = text[match.end():min(len(text), end)]
+        raw_codes = _HEADER_CODE_RE.findall(window)
+        label = match.group(1).upper()
+        for raw in raw_codes:
+            digits = raw.upper().translate(
+                str.maketrans({"S": "5", "O": "0", "G": "6", "B": "8"})
+            )
+            direct = normalize_indicator_code(digits)
+            if direct and registry.get("expense_functional", direct) is not None:
+                candidates.append(direct)
+                if label.startswith("CAPITOL") and len(direct) == 5:
+                    chapter = direct
+                continue
+            if (
+                chapter
+                and not label.startswith("CAPITOL")
+                and len(digits) == 4
+            ):
+                combined = normalize_indicator_code(chapter.replace(".", "") + digits)
+                if combined and registry.get("expense_functional", combined) is not None:
+                    candidates.append(combined)
+        # A source-less two-digit chapter is uncommon in these headers, but
+        # completing it is safe when the registry confirms the result.
+        if label.startswith("CAPITOL") and not chapter:
+            short = re.match(r"\s*(\d{2})\b", window)
+            if short:
+                completed = f"{short.group(1)}.{suffix}"
+                if registry.get("expense_functional", completed) is not None:
+                    chapter = completed
+                    candidates.append(completed)
+    return max(candidates, key=lambda code: (code.count("."), len(code)), default=None)
 
 
 def _doc_meta(text: str) -> tuple[str, str, str] | None:
@@ -246,6 +318,22 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 log.warning("page %d has lines before any document title — skipped", page)
                 continue
         doc.pages.append(page)
+        header_context = _header_functional_context(text, doc.suffix, registry)
+        # Pitești continuation pages can finish a previous aggregate above a
+        # mid-page "DIN CARE: Capitolul ..." detail table.  Delay the new
+        # context until that table's TOTAL row instead of assigning the
+        # aggregate rows to the following chapter.
+        defer_header_context = bool(
+            header_context
+            and "DIN CARE" in text.upper()
+            and any(
+                "TOTAL CHELTUIELI" in (source.get("name") or "").upper()
+                for source in payload["lines"]
+            )
+        )
+        if header_context is not None and not defer_header_context:
+            cap_context = header_context
+            region = "expense"
 
         for source_raw in payload["lines"]:
             raw = dict(source_raw)
@@ -257,6 +345,31 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
             raw_code = raw.get("raw_code") or ""
             name = raw.get("name") or ""
+            inferred_section = _canonical_section(name)
+            if (
+                is_scanned
+                and not raw.get("section")
+                and
+                inferred_section in SECTION_CANON.values()
+                and "SECTIUN" in name.upper().replace("Ț", "T").replace("Ţ", "T")
+                and inferred_section != section
+            ):
+                section = inferred_section
+            leading_context = (
+                _header_functional_context(name, doc.suffix, registry)
+                if _FUNCTIONAL_HEADER_RE.match(name.strip()) else None
+            )
+            if leading_context is not None:
+                cap_context = leading_context
+                region = "expense"
+            if (
+                defer_header_context
+                and header_context is not None
+                and name.upper().startswith("TOTAL CHELTUIELI")
+            ):
+                cap_context = header_context
+                region = "expense"
+                defer_header_context = False
             if raw.get("code") is None:
                 repaired_code = _ocr_indicator_code(raw_code, registry)
                 if repaired_code is not None:
@@ -333,6 +446,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 line.func_code is None
                 and line.raw_code
                 and registry is not None
+                and not out_of_scope
                 and re.match(rf"^{doc.suffix}\.\d{{2,6}}$", line.raw_code)
                 and not (line.code and registry.exists(line.code))
             ):
@@ -346,7 +460,12 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             # vendor code style without the budget suffix: '42.55' means
             # 42.<suffix>.55; '65.00.10' uses '00' as a suffix placeholder,
             # its tail being either functional detail or an economic code
-            if registry is not None and line.code and line.func_code is None:
+            if (
+                registry is not None
+                and line.code
+                and line.func_code is None
+                and not out_of_scope
+            ):
                 m00 = re.match(r"^(\d{2})\.00(?:\.(.+))?$", line.code)
                 m2 = re.match(r"^(\d{2})\.(\d{2})$", line.code)
                 if m00:
@@ -414,7 +533,12 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             # registry-driven kind for any line whose code lacks explicit
             # functional context (scans, and digital vendors that print bare
             # economic codes like Oradea's '710101')
-            if registry is not None and line.code and line.func_code is None:
+            if (
+                registry is not None
+                and line.code
+                and line.func_code is None
+                and not out_of_scope
+            ):
                 prev_kind = next(
                     (prev.kind for prev in reversed(doc.lines) if prev.kind != "heading"), None
                 )
@@ -437,6 +561,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 and line.code
                 and line.func_code is None
                 and line.kind != "expense_functional"
+                and not out_of_scope
                 and registry is not None
                 and registry.get("expense_economic", line.code) is not None
                 and region == "expense"
@@ -470,6 +595,17 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             if line.kind == "expense_economic" and line.func_code is None:
                 line.func_code = cap_context  # bare economic codes: per-capitol grouping
             doc.lines.append(line)
+            # A heading can be appended to the previous row by OCR (for
+            # example "Alte active fixe Capitolul 5402 ...").  Its context
+            # starts with the *next* row, not the row that carries the tail.
+            embedded = _FUNCTIONAL_HEADER_RE.search(name)
+            if embedded is not None and embedded.start() > 0:
+                trailing_context = _header_functional_context(
+                    name[embedded.start():], doc.suffix, registry
+                )
+                if trailing_context is not None:
+                    cap_context = trailing_context
+                    region = "expense"
 
     for d in documents:
         _derive_rows_from_formulas(d)

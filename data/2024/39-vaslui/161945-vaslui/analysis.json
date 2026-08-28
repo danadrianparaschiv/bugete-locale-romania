@@ -1,24 +1,26 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 2313,
-    "lines_strictly_verified": 1165,
-    "pct_lines_strictly_verified": 50.4,
-    "numeric_cells": 4632,
-    "numeric_cells_strictly_verified": 2968,
-    "pct_numeric_cells_strictly_verified": 64.1,
+    "lines": 1376,
+    "lines_strictly_verified": 841,
+    "pct_lines_strictly_verified": 61.1,
+    "numeric_cells": 2659,
+    "numeric_cells_strictly_verified": 1905,
+    "pct_numeric_cells_strictly_verified": 71.6,
+    "annex_lines": 938,
+    "annex_numeric_cells": 1997,
     "scope": {
       "pages_expected": 101,
       "pages_selected": 101,
       "pages_processed": 101,
       "complete_pdf": true
     },
-    "pct_clean": 50.4,
-    "errors": 354,
-    "warnings": 1119,
+    "pct_clean": 61.1,
+    "errors": 212,
+    "warnings": 392,
     "info": 0,
     "documents": 6
   },
@@ -59,11 +61,6 @@
       "total": 33338000.0
     },
     {
-      "code": "00.01",
-      "name": "VENITURILE SECTIUNII DE FUNCTIONARE",
-      "total": 32001000.0
-    },
-    {
       "code": "67.02",
       "name": "Cultură, recreere și religie - din care titlurile:",
       "total": 31728000.0
@@ -77,13 +74,133 @@
       "code": "61.10",
       "name": "Ordine publică și siguranță națională - din care titlurile:",
       "total": 13675000.0
+    },
+    {
+      "code": "67.10",
+      "name": "Cultură, recreere și religie - din care titlurile:",
+      "total": 9394000.0
     }
   ],
-  "infografic": null,
+  "infografic": {
+    "unitate": "mii lei",
+    "chart_quality": {
+      "cheltuieli": {
+        "coverage_pct": 107.0,
+        "coverage_note": "capitolele afișate însumează 107.0% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      },
+      "100_lei": {
+        "coverage_pct": 107.0,
+        "coverage_note": "capitolele afișate însumează 107.0% din totalul cheltuielilor",
+        "confidence": "strictly_verified_cells",
+        "recall_measured": false
+      }
+    },
+    "capitole": [
+      {
+        "cod": "84.02",
+        "nume": "Transporturi - din care titlurile:",
+        "val": 194801000.0,
+        "copii": []
+      },
+      {
+        "cod": "70.02",
+        "nume": "Locuințe, servicii și dezvoltare publică - din care titlurile:",
+        "val": 63247080.0,
+        "copii": []
+      },
+      {
+        "cod": "65.02",
+        "nume": "Învățământ - din care titlurile:",
+        "val": 61247000.0,
+        "copii": []
+      },
+      {
+        "cod": "68.02",
+        "nume": "Asigurări și asistență socială - din care titlurile:",
+        "val": 48726000.0,
+        "copii": []
+      },
+      {
+        "cod": "51.02",
+        "nume": "Autorități publice și acțiuni externe - din care titlurile:",
+        "val": 37385000.0,
+        "copii": []
+      },
+      {
+        "cod": "74.02",
+        "nume": "Protecția mediului - din care titlurile:",
+        "val": 33338000.0,
+        "copii": []
+      },
+      {
+        "cod": "67.02",
+        "nume": "Cultură, recreere și religie - din care titlurile:",
+        "val": 31728000.0,
+        "copii": []
+      },
+      {
+        "cod": "61.02",
+        "nume": "Ordine publică și siguranță națională - din care titlurile:",
+        "val": 14333000.0,
+        "copii": []
+      },
+      {
+        "cod": "61.10",
+        "nume": "Ordine publică și siguranță națională - din care titlurile:",
+        "val": 13675000.0,
+        "copii": []
+      },
+      {
+        "cod": "67.10",
+        "nume": "Cultură, recreere și religie - din care titlurile:",
+        "val": 9394000.0,
+        "copii": []
+      },
+      {
+        "cod": "65.10",
+        "nume": "învățământ - din care titlurile:",
+        "val": 6767895.0,
+        "copii": []
+      },
+      {
+        "cod": "70.10",
+        "nume": "Locuințe, servicii și dezvoltare publică - din care titlurile:",
+        "val": 4779533.0,
+        "copii": []
+      },
+      {
+        "cod": "66.02",
+        "nume": "Sănătate - din care titlurile:",
+        "val": 4747000.0,
+        "copii": []
+      },
+      {
+        "cod": "54.02",
+        "nume": "Alte servicii publice generale - din care titlurile:",
+        "val": 3141000.0,
+        "copii": []
+      },
+      {
+        "cod": "55.02",
+        "nume": "Tranzacții privind datoria publică și împrumuturi - din care titlurile",
+        "val": 470000.0,
+        "copii": []
+      },
+      {
+        "cod": "81.02",
+        "nume": "Combustibili și energie - din care titlurile:",
+        "val": 400000.0,
+        "copii": []
+      }
+    ],
+    "total_cheltuieli": 493563080.0
+  },
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1c843c5e512be946cca999e7",
+    "bundle_id": "7bdd65bc50adc7c0b274591d",
     "source_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f",
     "source_format": "pdf",
     "source_pdf_sha256": "f796d86118b5d2dc6571d629f2c93e520111b6730816e1a13672fc99db9d712f"

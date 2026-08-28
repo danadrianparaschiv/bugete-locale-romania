@@ -17,7 +17,6 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
 
-
 ROOT = Path(__file__).resolve().parent
 USER_AGENT = "bugetclar-public-data/1.0 (+https://github.com/danparaschiv/convertor-buget-local)"
 VERIFIED_STATUSES = frozenset(

@@ -67,7 +67,7 @@ def _strip_suffix(code: str, suffix: str) -> str | None:
 def validate(result: ConversionResult, registry: Registry) -> ConversionResult:
     for doc in result.documents:
         for line in doc.lines:
-            if line.kind == "heading" or line.code is None:
+            if line.kind in ("heading", "annex") or line.code is None:
                 continue
             _check_code_and_name(line, doc, registry)
             _check_row_checksum(line)
@@ -190,7 +190,7 @@ def _value_columns(lines: list[BudgetLine]) -> set[str]:
 def _check_hierarchy(doc: BudgetDocument, registry: Registry) -> None:
     groups: dict[tuple, dict[str, BudgetLine]] = defaultdict(dict)
     for ln in doc.lines:
-        if ln.kind == "heading" or ln.code is None:
+        if ln.kind in ("heading", "annex") or ln.code is None:
             continue
         key = (ln.section, ln.kind, ln.func_code)
         groups[key].setdefault(ln.code, ln)  # first occurrence wins
@@ -359,7 +359,11 @@ def _check_cross_section(doc: BudgetDocument) -> None:
     """TOTAL section = FUNCTIONARE + DEZVOLTARE, per (kind, code, func) and column."""
     per_section: dict[str, dict[tuple, BudgetLine]] = {s: {} for s in SECTIONS}
     for ln in doc.lines:
-        if ln.section in per_section and ln.code is not None and ln.kind != "heading":
+        if (
+            ln.section in per_section
+            and ln.code is not None
+            and ln.kind not in ("heading", "annex")
+        ):
             per_section[ln.section].setdefault((ln.kind, ln.code, ln.func_code), ln)
 
     total, func, dezv = (per_section[s] for s in SECTIONS)
@@ -397,7 +401,7 @@ def _check_cross_section(doc: BudgetDocument) -> None:
 def _check_duplicates(doc: BudgetDocument) -> None:
     seen: dict[tuple, BudgetLine] = {}
     for ln in doc.lines:
-        if ln.code is None or ln.kind == "heading":
+        if ln.code is None or ln.kind in ("heading", "annex"):
             continue
         # context_id makes the validation scope explicit for repeated forms.
         # Documents are already assembled per context, but retaining it in

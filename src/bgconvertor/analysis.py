@@ -373,6 +373,8 @@ def city_analysis(result: ConversionResult) -> dict:
             "pct_numeric_cells_strictly_verified": stats[
                 "pct_numeric_cells_strictly_verified"
             ],
+            "annex_lines": stats["annex_lines"],
+            "annex_numeric_cells": stats["annex_numeric_cells"],
             "scope": stats["scope"],
             # Kept while downstream consumers migrate to the explicit name.
             "pct_clean": stats["pct_clean"],

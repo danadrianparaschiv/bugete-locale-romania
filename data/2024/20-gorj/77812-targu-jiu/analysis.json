@@ -1,31 +1,33 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1422,
-    "lines_strictly_verified": 1180,
-    "pct_lines_strictly_verified": 83.0,
-    "numeric_cells": 2578,
-    "numeric_cells_strictly_verified": 2116,
-    "pct_numeric_cells_strictly_verified": 82.1,
+    "lines": 916,
+    "lines_strictly_verified": 533,
+    "pct_lines_strictly_verified": 58.2,
+    "numeric_cells": 3022,
+    "numeric_cells_strictly_verified": 1652,
+    "pct_numeric_cells_strictly_verified": 54.7,
+    "annex_lines": 771,
+    "annex_numeric_cells": 1161,
     "scope": {
       "pages_expected": 113,
       "pages_selected": 113,
       "pages_processed": 113,
       "complete_pdf": true
     },
-    "pct_clean": 83.0,
-    "errors": 312,
-    "warnings": 105,
+    "pct_clean": 58.2,
+    "errors": 1166,
+    "warnings": 149,
     "info": 1,
-    "documents": 34
+    "documents": 30
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 283422.01,
-    "cheltuieli": null
+    "cheltuieli": 342425.31
   },
   "top_capitole": [
     {
@@ -70,8 +72,8 @@
     },
     {
       "code": "61.02",
-      "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
-      "total": 18644.73
+      "name": "ORDINEPUBLICASISIGURANTA NATIOSALA",
+      "total": 19334.64
     },
     {
       "code": "54.02",
@@ -83,7 +85,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "0ce45b10cf3551207d331fe3",
+    "bundle_id": "b9ad3d44529df9f8b0d8ad3d",
     "source_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f",
     "source_format": "pdf",
     "source_pdf_sha256": "440bcc15f34909bd3c3fe334a23a31ca3f6a4600b6a01b4c8eac6c8b50bc9d6f"

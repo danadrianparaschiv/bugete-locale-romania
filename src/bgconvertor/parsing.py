@@ -67,6 +67,24 @@ def parse_ro_number(raw: str | None, ocr: bool = False) -> ParsedCell:
         lookalikes = str.maketrans({"O": "0", "o": "0", "I": "1", "l": "1",
                                     "S": "5", "s": "5", "G": "6", "B": "8"})
         repaired = s.translate(lookalikes)
+        # Romanian OCR frequently reads the final zero in a decimal suffix
+        # as C (``617,OC`` / ``0.C0``).  Restrict this repair to a one- or
+        # two-character decimal suffix: a code-like ``41.02C`` must remain
+        # invalid instead of silently becoming 41020.
+        decimal_zero = str.maketrans({"C": "0", "c": "0", "(": "0"})
+        decimal_five = str.maketrans({"î": "5", "Î": "5", "'": "5"})
+        if "," in repaired:
+            head, separator, tail = repaired.rpartition(",")
+            if re.fullmatch(r"[\dCc(îÎ']{1,2}", tail) and not tail.isdigit():
+                repaired = head + separator + tail.translate(decimal_zero).translate(decimal_five)
+        elif "." in repaired:
+            head, separator, tail = repaired.rpartition(".")
+            if re.fullmatch(r"[\dCc(îÎ']{1,2}", tail) and not tail.isdigit():
+                repaired = head + separator + tail.translate(decimal_zero).translate(decimal_five)
+        # Colon/semicolon are common OCR substitutions for a thousands or
+        # decimal separator.  Only repair punctuation bounded by digits in a
+        # cell that is already known to be numeric.
+        repaired = re.sub(r"(?<=\d)[:;](?=\d)", ".", repaired)
         if repaired != s and re.fullmatch(r"[\d.,()\-−–—]+", repaired):
             s = repaired
     if s in tuple(_MINUS_CHARS):

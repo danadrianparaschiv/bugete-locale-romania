@@ -1,0 +1,21 @@
+{
+  "id": "br24_p167",
+  "pdf": "data/2024/09-braila/42682-braila/budget_file.pdf",
+  "page": 167,
+  "layout": "scan_expense_chapter",
+  "budget": "local",
+  "source_type": "scanned",
+  "source_grid": "grids/br24_p167.json",
+  "hazards": [
+    "continuation_page_without_header",
+    "merged_rows",
+    "ocr_decimal_loss"
+  ],
+  "anchors": [
+    {"raw_code": "65020402", "column": "total_2024", "value": "2246.30"},
+    {"raw_code": "65020402", "column": "est2026", "value": "817.58"},
+    {"raw_code": "990296", "column": "est2026", "value": "817.58"},
+    {"raw_code": "4902", "column": "est2027", "value": "838.70"}
+  ],
+  "notes": "Sanitized OCR grid from a Brăila continuation page. The duplicate-looking section is legitimate and the corrupted 817758 reading remains untrusted rather than silently coerced."
+}

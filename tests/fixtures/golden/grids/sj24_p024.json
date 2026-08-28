@@ -1,0 +1,15 @@
+{
+  "text": "Denumirea indicatorilor Cod indicator Buget 2024 Estimări",
+  "grid": [
+    ["Denumirea indicatorilor", "Cod indicator", "Buget 2024", "Buget 2024", "Buget 2024", "Buget 2024", "Buget 2024", "Estimări", "Estimări", "Estimări"],
+    ["", "", "PREVEDERI ANUALE", "PREVEDERI ANUALE", "PREVEDERI ANUALE", "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE", "", "2026", "2027"],
+    ["", "", "TOTAL", "din care credite bugetare destinate stingerii platilor restante", "Trim; I", "Trim. II Trim. III", "Trim. IV", "2025", "", ""],
+    ["Reducerea si controlul poluării", "740203", "617,OC", "617,OC", "", "", "", "880,OC", "880,OC", ""],
+    ["Salubritate si gestiunea deşeurilor", "740205", "10:678,OC", "4.724,OC", "4.654,OC", "1.300,0C", "", "11.034,2î", "12.754,0C", "15.254,00"],
+    ["Salubritate", "74020501", "10.678,0C", "4.724,00", "4.654,OC", "1.300,0C", "", "11.034,2'", "12.754,0(", "15.254,00"],
+    ["Alte servicii în domeniul protecţiei mediului", "740250", "100,0C", "lOO.OC", "", "", "", "", "", ""],
+    ["Partea a V-a ACŢIUNI ECONOMICE", "7902", "16;611,0C", "5.650,0C", "6.423,OC", "3.338,0C", "1.200,0C", "15.200,0(", "17.200,OC", "23.200,00"],
+    ["SECŢIUNEA DE FUNCŢIONARE (cod 01+79+85)", "F", "16.611,0C", "5.650,OC", "6.423,0C", "3.338,0C", "1.200,0C", "15.200,OC", "17.200,0C", "23.200,00"],
+    ["CHELTUIELI CURENTE", "01F", "16.611,0C", "5.650,0C", "6.423,0C", "3.338,0C", "1.200,0C", "15.200,OC", "17.200,0C", "23.200,00"]
+  ]
+}

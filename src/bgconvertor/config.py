@@ -87,10 +87,12 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    # v45 closes P1: dynamic years (without confusing economic codes for
-    # years), continuation schemas/rows, Cluj annual totals, native-first
-    # routing and validation-selected OCR preprocessing.
-    extract_version: str = "45"
+    # v48 makes candidate selection lossless (an empty adaptive pass cannot
+    # defeat a productive baseline), recognizes compressed four-quarter
+    # grids, scopes scanned functional/section headers deterministically, and
+    # keeps commitment-credit budget grids out of investment-annex routing.
+    # Only the cheap mapping/extraction stage is invalidated; OCR stays cached.
+    extract_version: str = "48"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

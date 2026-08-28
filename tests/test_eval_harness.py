@@ -87,6 +87,14 @@ def test_all_committed_fixtures_are_valid():
     ) == 73
     assert sum(anchor.value == "X" for anchor in arad_revenue.anchors) == 15
     assert arad_revenue.source_grid
+    recovery_samples = {
+        fixture.id: fixture for fixture in fixtures
+        if fixture.id in {"bn24_p030", "br24_p167", "hd24_p226", "sj24_p024"}
+    }
+    assert set(recovery_samples) == {
+        "bn24_p030", "br24_p167", "hd24_p226", "sj24_p024"
+    }
+    assert all(fixture.source_grid for fixture in recovery_samples.values())
     # hazard coverage for the hard cases
     all_hazards = {h for f in fixtures for h in f.hazards}
     assert "rotated_90_in_image" in all_hazards

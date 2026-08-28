@@ -127,7 +127,7 @@ def test_2024_native_sources_publish_complete_analytics_and_verified_bundles():
         assert analysis["infografic"]["capitole"]
 
 
-def test_2024_all_available_sources_publish_complete_zero_cost_scopes():
+def test_2024_all_available_sources_publish_complete_budgeted_scopes():
     manifest = Manifest(ROOT / "data/2024/manifest.json")
     converted = [
         city for city in manifest.cities()
@@ -142,9 +142,22 @@ def test_2024_all_available_sources_publish_complete_zero_cost_scopes():
         assert city.analysis.exists()
         assert quality["scope"]["complete_pdf"] is True
         assert quality["recall_measured"] is False
-        assert conversion["llm_cost_usd"] == 0
+        assert 0 <= conversion["llm_cost_usd"] <= 5
         assert conversion["llm_cost_scope"] == "current_run_incremental"
         assert conversion["artifacts"]["bundle_id"]
+
+    lifetime_spend = sum(
+        float(city.entry["conversion"].get("llm_lifetime_cost_usd") or 0)
+        for city in converted
+    )
+    assert lifetime_spend <= 20.0
+    recovered = {
+        city.name for city in converted
+        if float(city.entry["conversion"].get("llm_lifetime_cost_usd") or 0) > 0
+    }
+    assert recovered == {"Brăila", "Deva", "Zalău"}
+    assert sum(float(city.entry["conversion"]["llm_cost_usd"]) for city in converted) \
+        <= lifetime_spend
 
 
 def test_2024_documentation_metrics_are_generated_from_public_artifacts():
