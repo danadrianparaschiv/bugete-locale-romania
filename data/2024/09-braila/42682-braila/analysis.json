@@ -1,28 +1,32 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 8237,
-    "lines_strictly_verified": 5417,
-    "pct_lines_strictly_verified": 65.8,
-    "numeric_cells": 16943,
-    "numeric_cells_strictly_verified": 11039,
-    "pct_numeric_cells_strictly_verified": 65.2,
+    "lines": 8520,
+    "lines_strictly_verified": 5637,
+    "pct_lines_strictly_verified": 66.2,
+    "numeric_cells": 17355,
+    "numeric_cells_strictly_verified": 11224,
+    "pct_numeric_cells_strictly_verified": 64.7,
+    "annex_lines": 144,
+    "annex_numeric_cells": 339,
     "scope": {
       "pages_expected": 291,
       "pages_selected": 291,
       "pages_processed": 291,
       "complete_pdf": true
     },
-    "pct_clean": 65.8,
-    "errors": 2899,
-    "warnings": 1370,
-    "info": 10,
+    "pct_clean": 66.2,
+    "errors": 2881,
+    "warnings": 1614,
+    "info": 119,
     "documents": 43
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
     "venituri": 856194.28,
     "cheltuieli": 882694.26
@@ -132,7 +136,8 @@
             "nume": "Prevenirea excluderii sociale",
             "val": 700.0
           }
-        ]
+        ],
+        "dezv": 11842.0
       },
       {
         "cod": "65.02",
@@ -152,12 +157,12 @@
             "val": 837.35
           },
           {
-            "nume": "Invatamant postliceal",
-            "val": 695.2
-          },
-          {
             "nume": "Alte cheltuieli in domeniul invatamantului",
             "val": 242.0
+          },
+          {
+            "nume": "Invatamanl postliceal",
+            "val": 142.0
           },
           {
             "nume": "Servicii auxiliare pentru educatie",
@@ -288,7 +293,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "48c2dc6a38efc231bc768a01",
+    "bundle_id": "d054fa6cd15343a343fe5392",
     "source_sha256": "bbe9ffb934969ff8536dbe65fae720d1cf22e62e06a9643702afd029897c27d3",
     "source_format": "pdf",
     "source_pdf_sha256": "bbe9ffb934969ff8536dbe65fae720d1cf22e62e06a9643702afd029897c27d3"

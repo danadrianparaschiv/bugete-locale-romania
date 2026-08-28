@@ -1,0 +1,22 @@
+{
+  "id": "sj24_p024",
+  "pdf": "data/2024/33-salaj/139704-zalau/budget_file.pdf",
+  "page": 24,
+  "layout": "digital_detail",
+  "budget": "local",
+  "source_type": "digital",
+  "source_grid": "grids/sj24_p024.json",
+  "hazards": [
+    "collapsed_remainder_column",
+    "merged_quarter_header",
+    "ocr_decimal_glyphs"
+  ],
+  "anchors": [
+    {"raw_code": "740205", "column": "total_2024", "value": "10678.00"},
+    {"raw_code": "740205", "column": "est2025", "value": "11034.25"},
+    {"raw_code": "74020501", "column": "est2026", "value": "12754.00"},
+    {"raw_code": "7902", "column": "trim4", "value": "1200.00"},
+    {"raw_code": "7902", "column": "est2027", "value": "23200.00"}
+  ],
+  "notes": "Sanitized native-text grid from Zalău 2024. The printed ten-column table has a permanently empty remainder column collapsed by extraction; the mapper must retain total, all four quarters and three estimates."
+}

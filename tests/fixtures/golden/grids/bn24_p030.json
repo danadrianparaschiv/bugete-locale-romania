@@ -1,0 +1,15 @@
+{
+  "text": "Buget 2024 PREVEDERI ANUALE PREVEDERI TRIMESTRIALE Estimari",
+  "grid": [
+    ["", "", "Buget 2024", "Buget 2024", "Buget 2024", "Buget 2024", "Buget 2024", "Estimari", "Estimari", "Estimari"],
+    ["", "", "PREVEDERI ANUALE", "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE", "2025", "2026", ""],
+    ["DENUMIREA INDICATORILOR", "Cod indicator", "TOTAL stingeri plalibr reslante", "Trim. I", "Trim. Il", "Trim. III", "Trim. IV", "", "", ""],
+    ["TOTAL CHELTUIELI (SECTIUNEA DE FUNCTIONARE+SECTIUNEA DE DEZVOLTARE)", "", "3.485,00", "1.255,00", "1.172,00", "708,00", "350,00", "3.550,00", "3.610,00", ""],
+    ["SECTIUNEA DE FUNCTIONARE (cod 01+79+85)", "F", "3.485,00", "1.255,00", "1.172,00", "708,00", "350,00", "3.550,00", "3.610,00", ""],
+    ["CHELTUIELI CURENTE (cod 10+20+30+40+50+51SF+55SF+57+59)", "01F", "3.485,00", "1.255,00", "1.172,00", "708,00", "350,00", "3.550,00", "3.610,00", ""],
+    ["TITLUL I CHELTUIELI DE PERSONAL (cod 10.01+10.02+10.03)", "10", "3.150,00", "1.130,00", "1.025,00", "665,00", "330,00", "3.200,00", "3.250,00", ""],
+    ["Indemnizatii de hrana", "100117", "105,00", "40,00", "30,00", "25,00", "10,00", "x", "x", ""],
+    ["Contributia asiguratorie pentru munca", "100307", "100,00", "30,00", "25,00", "25,00", "20,00", "x", "x", ""],
+    ["TITLUL II BUNURI SI SERVICII", "20", "295,00", "110,00", "137,00", "33,00", "15,00", "300,00", "310,00", ""]
+  ]
+}

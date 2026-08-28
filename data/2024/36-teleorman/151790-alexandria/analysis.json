@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
     "lines": 871,
@@ -10,6 +10,8 @@
     "numeric_cells": 4716,
     "numeric_cells_strictly_verified": 4365,
     "pct_numeric_cells_strictly_verified": 92.6,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 30,
       "pages_selected": 30,
@@ -368,7 +370,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "bce055ad83aaa9ff53f049a8",
+    "bundle_id": "e67cf056d621cddac53f1d25",
     "source_sha256": "550a814adb632d3d3e59636827fccae57a818cf6868a2265d3b34377f027cc98",
     "source_format": "pdf",
     "source_pdf_sha256": "550a814adb632d3d3e59636827fccae57a818cf6868a2265d3b34377f027cc98"

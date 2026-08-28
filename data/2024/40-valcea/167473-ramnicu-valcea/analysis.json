@@ -1,24 +1,26 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 338,
-    "lines_strictly_verified": 294,
-    "pct_lines_strictly_verified": 87.0,
-    "numeric_cells": 968,
-    "numeric_cells_strictly_verified": 871,
-    "pct_numeric_cells_strictly_verified": 90.0,
+    "lines": 321,
+    "lines_strictly_verified": 262,
+    "pct_lines_strictly_verified": 81.6,
+    "numeric_cells": 2695,
+    "numeric_cells_strictly_verified": 2549,
+    "pct_numeric_cells_strictly_verified": 94.6,
+    "annex_lines": 128,
+    "annex_numeric_cells": 378,
     "scope": {
       "pages_expected": 70,
       "pages_selected": 70,
       "pages_processed": 70,
       "complete_pdf": true
     },
-    "pct_clean": 87.0,
-    "errors": 20,
-    "warnings": 31,
+    "pct_clean": 81.6,
+    "errors": 142,
+    "warnings": 30,
     "info": 0,
     "documents": 1
   },
@@ -29,21 +31,56 @@
   },
   "top_capitole": [
     {
+      "code": "65.02",
+      "name": "Invatamant",
+      "total": 137269.11
+    },
+    {
+      "code": "70.02",
+      "name": "Locuinte, servicii si dezvoltare publica",
+      "total": 90356.05
+    },
+    {
+      "code": "84.02",
+      "name": "Transporturi",
+      "total": 74612.46
+    },
+    {
       "code": "68.02",
       "name": "Asigurari si asistenta sociala",
       "total": 65103.0
     },
     {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 53193.7
+    },
+    {
+      "code": "81.02",
+      "name": "Combustibili si energie",
+      "total": 14750.0
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 11389.2
+    },
+    {
       "code": "87.02",
       "name": "Alte actiuni economice",
       "total": 600.0
+    },
+    {
+      "code": "54.02",
+      "name": "Alte servicii publice generale",
+      "total": 524.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "bceaa774593b361f70783a89",
+    "bundle_id": "cdc18f5008b6dd05842f1cfe",
     "source_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d",
     "source_format": "pdf",
     "source_pdf_sha256": "3f6e095c40be5ea31a7cac3a15ae14649b7b8248d6c6d8b2ef099e5f24b37b2d"

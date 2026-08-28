@@ -77,7 +77,7 @@ def test_numeric_quality_counts_exported_values_on_marker_rows():
         values={"total": Decimal("150")},
     ))
     stats = result.stats()
-    assert stats["quality_schema_version"] == 2
+    assert stats["quality_schema_version"] == 3
     assert stats["lines"] == 2
     assert stats["numeric_cells"] == 4
     assert stats["numeric_cells_strictly_verified"] == 3
@@ -97,6 +97,9 @@ def test_publish_writes_one_hashed_bundle_and_audit_accepts_it(tmp_path):
     assert conv["status"] == "converted"
     assert conv["quality"]["metric"] == "observed_strict_line_rate"
     assert conv["quality"]["recall_measured"] is False
+    assert conv["quality"]["schema_version"] == 3
+    assert conv["quality"]["annex_lines"] == 0
+    assert conv["quality"]["annex_numeric_cells"] == 0
     assert conv["llm_cost_usd"] == 3.25
     assert conv["artifacts"]["workbook"]["sha256"] == file_sha256(workbook)
     assert conv["artifacts"]["analysis"]["sha256"] == file_sha256(
@@ -107,11 +110,15 @@ def test_publish_writes_one_hashed_bundle_and_audit_accepts_it(tmp_path):
     bundle = conv["artifacts"]["bundle_id"]
     assert analysis["publication"]["bundle_id"] == bundle
     assert analysis["quality"]["pct_lines_strictly_verified"] == 50.0
+    assert analysis["quality"]["annex_lines"] == 0
+    assert analysis["quality"]["annex_numeric_cells"] == 0
     wb = load_workbook(workbook, read_only=True)
     summary = {row[0]: row[1] for row in wb["Sumar calitate"].iter_rows(values_only=True)}
     wb.close()
     assert summary["Bundle conversie"] == bundle
     assert summary["Recall masurat"] == "nu"
+    assert summary["Linii anexe separate"] == 0
+    assert summary["Celule numerice anexe separate"] == 0
 
     audit = audit_city(on_disk, city)
     assert audit.status == "verified" and audit.trusted

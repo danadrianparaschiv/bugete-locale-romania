@@ -239,6 +239,8 @@ def _summary_sheet(
         ("Celule numerice", stats["numeric_cells"]),
         ("Celule numerice strict verificate", stats["numeric_cells_strictly_verified"]),
         ("% celule numerice strict verificate", stats["pct_numeric_cells_strictly_verified"]),
+        ("Linii anexe separate", stats["annex_lines"]),
+        ("Celule numerice anexe separate", stats["annex_numeric_cells"]),
         ("Pagini asteptate", stats["scope"]["pages_expected"]),
         ("Pagini selectate", stats["scope"]["pages_selected"]),
         ("Pagini procesate", stats["scope"]["pages_processed"]),

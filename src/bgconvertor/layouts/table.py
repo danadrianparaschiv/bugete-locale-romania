@@ -78,6 +78,33 @@ def _infer_columns(
     columns = column_semantics(grid, header_rows, n_cols)
     rows_ = [row for row in grid[first_data:] if any(cell.strip() for cell in row)]
 
+    # Some copier PDFs collapse the permanently-empty "credite restante"
+    # body column while retaining its multi-row header.  The resulting
+    # 10-column grid is: name, code, total, T1..T4, estimate years.  Header
+    # text alone otherwise shifts T1 into ``credite_restante`` and can even
+    # label T2 as a budget year.  The complete four-trim + three-estimate
+    # shape is unambiguous and its row checksum remains independently
+    # verifiable.
+    full_header = fold(" ".join(
+        cell for row in grid[:first_data] for cell in row
+    ))
+    compressed_quarter_grid = (
+        n_cols == 10
+        and len(header_rows) >= 2
+        and "prevederi trimestriale" in full_header
+        and "trim" in full_header
+        and any(role.startswith("est") for role in columns.values())
+        and columns.get(0) == "name"
+        and columns.get(1) == "code"
+    )
+    if compressed_quarter_grid:
+        year = budget_year or 2026
+        columns = {
+            0: "name", 1: "code", 2: f"total_{year}",
+            3: "trim1", 4: "trim2", 5: "trim3", 6: "trim4",
+            7: f"est{year + 1}", 8: f"est{year + 2}", 9: f"est{year + 3}",
+        }
+
     # Some vendors merge ``Cod`` and ``Denumire indicator`` in the second
     # header cell while data still occupy separate columns 0/1. Header-only
     # semantics then swaps every code and name. Recover the geometry only

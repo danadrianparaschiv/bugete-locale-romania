@@ -69,6 +69,8 @@ def _quality_fields(result: ConversionResult) -> dict[str, Any]:
         "pct_numeric_cells_strictly_verified": stats[
             "pct_numeric_cells_strictly_verified"
         ],
+        "annex_lines": stats["annex_lines"],
+        "annex_numeric_cells": stats["annex_numeric_cells"],
         "scope": stats["scope"],
         "errors": stats["issues"]["error"],
         "warnings": stats["issues"]["warning"],

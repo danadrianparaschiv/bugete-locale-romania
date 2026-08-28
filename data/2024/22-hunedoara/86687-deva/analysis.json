@@ -1,38 +1,37 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 4885,
-    "lines_strictly_verified": 2341,
-    "pct_lines_strictly_verified": 47.9,
-    "numeric_cells": 20251,
-    "numeric_cells_strictly_verified": 9463,
-    "pct_numeric_cells_strictly_verified": 46.7,
+    "lines": 4156,
+    "lines_strictly_verified": 2186,
+    "pct_lines_strictly_verified": 52.6,
+    "numeric_cells": 23519,
+    "numeric_cells_strictly_verified": 14459,
+    "pct_numeric_cells_strictly_verified": 61.5,
+    "annex_lines": 223,
+    "annex_numeric_cells": 831,
     "scope": {
       "pages_expected": 284,
       "pages_selected": 284,
       "pages_processed": 284,
       "complete_pdf": true
     },
-    "pct_clean": 47.9,
-    "errors": 3382,
-    "warnings": 675,
-    "info": 18,
+    "pct_clean": 52.6,
+    "errors": 3297,
+    "warnings": 1092,
+    "info": 66,
     "documents": 27
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": 430467.31,
-    "cheltuieli": null
+    "venituri": null,
+    "cheltuieli": 253812.23
   },
   "top_capitole": [
-    {
-      "code": "00.13",
-      "name": "C1. VENITURI DIN PROPRIETATE",
-      "total": 4532874532.87
-    },
     {
       "code": "00.10",
       "name": "A4. IMPOZITE SI TAXE PE BUNURI SI SERVICII",
@@ -40,8 +39,8 @@
     },
     {
       "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare publica",
-      "total": 95459.93
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 67559.97
     },
     {
       "code": "67.02",
@@ -64,26 +63,31 @@
       "total": 34979.21
     },
     {
-      "code": "00.12",
-      "name": "C. VENITURI NEFISCALE (0013+0014)",
-      "total": 21043.34
-    },
-    {
-      "code": "00.14",
-      "name": "C2. VANZARI DE BUNURI SI SERVICII",
-      "total": 16510.47
-    },
-    {
       "code": "74.02",
-      "name": "Prolecila medlulul",
+      "name": "PROTECTIA MEDIULUI",
       "total": 14796.73
+    },
+    {
+      "code": "67.10",
+      "name": "CULTURA, RECREERE SI RELIGIE",
+      "total": 12183.34
+    },
+    {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta natierala",
+      "total": 10964.9
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA IMPRUMUTURI",
+      "total": 6214.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "f3f0386caa63fa6fa23e96d0",
+    "bundle_id": "b16c2af17ff73bb7a5e95479",
     "source_sha256": "77225434318c5e6411cdc9efc0df496cc245ee11a506a93eae620846050d728a",
     "source_format": "pdf",
     "source_pdf_sha256": "77225434318c5e6411cdc9efc0df496cc245ee11a506a93eae620846050d728a"

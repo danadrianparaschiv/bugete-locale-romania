@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field
 Kind = Literal["revenue", "expense_functional", "expense_economic", "annex", "heading"]
 Severity = Literal["error", "warning", "info"]
 
-QUALITY_SCHEMA_VERSION = 2
+QUALITY_SCHEMA_VERSION = 3
 QUALITY_METRIC = "observed_strict_line_rate"
 
 
@@ -104,7 +104,12 @@ class ConversionResult(BaseModel):
 
     def stats(self) -> dict:
         all_lines = [ln for d in self.documents for ln in d.lines]
-        lines = [ln for ln in all_lines if ln.kind != "heading"]
+        # The converter preserves procurement/investment/allocation annexes in
+        # side sheets, but the product contract is PDF-to-Excel for budget
+        # facts.  Annex rows therefore remain visible and explicitly counted
+        # without diluting the budget-quality denominator.
+        lines = [ln for ln in all_lines if ln.kind not in ("heading", "annex")]
+        annex_lines = [ln for ln in all_lines if ln.kind == "annex"]
         issues = self.all_issues()
         by_sev = {s: sum(1 for i in issues if i.severity == s) for s in ("error", "warning", "info")}
         strict = [ln for ln in lines if not ln.issues]
@@ -112,8 +117,11 @@ class ConversionResult(BaseModel):
         # without a nomenclator code. They remain heading-kind so analytics do
         # not mistake them for classifications, but they are still exported
         # numeric cells and belong in the quality denominator.
-        numeric_cells = sum(len(ln.values) for ln in all_lines)
-        strict_numeric_cells = sum(len(ln.values) for ln in all_lines if not ln.issues)
+        quality_cell_lines = [ln for ln in all_lines if ln.kind != "annex"]
+        numeric_cells = sum(len(ln.values) for ln in quality_cell_lines)
+        strict_numeric_cells = sum(
+            len(ln.values) for ln in quality_cell_lines if not ln.issues
+        )
         selected = sorted(set(self.pages_selected))
         processed = sorted(set(self.pages_processed))
         scope_complete = (
@@ -139,6 +147,8 @@ class ConversionResult(BaseModel):
                 round(100 * strict_numeric_cells / numeric_cells, 1)
                 if numeric_cells else 0.0
             ),
+            "annex_lines": len(annex_lines),
+            "annex_numeric_cells": sum(len(ln.values) for ln in annex_lines),
             "scope": {
                 "pages_expected": self.pages_expected,
                 "pages_selected": len(selected),

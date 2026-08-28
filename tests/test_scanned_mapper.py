@@ -1,6 +1,11 @@
 """Mapper tests on synthetic text grids (no OCR involved)."""
 
-from bgconvertor.extract.scanned import map_payload, map_prose_budget_summary, map_table
+from bgconvertor.extract.scanned import (
+    choose_best_payload,
+    map_payload,
+    map_prose_budget_summary,
+    map_table,
+)
 
 
 def _grid(rows):
@@ -238,6 +243,72 @@ def test_cluj_wide_investment_program_is_out_of_budget_nomenclator_scope():
         ["65C", "Reabilitare scoala", "100", "50", "20", "20", "10"],
     ]]}, budget_year=2026)
     assert payload["layout"] == "investment_list"
+
+
+def test_wide_budget_grid_is_not_misclassified_as_an_investment_list():
+    grid = [
+        [
+            "Denumire indicator", "Cod indicator", "Prevederi anuale total",
+            "restante", "Trim. I", "Trim. II", "Trim. III", "Trim. IV",
+            "Estimari 2025", "Estimari 2026", "Estimari 2027", "Observatii",
+        ],
+        [
+            "TOTAL CHELTUIELI", "5002", "100", "0", "25", "25", "25",
+            "25", "101", "102", "103", "",
+        ],
+    ]
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+    assert payload["layout"] != "investment_list"
+    assert payload["lines"][0]["code"] == "50.02"
+
+
+def test_collapsed_empty_restante_column_preserves_all_four_quarters():
+    grid = [
+        ["Denumirea indicatorilor", "Cod indicator", "Buget 2024", "Buget 2024",
+         "Buget 2024", "Buget 2024", "Buget 2024", "Estimari", "Estimari", "Estimari"],
+        ["", "", "PREVEDERI ANUALE", "PREVEDERI ANUALE", "PREVEDERI ANUALE",
+         "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE", "", "2026", "2027"],
+        ["", "", "TOTAL", "din care credite bugetare restante", "Trim. I",
+         "Trim. II Trim. III", "Trim. IV", "2025", "", ""],
+        ["Salubritate", "74020501", "10.678,0C", "4.724,00", "4.654,OC",
+         "1.300,0C", "", "11.034,2'", "12.754,0(", "15.254,00"],
+    ]
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+    assert payload["lines"][0]["values"] == {
+        "total_2024": "10678.00",
+        "trim1": "4724.00",
+        "trim2": "4654.00",
+        "trim3": "1300.00",
+        "est2025": "11034.25",
+        "est2026": "12754.00",
+        "est2027": "15254.00",
+    }
+    assert payload["mapping_context"]["columns"]["6"] == "trim4"
+
+
+def test_empty_recovery_candidate_cannot_defeat_a_productive_baseline():
+    baseline = map_payload({"tables_raw": [[
+        ["Denumire", "Cod", "Buget 2024"],
+        ["Invatamant", "6502", "100"],
+    ]]}, budget_year=2024)
+    empty = map_payload({"tables_raw": [], "text": None}, budget_year=2024)
+    assert empty["lines"] == []
+    assert choose_best_payload([
+        ("ocr_baseline", baseline), ("ocr_preprocessed", empty),
+    ])["candidate_selection"]["selected"] == "ocr_baseline"
+
+
+def test_commitment_credit_column_does_not_turn_a_budget_grid_into_investments():
+    payload = map_payload({"tables_raw": [[
+        ["Denumirea indicatorilor", "Cod indicator", "Buget 2024", "Credite de Angajament 2024"],
+        ["TOTAL VENITURI", "000102", "100", "0"],
+        ["Venituri proprii", "4802", "25", "0"],
+    ]], "text": (
+        "BUGETUL LOCAL DETALIAT LA VENITURI PE CAPITOLE SI SUBCAPITOLE "
+        "SI LA CHELTUIELI PE CAPITOLE SI TITLURI"
+    )}, budget_year=2024)
+    assert payload["layout"] != "investment_list"
+    assert len(payload["lines"]) == 2
 
 
 def test_cluj_consolidated_summary_maps_all_seven_value_columns():

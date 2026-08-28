@@ -1,89 +1,46 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 598,
-    "lines_strictly_verified": 517,
-    "pct_lines_strictly_verified": 86.5,
-    "numeric_cells": 3021,
-    "numeric_cells_strictly_verified": 2650,
-    "pct_numeric_cells_strictly_verified": 87.7,
+    "lines": 1402,
+    "lines_strictly_verified": 1152,
+    "pct_lines_strictly_verified": 82.2,
+    "numeric_cells": 6984,
+    "numeric_cells_strictly_verified": 5868,
+    "pct_numeric_cells_strictly_verified": 84.0,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 53,
       "pages_selected": 53,
       "pages_processed": 53,
       "complete_pdf": true
     },
-    "pct_clean": 86.5,
-    "errors": 96,
-    "warnings": 31,
-    "info": 8,
+    "pct_clean": 82.2,
+    "errors": 354,
+    "warnings": 70,
+    "info": 17,
     "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 344442.03,
-    "cheltuieli": 365412.8
+    "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "00.01",
-      "name": "VENITURILE SECTIUNII DE FUNCTIONARE - TOTAL",
-      "total": 125923.7
-    },
-    {
-      "code": "00.03",
-      "name": "A. VENITURI FISCALE",
-      "total": 121046.0
-    },
-    {
-      "code": "00.02",
-      "name": "I. VENITURI CURENTE",
-      "total": 120769.0
-    },
-    {
-      "code": "00.04",
-      "name": "A1. IMPOZIT PE VENIT, PROFIT SI CASTIGURI DIN CAPITAL",
-      "total": 69144.0
-    },
-    {
-      "code": "00.06",
-      "name": "A1.2. IMPOZIT PE VENIT, PROFIT, SI CASTIGURI DIN CAPITAL DE LA PERSOAN",
-      "total": 69144.0
-    },
-    {
-      "code": "00.10",
-      "name": "A4. IMPOZITE SI TAXE PE BUNURI SI SERVICII",
-      "total": 36792.0
-    },
-    {
-      "code": "00.09",
-      "name": "A3. IMPOZITE SI TAXE PE PROPRIETATE",
-      "total": 14670.0
-    },
-    {
-      "code": "84.02",
-      "name": "Transporturi",
-      "total": 12170.2
-    },
-    {
       "code": "81.02",
       "name": "Combustibili si energie",
-      "total": 5311.0
-    },
-    {
-      "code": "70.02",
-      "name": "Locuinte, servicii si dezvoltare:publica",
-      "total": 5125.5
+      "total": 6022.3
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "059c54cd27dd4de2f3dda4f6",
+    "bundle_id": "ab6b73833080a9f6e0f0b14a",
     "source_sha256": "b90cfcea74edba04dc9fd0bc80c62fd7ba72734c4e32599dddea76206099884b",
     "source_format": "pdf",
     "source_pdf_sha256": "b90cfcea74edba04dc9fd0bc80c62fd7ba72734c4e32599dddea76206099884b"

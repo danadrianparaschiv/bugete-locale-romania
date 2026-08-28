@@ -1,31 +1,33 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1747,
-    "lines_strictly_verified": 632,
-    "pct_lines_strictly_verified": 36.2,
-    "numeric_cells": 4132,
-    "numeric_cells_strictly_verified": 1983,
-    "pct_numeric_cells_strictly_verified": 48.0,
+    "lines": 1746,
+    "lines_strictly_verified": 1577,
+    "pct_lines_strictly_verified": 90.3,
+    "numeric_cells": 5323,
+    "numeric_cells_strictly_verified": 4813,
+    "pct_numeric_cells_strictly_verified": 90.4,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 160,
       "pages_selected": 160,
       "pages_processed": 160,
       "complete_pdf": true
     },
-    "pct_clean": 36.2,
-    "errors": 126,
-    "warnings": 1051,
+    "pct_clean": 90.3,
+    "errors": 208,
+    "warnings": 49,
     "info": 16,
     "documents": 5
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 586400.0,
-    "cheltuieli": 275840.0
+    "venituri": 311707.0,
+    "cheltuieli": null
   },
   "top_capitole": [
     {
@@ -69,21 +71,21 @@
       "total": 21319.0
     },
     {
+      "code": "61.02",
+      "name": "Ordine publica si siguranta nationala",
+      "total": 11751.0
+    },
+    {
       "code": "55.02",
       "name": "Tranzactii privind datoria publica si împrumuturi",
       "total": 11500.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 4085.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "53e3580db36c46fdf25d3526",
+    "bundle_id": "7c75293c06188f0fec85a641",
     "source_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a",
     "source_format": "pdf",
     "source_pdf_sha256": "0c6312b7db82fd75420c6aeba355ac82fe60c7e9e30282bb5a8ed877d6f6451a"

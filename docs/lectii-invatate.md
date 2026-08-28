@@ -231,15 +231,16 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
   versionate.
 <!-- BEGIN GENERATED:2024_LESSONS_METRICS -->
 - **Achiziția completă nu înseamnă automat calitate uniformă.** Conversia
-  deterministă a tuturor celor 41 de intrări disponibile a produs 73.428 de
-  linii la 0 USD, dar mediana ratei stricte observate este 84,7% și 10
-  intrări rămân sub 70%. Bistrița, Zalău, Deva și Vaslui trebuie tratate ca
-  ținte de mapper sau recuperare, nu mascate prin media corpusului. Procentul
-  rămâne consistență pe ieșirea extrasă, nu recall complet.
+  deterministă a tuturor celor 41 de intrări disponibile a produs 66.341 de
+  linii, iar recuperarea P2 selectivă a adăugat 1.515 celule strict
+  verificate pentru 2,213 USD. Mediana ratei stricte observate este 81,6% și 13
+  intrări rămân sub 70%. Schema 3 separă anexele și investițiile, iar procentul
+  rămâne consistență pe ieșirea extrasă, nu recall complet; numărul absolut de
+  celule și fixture-urile exhaustive trebuie citite împreună cu el.
 - **Absența graficului este și ea un rezultat de calitate.** Ediția publică 40
-  de pagini municipale și 39 de tabele de capitole, dar numai 11 blocuri
+  de pagini municipale și 38 de tabele de capitole, dar numai 11 blocuri
   complete de grafice trec poarta de acoperire 90–110% față de totalul
-  tipărit. Analiticele transversale păstrează 24 de municipiu-ani eligibili
+  tipărit. Analiticele transversale păstrează 27 de municipiu-ani eligibili
   pentru comparația planului; restul rămân vizibili cu motivul excluderii, fără
   estimări care să umple golurile.
 <!-- END GENERATED:2024_LESSONS_METRICS -->
@@ -280,9 +281,9 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
 
 <!-- BEGIN GENERATED:2024_LESSONS_FOOTER -->
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
-actualizare: 27 august 2026, după implementarea cap-coadă a ediției 2024:
-41/42 intrări convertite, 40 de pagini municipale de analiză, 73.428 de linii,
-0 USD cost API și o singură sursă indisponibilă declarată. Auditul public trece
+actualizare: 28 august 2026, după campania de calitate a ediției 2024:
+41/42 intrări convertite, 40 de pagini municipale de analiză, 66.341 de linii,
+2,213 USD cost API real și o singură sursă indisponibilă declarată. Auditul public trece
 pentru toate cele 110 conversii existente din 2024–2026, fără neconcordanțe de
 bundle; rezultatele detaliate și limitele metricilor sunt în
 [`data/2024/README.md`](../data/2024/README.md).*

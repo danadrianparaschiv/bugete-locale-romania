@@ -1,44 +1,40 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 418,
-    "lines_strictly_verified": 294,
-    "pct_lines_strictly_verified": 70.3,
-    "numeric_cells": 1317,
-    "numeric_cells_strictly_verified": 812,
-    "pct_numeric_cells_strictly_verified": 61.7,
+    "lines": 6228,
+    "lines_strictly_verified": 3661,
+    "pct_lines_strictly_verified": 58.8,
+    "numeric_cells": 14140,
+    "numeric_cells_strictly_verified": 8713,
+    "pct_numeric_cells_strictly_verified": 61.6,
+    "annex_lines": 154,
+    "annex_numeric_cells": 223,
     "scope": {
       "pages_expected": 287,
       "pages_selected": 287,
       "pages_processed": 287,
       "complete_pdf": true
     },
-    "pct_clean": 70.3,
-    "errors": 128,
-    "warnings": 87,
-    "info": 0,
-    "documents": 16
+    "pct_clean": 58.8,
+    "errors": 955,
+    "warnings": 2353,
+    "info": 2,
+    "documents": 12
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": null,
-    "cheltuieli": null
+    "cheltuieli": 1756.0
   },
-  "top_capitole": [
-    {
-      "code": "65.02",
-      "name": "Invatamant",
-      "total": 3756.0
-    }
-  ],
+  "top_capitole": [],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "326f900e323b2b67212316a1",
+    "bundle_id": "dc3107b72710c81259552b7c",
     "source_sha256": "a1d423da9affb716ef4dd243ab025a557785374163b05259076f7c2a6e2b7337",
     "source_format": "pdf",
     "source_pdf_sha256": "a1d423da9affb716ef4dd243ab025a557785374163b05259076f7c2a6e2b7337"

@@ -33,10 +33,15 @@ def _decimal(value: float) -> str:
     return f"{value:.1f}".replace(".", ",")
 
 
+def _money(value: float) -> str:
+    return f"{value:.4f}".rstrip("0").rstrip(".").replace(".", ",")
+
+
 def collect_metrics() -> dict:
     """Return the reproducible snapshot used by every generated doc block."""
     manifest = Manifest(EDITION / "manifest.json")
     verification = json.loads((EDITION / "verification.json").read_text())
+    campaign = json.loads((EDITION / "quality-campaign.json").read_text())
     analytics = json.loads((ROOT / "analytics/analytics.json").read_text())
     entries = manifest.cities()
     converted = [
@@ -106,9 +111,14 @@ def collect_metrics() -> dict:
         "trusted_plan_analyses": coverage["trusted_plan_analyses"],
         "plan_comparison_eligible": coverage["plan_comparison_eligible"],
         "llm_cost_usd": round(sum(
+            float(city.entry["conversion"].get("llm_lifetime_cost_usd") or 0)
+            for city in converted
+        ), 6),
+        "llm_current_run_cost_usd": round(sum(
             float(city.entry["conversion"].get("llm_cost_usd") or 0)
             for city in converted
         ), 6),
+        "quality_campaign": campaign["summary"],
         "corpus_audit": {
             "entries": corpus_audit["entries"],
             "converted": corpus_audit["converted"],
@@ -120,8 +130,10 @@ def collect_metrics() -> dict:
 
 
 def _edition_readme(metrics: dict) -> str:
-    return f"""Rularea deterministă din 27 august 2026 a convertit toate cele {metrics['converted_entries']} de intrări
-cu sursă disponibilă, fără apeluri LLM și cu {_integer(int(metrics['llm_cost_usd']))} USD cost API. București apare în
+    campaign = metrics["quality_campaign"]
+    return f"""Rularea de calitate finalizată la 28 august 2026 a convertit toate cele {metrics['converted_entries']} de intrări
+cu sursă disponibilă. Nucleul este determinist; trei recuperări P2 acceptate
+(Brăila, Deva și Zalău) au costat în total {_money(metrics['llm_cost_usd'])} USD. București apare în
 manifest atât ca reședință pentru Ilfov, cât și în poziția separată a
 municipiului București; cele două intrări folosesc aceeași sursă verificată și
 au produs bundle-uri identice ca date. Drobeta-Turnu Severin rămâne singura
@@ -140,7 +152,9 @@ intrare fără document publicabil.
 | Intrări cu rată strictă ≥90% / ≥70% | {metrics['entries_at_least_90']} / {metrics['entries_at_least_70']} |
 | Pagini municipale cu analiză publică | {metrics['municipal_pages']} |
 | Municipiu-ani eligibili pentru comparația planului | {metrics['plan_comparison_eligible']} |
-| Cost API incremental | {_integer(int(metrics['llm_cost_usd']))} USD |
+| Pilot P2: fișiere / apeluri API facturabile | {campaign['pilot_files']} / {campaign['billable_api_calls']} |
+| Câștig P2 în celule numerice strict verificate | +{_integer(campaign['pilot_strict_numeric_cell_gain'])} |
+| Cost API real / buget experimental | {_money(metrics['llm_cost_usd'])} / 20 USD |
 
 Cele {metrics['municipal_pages']} de pagini municipale provin din {metrics['converted_entries']} de intrări convertite deoarece
 București este duplicat intenționat în manifest. {metrics['chapter_tables']} de intrări au un tabel de
@@ -152,6 +166,13 @@ Aceste procente sunt rate de consistență pentru liniile și celulele deja
 extrase, nu `validated_cell_recall`. Niciun etalon exhaustiv nu există încă
 pentru toate cele {metrics['converted_entries']} de documente; prin urmare ediția declară explicit
 `recall_measured=false` și nu pretinde 90% recall la nivel de corpus. Poarta
+de calitate folosește schema 3: anexele și listele de investiții sunt raportate
+separat și nu mai pot umfla numitorul bugetar. Cele patru pagini dificile
+Bistrița p30, Brăila p167, Deva p226 și Zalău p24 sunt fixate ca fixture-uri
+offline. Matricea completă, inclusiv baseline-ul, câștigul per dolar și
+deciziile de publicare, este în `QUALITY.md` și `quality-campaign.json`.
+
+Poarta
 `corpus audit data --strict --require-modern` verifică însă că toate cele {metrics['corpus_audit']['converted']}
 conversii existente din corpusul 2024–2026 sunt bundle-uri moderne coerente,
 fără nicio neconcordanță între Excel, analiză și manifest."""
@@ -161,21 +182,31 @@ def _root_readme(metrics: dict) -> str:
     return f"""Ediția 2024 este procesată cap-coadă pentru toate cele {metrics['converted_entries']} de intrări cu sursă
 oficială disponibilă: {_integer(metrics['lines'])} de linii extrase, mediană strictă observată de
 {_decimal(metrics['median_strict_line_rate'])}%, {metrics['municipal_pages']} de pagini municipale de analiză, {metrics['plan_comparison_eligible']} de municipiu-ani eligibili
-pentru comparația planului și {_integer(int(metrics['llm_cost_usd']))} USD cost API. Drobeta-Turnu Severin este
+pentru comparația planului și {_money(metrics['llm_cost_usd'])} USD cost API real pentru cele trei
+recuperări P2 acceptate. Drobeta-Turnu Severin este
 singura lipsă declarată. Aceste cifre măsoară ieșirea și consistența ei, nu
 recall exhaustiv; tabelul auditat și limitele sunt în README-ul ediției."""
 
 
 def _quality(metrics: dict) -> str:
-    return f"""Conversia deterministă din 27 august 2026 acoperă toate cele {metrics['converted_entries']} de intrări cu
+    campaign = metrics["quality_campaign"]
+    return f"""Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele {metrics['converted_entries']} de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și {_integer(int(metrics['llm_cost_usd']))} USD cost API. A produs {_integer(metrics['lines'])} de linii, dintre care {_integer(metrics['strict_lines'])} strict
+complet și {_money(metrics['llm_cost_usd'])} USD cost API real. A produs {_integer(metrics['lines'])} de linii, dintre care {_integer(metrics['strict_lines'])} strict
 verificate, și {_integer(metrics['numeric_cells'])} de celule numerice, dintre care {_integer(metrics['strict_numeric_cells'])} strict
 verificate. Mediana ratei stricte pe intrare este {_decimal(metrics['median_strict_line_rate'])}%; {metrics['entries_at_least_90']}/{metrics['converted_entries']} intrări sunt la
 cel puțin 90%, {metrics['entries_at_least_70']}/{metrics['converted_entries']} la cel puțin 70%, iar {metrics['entries_below_70']} rămân sub 70%.
 
-Acest snapshot nu schimbă semantica metricii: numitorul conține numai ieșirea
-extrasă. Toate bundle-urile publică `recall_measured=false`, iar cifrele nu
+Schema de calitate 3 elimină din numitor anexele și listele de investiții, pe
+care le raportează separat. Recuperarea paginilor anterior omise poate mări
+numitorul și micșora procentul chiar când apar mai multe celule corecte; de
+aceea matricea publică urmărește și numărul absolut de celule strict verificate.
+Pilotul P2 a acceptat {campaign['accepted_pilots']} fișiere și a adăugat
+{_integer(campaign['pilot_strict_numeric_cell_gain'])} astfel de celule pentru
+{_money(campaign['actual_spend_usd'])} USD, sub plafonul de 3 USD/fișier și
+bugetul experimental de 20 USD.
+
+Toate bundle-urile publică `recall_measured=false`, iar cifrele nu
 pot fi prezentate drept recall complet. Pe partea analitică, ediția produce
 {metrics['municipal_pages']} de pagini municipale, {metrics['plan_comparison_eligible']} de municipiu-ani eligibili pentru comparația
 planului, {metrics['chapter_tables']} de tabele de capitole și {metrics['full_chart_blocks']} blocuri complete de grafice. Graficele
@@ -189,12 +220,14 @@ inconsistente. Achiziția și rezultatele detaliate sunt documentate în
 
 
 def _lessons(metrics: dict) -> str:
+    campaign = metrics["quality_campaign"]
     return f"""- **Achiziția completă nu înseamnă automat calitate uniformă.** Conversia
   deterministă a tuturor celor {metrics['converted_entries']} de intrări disponibile a produs {_integer(metrics['lines'])} de
-  linii la {_integer(int(metrics['llm_cost_usd']))} USD, dar mediana ratei stricte observate este {_decimal(metrics['median_strict_line_rate'])}% și {metrics['entries_below_70']}
-  intrări rămân sub 70%. Bistrița, Zalău, Deva și Vaslui trebuie tratate ca
-  ținte de mapper sau recuperare, nu mascate prin media corpusului. Procentul
-  rămâne consistență pe ieșirea extrasă, nu recall complet.
+  linii, iar recuperarea P2 selectivă a adăugat {_integer(campaign['pilot_strict_numeric_cell_gain'])} celule strict
+  verificate pentru {_money(metrics['llm_cost_usd'])} USD. Mediana ratei stricte observate este {_decimal(metrics['median_strict_line_rate'])}% și {metrics['entries_below_70']}
+  intrări rămân sub 70%. Schema 3 separă anexele și investițiile, iar procentul
+  rămâne consistență pe ieșirea extrasă, nu recall complet; numărul absolut de
+  celule și fixture-urile exhaustive trebuie citite împreună cu el.
 - **Absența graficului este și ea un rezultat de calitate.** Ediția publică {metrics['municipal_pages']}
   de pagini municipale și {metrics['chapter_tables']} de tabele de capitole, dar numai {metrics['full_chart_blocks']} blocuri
   complete de grafice trec poarta de acoperire 90–110% față de totalul
@@ -205,9 +238,9 @@ def _lessons(metrics: dict) -> str:
 
 def _lessons_footer(metrics: dict) -> str:
     return f"""*Document viu — se actualizează pe măsură ce corpusul crește. Ultima
-actualizare: 27 august 2026, după implementarea cap-coadă a ediției 2024:
+actualizare: 28 august 2026, după campania de calitate a ediției 2024:
 {metrics['converted_entries']}/{metrics['entries']} intrări convertite, {metrics['municipal_pages']} de pagini municipale de analiză, {_integer(metrics['lines'])} de linii,
-{_integer(int(metrics['llm_cost_usd']))} USD cost API și o singură sursă indisponibilă declarată. Auditul public trece
+{_money(metrics['llm_cost_usd'])} USD cost API real și o singură sursă indisponibilă declarată. Auditul public trece
 pentru toate cele {metrics['corpus_audit']['trusted']} conversii existente din 2024–2026, fără neconcordanțe de
 bundle; rezultatele detaliate și limitele metricilor sunt în
 [`data/2024/README.md`](../data/2024/README.md).*"""

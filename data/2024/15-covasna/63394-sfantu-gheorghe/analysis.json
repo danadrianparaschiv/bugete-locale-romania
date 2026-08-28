@@ -1,25 +1,27 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1752,
-    "lines_strictly_verified": 1617,
-    "pct_lines_strictly_verified": 92.3,
-    "numeric_cells": 1766,
-    "numeric_cells_strictly_verified": 1631,
-    "pct_numeric_cells_strictly_verified": 92.4,
+    "lines": 1766,
+    "lines_strictly_verified": 1622,
+    "pct_lines_strictly_verified": 91.8,
+    "numeric_cells": 1768,
+    "numeric_cells_strictly_verified": 1624,
+    "pct_numeric_cells_strictly_verified": 91.9,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 40,
       "pages_selected": 40,
       "pages_processed": 40,
       "complete_pdf": true
     },
-    "pct_clean": 92.3,
-    "errors": 44,
-    "warnings": 96,
-    "info": 4,
+    "pct_clean": 91.8,
+    "errors": 47,
+    "warnings": 100,
+    "info": 5,
     "documents": 1
   },
   "llm_models": [],
@@ -31,44 +33,14 @@
     {
       "code": "51.02",
       "name": "Autoritati publice si actiuni externe",
-      "total": 23173000.0
-    },
-    {
-      "code": "55.02",
-      "name": "Tranzactii privind datoria publica si împrumuturi",
-      "total": 4956110.0
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 4909000.0
-    },
-    {
-      "code": "66.02",
-      "name": "Sanatate",
-      "total": 3915900.0
-    },
-    {
-      "code": "83.02",
-      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
-      "total": 1221000.0
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 1172170.0
-    },
-    {
-      "code": "87.02",
-      "name": "Alte actiuni economice",
-      "total": 500000.0
+      "total": 423540.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "287f990445d3eece1a302469",
+    "bundle_id": "d2ef2791e69ae85344cd1fa1",
     "source_sha256": "473885e43668145081a930011515954a676e9af1d1889edb1d73e598d9f2b509",
     "source_format": "pdf",
     "source_pdf_sha256": "473885e43668145081a930011515954a676e9af1d1889edb1d73e598d9f2b509"

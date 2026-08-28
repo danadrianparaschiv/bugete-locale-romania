@@ -1,0 +1,21 @@
+{
+  "id": "hd24_p226",
+  "pdf": "data/2024/22-hunedoara/86687-deva/budget_file.pdf",
+  "page": 226,
+  "layout": "scan_detail_economic",
+  "budget": "local",
+  "source_type": "scanned",
+  "source_grid": "grids/hd24_p226.json",
+  "hazards": [
+    "low_contrast_scan",
+    "merged_cells",
+    "split_numeric_tokens"
+  ],
+  "anchors": [
+    {"raw_code": "5801", "column": "total_2024", "value": "10797.71"},
+    {"raw_code": "6141", "column": "total_2024", "value": "26135.71"},
+    {"raw_code": "6163", "column": "trim1", "value": "564.22"},
+    {"raw_code": "7101", "column": "total_2024", "value": "23632.77"}
+  ],
+  "notes": "Sanitized OCR rows from a low-contrast Deva page. It preserves representative merged glyphs while anchoring only independently readable values."
+}

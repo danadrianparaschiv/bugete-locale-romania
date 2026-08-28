@@ -1,33 +1,40 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1690,
-    "lines_strictly_verified": 1515,
-    "pct_lines_strictly_verified": 89.6,
-    "numeric_cells": 5869,
-    "numeric_cells_strictly_verified": 5451,
-    "pct_numeric_cells_strictly_verified": 92.9,
+    "lines": 1705,
+    "lines_strictly_verified": 1520,
+    "pct_lines_strictly_verified": 89.1,
+    "numeric_cells": 6041,
+    "numeric_cells_strictly_verified": 5586,
+    "pct_numeric_cells_strictly_verified": 92.5,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 60,
       "pages_selected": 60,
       "pages_processed": 60,
       "complete_pdf": true
     },
-    "pct_clean": 89.6,
-    "errors": 126,
-    "warnings": 122,
-    "info": 0,
+    "pct_clean": 89.1,
+    "errors": 113,
+    "warnings": 135,
+    "info": 1,
     "documents": 1
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 707391.1,
+    "venituri": 1645039.04,
     "cheltuieli": 1923999.23
   },
   "top_capitole": [
+    {
+      "code": "00.10",
+      "name": "A4. IMPOZITE SI TAXE PE BUNURI SI SERVICII",
+      "total": 227452.99
+    },
     {
       "code": "65.02",
       "name": "Invatamant",
@@ -37,6 +44,11 @@
       "code": "74.02",
       "name": "Protectia mediului",
       "total": 79891.0
+    },
+    {
+      "code": "00.12",
+      "name": "C. VENITURI NEFISCALE",
+      "total": 79129.06
     },
     {
       "code": "70.02",
@@ -49,41 +61,31 @@
       "total": 61347.1
     },
     {
+      "code": "00.14",
+      "name": "C2. VANZARI DE BUNURI SI SERVICII",
+      "total": 42210.06
+    },
+    {
       "code": "61.02",
       "name": "Ordine publica si siguranta nationala",
       "total": 39390.0
     },
     {
+      "code": "00.13",
+      "name": "C1. VENITURI DIN PROPRIETATE",
+      "total": 36919.0
+    },
+    {
       "code": "87.02",
       "name": "Alte actiuni economice",
       "total": 21231.88
-    },
-    {
-      "code": "54.02",
-      "name": "Alte servicii publice generale",
-      "total": 17297.49
-    },
-    {
-      "code": "81.02",
-      "name": "Combustibili si energie",
-      "total": 2000.0
-    },
-    {
-      "code": "55.02",
-      "name": "Tranzactii privind datoria publica si imprumuturi",
-      "total": 1393.0
-    },
-    {
-      "code": "83.02",
-      "name": "Agricultura, silvicultura, piscicultura si vanatoare",
-      "total": 429.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "a846014f879265e48ea1ef95",
+    "bundle_id": "86a376944b41e21399e75c22",
     "source_sha256": "73955ad912bf9a63a4e3dd4f4a7c25e58b12fe35ee7e8e2dff4f97e2ba816090",
     "source_format": "pdf",
     "source_pdf_sha256": "73955ad912bf9a63a4e3dd4f4a7c25e58b12fe35ee7e8e2dff4f97e2ba816090"

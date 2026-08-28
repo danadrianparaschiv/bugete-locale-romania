@@ -1,0 +1,15 @@
+{
+  "text": "SECTIUNEA DE FUNCTIONARE",
+  "grid": [
+    ["650204", "Invatamant secundar", "2.246.30", "794.52", "817,58", "838.70"],
+    ["65020402", "Invatamant secundar superior", "2.246,30", "794,52", "817.58", "838,70"],
+    ["9602", "Rezerve, Excedent/Deficit", "-2.246,30", "-794,52", "-817,58", "-838.70"],
+    ["9902", "Deficit", "2.246,30", "794,52", "817758", "838.70"],
+    ["990296", "Deficitul sectiunii de functionare", "725,21", "794,52", "817.58", "838,70"],
+    ["990297", "Deficitul sectiunii de dezvoltare", "1.521.09", "0.00", "00'0", "00.0"],
+    ["", "SECTIUNEA DE FUNCTIONARE", "", "", "", ""],
+    ["4902", "TOTAL CHELTUIELI", "725,21", "794,52", "817.58", "838.70"],
+    ["01", "CHELTUIELI CURENTE", "725,21", "794,52", "817,58", "838.70"],
+    ["20", "TITLUL II BUNURI SI SERVICII", "669.77", "736.95", "758,38", "778,03"]
+  ]
+}

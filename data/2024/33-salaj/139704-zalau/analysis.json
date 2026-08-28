@@ -1,42 +1,51 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 807,
-    "lines_strictly_verified": 325,
-    "pct_lines_strictly_verified": 40.3,
-    "numeric_cells": 2517,
-    "numeric_cells_strictly_verified": 1264,
-    "pct_numeric_cells_strictly_verified": 50.2,
+    "lines": 777,
+    "lines_strictly_verified": 447,
+    "pct_lines_strictly_verified": 57.5,
+    "numeric_cells": 3588,
+    "numeric_cells_strictly_verified": 2121,
+    "pct_numeric_cells_strictly_verified": 59.1,
+    "annex_lines": 0,
+    "annex_numeric_cells": 0,
     "scope": {
       "pages_expected": 50,
       "pages_selected": 50,
       "pages_processed": 50,
       "complete_pdf": true
     },
-    "pct_clean": 40.3,
-    "errors": 1223,
-    "warnings": 137,
-    "info": 16,
+    "pct_clean": 57.5,
+    "errors": 529,
+    "warnings": 242,
+    "info": 86,
     "documents": 2
   },
-  "llm_models": [],
+  "llm_models": [
+    "gemini-3.6-flash"
+  ],
   "totals_mii_lei": {
-    "venituri": null,
+    "venituri": 382743.76,
     "cheltuieli": null
   },
   "top_capitole": [
     {
-      "code": "51.02",
-      "name": "Autoritati publice si actiuni externe",
-      "total": 32542.0
+      "code": "55.02",
+      "name": "Tranzacţii privind datoria publica si împrumuturi",
+      "total": 9151.0
     },
     {
       "code": "61.02",
       "name": "Ordine publica si siguranţa naţionala",
       "total": 7440.0
+    },
+    {
+      "code": "61.10",
+      "name": "Ordine publica si siguranţa naţionala",
+      "total": 7405.0
     },
     {
       "code": "54.10",
@@ -58,7 +67,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "7086e4ac0d5a828613854a14",
+    "bundle_id": "ab9ad5247a05880f5b71c36a",
     "source_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4",
     "source_format": "pdf",
     "source_pdf_sha256": "f39f20aeb265eec1f13a63611fca8fbb89b4b2e8b011d3bfa08bb1dcc35125b4"

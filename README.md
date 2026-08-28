@@ -157,7 +157,10 @@ Poarta P1 acoperă acum toate cele zece familii numerice reprezentate în suita
 golden: 1.398/1.398 celule regăsite și corecte în scope-urile exhaustive.
 Aceasta este acoperire pe pagini reprezentative, nu recall măsurat pentru
 fiecare PDF complet. P2 prioritizează recuperarea LLM sub același plafon
-public de 5 USD/PDF și publică planul de cheltuire în run store.
+public de 5 USD/PDF și publică planul de cheltuire în run store. Pentru ediția
+2024, matricea auditată baseline → rezultat, modelul, costul real și regula de
+acceptare sunt comise în
+[`data/2024/quality-campaign.json`](data/2024/quality-campaign.json).
 
 P3 publică un set analitic separat (`analytics.json`, `.csv`, `.xlsx`) și
 comparații pe site. Fiecare municipiu-an păstrează intrările extrase,
@@ -183,9 +186,10 @@ administrative publice; atribuirea este păstrată și în [NOTICE](NOTICE).
 
 <!-- BEGIN GENERATED:2024_ROOT_METRICS -->
 Ediția 2024 este procesată cap-coadă pentru toate cele 41 de intrări cu sursă
-oficială disponibilă: 73.428 de linii extrase, mediană strictă observată de
-84,7%, 40 de pagini municipale de analiză, 24 de municipiu-ani eligibili
-pentru comparația planului și 0 USD cost API. Drobeta-Turnu Severin este
+oficială disponibilă: 66.341 de linii extrase, mediană strictă observată de
+81,6%, 40 de pagini municipale de analiză, 27 de municipiu-ani eligibili
+pentru comparația planului și 2,213 USD cost API real pentru cele trei
+recuperări P2 acceptate. Drobeta-Turnu Severin este
 singura lipsă declarată. Aceste cifre măsoară ieșirea și consistența ei, nu
 recall exhaustiv; tabelul auditat și limitele sunt în README-ul ediției.
 <!-- END GENERATED:2024_ROOT_METRICS -->

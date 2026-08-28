@@ -1,31 +1,33 @@
 {
   "schema_version": 3,
   "quality": {
-    "schema_version": 2,
+    "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 6499,
-    "lines_strictly_verified": 6132,
-    "pct_lines_strictly_verified": 94.4,
-    "numeric_cells": 16195,
-    "numeric_cells_strictly_verified": 14724,
-    "pct_numeric_cells_strictly_verified": 90.9,
+    "lines": 1632,
+    "lines_strictly_verified": 1246,
+    "pct_lines_strictly_verified": 76.3,
+    "numeric_cells": 6261,
+    "numeric_cells_strictly_verified": 4751,
+    "pct_numeric_cells_strictly_verified": 75.9,
+    "annex_lines": 4806,
+    "annex_numeric_cells": 9994,
     "scope": {
       "pages_expected": 258,
       "pages_selected": 258,
       "pages_processed": 258,
       "complete_pdf": true
     },
-    "pct_clean": 94.4,
-    "errors": 345,
-    "warnings": 238,
+    "pct_clean": 76.3,
+    "errors": 448,
+    "warnings": 240,
     "info": 0,
     "documents": 4
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 1729806.14,
-    "cheltuieli": null
+    "cheltuieli": 1747515.15
   },
   "top_capitole": [
     {
@@ -49,6 +51,11 @@
       "total": 14270.0
     },
     {
+      "code": "67.02",
+      "name": "Cultura, recreere si religie",
+      "total": 455.07
+    },
+    {
       "code": "65.02",
       "name": "Invatamant",
       "total": 0.0
@@ -58,7 +65,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "1798da74ead24dd6e7998a53",
+    "bundle_id": "b664054b9c42ff720a42bcc9",
     "source_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f",
     "source_format": "pdf",
     "source_pdf_sha256": "9cfed97693db195f8e3747b389d732ca98af951e37932b1bade6a7c3c1e56d3f"

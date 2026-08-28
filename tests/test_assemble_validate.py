@@ -134,6 +134,170 @@ def test_assemble_repairs_truncated_func_prefix(tmp_path):
     assert doc.lines[-1].func_code == "50.02"
 
 
+def test_assemble_applies_functional_context_from_scanned_page_header(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": (
+            "BUGETUL LOCAL DETALIAT LA CHELTUIELI "
+            "Capitolul 5102 Autoritati publice Paragraful 0103 "
+            "Autoritati executive"
+        ),
+        "layout": "scan_simple_table",
+        "lines": [
+            _line("10", "Cheltuieli de personal", total_2024="100"),
+            _line("20", "Bunuri si servicii", total_2024="20"),
+        ],
+    })
+    store.put("extract", 2, {
+        "text": (
+            "Capitolul 5402 Alte servicii publice generale "
+            "Subcapitolul 540210 Servicii publice comunitare"
+        ),
+        "layout": "scan_simple_table",
+        "lines": [_line("10", "Cheltuieli de personal", total_2024="50")],
+    })
+
+    doc = assemble(store, [1, 2], registry)[0]
+    assert [line.func_code for line in doc.lines] == [
+        "51.02.01.03", "51.02.01.03", "54.02.10",
+    ]
+    assert all(line.kind == "expense_economic" for line in doc.lines)
+
+
+def test_header_functional_context_scopes_legitimate_repeated_codes(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    for page, header, amount in (
+        (1, "Capitolul 5402 Subcapitolul 540205", "10"),
+        (2, "Capitolul 5402 Subcapitolul 540210", "20"),
+    ):
+        store.put("extract", page, {
+            "text": "BUGETUL LOCAL DETALIAT " + header,
+            "layout": "scan_simple_table",
+            "lines": [_line("10", "Cheltuieli de personal", total_2024=amount)],
+        })
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [1, 2], registry),
+        pages_expected=2,
+        pages_selected=[1, 2],
+        pages_processed=[1, 2],
+    )
+    validate(result, registry)
+
+    lines = result.documents[0].lines
+    assert [line.func_code for line in lines] == ["54.02.05", "54.02.10"]
+    assert not [
+        issue for issue in result.all_issues()
+        if issue.check == "V7_hygiene" and "duplicate" in issue.message
+    ]
+
+
+def test_printed_section_heading_scopes_repeated_summary_rows(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "layout": "scan_simple_table",
+        "lines": [
+            _line("5002", "Partea I SERVICII PUBLICE GENERALE", total_2024="100"),
+            _line(
+                "4902",
+                "CHELTUIELILE SECTIUNII DE FUNCTIONARE (cod 50.02+59.02)",
+                total_2024="80",
+            ),
+            _line("5002", "Partea I SERVICII PUBLICE GENERALE", total_2024="80"),
+        ],
+    })
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [1], registry),
+        pages_expected=1,
+        pages_selected=[1],
+        pages_processed=[1],
+    )
+    validate(result, registry)
+
+    repeated = [line for line in result.documents[0].lines if line.code == "50.02"]
+    assert [line.section for line in repeated] == [None, "FUNCTIONARE"]
+    assert not [
+        issue for issue in result.all_issues()
+        if issue.check == "V7_hygiene" and "duplicate" in issue.message
+    ]
+
+
+def test_mid_page_header_context_starts_at_detail_total(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": (
+            "DIN CARE: Capitolul 5102 Autoritati publice "
+            "Paragraful 0103 Autoritati executive"
+        ),
+        "layout": "scan_simple_table",
+        "lines": [
+            _line("70", "CHELTUIELI DE CAPITAL", total_2024="200"),
+            _line(None, "TOTAL CHELTUIELI", total_2024="100"),
+            _line("70", "CHELTUIELI DE CAPITAL", total_2024="20"),
+        ],
+    })
+    lines = assemble(store, [1], registry)[0].lines
+    assert lines[0].func_code is None
+    assert lines[-1].func_code == "51.02.01.03"
+
+
+def test_embedded_header_context_applies_only_to_following_row(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "layout": "scan_simple_table",
+        "lines": [
+            _line(
+                "710130",
+                "Alte active fixe Capitolul 5402 Alte servicii publice generale",
+                func="51.02.01.03",
+                code="71.01.30",
+                total_2024="10",
+            ),
+            _line("20", "Bunuri si servicii", total_2024="5"),
+        ],
+    })
+    lines = assemble(store, [1], registry)[0].lines
+    assert lines[0].func_code == "51.02.01.03"
+    assert lines[1].func_code == "54.02"
+
+
+def test_annex_rows_are_reported_outside_budget_quality_scope(tmp_path, registry):
+    store = _mk_store(tmp_path)
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT",
+        "layout": "scan_simple_table",
+        "lines": [_line("000102", "TOTAL VENITURI", total_2024="100")],
+    })
+    store.put("extract", 2, {
+        "text": "LISTA OBIECTIVELOR DE INVESTITII",
+        "layout": "investment_list",
+        "lines": [
+            _line("12", "Reabilitare scoala", total_2024="50"),
+            _line("12", "Modernizare parc", total_2024="75"),
+        ],
+    })
+    result = ConversionResult(
+        pdf="doc.pdf",
+        documents=assemble(store, [1, 2], registry),
+        pages_expected=2,
+        pages_selected=[1, 2],
+        pages_processed=[1, 2],
+    )
+    validate(result, registry)
+    stats = result.stats()
+
+    assert stats["quality_schema_version"] == 3
+    assert stats["lines"] == 1
+    assert stats["numeric_cells"] == 1
+    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["annex_lines"] == 2
+    assert stats["annex_numeric_cells"] == 2
+    assert not result.all_issues()
+
+
 def test_assemble_source_digit_completion_is_name_gated(tmp_path, registry):
     """Bare codes are completed to <NN>.<suffix> only when the printed name
     matches the official one (PMB drops the source digit document-wide).
@@ -540,9 +704,10 @@ def test_investment_grid_survives_assembly_validation_and_export(tmp_path, regis
     validate(result, registry)
     stats = result.stats()
 
-    assert stats["numeric_cells"] == 62
-    assert stats["numeric_cells_strictly_verified"] == 62
-    assert stats["pct_lines_strictly_verified"] == 100.0
+    assert stats["numeric_cells"] == 0
+    assert stats["numeric_cells_strictly_verified"] == 0
+    assert stats["pct_lines_strictly_verified"] == 0.0
+    assert stats["annex_numeric_cells"] == 62
     assert stats["issues"] == {"error": 0, "warning": 0, "info": 0}
 
     lines = [line for doc in result.documents for line in doc.lines]

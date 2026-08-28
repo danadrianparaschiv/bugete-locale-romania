@@ -130,5 +130,6 @@ def _recommend(pdf: Path, n_scanned: int, est_cost: float) -> str:
     parts = [f"bgconvertor convert {pdf.name}"]
     if n_scanned > 40:
         parts.append("--workers 4")
-    parts.append(f"--llm repair --max-llm-cost {max(1.0, round(est_cost * 1.5, 0)):.2f}")
+    budget = min(5.0, max(1.0, round(est_cost * 1.5, 0)))
+    parts.append(f"--llm repair --max-llm-cost {budget:.2f}")
     return " ".join(parts)
