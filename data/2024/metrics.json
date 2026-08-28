@@ -22,6 +22,7 @@
   "native_excel_sources": 3,
   "numeric_cells": 225660,
   "pages_expected": 4174,
+  "pdf_pages_expected": 4170,
   "pdf_sources": 38,
   "plan_comparison_eligible": 27,
   "quality_campaign": {
@@ -35,7 +36,7 @@
     "pilot_strict_numeric_cell_gain": 1515,
     "remaining_experiment_budget_usd": 17.787
   },
-  "schema_version": 1,
+  "schema_version": 2,
   "strict_lines": 48601,
   "strict_numeric_cells": 173706,
   "trusted_plan_analyses": 40,
@@ -44,5 +45,6 @@
     "Drobeta-Turnu Severin"
   ],
   "verified_sources": 41,
+  "workbook_sheets_expected": 4,
   "year": 2024
 }

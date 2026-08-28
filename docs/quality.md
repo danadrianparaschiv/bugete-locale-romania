@@ -657,6 +657,27 @@ Aceste procente sunt rate observate de validare, nu o măsurare directă a
 recall-ului față de un adevăr de referință complet; de aceea
 `recall_measured=false` rămâne neschimbat.
 
+## Option E — etalon independent pe fișier și familie
+
+Următoarea fază nu mai deduce recall-ul din liniile deja extrase. Comenzile
+`bgconvertor annotate` inventariază fiecare pagină PDF și foaie Excel, apoi
+cer transcriere exhaustivă independentă înainte să afișeze output-ul
+converterului. În ediția 2024, inventarul are 4.170 de pagini PDF plus patru
+foi Excel native, iar cele 13 intrări sub 70% sunt prioritizate automat ca
+benchmark-uri complete.
+
+Ground truth păstrează valoarea tipărită, valoarea normalizată în `mii lei`,
+codurile funcțional/economic și contextul instituție/formular/subdocument.
+Matching-ul este unu-la-unu; o valoare greșită produce atât un fals negativ,
+cât și un fals pozitiv. Citirile incerte și discrepanțele cer un al doilea
+reviewer. PDF-urile, randările și drafturile rămân în `runs/`, iar exportul
+public refuză implicit un inventar incomplet.
+
+Implementarea și fluxul reproductibil sunt documentate în
+[`docs/adnotare.md`](adnotare.md). Existența instrumentului nu schimbă încă
+metricile publice: `recall_measured` devine adevărat numai după ce scope-ul
+independent este complet și trece auditul.
+
 ## Porți pentru ținta de 90%
 
 - ≥90% `validated_cell_recall` pentru fiecare familie de PDF suportată;
