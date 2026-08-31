@@ -506,3 +506,37 @@ def test_prediction_facts_exclude_annex_and_preserve_classification():
     assert facts[0].functional_code == "65.02"
     assert facts[0].economic_code == "20.01"
     assert facts[0].institution == "Școala A"
+
+
+def test_prediction_result_prefers_exact_exported_candidate(tmp_path, monkeypatch):
+    from bgconvertor.model import BudgetDocument, BudgetLine, ConversionResult
+    from bgconvertor.runstore import RunStore
+
+    workspace = _write_workspace(tmp_path)
+    root = Path(ann.load_workspace(workspace).repository_root)
+    source = root / "data/2024/01-alba/1017-alba/budget_file.pdf"
+    config = RunConfig(runs_dir=root / "runs", reference_dir=root / "reference")
+    monkeypatch.setattr(
+        "bgconvertor.nomenclator.load_registry_for_year", lambda *_: object()
+    )
+    exported = ConversionResult(
+        pdf=source.name,
+        documents=[BudgetDocument(
+            title="BUGET LOCAL", budget="local", suffix="02", pages=[1],
+            lines=[BudgetLine(
+                raw_code="0402", code="04.02", name="Cote", kind="revenue", page=1,
+                values={"total_2024": Decimal("777")},
+                value_sources={"total_2024": "llm_targeted"},
+            )],
+        )],
+        pages_expected=1,
+        pages_selected=[1],
+        pages_processed=[1],
+    )
+    RunStore(config, source).put_final_candidate(exported)
+
+    result = ann._prediction_result(config, source, 2024, 1)
+
+    assert result.documents[0].lines[0].values["total_2024"] == Decimal("777")
+    metadata = ann._candidate_metadata(config, source, 1)
+    assert metadata["final_candidate"]["artifact_sha256"]

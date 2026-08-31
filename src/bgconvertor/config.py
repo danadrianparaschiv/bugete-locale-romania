@@ -87,11 +87,10 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    # v52 recognizes comparative BVC/execution/current-budget tables in both
-    # scanned and copier-text sources, and keeps investment-list continuation
-    # pages out of the public budget facts.
+    # v56 preserves Buzău's printed TOTAL/functionare repetitions with
+    # explicit section context and repairs a damaged duplicate code safely.
     # Only the cheap mapping/extraction stage is invalidated; OCR stays cached.
-    extract_version: str = "52"
+    extract_version: str = "56"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.
@@ -108,6 +107,7 @@ class RunConfig(BaseSettings):
             "docling_cell_matching", "adaptive_ocr", "structural_score_threshold",
             "max_deskew_degrees",
         ],
+        "coordinate_ocr": ["extract_version"],
         "classify": ["render_scale", "llm.classify_model", "llm.prompt_version", "llm.mode"],
         # extract derives from ocr output, so it inherits ocr's fields too
         "extract": [

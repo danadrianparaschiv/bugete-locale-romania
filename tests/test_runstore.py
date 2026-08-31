@@ -4,6 +4,7 @@ from threading import Event, Thread
 import pytest
 
 from bgconvertor.config import RunConfig
+from bgconvertor.model import BudgetDocument, BudgetLine, ConversionResult
 from bgconvertor.orchestrator import parse_pages, run_stage
 from bgconvertor.runstore import RunStore
 
@@ -20,6 +21,30 @@ def test_put_get_roundtrip(store: RunStore):
     store.put("extract", 3, {"rows": [1, 2]})
     assert store.get("extract", 3) == {"rows": [1, 2]}
     assert store.get("extract", 4) is None
+
+
+def test_final_candidate_roundtrip_preserves_cell_level_repair(store: RunStore):
+    candidate = ConversionResult(
+        pdf="doc.pdf",
+        documents=[BudgetDocument(
+            title="BUGET LOCAL", budget="local", suffix="02", pages=[1],
+            lines=[BudgetLine(
+                raw_code="0402", code="04.02", name="Cote", kind="revenue", page=1,
+                values={"total_2024": "123.5"},
+                value_sources={"total_2024": "llm_targeted"},
+            )],
+        )],
+        pages_expected=1,
+        pages_selected=[1],
+        pages_processed=[1],
+    )
+
+    store.put_final_candidate(candidate)
+
+    loaded = store.get_final_candidate()
+    assert loaded is not None
+    assert loaded.documents[0].lines[0].values["total_2024"] == candidate.documents[0].lines[0].values["total_2024"]
+    assert loaded.documents[0].lines[0].value_sources["total_2024"] == "llm_targeted"
 
 
 def test_malformed_page_cache_is_a_miss_and_can_be_rebuilt(store: RunStore):

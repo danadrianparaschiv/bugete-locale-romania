@@ -1084,6 +1084,20 @@ def _prediction_result(
         from .native_workbook import convert_workbook
 
         return convert_workbook(source, year, registry)
+    candidate_path = config.runs_dir / store_key(source) / "final_candidate.json"
+    try:
+        candidate_envelope = json.loads(candidate_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        candidate_envelope = None
+    if (
+        isinstance(candidate_envelope, dict)
+        and candidate_envelope.get("schema_version") == 1
+        and candidate_envelope.get("pdf_sha256") == file_sha256(source)
+    ):
+        try:
+            return ConversionResult.model_validate(candidate_envelope.get("payload"))
+        except (TypeError, ValueError):
+            pass
     from .assemble import assemble
 
     pages = list(range(1, source_units + 1))
@@ -1105,6 +1119,11 @@ def _candidate_metadata(config: RunConfig, source: Path, source_units: int) -> d
             "stages": {"native_workbook": {"source_units": source_units}},
         }
     stages = {}
+    candidate_path = config.runs_dir / store_key(source) / "final_candidate.json"
+    try:
+        final_candidate = json.loads(candidate_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        final_candidate = None
     for stage in ("extract", "llm_extract"):
         digest = hashlib.sha256()
         pages = 0
@@ -1126,7 +1145,19 @@ def _candidate_metadata(config: RunConfig, source: Path, source_units: int) -> d
                 "config_hashes": sorted(config_hashes),
                 "artifacts_sha256": digest.hexdigest(),
             }
-    return {"source_sha256": file_sha256(source), "stages": stages}
+    metadata = {"source_sha256": file_sha256(source), "stages": stages}
+    if (
+        isinstance(final_candidate, dict)
+        and final_candidate.get("schema_version") == 1
+        and final_candidate.get("pdf_sha256") == metadata["source_sha256"]
+    ):
+        metadata["final_candidate"] = {
+            "schema_version": final_candidate["schema_version"],
+            "config_sha256": final_candidate.get("config_sha256"),
+            "created_at": final_candidate.get("created_at"),
+            "artifact_sha256": hashlib.sha256(candidate_path.read_bytes()).hexdigest(),
+        }
+    return metadata
 
 
 def score_workspace(workspace_path: Path) -> dict[str, Any]:

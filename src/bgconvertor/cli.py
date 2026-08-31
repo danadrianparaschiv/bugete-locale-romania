@@ -587,6 +587,28 @@ def _run_extraction(
                 ),
             )
 
+        from .extract import coordinate_annual
+
+        coordinate_pages = [
+            page for page in scanned_pages
+            if coordinate_annual.is_candidate(store.get("ocr", page) or {})
+        ]
+        if coordinate_pages:
+            _stage_banner(
+                "OCR coordonate Buzău/InfoSoft",
+                f"{len(coordinate_pages)} pagini · candidat determinist cache-uit",
+            )
+            run_stage(
+                store,
+                "coordinate_ocr",
+                coordinate_pages,
+                lambda page: coordinate_annual.extract_page(
+                    pdf,
+                    page,
+                    budget_year=budget_year,
+                ),
+            )
+
         _stage_banner("Mapare tabele", "structura OCR -> linii bugetare (rapid)")
         first_page = min(scanned_pages)
         previous = store.get("extract", first_page - 1) if first_page > 1 else None
@@ -630,6 +652,9 @@ def _run_extraction(
                         context=mapping_state["context"],
                     ),
                 ))
+            coordinate = store.get("coordinate_ocr", page)
+            if coordinate is not None:
+                candidates.append(("coordinate_ocr", coordinate))
             payload = scanned.choose_best_payload(candidates)
             _advance_mapping(page, payload)
             return payload
@@ -1368,6 +1393,11 @@ def convert(
             raise typer.Exit(1) from None
     else:
         export_mod.export(result, out_path)
+
+    # This must happen only after a successful export/publication.  Targeted
+    # repairs live in the assembled ConversionResult, not in page-stage cache,
+    # and the independent recall scorer must evaluate the exact emitted result.
+    store.put_final_candidate(result)
 
     stats = result.stats()
     console.print(f"\n[bold green]✓ scris {out_path}[/bold green]")

@@ -101,6 +101,38 @@ inconsistente. Achiziția și rezultatele detaliate sunt documentate în
 [`data/2024/README.md`](../data/2024/README.md).
 <!-- END GENERATED:2024_QUALITY_METRICS -->
 
+### Option E — pilotul exhaustiv Buzău
+
+Etalonul source-only pentru PDF-ul Buzău 2024 inventariază toate cele 46 de
+pagini bugetare și 8.236 de celule numerice. Citirea combinată a fost
+confruntată cu anexele oficiale de funcționare/dezvoltare, două randări OCR
+locale pe coordonate și review vizual pentru cele 43 de celule reziduale.
+Acesta este primul rezultat complete-file măsurat pentru layout-ul anual
+InfoSoft Buzău; nu este extrapolat la celelalte intrări 2024.
+
+| Candidat Buzău | Celule corecte | Celule emise | Recall | Precizie | Recall pagini bugetare | Cost API conversie |
+|---|---:|---:|---:|---:|---:|---:|
+| Mapper anterior | 2.734 | 3.284 | 33,20% | 83,25% | 97,83% | 0 USD |
+| Mapper determinist InfoSoft | 7.852 | 8.234 | 95,34% | 95,36% | 100% | 0 USD |
+| + reparare țintită Gemini | 7.858 | 8.204 | 95,41% | 95,78% | 100% | 0,4379 USD |
+
+Mapperul folosește OCR local la coordonate fixe numai după o poartă de sursă
+specifică (`buget local detaliat` + `Buzău`), păstrează continuările fără antet
+și recunoaște trimestrele II–IV. Prima construire a cache-ului de coordonate a
+durat aproximativ 2,5 minute; reluările sunt gratuite și cache-uite.
+
+Repararea LLM a adăugat numai șase celule corecte și a eliminat 30 de predicții
+greșite. Câștigul de 0,07 puncte procentuale recall pentru 0,4379 USD nu
+justifică o escaladare suplimentară pe acest fișier. Costul total al evidence-ului
+de adnotare (drafturi vision și probe) plus conversia pilot a fost aproximativ
+4,30 USD din bugetul experimental separat de 20 USD; costul public per conversie
+rămâne sub plafonul de 3 USD al pilotului.
+
+Cele 42 de pagini cu diferențe față de converter rămân marcate pentru o a doua
+revizie independentă înainte ca etalonul să poată deveni release gate public.
+Scorul de mai sus este diagnostic pe adevărul exhaustiv înghețat, nu o afirmație
+că întregul corpus 2024 este deja măsurat.
+
 ## Bundle public atomic și auditabil
 
 O conversie completă din arborele `data/` publică împreună:

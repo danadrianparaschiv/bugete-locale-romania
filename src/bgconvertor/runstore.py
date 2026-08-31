@@ -24,6 +24,9 @@ from pathlib import Path
 from typing import Any
 
 from .config import RunConfig
+from .model import ConversionResult
+
+FINAL_CANDIDATE_SCHEMA_VERSION = 1
 
 
 def _read_json(path: Path) -> Any | None:
@@ -160,6 +163,44 @@ class RunStore:
         _write_json(path, envelope, ensure_ascii=False)
         # A success clears any previous failure record.
         self._failure_path(stage, page).unlink(missing_ok=True)
+
+    def put_final_candidate(self, result: ConversionResult) -> None:
+        """Persist the exact result successfully exported by the converter.
+
+        Targeted repairs mutate the assembled result rather than a page-stage
+        payload.  Keeping this source-bound snapshot lets independent scoring
+        evaluate the exported candidate instead of silently falling back to
+        the pre-repair extraction artifacts.
+        """
+        config_payload = self.config.model_dump(mode="json")
+        config_blob = json.dumps(
+            config_payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode()
+        _write_json(
+            self.root / "final_candidate.json",
+            {
+                "schema_version": FINAL_CANDIDATE_SCHEMA_VERSION,
+                "pdf_sha256": self.pdf_sha,
+                "config_sha256": hashlib.sha256(config_blob).hexdigest(),
+                "created_at": _now(),
+                "payload": result.model_dump(mode="json"),
+            },
+            ensure_ascii=False,
+        )
+
+    def get_final_candidate(self) -> ConversionResult | None:
+        """Load the last complete exported candidate for this exact source."""
+        envelope = _read_json(self.root / "final_candidate.json")
+        if not isinstance(envelope, dict):
+            return None
+        if envelope.get("schema_version") != FINAL_CANDIDATE_SCHEMA_VERSION:
+            return None
+        if envelope.get("pdf_sha256") != self.pdf_sha:
+            return None
+        try:
+            return ConversionResult.model_validate(envelope.get("payload"))
+        except (TypeError, ValueError):
+            return None
 
     def record_failure(self, stage: str, page: int, exc: BaseException) -> None:
         record = {

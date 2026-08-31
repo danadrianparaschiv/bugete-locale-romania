@@ -103,6 +103,64 @@ def test_transposed_family():
     assert map_grid(grid) == lines  # registry dispatches to transposed
 
 
+def test_transposed_recovers_rotated_ocr_period_labels_and_split_rows():
+    grid = [
+        ["Pag 1 / 46 2027", "622084.00", "1944.00 788.00"],
+        ["2026", "619086.00", "1944.00 788.00"],
+        ["2025", "654915.00", "1944.00 788.00"],
+        ["TrimV", "101722.80", "292.00 0.00"],
+        ["Timl", "127173.15", "292.00 0.00"],
+        ["Triml", "159603.80", "388.00 0.00"],
+        ["Tril pl. restante Stingere", "295494.25", "972.00 0.00"],
+        ["Total AN", "683994.00", "1944.00 788.00"],
+        ["Cod", "00.01", "03.02.18 04.02.04"],
+        ["Denumire indicator", "TOTAL VENITURI", "Rânduri unite"],
+    ]
+
+    lines = transposed_try(grid, budget_year=2024)
+
+    assert lines is not None
+    assert lines[0]["values"] == {
+        "est2027": "622084.00",
+        "est2026": "619086.00",
+        "est2025": "654915.00",
+        "trim4": "101722.80",
+        "trim3": "127173.15",
+        "trim2": "159603.80",
+        "trim1": "295494.25",
+        "total": "683994.00",
+    }
+    assert [line["raw_code"] for line in lines[1:]] == ["03.02.18", "04.02.04"]
+    assert lines[1]["values"]["est2027"] == "1944.00"
+    assert lines[2]["values"]["est2027"] == "788.00"
+
+
+def test_transposed_recovers_headerless_rotated_continuation():
+    logical_rows = [
+        ["Bunuri si servicii", "20.01", "100.00", "40.00", "30.00", "20.00", "10.00", "110.00", "120.00", "130.00"],
+        ["Reparatii curente", "20.02", "50.00", "20.00", "15.00", "10.00", "5.00", "55.00", "60.00", "65.00"],
+    ]
+    grid = [list(column) for column in zip(*logical_rows, strict=True)]
+    # Real pages contain many columns; repeat the two safe synthetic rows.
+    grid = [row * 8 for row in grid]
+
+    lines = transposed_try(grid, budget_year=2024)
+
+    assert lines is not None
+    assert len(lines) == 16
+    assert lines[0]["raw_code"] == "20.01"
+    assert lines[0]["values"] == {
+        "total_2024": "100.00",
+        "trim1": "40.00",
+        "trim2": "30.00",
+        "trim3": "20.00",
+        "trim4": "10.00",
+        "est2025": "110.00",
+        "est2026": "120.00",
+        "est2027": "130.00",
+    }
+
+
 def test_transposed_recovers_collapsed_indicator_columns_on_bistrita_p2():
     source = Path(__file__).parent / "fixtures" / "golden" / "grids" / "bn_p002.json"
     grid = json.loads(source.read_text())["grid"]
@@ -130,7 +188,7 @@ def test_bistrita_transposed_repair_requires_exact_grid_fingerprint():
 
     lines = transposed_try(grid)
     assert lines is not None
-    assert len(lines) == 21
+    assert len(lines) == 22
     assert sum(len(line["values"]) for line in lines) < 216
     assert not any(line.get("raw_code") == "07020203" for line in lines)
 
