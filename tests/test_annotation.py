@@ -492,6 +492,8 @@ def test_prediction_facts_exclude_annex_and_preserve_classification():
                 BudgetLine(
                     raw_code="6502.2001", code="20.01", func_code="65.02",
                     name="Bunuri", kind="expense_economic", page=1,
+                    institution="Școala B", form="Formular 11",
+                    subdocument="Secțiune proprie",
                     values={"total_2024": Decimal("12.5")},
                 ),
                 BudgetLine(
@@ -505,7 +507,35 @@ def test_prediction_facts_exclude_annex_and_preserve_classification():
     assert len(facts) == 1
     assert facts[0].functional_code == "65.02"
     assert facts[0].economic_code == "20.01"
-    assert facts[0].institution == "Școala A"
+    assert facts[0].institution == "Școala B"
+    assert facts[0].form == "Formular 11"
+    assert facts[0].subdocument == "Secțiune proprie"
+
+
+def test_fact_matching_uses_line_level_form_and_subdocument():
+    row = ann.GroundTruthRow(
+        id="r1",
+        name="Bunuri",
+        institution="Școala A",
+        form="Formular 11",
+        subdocument="Buget propriu",
+        values={"total_2024": ann.AnnotationValue(printed="10")},
+    )
+    fact = ann.PredictionFact(
+        document="Buget local",
+        institution="Școala A",
+        form="Formular 11",
+        subdocument="Buget propriu",
+        budget="local",
+        page=1,
+        kind="heading",
+        name="Bunuri",
+        column="total_2024",
+        value_mii_lei="10",
+        source="ocr",
+    )
+
+    assert ann._fact_matches(row, fact)
 
 
 def test_prediction_result_prefers_exact_exported_candidate(tmp_path, monkeypatch):

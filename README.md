@@ -192,9 +192,9 @@ administrative publice; atribuirea este păstrată și în [NOTICE](NOTICE).
 
 <!-- BEGIN GENERATED:2024_ROOT_METRICS -->
 Ediția 2024 este procesată cap-coadă pentru toate cele 41 de intrări cu sursă
-oficială disponibilă: 66.341 de linii extrase, mediană strictă observată de
+oficială disponibilă: 66.299 de linii extrase, mediană strictă observată de
 81,6%, 40 de pagini municipale de analiză, 27 de municipiu-ani eligibili
-pentru comparația planului și 2,213 USD cost API real pentru cele trei
+pentru comparația planului și 2,9424 USD cost API real pentru cele trei
 recuperări P2 acceptate. Drobeta-Turnu Severin este
 singura lipsă declarată. Aceste cifre măsoară ieșirea și consistența ei, nu
 recall exhaustiv; tabelul auditat și limitele sunt în README-ul ediției.

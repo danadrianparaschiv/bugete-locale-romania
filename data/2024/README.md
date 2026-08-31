@@ -104,7 +104,7 @@ hash-uri separate în bundle-ul public.
 <!-- BEGIN GENERATED:2024_EDITION_METRICS -->
 Rularea de calitate finalizată la 28 august 2026 a convertit toate cele 41 de intrări
 cu sursă disponibilă. Nucleul este determinist; trei recuperări P2 acceptate
-(Brăila, Deva și Zalău) au costat în total 2,213 USD. București apare în
+(Brăila, Deva și Zalău) au costat în total 2,9424 USD. București apare în
 manifest atât ca reședință pentru Ilfov, cât și în poziția separată a
 municipiului București; cele două intrări folosesc aceeași sursă verificată și
 au produs bundle-uri identice ca date. Drobeta-Turnu Severin rămâne singura
@@ -118,15 +118,15 @@ intrare fără document publicabil.
 | Scope-uri sursă procesate complet | 41/41 |
 | Unități sursă inventariabile | 4.174 |
 | Pagini PDF / foi Excel native | 4.170 / 4 |
-| Linii extrase / strict verificate | 66.341 / 48.601 |
-| Celule numerice / strict verificate | 225.660 / 173.706 |
+| Linii extrase / strict verificate | 66.299 / 48.783 |
+| Celule numerice / strict verificate | 228.626 / 176.956 |
 | Mediana `observed_strict_line_rate` | 81,6% |
 | Intrări cu rată strictă ≥90% / ≥70% | 13 / 28 |
 | Pagini municipale cu analiză publică | 40 |
 | Municipiu-ani eligibili pentru comparația planului | 27 |
 | Pilot P2: fișiere / apeluri API facturabile | 3 / 438 |
 | Câștig P2 în celule numerice strict verificate | +1.515 |
-| Cost API real / buget experimental | 2,213 / 20 USD |
+| Cost API real / buget experimental | 2,9424 / 20 USD |
 
 Cele 40 de pagini municipale provin din 41 de intrări convertite deoarece
 București este duplicat intenționat în manifest. 38 de intrări au un tabel de

@@ -334,7 +334,16 @@ def _duplicate_jobs(doc: BudgetDocument, prefix: str) -> list[TargetedJob]:
     for index, line in enumerate(doc.lines):
         if line.code is None or line.kind == "heading":
             continue
-        key = (doc.context_id, line.section, line.kind, line.func_code, line.code)
+        key = (
+            doc.context_id,
+            line.institution,
+            line.form,
+            line.subdocument,
+            line.section,
+            line.kind,
+            line.func_code,
+            line.code,
+        )
         previous = seen.get(key)
         seen.setdefault(key, line)
         issues = tuple(

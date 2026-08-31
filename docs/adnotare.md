@@ -187,10 +187,13 @@ automat scope `full`: Giurgiu, Călărași, Sibiu, Deva, Buzău, Zalău, Târgu 
 Focșani, Vaslui, Galați, Alba Iulia, Brăila și Ploiești. Giurgiu este pilotul
 de ergonomie deoarece are rata observată cea mai mică și numai 28 de pagini.
 
-Pilotul exhaustiv Giurgiu este înghețat, iar Buzău are toate cele 46 de pagini
-și 8.236 de celule numerice înghețate prin consens source-only. Diferențele
-față de converter rămân în coada separată de revizie a doua; un scor diagnostic
-nu ocolește această poartă.
+Piloții exhaustivi Giurgiu și Călărași sunt înghețați. Călărași clasifică toate
+cele 87 de pagini și inventariază 7.748 de celule pe 63 de pagini bugetare;
+Buzău are toate cele 46 de pagini bugetare și 8.236 de celule numerice înghețate
+prin consens source-only. Diferențele față de converter rămân în coada separată
+de revizie a doua; un scor diagnostic nu ocolește această poartă. Contextul
+instituție/formular/subdocument/secțiune este obligatoriu în matching și în
+detecția duplicatelor, pentru a păstra repetițiile legitime dintre instituții.
 
 După cele 13 fișiere, se marchează `sample` cel puțin un document complet din
 fiecare familie de layout rămasă. Numai apoi există bază pentru o afirmație de

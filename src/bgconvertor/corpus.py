@@ -175,8 +175,8 @@ def export_rows(config: RunConfig, pdf: Path):
                 yield {
                     **ident,
                     "document": doc.title[:160],
-                    "context_id": doc.context_id,
-                    "institution": doc.institution,
+                    "context_id": ln.subdocument or doc.context_id,
+                    "institution": ln.institution or doc.institution,
                     "budget": doc.budget,
                     "suffix": doc.suffix,
                     "section": ln.section,

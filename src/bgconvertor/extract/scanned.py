@@ -407,13 +407,21 @@ def map_payload(
     )
     if prose_lines:
         source_value_cells = mapped_value_cells
+    layout = (
+        "official_prose_summary"
+        if prose_lines else _guess_layout(lines, cls_text, mapping_context)
+    )
+    if (
+        mapping_context
+        and layout in {"investment_list", "allocations_annex", "annex_other"}
+    ):
+        mapping_context["budget_table"] = False
+        mapping_context["institution"] = None
+        mapping_context["subdocument"] = None
     return {
         "lines": lines,
         "text": text,
-        "layout": (
-            "official_prose_summary"
-            if prose_lines else _guess_layout(lines, cls_text, mapping_context)
-        ),
+        "layout": layout,
         "rotation_applied": ocr_payload.get("rotation_applied", 0),
         "confidence_grade": ocr_payload.get("confidence_grade"),
         "n_tables": len(ocr_payload.get("tables_raw", [])),
@@ -587,6 +595,8 @@ def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> 
         if numbered >= len(lines) / 2 and revenue_like >= code_count * 0.8:
             return "scan_revenue_detail"
         return "scan_simple_table"
+    if context and context.get("budget_table"):
+        return "scan_table_other"
     # a table with data but essentially no indicator codes is an annex
     # (procurement lists, per-institution allocations, personnel tables) —
     # kept for side sheets, out of nomenclator scope. Codes present in the

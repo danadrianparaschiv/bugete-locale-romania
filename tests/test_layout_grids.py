@@ -9,7 +9,7 @@ from copy import deepcopy
 from decimal import Decimal
 from pathlib import Path
 
-from bgconvertor.layouts import map_grid
+from bgconvertor.layouts import map_grid, map_grid_with_context
 from bgconvertor.layouts.collapsed import try_map as collapsed_try
 from bgconvertor.layouts.collapsed_detail import try_map as collapsed_detail_try
 from bgconvertor.layouts.expense_chapter import try_map as expense_chapter_try
@@ -35,6 +35,316 @@ def test_generic_header_table_romanian():
     assert idx["610203"]["code"] == "61.02.03"
     assert idx["610203"]["values"]["total_2026"] == "21303.00"
     assert idx["61020304"]["values"]["est2027"] == "21303.00"
+
+
+def test_dotted_year_quarter_header_keeps_all_eight_value_columns():
+    grid = [
+        ["INDICATORI", "CAPITOL", "Proiect", "Prevederi trimestriale 2024",
+         "Prevederi trimestriale 2024", "Prevederi trimestriale 2024",
+         "Prevederi trimestriale 2024", "Estimari", "Estimari", "Estimari"],
+        ["", "", "2024", "Trim I", "Trim II", "Trim III", "Trim IV",
+         "2.025", "2.026", "2027"],
+        ["TOTAL VENITURI", "00 01", "223.517", "76.699", "56.238",
+         "47.520", "43.060", "215.504", "220.439", "225.107"],
+    ]
+
+    line = _by_code(map_grid(grid, budget_year=2024))["0001"]
+
+    assert line["values"] == {
+        "total_2024": "223517",
+        "trim1": "76699",
+        "trim2": "56238",
+        "trim3": "47520",
+        "trim4": "43060",
+        "est2025": "215504",
+        "est2026": "220439",
+        "est2027": "225107",
+    }
+
+
+def test_eleven_column_annual_header_keeps_code_total_and_restante_separate():
+    grid = [
+        ["", "Cod indicator", "", "Prevederi anuale",
+         "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE",
+         "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE",
+         "ESTIMARI", "ESTIMARI", "ESTIMARI"],
+        ["DENUMIREA INDICATORILOR",
+         "din care credite TOTAL 2024 bugetare destinate restantelor", "", "",
+         "TRIM I", "TRIM II", "TRIM III", "TRIM IV", "2025", "2026", "2027"],
+        ["Subventii de la bugetul de stat", "42.02", "17.265", "0",
+         "15.824", "485", "485", "471", "2.000", "2.000", "2.000"],
+    ]
+
+    line = _by_code(map_grid(grid, budget_year=2024))["42.02"]
+
+    assert line["values"] == {
+        "total_2024": "17265",
+        "credite_restante": "0",
+        "trim1": "15824",
+        "trim2": "485",
+        "trim3": "485",
+        "trim4": "471",
+        "est2025": "2000",
+        "est2026": "2000",
+        "est2027": "2000",
+    }
+
+
+def test_explicit_header_resets_stale_hierarchy_and_section_marker_uses_stem():
+    context = {
+        "family": "table",
+        "n_cols": 11,
+        "columns": {"0": "name", "1": "code", "2": "total_2024"},
+        "subdocument": "stale parent",
+    }
+    grid = [
+        ["DENUMIREA INDICATORILOR", "Cod indicator", "Prevederi anuale",
+         "Prevederi anuale", "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE",
+         "PREVEDERI TRIMESTRIALE", "PREVEDERI TRIMESTRIALE",
+         "ESTIMARI", "ESTIMARI", "ESTIMARI"],
+        ["", "", "TOTAL 2024", "din care credite restante", "TRIM I", "TRIM II",
+         "TRIM III", "TRIM IV", "2025", "2026", "2027"],
+        ["VENITURILE SECŢIUNII DE FUNCŢIONARE - TOTAL", "", "100", "0",
+         "25", "25", "25", "25", "110", "120", "130"],
+        ["Venituri proprii", "49.90", "80", "0", "20", "20", "20", "20",
+         "90", "100", "110"],
+    ]
+
+    lines, _ = map_grid_with_context(grid, context=context, budget_year=2024)
+
+    assert lines[0]["raw_code"] == "00.01SF"
+    assert lines[0]["section"] == "VENITURILE SECŢIUNII DE FUNCŢIONARE - TOTAL"
+    assert "subdocument" not in lines[1]
+
+
+def test_headerless_continuation_prefers_structured_codes_over_amounts():
+    grid = [
+        ["Parcuri", "67.00.05.03", "6.929", "1.873", "1.844", "1.722",
+         "1.490", "8.000", "8.500", "", "7.260"],
+        *[
+            [f"Indicator {index}", "67.00.20", "2.291", "562", "652", "627",
+             "450X", "X", "", "X", ""]
+            for index in range(1, 8)
+        ],
+    ]
+
+    lines = map_grid(grid, budget_year=2024)
+
+    assert lines[0]["raw_code"] == "67.00.05.03"
+    assert lines[0]["values"] == {
+        "total_2024": "6929",
+        "trim1": "1873",
+        "trim2": "1844",
+        "trim3": "1722",
+        "trim4": "1490",
+        "est2025": "8000",
+        "est2026": "8500",
+        "est2027": "7260",
+    }
+    assert lines[1]["values"]["trim4"] == "450"
+
+
+def test_nine_column_no_code_continuation_streams_collapsed_values():
+    grid = [
+        ["Camera Volna", "", "0 0", "0", "", "", "", "", ""],
+        *[
+            [f"Proiect {index}", "100", "100", "0", "", "", "", "", ""]
+            for index in range(1, 7)
+        ],
+    ]
+
+    lines = map_grid(grid, budget_year=2024)
+
+    assert lines[0]["raw_code"] is None
+    assert lines[0]["values"] == {
+        "total_2024": "0",
+        "trim1": "0",
+        "trim2": "0",
+    }
+    assert lines[1]["values"] == {
+        "total_2024": "100",
+        "trim1": "100",
+        "trim2": "0",
+    }
+
+
+def test_nine_column_coded_table_is_not_treated_as_no_code_continuation():
+    grid = [
+        [f"Indicator {index}", "65.00.20", "276 X", "X", "X", "X", "X", "X", "X"]
+        for index in range(7)
+    ]
+
+    lines = map_grid(grid, budget_year=2024)
+
+    assert all(line["raw_code"] == "65.00.20" for line in lines)
+
+
+def test_collapsed_numeric_and_adjacent_x_keeps_observed_number():
+    grid = [["Școală", "65.00.03.01", "329 X", "X", "X", "X", "X"]] * 7
+
+    line = map_grid(grid, budget_year=2024)[0]
+
+    assert line["values"]["total_2024"] == "329"
+    assert not line.get("cell_issues")
+
+
+def test_table_hierarchy_tracks_institutions_across_continuation_pages():
+    first = [
+        ["Grădinița Amicii", "65.00.03.01", "100", "25", "25", "25", "25"],
+        ["bunuri si servicii", "65.00.20", "80", "20", "20", "20", "20"],
+    ]
+    second = [
+        ["asistenta sociala", "65.00.57", "20", "5", "5", "5", "5"],
+        ["Liceul Danubius", "65.00.04.02", "200", "50", "50", "50", "50"],
+        ["cheltuieli de personal", "65.00.10", "150", "40", "40", "40", "30"],
+    ]
+
+    first_lines, context = map_grid_with_context(first, budget_year=2024)
+    second_lines, _ = map_grid_with_context(
+        second, context=context, budget_year=2024
+    )
+
+    assert first_lines[0]["institution"] == "Grădinița Amicii"
+    assert first_lines[1]["institution"] == "Grădinița Amicii"
+    assert second_lines[0]["institution"] == "Grădinița Amicii"
+    assert second_lines[1]["institution"] == "Liceul Danubius"
+    assert second_lines[2]["institution"] == "Liceul Danubius"
+
+
+def test_table_reads_section_from_header_and_numbered_education_parent():
+    grid = [
+        ["Nr. Denumire indicatori", "BUGET", "din care: Trim I", "", "", ""],
+        ["SECTIUNEA DE FUNCTIONARE", "2024", "", "Trim II", "Trim III", "Trim IV"],
+        ["1Scoala Gimnaziala CAROL I", "150", "65", "50", "15", "20"],
+        ["cheltuieli de personal", "80", "35", "25", "10", "10"],
+    ]
+
+    lines = map_grid(grid, budget_year=2024)
+
+    assert lines[0]["raw_code"] == "1"
+    assert lines[0]["name"] == "Scoala Gimnaziala CAROL I"
+    assert lines[0]["institution"] == "1Scoala Gimnaziala CAROL I"
+    assert lines[0]["section"] == "SECTIUNEA DE FUNCTIONARE"
+    assert lines[1]["institution"] == "1Scoala Gimnaziala CAROL I"
+    assert lines[1]["section"] == "SECTIUNEA DE FUNCTIONARE"
+
+
+def test_table_hierarchy_uses_subdocument_for_non_education_groups():
+    grid = [
+        ["Căminul de bătrâni", "68.00.04", "100", "25", "25", "25", "25"],
+        ["cheltuieli de personal", "", "80", "20", "20", "20", "20"],
+    ]
+
+    lines, _ = map_grid_with_context(grid, budget_year=2024)
+
+    assert lines[1]["subdocument"] == "Căminul de bătrâni"
+
+
+def test_collapsed_two_numbers_expand_to_full_annual_contract():
+    grid = [[
+        "Învățământ particular", "65.00.55", "1.281", "375", "328 328",
+        "250", "1.334", "1.373", "1.409",
+    ]]
+
+    line = map_grid(grid, budget_year=2024)[0]
+
+    assert line["values"] == {
+        "total_2024": "1281",
+        "trim1": "375",
+        "trim2": "328",
+        "trim3": "328",
+        "trim4": "250",
+        "est2025": "1334",
+        "est2026": "1373",
+        "est2027": "1409",
+    }
+
+
+def test_vertical_collapse_fills_missing_same_column_on_previous_row():
+    grid = [
+        ["Indicator A", "84.00.59", "60", "15", "15", "15", "15", "80", "", "80"],
+        ["Indicator B", "84.00.40", "2.800", "900", "900", "500", "500",
+         "2.200", "80 2.200", "2.200"],
+        *[
+            [f"Indicator {index}", "84.00.20", "100", "25", "25", "25", "25",
+             "110", "120", "130"]
+            for index in range(3, 9)
+        ],
+    ]
+
+    lines = map_grid(grid, budget_year=2024)
+
+    assert lines[0]["values"]["est2026"] == "80"
+    assert lines[1]["values"]["est2026"] == "2200"
+
+
+def test_initial_budget_summary_maps_current_total_and_embedded_codes():
+    grid = [
+        ["Nr. crt. Denumire indicator/ordonatori de credite", "Buget initial"],
+        ["SECTIUNEA DE FUNCTIONARE", "2024"],
+        ["I VENITURI total, din care:", "198.165"],
+        ["1.1 venituri din impozite si taxe", "62.000"],
+        ["cheltuieli de personal", "21.000"],
+    ]
+
+    lines, context = map_grid_with_context(grid, budget_year=2024)
+
+    assert lines[0]["raw_code"] == "I"
+    assert lines[0]["name"] == "VENITURI total, din care:"
+    assert lines[0]["section"] == "SECTIUNEA DE FUNCTIONARE"
+    assert lines[0]["values"] == {"total_2024": "198165"}
+    assert lines[1]["raw_code"] == "1.1"
+    assert lines[2]["raw_code"] is None
+    assert lines[2]["subdocument"] == "venituri din impozite si taxe"
+    assert context["family"] == "initial_summary"
+
+
+def test_initial_budget_summary_carries_contract_and_changes_section():
+    header = [
+        ["Nr. crt. Denumire indicator/ordonatori de credite", "Buget initial"],
+        ["SECTIUNEA DE FUNCTIONARE", "2024"],
+        ["II CHELTUIELI total", "196.906"],
+    ]
+    continuation = [
+        ["III. Excedent Sectiunea de functionare(V-CH)", "1.259"],
+        ["I Venituri pentru dezvoltare, total din care:", "31.743"],
+        ["2 Complex ZOO", "218"],
+    ]
+
+    _, context = map_grid_with_context(header, budget_year=2024)
+    lines, context = map_grid_with_context(
+        continuation, context=context, budget_year=2024
+    )
+
+    assert lines[0]["raw_code"] is None
+    assert lines[0]["name"].startswith("III. Excedent")
+    assert lines[1]["raw_code"] == "I"
+    assert lines[1]["section"] == "SECTIUNEA DE DEZVOLTARE"
+    assert lines[2]["raw_code"] == "2"
+    assert lines[2]["values"] == {"total_2024": "218"}
+    assert context["section"] == "SECTIUNEA DE DEZVOLTARE"
+
+
+def test_initial_budget_summary_carries_parent_context_between_pages():
+    first = [
+        ["Nr. crt. Denumire indicator/ordonatori de credite", "Buget initial"],
+        ["SECTIUNEA DE FUNCTIONARE", "2024"],
+        ["8.1 Directia de Asistenta Sociala", "45.075"],
+    ]
+    continuation = [
+        ["salarii asistenti scolari si comunitari", "1.894"],
+        ["bunuri si servicii", "38"],
+    ]
+
+    _, context = map_grid_with_context(first, budget_year=2024)
+    lines, _ = map_grid_with_context(
+        continuation, context=context, budget_year=2024
+    )
+
+    assert [line["subdocument"] for line in lines] == [
+        "Directia de Asistenta Sociala",
+        "Directia de Asistenta Sociala",
+    ]
 
 
 def test_us_locale_and_dotted_codes():

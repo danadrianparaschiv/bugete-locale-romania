@@ -252,6 +252,8 @@ class PredictionFact(BaseModel):
     document: str
     context_id: str | None = None
     institution: str | None = None
+    form: str | None = None
+    subdocument: str | None = None
     budget: str
     page: int
     section: str | None = None
@@ -923,7 +925,9 @@ def prediction_facts(result: ConversionResult) -> list[PredictionFact]:
                 facts.append(PredictionFact(
                     document=document.title,
                     context_id=document.context_id,
-                    institution=document.institution,
+                    institution=line.institution or document.institution,
+                    form=line.form,
+                    subdocument=line.subdocument,
                     budget=document.budget,
                     page=line.page,
                     section=line.section,
@@ -1019,9 +1023,13 @@ def _fact_matches(row: GroundTruthRow, fact: PredictionFact) -> bool:
         return False
     if not _text_match(row.institution, fact.institution):
         return False
-    if not _text_match(row.form, fact.document):
+    if row.form and not (
+        _text_match(row.form, fact.form) or _text_match(row.form, fact.document)
+    ):
         return False
     if row.subdocument and not (
+        _text_match(row.subdocument, fact.subdocument)
+        or
         _text_match(row.subdocument, fact.context_id)
         or _text_match(row.subdocument, fact.document)
     ):

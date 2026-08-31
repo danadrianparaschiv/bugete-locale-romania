@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from collections import Counter
 from dataclasses import dataclass
 from decimal import Decimal
@@ -44,6 +45,13 @@ def _sha256(path: Path) -> str:
 def _canonical(raw: str | None) -> str | None:
     if raw is None or raw.strip().lower() in {"", "null"}:
         return None
+    # RapidOCR sometimes joins the numeric total with an adjacent narrow
+    # applicability-marker column (for example ``250 x``).  The marker is not
+    # part of the number and is excluded from cell ground truth.
+    raw = re.sub(r"(?i)(?:^|\s)x(?:\s|$)", " ", raw).strip()
+    raw = re.sub(r"(?i)x$", "", raw).strip()
+    if not raw:
+        return None
     try:
         parsed = parse_ro_number(raw, ocr=True)
     except NumberParseError:
@@ -55,6 +63,26 @@ def _canonical(raw: str | None) -> str | None:
         return "0"
     text = format(value, "f")
     return text.rstrip("0").rstrip(".") if "." in text else text
+
+
+def _canonical_column(raw: str) -> str:
+    """Normalize printed Romanian headers emitted by a vision provider."""
+    compact = re.sub(r"[^a-z0-9]", "", raw.lower())
+    aliases = {
+        "total2024": "total_2024",
+        "dincarecreditebugetaredestinatestingeriiplatilorrestante": (
+            "credite_restante"
+        ),
+        "trimi": "trim1",
+        "trimii": "trim2",
+        "trimiii": "trim3",
+        "trimiv": "trim4",
+        "2025": "est2025",
+        "2026": "est2026",
+        "2027": "est2027",
+        "est2027consolidated": "est2027",
+    }
+    return aliases.get(compact, raw)
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -72,7 +100,7 @@ def _load_draft_page(path: Path) -> list[dict[str, str]]:
     rows = []
     for row in payload["reading"]["rows"]:
         values = {
-            str(cell["column"]): value
+            _canonical_column(str(cell["column"])): value
             for cell in row.get("cells") or []
             if (value := _canonical(cell.get("value"))) is not None
         }
@@ -208,6 +236,7 @@ def _compare_page(draft: list[dict[str, str]], ocr: list[dict], page: int) -> di
     by_draft = {draft_index: ocr_index for draft_index, ocr_index in alignment}
     totals = Counter()
     discrepancies = []
+    extra_observations = []
     for draft_index, row in enumerate(draft):
         ocr_index = by_draft.get(draft_index)
         observed = ocr[ocr_index]["values"] if ocr_index is not None else {}
@@ -241,6 +270,21 @@ def _compare_page(draft: list[dict[str, str]], ocr: list[dict], page: int) -> di
                     "ocr_box": cell["box"],
                     "kind": "conflict",
                 })
+        if ocr_index is not None:
+            for column, actual in observed.items():
+                if column in row:
+                    continue
+                cell = ocr[ocr_index]["cells"][column]
+                extra_observations.append({
+                    "page": page,
+                    "draft_row": draft_index + 1,
+                    "ocr_row": ocr_index + 1,
+                    "column": column,
+                    "ocr_value": actual,
+                    "ocr_printed": cell["printed"],
+                    "ocr_confidence": cell["confidence"],
+                    "ocr_box": cell["box"],
+                })
     expected = sum(totals.values())
     return {
         "page": page,
@@ -248,9 +292,12 @@ def _compare_page(draft: list[dict[str, str]], ocr: list[dict], page: int) -> di
         "ocr_rows": len(ocr),
         "aligned_rows": len(alignment),
         "expected": expected,
-        **dict(totals),
+        "confirmed": totals["confirmed"],
+        "conflicting": totals["conflicting"],
+        "uncovered": totals["uncovered"],
         "confirmed_pct": round(100 * totals["confirmed"] / expected, 2) if expected else 100.0,
         "discrepancies": discrepancies,
+        "extra_observations": extra_observations,
     }
 
 

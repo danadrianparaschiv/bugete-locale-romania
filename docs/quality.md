@@ -74,8 +74,8 @@ campaniile publică și numărul absolut de celule strict verificate.
 <!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
 Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele 41 de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și 2,213 USD cost API real. A produs 66.341 de linii, dintre care 48.601 strict
-verificate, și 225.660 de celule numerice, dintre care 173.706 strict
+complet și 2,9424 USD cost API real. A produs 66.299 de linii, dintre care 48.783 strict
+verificate, și 228.626 de celule numerice, dintre care 176.956 strict
 verificate. Mediana ratei stricte pe intrare este 81,6%; 13/41 intrări sunt la
 cel puțin 90%, 28/41 la cel puțin 70%, iar 13 rămân sub 70%.
 
@@ -734,6 +734,43 @@ activat nu face parte din pipeline. Discrepanța de pe pagina 5 rămâne marcat�
 pentru al doilea reviewer. Prin urmare, pilotul demonstrează depășirea țintei
 de recall pentru această familie, dar nu încă poarta de 99,5% precizie și nu
 schimbă `recall_measured=false` pentru întregul corpus 2024.
+
+### Pilot exhaustiv Călărași 2024
+
+Al doilea pilot de familie mare clasifică toate cele 87 de pagini ale sursei:
+63 pagini bugetare și 24 de pagini de hotărâre, investiții, achiziții sau
+personal excluse explicit din numitor. Etalonul source-only înghețat conține
+7.748 de celule numerice. Contextul instituție/formular/subdocument și secțiune
+face parte din identitatea faptului, astfel încât repetițiile legitime între
+școli nu mai sunt confundate cu duplicatele reale.
+
+| Candidat Călărași | Celule corecte | Celule emise | Recall | Precizie | Recall pagini bugetare | Cost API conversie cumulat |
+|---|---:|---:|---:|---:|---:|---:|
+| Mapper înaintea pilotului | 5.641 | — | 72,81% | — | — | 0 USD |
+| Mappere deterministe noi | 6.230 | 7.472 | 80,41% | 83,38% | 95,24% | 0 USD |
+| + recuperare LLM acceptată | 6.238 | 7.480 | 80,51% | 83,40% | 95,24% | 0,7294 USD |
+
+Îmbunătățirea deterministă recuperează tabelele inițiale cu două coloane,
+antete anuale cu 11 coloane, continuări fără cod, secțiuni, instituții școlare
+numerotate și valori OCR colapsate vertical. Citirea LLM folosește schema
+coloanelor inferată pe pagină și o îmbinare conservatoare după cod, context și
+denumire normalizată. Pe paginile deja productive, rândurile fără identitate
+sigură nu sunt anexate.
+
+Prima citire LLM a expus o deplasare a totalului anual după trimestre și ar fi
+coborât precizia la 70,56%; candidatul a fost respins. După corectarea ordinii,
+citirea de pagină a adăugat opt celule corecte pe pagina 27. O reparare
+aritmetică separată a adăugat nouă predicții nevalidate pe pagina 60 și a fost,
+de asemenea, respinsă. Bundle-ul public este reluarea din cache fără acea
+reparare. Costul source-only al adnotării a fost aproximativ 7,264 USD, separat
+de costul conversiei; împreună cu cele 0,7294 USD de experimente ale
+converterului, pilotul Călărași a costat aproximativ 7,9934 USD din bugetul de
+evaluare, în timp ce rularea publică rămâne sub plafonul de 3 USD/fișier.
+
+Rezultatul nu trece încă porțile de 90% recall, 99,5% precizie și 98% recall al
+paginilor. Câștigul LLM este prea mic pentru escaladare generală; următoarele
+îmbunătățiri trebuie să fie mappere deterministe pentru paginile 15, 53–54,
+65–68 și 72, nu transcriere integrală mai scumpă.
 
 ## Porți pentru ținta de 90%
 

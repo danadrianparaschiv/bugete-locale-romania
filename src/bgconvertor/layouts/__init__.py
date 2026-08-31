@@ -15,6 +15,7 @@ from . import (
     expense_chapter,
     formular11,
     general_summary,
+    initial_summary,
     institution,
     investment,
     matrix,
@@ -26,6 +27,7 @@ from . import (
 
 MAPPERS = [
     comparative.try_map,
+    initial_summary.try_map,
     annual_total.try_map,
     institution.try_map,
     collapsed.try_map,
@@ -59,7 +61,7 @@ def map_grid_with_context(
     if not grid or not grid[0]:
         return [], context
     for mapper in MAPPERS:
-        if mapper is comparative.try_map:
+        if mapper in (comparative.try_map, initial_summary.try_map):
             lines = mapper(grid, budget_year=budget_year, context=context)
         elif mapper is annual_total.try_map:
             lines = mapper(grid, budget_year=budget_year, context=context)
@@ -74,6 +76,10 @@ def map_grid_with_context(
         if lines is not None:
             if mapper is comparative.try_map:
                 mapped_context = comparative.mapping_context(
+                    grid, budget_year, context=context
+                )
+            elif mapper is initial_summary.try_map:
+                mapped_context = initial_summary.mapping_context(
                     grid, budget_year, context=context
                 )
             elif mapper is annual_total.try_map:

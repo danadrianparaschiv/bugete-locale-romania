@@ -756,55 +756,56 @@
         "status": "converted",
         "workbook": "budget_file.xlsx",
         "analysis": "analysis.json",
-        "at": "2026-08-28T01:29:50+03:00",
+        "at": "2026-08-31T20:46:09+03:00",
         "tool_version": "0.1.0",
         "quality": {
           "schema_version": 3,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 2,
-          "lines": 1066,
-          "lines_strictly_verified": 454,
-          "pct_lines_strictly_verified": 42.6,
-          "numeric_cells": 4571,
-          "numeric_cells_strictly_verified": 2460,
-          "pct_numeric_cells_strictly_verified": 53.8,
-          "annex_lines": 300,
-          "annex_numeric_cells": 428,
+          "lines": 1024,
+          "lines_strictly_verified": 636,
+          "pct_lines_strictly_verified": 62.1,
+          "numeric_cells": 7537,
+          "numeric_cells_strictly_verified": 5710,
+          "pct_numeric_cells_strictly_verified": 75.8,
+          "annex_lines": 98,
+          "annex_numeric_cells": 181,
           "scope": {
             "pages_expected": 87,
             "pages_selected": 87,
             "pages_processed": 87,
             "complete_pdf": true
           },
-          "errors": 678,
-          "warnings": 755,
+          "errors": 320,
+          "warnings": 338,
           "info": 10
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "df144de43330a1230a5c60aa",
+          "bundle_id": "942309d9bd8e6bd73329f771",
           "source_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
           "source_format": "pdf",
           "source_pdf_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "313db8685893b129cfd3a69511b07071894731334d161669b47e872b40b8fb12",
-            "bytes": 252018
+            "sha256": "e799ef1cbf2b14c70ce77f2428e8916c5c7c67d640d0136858162eb55dd1ef06",
+            "bytes": 229138
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "895442b96c782f30c818479aa0bbe932555a1de34f99e1e27723bb8b48f03cff",
-            "bytes": 1340
+            "sha256": "8af4c83cdcaa173cf723a57b7ce6f5912dfa60914de8e176927a9c8091bc5822",
+            "bytes": 1997
           }
         },
-        "lines": 1066,
-        "pct_clean": 42.6,
-        "errors": 678,
-        "warnings": 755,
+        "lines": 1024,
+        "pct_clean": 62.1,
+        "errors": 320,
+        "warnings": 338,
         "llm_cost_usd": 0.0,
         "llm_cost_scope": "current_run_incremental",
-        "llm_lifetime_cost_usd": 0.0
+        "llm_lifetime_cost_usd": 0.7294,
+        "llm_preset": "openai:gpt-5-mini"
       }
     },
     {

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import math
 import os
+import re
 import tempfile
 from pathlib import Path
 
@@ -90,11 +91,16 @@ WARN_FILL = PatternFill("solid", fgColor="FFEB9C")
 SECTION_FONT = Font(bold=True)
 
 DOC_PREFIX = {"local": "BL", "own_revenue": "VP", "general": "BG", "unknown": "DOC"}
+ILLEGAL_XLSX_TEXT = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
 
 
 def _append_values(ws, values) -> None:
     """Append literal values without interpreting PDF text as Excel formulas."""
-    ws.append(values)
+    sanitized = [
+        ILLEGAL_XLSX_TEXT.sub("", value) if isinstance(value, str) else value
+        for value in values
+    ]
+    ws.append(sanitized)
     for cell in ws[ws.max_row]:
         if cell.data_type == "f" and isinstance(cell.value, str):
             cell.data_type = "s"

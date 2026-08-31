@@ -572,6 +572,37 @@ def test_cluj_individual_forms_scope_legitimate_and_real_duplicates(tmp_path, re
     assert duplicates[0].message == "duplicate of p144 with different values"
 
 
+def test_line_context_scopes_legitimate_repeated_codes(registry):
+    from decimal import Decimal
+
+    from bgconvertor.model import BudgetDocument, BudgetLine
+
+    document = BudgetDocument(
+        title="Buget multi-instituție",
+        budget="local",
+        suffix="02",
+        pages=[1],
+        lines=[
+            BudgetLine(
+                raw_code="65.00.20", code="20", func_code="65.02",
+                name="Bunuri", kind="expense_economic", page=1,
+                institution=institution,
+                values={"total_2024": Decimal(value)},
+            )
+            for institution, value in (("Școala A", "100"), ("Școala B", "60"))
+        ],
+    )
+    result = ConversionResult(pdf="doc.pdf", documents=[document])
+
+    validate(result, registry)
+
+    duplicates = [
+        issue for issue in result.all_issues()
+        if issue.check == "V7_hygiene" and "duplicate" in issue.message
+    ]
+    assert duplicates == []
+
+
 def test_collapsed_annual_grid_survives_assembly_and_validation(tmp_path, registry):
     source_path = (
         Path(__file__).parent / "fixtures" / "golden" / "grids" / "ag_p009.json"

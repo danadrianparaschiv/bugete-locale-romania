@@ -870,6 +870,9 @@ def _to_line(
         row_no=raw.get("row_no"),
         page=page,
         section=section,
+        institution=raw.get("institution"),
+        form=raw.get("form"),
+        subdocument=raw.get("subdocument"),
         values=values,
         value_sources={
             column: (raw.get("value_sources") or {}).get(column, source)

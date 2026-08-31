@@ -14,6 +14,9 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 from bgconvertor.config import RunConfig, project_root
 from bgconvertor.llm.client import LLMClient
@@ -22,6 +25,40 @@ from bgconvertor.llm.ledger import Ledger
 from bgconvertor.llm.presets import apply as apply_preset
 from bgconvertor.orchestrator import parse_pages
 from bgconvertor.profilepdf import page_count, render_page
+
+
+class InventoryReading(BaseModel):
+    page_kind: Literal["budget_table", "other_table", "not_relevant", "uncertain"]
+    orientation: Literal[0, 90, 180, 270] = Field(
+        description="Rotirea anti-orară necesară pentru ca pagina să fie dreaptă"
+    )
+    source_unit: Literal["lei", "mii_lei", "unknown"]
+    table_family: str = Field(
+        description="Tip scurt: buget anual, detaliu economic, investiții, HCL etc."
+    )
+    columns: list[str] = Field(
+        description="Coloanele numerice tipărite, în ordine; listă goală dacă nu există"
+    )
+    note: str = ""
+
+
+INVENTORY_PROMPT = """\
+Clasifică această pagină din dosarul bugetar al unei primării românești. Citește
+exclusiv imaginea; nu presupune ce a fost pe alte pagini și nu calcula valori.
+
+page_kind:
+- budget_table: tabel de venituri/cheltuieli cu indicatori bugetari și credite
+  ori prevederi numerice care trebuie convertite în Excel;
+- other_table: investiții, achiziții, personal/salarii, listă de proiecte sau
+  altă anexă tabelară care nu este grila bugetară normalizată;
+- not_relevant: hotărâre/proză, semnături sau pagină fără tabel numeric relevant;
+- uncertain: imaginea nu permite o decizie sigură.
+
+Raportează orientarea anti-orară necesară pentru citire, unitatea exact tipărită,
+familia tabelului și etichetele coloanelor numerice în ordinea tipărită. Pentru
+continuări fără antet, lasă columns gol în loc să inventezi etichete. Acesta este
+doar inventar source-only, nu extracție și nu ground truth.
+"""
 
 
 def _load_project_env() -> None:
@@ -62,8 +99,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--year", type=int, required=True)
     parser.add_argument(
         "--columns",
-        required=True,
         help="Comma-separated semantic numeric columns in printed order.",
+    )
+    parser.add_argument(
+        "--inventory-only",
+        action="store_true",
+        help="Classify page/layout/columns without transcribing numeric rows.",
     )
     parser.add_argument("--pages", help="Page selection, for example 1-10 or 3,7.")
     parser.add_argument(
@@ -86,8 +127,10 @@ def main() -> None:
     source = args.source.resolve()
     if not source.is_file():
         raise SystemExit(f"source PDF not found: {source}")
-    columns = [column.strip() for column in args.columns.split(",") if column.strip()]
-    if not columns:
+    columns = [
+        column.strip() for column in (args.columns or "").split(",") if column.strip()
+    ]
+    if not args.inventory_only and not columns:
         raise SystemExit("at least one semantic column is required")
 
     _load_project_env()
@@ -100,7 +143,7 @@ def main() -> None:
     client = LLMClient(config, ledger, output_dir / "cache")
     selected = parse_pages(args.pages, page_count(source))
     source_hash = _source_sha256(source)
-    prompt = FALLBACK_PROMPT.format(
+    prompt = INVENTORY_PROMPT if args.inventory_only else FALLBACK_PROMPT.format(
         columns=", ".join(f'"{column}"' for column in columns)
     ) + (
         "\nAceasta este o citire independentă pentru ground truth. "
@@ -123,10 +166,11 @@ def main() -> None:
         image = render_page(source, page, scale=args.scale)
         if args.rotation:
             image = image.rotate(args.rotation, expand=True)
+        schema = InventoryReading if args.inventory_only else PageReading
         reading = client.structured(
             "annotation_independent_draft",
             prompt,
-            PageReading,
+            schema,
             model=preset.repair_model,
             image=image,
             page=page,
@@ -134,11 +178,16 @@ def main() -> None:
         )
         _write_json(output, {
             "schema_version": 1,
-            "status": "machine_draft_requires_visual_review",
+            "status": (
+                "source_only_inventory_requires_visual_review"
+                if args.inventory_only
+                else "machine_draft_requires_visual_review"
+            ),
             "source_sha256": source_hash,
             "source_page": page,
             "source_year": args.year,
-            "columns": columns,
+            "columns": reading.columns if args.inventory_only else columns,
+            "mode": "inventory" if args.inventory_only else "transcription",
             "rotation": args.rotation,
             "render_scale": args.scale,
             "model_preset": args.model_preset,
@@ -147,16 +196,23 @@ def main() -> None:
             "reading": reading.model_dump(mode="json"),
         })
         completed += 1
-        numeric = sum(
-            cell.value is not None
-            for row in reading.rows
-            for cell in row.cells
-        )
-        print(
-            f"p{page:04d}: {len(reading.rows)} rows, {numeric} numeric cells; "
-            f"run cost ${ledger.run_cost_usd:.4f}",
-            flush=True,
-        )
+        if args.inventory_only:
+            print(
+                f"p{page:04d}: {reading.page_kind}, {reading.table_family}; "
+                f"run cost ${ledger.run_cost_usd:.4f}",
+                flush=True,
+            )
+        else:
+            numeric = sum(
+                cell.value is not None
+                for row in reading.rows
+                for cell in row.cells
+            )
+            print(
+                f"p{page:04d}: {len(reading.rows)} rows, {numeric} numeric cells; "
+                f"run cost ${ledger.run_cost_usd:.4f}",
+                flush=True,
+            )
     print(
         f"done: {completed} created, {skipped} reused; {ledger.summary()}",
         flush=True,
