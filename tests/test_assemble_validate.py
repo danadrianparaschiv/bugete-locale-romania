@@ -224,6 +224,40 @@ def test_printed_section_heading_scopes_repeated_summary_rows(tmp_path, registry
     ]
 
 
+def test_repeated_summary_repairs_one_cell_only_after_two_columns_agree(tmp_path):
+    store = _mk_store(tmp_path)
+    first = _line(
+        None,
+        "CHELTUIELI TOTAL, din care:",
+        buget_2023="568077",
+        executie_2023="275990.59",
+        total_2024="463579",
+    )
+    second = _line(
+        None,
+        "TOTAL CHELTUIELI footer OCR",
+        executie_2023="275990.59",
+        total_2024="463579",
+    )
+    second["cell_issues"] = [{"column": "buget_2023", "raw": "568.0,7.00"}]
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "layout": "scan_comparative_budget",
+        "lines": [first],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "layout": "digital_detail",
+        "lines": [second],
+    })
+
+    line = assemble(store, [1, 2])[-1].lines[-1]
+
+    assert line.values["buget_2023"] == 568077
+    assert line.value_sources["buget_2023"] == "cross_page_repeat"
+    assert not [issue for issue in line.issues if issue.column == "buget_2023"]
+
+
 def test_mid_page_header_context_starts_at_detail_total(tmp_path, registry):
     store = _mk_store(tmp_path)
     store.put("extract", 1, {

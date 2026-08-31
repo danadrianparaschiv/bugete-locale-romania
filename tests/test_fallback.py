@@ -92,6 +92,22 @@ def test_catastrophic_zero_line_table_is_fallback_eligible():
     })
 
 
+def test_productive_comparative_page_is_not_replaced_by_full_page_fallback():
+    payload = {
+        "layout": "scan_comparative_budget",
+        "n_tables": 1,
+        "n_numeric_cells": 130,
+        "lines": [
+            {"code": "61.02", "values": {"total_2024": "100"}},
+            {"code": "61.02/10", "values": {"total_2024": "90"}},
+            {"code": "61.02/20", "values": {"total_2024": "10"}},
+        ],
+        "mapping_stats": {"cell_issues": 2},
+    }
+
+    assert not needs_fallback(payload)
+
+
 def test_dense_table_is_split_into_bounded_vertical_bands():
     rows = [[index / 100, (index + 0.8) / 100] for index in range(80)]
     bands = fallback_bands({"tables_rows_y": [rows]}, max_rows=32)

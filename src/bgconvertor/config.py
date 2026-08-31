@@ -87,12 +87,11 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    # v48 makes candidate selection lossless (an empty adaptive pass cannot
-    # defeat a productive baseline), recognizes compressed four-quarter
-    # grids, scopes scanned functional/section headers deterministically, and
-    # keeps commitment-credit budget grids out of investment-annex routing.
+    # v52 recognizes comparative BVC/execution/current-budget tables in both
+    # scanned and copier-text sources, and keeps investment-list continuation
+    # pages out of the public budget facts.
     # Only the cheap mapping/extraction stage is invalidated; OCR stays cached.
-    extract_version: str = "48"
+    extract_version: str = "52"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.

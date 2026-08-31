@@ -953,7 +953,51 @@ def _text_match(expected: str | None, actual: str | None) -> bool:
         return True
     from rapidfuzz import fuzz
 
-    return fuzz.partial_ratio(needle, haystack) >= 85
+    if fuzz.partial_ratio(needle, haystack) >= 85:
+        return True
+    expected_tokens = _semantic_tokens(needle)
+    actual_tokens = _semantic_tokens(haystack)
+    return len(expected_tokens) >= 3 and expected_tokens <= actual_tokens
+
+
+_TOKEN_ALIASES = (
+    ("drept", "drepturi"),
+    ("asist", "asistenti"),
+    ("pers", "persoane"),
+    ("hand", "handicap"),
+    ("salari", "salarii"),
+    ("unit", "unitati"),
+    ("ingr", "ingrijire"),
+    ("dom", "domiciliu"),
+    ("chelt", "cheltuieli"),
+    ("mat", "materiale"),
+    ("dir", "directie"),
+    ("indemn", "indemnizatii"),
+    ("insot", "insotitori"),
+)
+_TOKEN_STOP = {"a", "ale", "cu", "de", "din", "in", "la", "si"}
+
+
+def _semantic_tokens(value: str) -> set[str]:
+    """Normalize common printed abbreviations without weakening identity.
+
+    Comparative summaries often omit a code for local explanatory rows and
+    abbreviate labels aggressively. Critical source markers remain distinct:
+    ``BL`` expands to ``buget local`` while ``TVA`` stays ``tva``.
+    """
+    tokens: set[str] = set()
+    for raw in re.findall(r"[a-z0-9]+", value):
+        if raw in _TOKEN_STOP:
+            continue
+        if raw == "bl":
+            tokens.update(("buget", "local"))
+            continue
+        canonical = next(
+            (target for prefix, target in _TOKEN_ALIASES if raw.startswith(prefix)),
+            raw,
+        )
+        tokens.add(canonical)
+    return tokens
 
 
 def _code(value: str | None) -> str:
@@ -967,7 +1011,11 @@ def _fact_matches(row: GroundTruthRow, fact: PredictionFact) -> bool:
         return False
     if row.economic_code and _code(row.economic_code) != _code(fact.economic_code):
         return False
-    if not _text_match(row.name, fact.name):
+    # Exact printed codes are the stable semantic identity. Names are still
+    # required for uncoded rows, but must not turn a correct coded cell into a
+    # miss merely because OCR abbreviated or damaged its descriptive label.
+    has_code_identity = any((row.raw_code, row.functional_code, row.economic_code))
+    if not has_code_identity and not _text_match(row.name, fact.name):
         return False
     if not _text_match(row.institution, fact.institution):
         return False

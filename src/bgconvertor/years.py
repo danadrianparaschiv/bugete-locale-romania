@@ -39,7 +39,7 @@ def infer_budget_year_from_path(path: Path) -> int | None:
     return None
 
 
-def role_for_header(text: str) -> str | None:
+def role_for_header(text: str, budget_year: int | None = None) -> str | None:
     """Return a dynamic year role for one normalized header cell."""
     folded = text.lower()
     if "trim" in folded:
@@ -48,6 +48,13 @@ def role_for_header(text: str) -> str | None:
     if not years:
         return None
     year = years[0]
+    if "exec" in folded:
+        return f"executie_{year}"
+    # Comparative tables print the previous approved budget next to its
+    # execution and the current BVC. A previous-year BVC is historical
+    # context, not the current document total and not a forecast.
+    if "bvc" in folded:
+        return f"total_{year}" if budget_year in (None, year) else f"buget_{year}"
     if "estim" in folded or re.fullmatch(r"\s*(?:19|20)\d{2}\s*", folded):
         return f"est{year}"
     if "initial" in folded:

@@ -678,6 +678,31 @@ Implementarea și fluxul reproductibil sunt documentate în
 metricile publice: `recall_measured` devine adevărat numai după ce scope-ul
 independent este complet și trece auditul.
 
+### Pilot exhaustiv Giurgiu 2024
+
+Primul inventar exhaustiv acoperă toate cele 28 de pagini ale sursei Giurgiu:
+5 pagini bugetare și 23 de pagini de hotărâre/anexe clasificate separat. Pe
+cele 5 pagini bugetare au fost transcrise independent 169 de rânduri și 507
+celule numerice. Față de acest adevăr înghețat, extractorul inițial a regăsit
+21/507 celule (4,14% recall, 4,46% precizie).
+
+Mapperul comparativ nou separă explicit BVC-ul anului precedent, execuția
+anului precedent și BVC-ul curent, propagă contractul coloanelor pe paginile
+de continuare, repară numai despărțirile complet observate și exclude anexele
+de investiții. Rezultatul determinist este 491/507 celule regăsite (96,84%) și
+491/497 celule corecte (98,79%), cu 5/5 pagini bugetare găsite și fără pagini
+false. Paginile 3, 4, 6 și 7 au 100% recall și precizie; pagina 5 rămâne la
+119/135 celule regăsite și 119/125 corecte din cauza unui bloc de rânduri
+colapsate de OCR. Costul API al rezultatului acceptat este 0 USD.
+
+Un experiment LLM izolat, de 0,1282 USD, a citit toate cele 507 celule, dar a
+emis 620 de predicții și a coborât precizia la 81,77%. Candidatul a fost
+respins și păstrat numai local pentru diagnostic; automatizarea care l-ar fi
+activat nu face parte din pipeline. Discrepanța de pe pagina 5 rămâne marcată
+pentru al doilea reviewer. Prin urmare, pilotul demonstrează depășirea țintei
+de recall pentru această familie, dar nu încă poarta de 99,5% precizie și nu
+schimbă `recall_measured=false` pentru întregul corpus 2024.
+
 ## Porți pentru ținta de 90%
 
 - ≥90% `validated_cell_recall` pentru fiecare familie de PDF suportată;

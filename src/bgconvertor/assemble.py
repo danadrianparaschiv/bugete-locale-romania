@@ -609,6 +609,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
     for d in documents:
         _derive_rows_from_formulas(d)
+        _repair_repeated_summary_cells(d)
         if registry is not None:
             _fix_misread_codes(d, registry)
         log.info(
@@ -616,6 +617,60 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             d.title[:40], d.budget, d.pages[0], d.pages[-1], len(d.lines),
         )
     return documents
+
+
+def _summary_identity(line: BudgetLine) -> str | None:
+    folded = re.sub(r"[^a-z0-9]+", " ", line.name.lower())
+    tokens = set(folded.split())
+    if {"total", "cheltuieli"} <= tokens:
+        return "total_cheltuieli"
+    if {"total", "venituri"} <= tokens:
+        return "total_venituri"
+    return None
+
+
+def _repair_repeated_summary_cells(doc: BudgetDocument) -> None:
+    """Recover a damaged repeated total from an independently printed copy.
+
+    Acceptance requires the same summary identity on another page and two
+    already-read columns with identical values. This is deliberately narrower
+    than fuzzy duplicate matching: one coincidental total can never authorize
+    a cell replacement.
+    """
+    grouped: dict[str, list[BudgetLine]] = {}
+    for line in doc.lines:
+        identity = _summary_identity(line)
+        if identity:
+            grouped.setdefault(identity, []).append(line)
+    for lines in grouped.values():
+        for target in lines:
+            broken_columns = {
+                issue.column
+                for issue in target.issues
+                if issue.check == "V7_hygiene" and issue.column
+            }
+            for column in sorted(broken_columns):
+                candidates = []
+                for candidate in lines:
+                    if candidate.page == target.page or column not in candidate.values:
+                        continue
+                    shared = set(target.values) & set(candidate.values) - {column}
+                    exact = sum(
+                        target.values[key] == candidate.values[key]
+                        for key in shared
+                    )
+                    if exact >= 2:
+                        candidates.append(candidate)
+                observed = {candidate.values[column] for candidate in candidates}
+                if len(observed) != 1:
+                    continue
+                target.set_value_with_source(
+                    column, observed.pop(), "cross_page_repeat"
+                )
+                target.issues = [
+                    issue for issue in target.issues
+                    if not (issue.check == "V7_hygiene" and issue.column == column)
+                ]
 
 
 def _derive_rows_from_formulas(doc) -> None:

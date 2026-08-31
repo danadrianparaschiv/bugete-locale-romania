@@ -504,6 +504,8 @@ INVEST_HINT = re.compile(
     r"surse de finantare|denumire.{0,20}obiectiv|neetichetat|nr\.? si data|"
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
     r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv|"
+    r"lista de investitii|dotari independente|cheltuieli de proiectare|"
+    r"denumirea lucrarilor|denumirea luciurilor|\blucrari noi\b|"
     r"n[aeo]mi\w*.{0,20}(?:obiect|ebiact|osiect).{0,30}(?:invest|imvest|invet|irvoet)"
 )
 COMMITMENT_CREDIT_HINT = re.compile(r"credite de angajament")
@@ -545,6 +547,8 @@ def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> 
         return "investment_list"
     if context and context.get("family") == "annual_total":
         return "scan_annual_total"
+    if context and context.get("family") == "comparative_budget":
+        return "scan_comparative_budget"
     # investment objective pages tag rows verde/maro/mixt/neutru
     tags = sum(1 for ln in lines if INVEST_TAG.match(fold(ln.get("name") or "")))
     if tags >= 3:

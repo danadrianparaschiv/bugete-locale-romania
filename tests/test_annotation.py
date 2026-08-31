@@ -411,6 +411,57 @@ def test_page_score_counts_missing_and_extra_cells_one_to_one():
     assert len(score["extras"]) == 1
 
 
+def test_page_score_uses_exact_code_without_requiring_ocr_perfect_name():
+    review = ann.PageReview(
+        page_kind="budget_table",
+        status="frozen",
+        exhaustive=True,
+        source_unit="mii_lei",
+        reviewer="a",
+        rows=[ann.GroundTruthRow(
+            id="r1",
+            raw_code="04.02.01",
+            name="Cote defalcate din impozitul pe venit",
+            values={
+                "total_2024": ann.AnnotationValue(
+                    printed="100", normalized_mii_lei="100"
+                ),
+            },
+        )],
+    )
+    facts = [ann.PredictionFact(
+        document="BUGET LOCAL",
+        budget="local",
+        page=1,
+        kind="revenue",
+        raw_code="04.02.01",
+        name="Cote defalcate Imp.pe Venit, adr. AJFP",
+        column="total_2024",
+        value_mii_lei="100",
+        source="ocr",
+    )]
+
+    score = ann.score_page(review, facts, 1)
+
+    assert score["matched"] == 1
+    assert score["recall_pct"] == 100
+
+
+def test_uncoded_annotation_rows_match_common_budget_abbreviations():
+    assert ann._text_match(
+        "Drepturile asistenților personali cu handicap grav buget local",
+        "drepturile asist. pers. cu hand.grav - BL",
+    )
+    assert ann._text_match(
+        "Salarii unități de îngrijire la domiciliu buget local",
+        "salarii Unitati de Ingr.la Domiciliu a pers.in varsta-BL",
+    )
+    assert not ann._text_match(
+        "Drepturile asistenților personali cu handicap grav TVA",
+        "drepturile asist. pers. cu hand.grav - BL",
+    )
+
+
 def test_annotation_http_policy_requires_loopback_host_and_token():
     handler = object.__new__(AnnotationRequestHandler)
     headers = Message()
