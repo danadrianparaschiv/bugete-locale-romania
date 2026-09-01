@@ -74,10 +74,10 @@ campaniile publică și numărul absolut de celule strict verificate.
 <!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
 Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele 41 de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și 2,9424 USD cost API real. A produs 66.328 de linii, dintre care 48.813 strict
-verificate, și 228.786 de celule numerice, dintre care 177.158 strict
-verificate. Mediana ratei stricte pe intrare este 81,6%; 13/41 intrări sunt la
-cel puțin 90%, 28/41 la cel puțin 70%, iar 13 rămân sub 70%.
+complet și 2,9424 USD cost API real. A produs 67.055 de linii, dintre care 49.911 strict
+verificate, și 234.821 de celule numerice, dintre care 183.337 strict
+verificate. Mediana ratei stricte pe intrare este 82,1%; 13/41 intrări sunt la
+cel puțin 90%, 29/41 la cel puțin 70%, iar 12 rămân sub 70%.
 
 Schema de calitate 3 elimină din numitor anexele și listele de investiții, pe
 care le raportează separat. Recuperarea paginilor anterior omise poate mări
@@ -783,6 +783,45 @@ continuă să ceară un reviewer uman distinct. Prin urmare, 90,10% este un scor
 diagnostic exhaustiv al pilotului, nu o declarație că toate porțile release-ului
 au fost închise. Următorul câștig trebuie să reducă falsele pozitive și să
 rezolve coada de revizie, nu să escaladeze transcrierea integrală mai scumpă.
+
+### Pilot exhaustiv Sibiu 2024
+
+Al treilea pilot acoperă toate cele 98 de pagini bugetare și 10.531 de celule
+numerice. Sursa este un scan landscape regulat cu două formulare: 41 de pagini
+cu total anual, credite restante, patru trimestre și trei estimări, respectiv
+57 de pagini cu program anual, credite restante și patru trimestre. Etalonul
+source-only a fost înghețat numai după ce OCR-ul local, a doua citire independentă
+și review-ul vizual au acoperit 10.531/10.531 celule.
+
+Mapperul public este legat fail-closed de SHA-256-ul sursei auditate. El rulează
+RapidOCR local la coordonatele celor două grile, unește denumirile împărțite pe
+mai multe linii până la următorul cod și propagă subdocumentele tipărite pe
+paginile cu repetiții legitime. `Program 2024` este normalizat la coloana
+canonică `total_2024`. Codurile deteriorate se repară după nomenclator numai
+când denumirea oficială are cel puțin 94% potrivire, o marjă de minimum cinci
+puncte și codul candidat este la cel mult o editare de codul OCR. Pagina 1 este
+fail-closed cu excepția totalului general, verificat vizual la 400 DPI și prin
+identitatea celor patru trimestre; celelalte predicții OCR de pe acea pagină
+nu sunt publicate.
+
+| Candidat Sibiu | Celule corecte | Celule emise | Recall | Precizie | Recall pagini bugetare | Cost API conversie |
+|---|---:|---:|---:|---:|---:|---:|
+| Bundle public înaintea pilotului | — | 4.078 | nemăsurat | nemăsurat | — | 0 USD |
+| Mapper coordonate + nomenclator + fail-closed p.1 | **9.751** | **10.113** | **92,59%** | **96,42%** | **100%** | **0 USD** |
+
+Bundle-ul public rezultat are 2.037 de linii, 8.442 de celule strict validate
+în raportul campaniei și o rată observată strictă de 84,8%, față de 2.263 de
+celule și 48,0% înaintea pilotului. Erorile de validare au scăzut de la 2.171
+la 552. Costul source-only al adnotării a fost 4,3247 USD; este separat de
+conversia publică, care nu face apeluri API și rămâne reproductibilă offline.
+
+Sibiu trece porțile de recall pe celule și pagini, dar nu poarta de 99,5%
+precizie. Cele 780 de celule lipsă și 362 de predicții false, distribuite pe
+86 de pagini, rămân vizibile în raportul diagnostic, iar discrepanțele cer
+formal un al doilea reviewer uman distinct. Scorul este deci o măsurare
+exhaustivă a pilotului și justifică
+publicarea bundle-ului îmbunătățit, nu o declarație că toate porțile release-ului
+au fost închise.
 
 ## Porți pentru ținta de 90%
 

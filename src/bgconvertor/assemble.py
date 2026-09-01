@@ -767,8 +767,92 @@ def _fix_misread_codes(doc, registry) -> None:
     from collections import defaultdict
 
     from rapidfuzz import fuzz
+    from rapidfuzz.distance import Levenshtein
 
     from .validate import _fold
+
+    # First repair rows whose printed name identifies one official code
+    # unambiguously.  This covers insertions/transpositions that cannot be
+    # expressed as lookalike substitutions (for example 37.02.014 instead of
+    # 37.02.04).  The high score and margin gates are deliberately strict;
+    # ambiguous generic names remain untouched and visibly fail validation.
+    rollup_entries = [
+        (item.code, item.name, "heading") for item in registry.rollups
+    ]
+    official_entries = [
+        (item.code, item.name, item.kind)
+        for item in registry.entries
+        if item.kind == "expense_economic"
+        or len(item.code.split(".")) < 2
+        or item.code.split(".")[1] == doc.suffix
+    ]
+    candidates = [*official_entries, *rollup_entries]
+    names_by_code = {code: name for code, name, _kind in candidates}
+    for ln in doc.lines:
+        if ln.source != "coordinate_sibiu" or not ln.values or not ln.name:
+            continue
+        current_entry = names_by_code.get(ln.code or "")
+        current_score = (
+            fuzz.WRatio(_fold(ln.name), _fold(current_entry))
+            if current_entry else 0
+        )
+        if current_score >= 75:
+            continue
+        printed_digits = re.sub(r"\D", "", ln.raw_code or "")
+        if not printed_digits:
+            continue
+        compatible = [
+            candidate
+            for candidate in candidates
+            if (
+                Levenshtein.distance(
+                    candidate[0].replace(".", ""), printed_digits
+                ) <= 1
+                and (
+                    ln.kind == "heading"
+                    or candidate[2] == ln.kind
+                    or (candidate[2] == "heading" and ln.kind != "revenue")
+                )
+            )
+        ]
+        ranked = sorted(
+            (
+                fuzz.WRatio(_fold(ln.name), _fold(name)),
+                code,
+                kind,
+            )
+            for code, name, kind in compatible
+        )
+        if not ranked:
+            continue
+        best_score, best_code, best_kind = ranked[-1]
+        second_score = next(
+            (score for score, code, _kind in reversed(ranked[:-1]) if code != best_code),
+            0,
+        )
+        if (
+            best_code == ln.code
+            or best_score < 94
+            or best_score - second_score < 5
+        ):
+            continue
+        old_code = ln.code
+        ln.code = best_code
+        ln.raw_code = best_code.replace(".", "")
+        if best_kind != "heading":
+            ln.kind = best_kind
+        ln.code_source = "nomenclator_name"
+        ln.issues.append(Issue(
+            check="V1_code",
+            severity="info",
+            page=ln.page,
+            code=best_code,
+            column=None,
+            message=(
+                f"cod OCR corectat după numele oficial: {old_code} -> {best_code} "
+                f"({best_score:.0f}% potrivire, marjă {best_score - second_score:.0f})"
+            ),
+        ))
 
     groups: dict[tuple, list] = defaultdict(list)
     for ln in doc.lines:
@@ -792,8 +876,6 @@ def _fix_misread_codes(doc, registry) -> None:
                 if score >= 85 and (best is None or score > best[0]):
                     best = (score, sib)
             if best:
-                from .model import Issue
-
                 ln.issues.append(Issue(
                     check="V1_code", severity="info", page=ln.page,
                     code=best[1], column=None,

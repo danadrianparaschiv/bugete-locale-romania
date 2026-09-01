@@ -431,6 +431,60 @@ def _run_extraction(
     _stage_banner("Profilare pagini", "detectam care pagini au text nativ vs. scanate")
     reader = PdfReader(pdf)
     run_stage(store, "profile", selected, lambda p: profilepdf.profile_page(reader, p))
+
+    # Sibiu 2024 is visually raster but carries a weak copier OCR layer, so
+    # generic profiling labels it digital.  Its immutable audited source has
+    # a stronger coordinate mapper which must run before the digital/raster
+    # branch.  Failed pages still continue through the ordinary fallbacks.
+    from .extract import coordinate_sibiu
+
+    if coordinate_sibiu.is_source(pdf):
+        from .extract import scanned as scanned_extract
+
+        _stage_banner(
+            "OCR coordonate Sibiu 2024",
+            f"{len(selected)} pagini · mapper determinist auditat",
+        )
+        coordinate_summary = run_stage(
+            store,
+            "coordinate_sibiu",
+            selected,
+            lambda page: coordinate_sibiu.extract_page(
+                pdf,
+                page,
+                budget_year=budget_year,
+            ),
+        )
+        coordinate_pages = sorted(
+            set(coordinate_summary.ok) | set(coordinate_summary.cached)
+        )
+
+        def _select_sibiu(page: int) -> dict:
+            payload = store.get("coordinate_sibiu", page)
+            if payload is None:
+                raise ValueError("lipsește candidatul coordonat Sibiu")
+            for line in payload.get("lines") or []:
+                line["source"] = "coordinate_sibiu"
+            score = scanned_extract.structural_score(payload)
+            payload["candidate_selection"] = {
+                "selected": "coordinate_sibiu",
+                "score": score,
+                "candidates": [{"name": "coordinate_sibiu", "score": score}],
+            }
+            return payload
+
+        if coordinate_pages:
+            run_stage(
+                store,
+                "extract",
+                coordinate_pages,
+                _select_sibiu,
+                force=True,
+            )
+        selected = sorted(set(selected) - set(coordinate_pages))
+        if not selected:
+            return
+
     digital_pages = [
         p for p in selected if (store.get("profile", p) or {}).get("has_text_layer")
     ]

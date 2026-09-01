@@ -13,6 +13,7 @@ from bgconvertor.llm.fallback import (
     merge_page_payloads,
     needs_fallback,
 )
+from bgconvertor.llm.presets import resolve
 
 
 class FakeClient:
@@ -127,6 +128,11 @@ def test_dense_table_is_split_into_bounded_vertical_bands():
     assert [band.row_count for band in bands] == [32, 32, 16]
     assert bands[0].y0 == 0
     assert bands[-1].y1 < 1
+
+
+def test_openai_vision_presets_bound_reasoning_cost():
+    assert resolve("openai:gpt-5-mini").reasoning == "low"
+    assert resolve("openai:gpt-5.1").reasoning == "low"
 
 
 def test_fallback_size_and_benefit_scale_with_missing_numeric_work():

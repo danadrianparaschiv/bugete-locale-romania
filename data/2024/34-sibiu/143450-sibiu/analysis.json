@@ -4,12 +4,12 @@
     "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1310,
-    "lines_strictly_verified": 629,
-    "pct_lines_strictly_verified": 48.0,
-    "numeric_cells": 4078,
-    "numeric_cells_strictly_verified": 2263,
-    "pct_numeric_cells_strictly_verified": 55.5,
+    "lines": 2037,
+    "lines_strictly_verified": 1727,
+    "pct_lines_strictly_verified": 84.8,
+    "numeric_cells": 10113,
+    "numeric_cells_strictly_verified": 8442,
+    "pct_numeric_cells_strictly_verified": 83.5,
     "annex_lines": 0,
     "annex_numeric_cells": 0,
     "scope": {
@@ -18,26 +18,31 @@
       "pages_processed": 98,
       "complete_pdf": true
     },
-    "pct_clean": 48.0,
-    "errors": 2171,
-    "warnings": 431,
-    "info": 0,
+    "pct_clean": 84.8,
+    "errors": 552,
+    "warnings": 142,
+    "info": 25,
     "documents": 12
   },
   "llm_models": [],
   "totals_mii_lei": {
-    "venituri": 380533.76,
+    "venituri": 946044.0,
     "cheltuieli": null
   },
   "top_capitole": [
     {
       "code": "67.02",
-      "name": "CULTURA. RECREERE SI RELIGIE",
+      "name": "CULTURA, RECREERE SI RELIGIE",
       "total": 113343.04
     },
     {
+      "code": "66.10",
+      "name": "SANATATE",
+      "total": 111097.8
+    },
+    {
       "code": "67.10",
-      "name": "CULTURA. RECREERE Sl RELIGIE",
+      "name": "CULTURA, RECREERE SI RELIGIE",
       "total": 86194.0
     },
     {
@@ -51,17 +56,17 @@
       "total": 74725.0
     },
     {
+      "code": "65.02",
+      "name": "INVATAMANT",
+      "total": 63217.0
+    },
+    {
       "code": "70.02",
-      "name": "LOCUJNTE. SERVICII SI DEZVOLT ARE",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
       "total": 41266.0
     },
     {
-      "code": "54.02",
-      "name": "ALT E SERVICII PL~LICE GE .ERALE",
-      "total": 17885.55
-    },
-    {
-      "code": "61.10",
+      "code": "61.02",
       "name": "ORDINE PUBLICA SI SIGURANTA NATIONALA",
       "total": 16150.0
     },
@@ -71,21 +76,16 @@
       "total": 14563.0
     },
     {
-      "code": "65.10",
-      "name": "INVATAMANT",
-      "total": 6294.33
-    },
-    {
-      "code": "55.02",
-      "name": "TRANZACTll PRIVIND DATORIA PUBLICA Sf TMPRUMUTURI",
-      "total": 3738.89
+      "code": "70.10",
+      "name": "LOCUINTE, SERVICII SI DEZVOLTARE",
+      "total": 12164.0
     }
   ],
   "infografic": null,
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "060386443d6f8fe3ce751079",
+    "bundle_id": "7414dafc041da1dbe673460c",
     "source_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
     "source_format": "pdf",
     "source_pdf_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df"

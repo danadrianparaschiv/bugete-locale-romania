@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 from typing import Literal
 
+import numpy as np
 from pydantic import BaseModel, Field
 
 from bgconvertor.config import RunConfig, project_root
@@ -90,6 +91,41 @@ def _write_json(path: Path, payload: dict) -> None:
     temporary.replace(path)
 
 
+def _split_image_bands(image, count: int) -> list[tuple[float, float, object]]:
+    """Split a dense page at low-ink scanlines without using converter output.
+
+    The source image is the only input.  Looking for a nearby whitespace row
+    avoids cutting printed table rows at an arbitrary percentage while keeping
+    every pixel in exactly one band (no overlap and therefore no duplicate
+    facts in the independent draft).
+    """
+    if count <= 1:
+        return [(0.0, 1.0, image)]
+    grayscale = np.asarray(image.convert("L"))
+    height = grayscale.shape[0]
+    # Ignore a narrow left/right margin so page borders and scan shadows do not
+    # dominate the ink score. Vertical grid lines contribute equally to nearby
+    # scanlines; text and horizontal rules make unsafe cuts more expensive.
+    x0, x1 = int(image.width * 0.03), int(image.width * 0.97)
+    ink = np.count_nonzero(grayscale[:, x0:x1] < 205, axis=1)
+    cuts = [0]
+    radius = max(12, int(height * 0.035))
+    for index in range(1, count):
+        target = round(height * index / count)
+        low = max(cuts[-1] + 40, target - radius)
+        high = min(height - 40, target + radius)
+        if low >= high:
+            cut = target
+        else:
+            cut = low + int(np.argmin(ink[low:high]))
+        cuts.append(cut)
+    cuts.append(height)
+    return [
+        (round(y0 / height, 6), round(y1 / height, 6), image.crop((0, y0, image.width, y1)))
+        for y0, y1 in zip(cuts, cuts[1:], strict=False)
+    ]
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Draft independent table readings from source PDF images."
@@ -115,6 +151,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Counter-clockwise image rotation after rendering.",
     )
     parser.add_argument("--scale", type=float, default=2.0)
+    parser.add_argument(
+        "--bands",
+        type=int,
+        default=1,
+        help="Split dense pages into this many source-only horizontal bands.",
+    )
     parser.add_argument("--model-preset", default="google:gemini-3.6-flash")
     parser.add_argument("--max-cost", type=float, default=5.0)
     parser.add_argument("--max-calls", type=int, default=200)
@@ -124,6 +166,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
+    if args.bands < 1 or args.bands > 8:
+        raise SystemExit("--bands must be between 1 and 8")
+    if args.inventory_only and args.bands != 1:
+        raise SystemExit("--bands is available only for transcription")
     source = args.source.resolve()
     if not source.is_file():
         raise SystemExit(f"source PDF not found: {source}")
@@ -166,16 +212,48 @@ def main() -> None:
         image = render_page(source, page, scale=args.scale)
         if args.rotation:
             image = image.rotate(args.rotation, expand=True)
-        schema = InventoryReading if args.inventory_only else PageReading
-        reading = client.structured(
-            "annotation_independent_draft",
-            prompt,
-            schema,
-            model=preset.repair_model,
-            image=image,
-            page=page,
-            max_tokens=args.max_tokens,
-        )
+        band_metadata = []
+        if args.inventory_only:
+            reading = client.structured(
+                "annotation_independent_draft",
+                prompt,
+                InventoryReading,
+                model=preset.repair_model,
+                image=image,
+                page=page,
+                max_tokens=args.max_tokens,
+            )
+        else:
+            rows = []
+            notes = []
+            bands = _split_image_bands(image, args.bands)
+            for band_index, (y0, y1, band_image) in enumerate(bands, start=1):
+                band_prompt = prompt
+                if len(bands) > 1:
+                    band_prompt += (
+                        f"\nImaginea este banda verticală {band_index}/{len(bands)} "
+                        "a paginii. Transcrie numai rândurile complet vizibile; "
+                        "nu inventa rânduri tăiate la marginea imaginii.\n"
+                    )
+                band_reading = client.structured(
+                    "annotation_independent_draft",
+                    band_prompt,
+                    PageReading,
+                    model=preset.repair_model,
+                    image=band_image,
+                    page=page,
+                    max_tokens=args.max_tokens,
+                )
+                rows.extend(band_reading.rows)
+                if band_reading.note:
+                    notes.append(f"band {band_index}: {band_reading.note}")
+                band_metadata.append({
+                    "index": band_index,
+                    "y0": y0,
+                    "y1": y1,
+                    "rows": len(band_reading.rows),
+                })
+            reading = PageReading(rows=rows, note="; ".join(notes))
         _write_json(output, {
             "schema_version": 1,
             "status": (
@@ -190,6 +268,7 @@ def main() -> None:
             "mode": "inventory" if args.inventory_only else "transcription",
             "rotation": args.rotation,
             "render_scale": args.scale,
+            "bands": band_metadata,
             "model_preset": args.model_preset,
             "model": preset.repair_model,
             "generated_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),

@@ -47,7 +47,7 @@
     "baseline_targets_below_70": 10,
     "billable_api_calls": 438,
     "cross_year_candidates": 792,
-    "final_targets_below_70": 8,
+    "final_targets_below_70": 7,
     "pilot_files": 3,
     "pilot_strict_numeric_cell_gain": 1515,
     "remaining_experiment_budget_usd": 17.787
@@ -448,28 +448,28 @@
         "strict_lines": 616,
         "strict_numeric_cells": 2138
       },
-      "bundle_id": "060386443d6f8fe3ce751079",
+      "bundle_id": "7414dafc041da1dbe673460c",
       "change": {
-        "line_rate_points": -9.6,
-        "lines": 241,
-        "numeric_cell_rate_points": -9.3,
-        "numeric_cells": 780,
-        "strict_lines": 13,
-        "strict_numeric_cells": 125
+        "line_rate_points": 27.2,
+        "lines": 968,
+        "numeric_cell_rate_points": 18.7,
+        "numeric_cells": 6815,
+        "strict_lines": 1111,
+        "strict_numeric_cells": 6304
       },
       "county_code": "34",
       "final": {
         "annex_lines": 0,
         "annex_numeric_cells": 0,
-        "errors": 2171,
-        "line_rate_pct": 48.0,
-        "lines": 1310,
-        "numeric_cell_rate_pct": 55.5,
-        "numeric_cells": 4078,
+        "errors": 552,
+        "line_rate_pct": 84.8,
+        "lines": 2037,
+        "numeric_cell_rate_pct": 83.5,
+        "numeric_cells": 10113,
         "quality_schema_version": 3,
-        "strict_lines": 629,
-        "strict_numeric_cells": 2263,
-        "warnings": 431
+        "strict_lines": 1727,
+        "strict_numeric_cells": 8442,
+        "warnings": 142
       },
       "issue_family": "recovered_rows_expand_observed_denominator",
       "municipality": "Sibiu",

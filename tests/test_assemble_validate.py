@@ -7,12 +7,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from bgconvertor.assemble import assemble
+from bgconvertor.assemble import _fix_misread_codes, assemble
 from bgconvertor.config import RunConfig
 from bgconvertor.export import _sheet_columns
 from bgconvertor.export import export as export_xlsx
 from bgconvertor.extract.scanned import map_payload
-from bgconvertor.model import ConversionResult
+from bgconvertor.model import BudgetDocument, BudgetLine, ConversionResult
 from bgconvertor.nomenclator import load_registry
 from bgconvertor.runstore import RunStore
 from bgconvertor.validate import revalidate, validate
@@ -82,6 +82,31 @@ def test_assemble_documents_sections_regions(tmp_path):
                      "expense_functional", "expense_economic"]
     # section carried across pages
     assert doc.lines[-1].section == "TOTAL"
+
+
+def test_name_driven_code_repair_requires_an_unambiguous_official_match(registry):
+    document = BudgetDocument(
+        title="BUGETUL LOCAL",
+        budget="local",
+        suffix="02",
+        pages=[1],
+        lines=[BudgetLine(
+            raw_code="3702014",
+            code="37.02.01.04",
+            name="Varsaminte din sectiunea de functionare",
+            kind="revenue",
+            page=1,
+            source="coordinate_sibiu",
+            values={"total_2024": 100},
+        )],
+    )
+
+    _fix_misread_codes(document, registry)
+
+    line = document.lines[0]
+    assert line.code == "37.02.04"
+    assert line.raw_code == "370204"
+    assert line.code_source == "nomenclator_name"
 
 
 def test_assemble_carries_leading_detail_hierarchy_across_page_break(tmp_path):
