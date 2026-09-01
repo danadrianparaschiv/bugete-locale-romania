@@ -74,8 +74,8 @@ campaniile publică și numărul absolut de celule strict verificate.
 <!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
 Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele 41 de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și 2,213 USD cost API real. A produs 66.341 de linii, dintre care 48.601 strict
-verificate, și 225.660 de celule numerice, dintre care 173.706 strict
+complet și 2,9424 USD cost API real. A produs 66.328 de linii, dintre care 48.813 strict
+verificate, și 228.786 de celule numerice, dintre care 177.158 strict
 verificate. Mediana ratei stricte pe intrare este 81,6%; 13/41 intrări sunt la
 cel puțin 90%, 28/41 la cel puțin 70%, iar 13 rămân sub 70%.
 
@@ -100,6 +100,38 @@ Auditul final `corpus audit data --strict --require-modern` trece pentru
 inconsistente. Achiziția și rezultatele detaliate sunt documentate în
 [`data/2024/README.md`](../data/2024/README.md).
 <!-- END GENERATED:2024_QUALITY_METRICS -->
+
+### Option E — pilotul exhaustiv Buzău
+
+Etalonul source-only pentru PDF-ul Buzău 2024 inventariază toate cele 46 de
+pagini bugetare și 8.236 de celule numerice. Citirea combinată a fost
+confruntată cu anexele oficiale de funcționare/dezvoltare, două randări OCR
+locale pe coordonate și review vizual pentru cele 43 de celule reziduale.
+Acesta este primul rezultat complete-file măsurat pentru layout-ul anual
+InfoSoft Buzău; nu este extrapolat la celelalte intrări 2024.
+
+| Candidat Buzău | Celule corecte | Celule emise | Recall | Precizie | Recall pagini bugetare | Cost API conversie |
+|---|---:|---:|---:|---:|---:|---:|
+| Mapper anterior | 2.734 | 3.284 | 33,20% | 83,25% | 97,83% | 0 USD |
+| Mapper determinist InfoSoft | 7.852 | 8.234 | 95,34% | 95,36% | 100% | 0 USD |
+| + reparare țintită Gemini | 7.858 | 8.204 | 95,41% | 95,78% | 100% | 0,4379 USD |
+
+Mapperul folosește OCR local la coordonate fixe numai după o poartă de sursă
+specifică (`buget local detaliat` + `Buzău`), păstrează continuările fără antet
+și recunoaște trimestrele II–IV. Prima construire a cache-ului de coordonate a
+durat aproximativ 2,5 minute; reluările sunt gratuite și cache-uite.
+
+Repararea LLM a adăugat numai șase celule corecte și a eliminat 30 de predicții
+greșite. Câștigul de 0,07 puncte procentuale recall pentru 0,4379 USD nu
+justifică o escaladare suplimentară pe acest fișier. Costul total al evidence-ului
+de adnotare (drafturi vision și probe) plus conversia pilot a fost aproximativ
+4,30 USD din bugetul experimental separat de 20 USD; costul public per conversie
+rămâne sub plafonul de 3 USD al pilotului.
+
+Cele 42 de pagini cu diferențe față de converter rămân marcate pentru o a doua
+revizie independentă înainte ca etalonul să poată deveni release gate public.
+Scorul de mai sus este diagnostic pe adevărul exhaustiv înghețat, nu o afirmație
+că întregul corpus 2024 este deja măsurat.
 
 ## Bundle public atomic și auditabil
 
@@ -656,6 +688,101 @@ după verificarea absenței erorilor de formule în workbook.
 Aceste procente sunt rate observate de validare, nu o măsurare directă a
 recall-ului față de un adevăr de referință complet; de aceea
 `recall_measured=false` rămâne neschimbat.
+
+## Option E — etalon independent pe fișier și familie
+
+Următoarea fază nu mai deduce recall-ul din liniile deja extrase. Comenzile
+`bgconvertor annotate` inventariază fiecare pagină PDF și foaie Excel, apoi
+cer transcriere exhaustivă independentă înainte să afișeze output-ul
+converterului. În ediția 2024, inventarul are 4.170 de pagini PDF plus patru
+foi Excel native, iar cele 13 intrări sub 70% sunt prioritizate automat ca
+benchmark-uri complete.
+
+Ground truth păstrează valoarea tipărită, valoarea normalizată în `mii lei`,
+codurile funcțional/economic și contextul instituție/formular/subdocument.
+Matching-ul este unu-la-unu; o valoare greșită produce atât un fals negativ,
+cât și un fals pozitiv. Citirile incerte și discrepanțele cer un al doilea
+reviewer. PDF-urile, randările și drafturile rămân în `runs/`, iar exportul
+public refuză implicit un inventar incomplet.
+
+Implementarea și fluxul reproductibil sunt documentate în
+[`docs/adnotare.md`](adnotare.md). Existența instrumentului nu schimbă încă
+metricile publice: `recall_measured` devine adevărat numai după ce scope-ul
+independent este complet și trece auditul.
+
+### Pilot exhaustiv Giurgiu 2024
+
+Primul inventar exhaustiv acoperă toate cele 28 de pagini ale sursei Giurgiu:
+5 pagini bugetare și 23 de pagini de hotărâre/anexe clasificate separat. Pe
+cele 5 pagini bugetare au fost transcrise independent 169 de rânduri și 507
+celule numerice. Față de acest adevăr înghețat, extractorul inițial a regăsit
+21/507 celule (4,14% recall, 4,46% precizie).
+
+Mapperul comparativ nou separă explicit BVC-ul anului precedent, execuția
+anului precedent și BVC-ul curent, propagă contractul coloanelor pe paginile
+de continuare, repară numai despărțirile complet observate și exclude anexele
+de investiții. Rezultatul determinist este 491/507 celule regăsite (96,84%) și
+491/497 celule corecte (98,79%), cu 5/5 pagini bugetare găsite și fără pagini
+false. Paginile 3, 4, 6 și 7 au 100% recall și precizie; pagina 5 rămâne la
+119/135 celule regăsite și 119/125 corecte din cauza unui bloc de rânduri
+colapsate de OCR. Costul API al rezultatului acceptat este 0 USD.
+
+Un experiment LLM izolat, de 0,1282 USD, a citit toate cele 507 celule, dar a
+emis 620 de predicții și a coborât precizia la 81,77%. Candidatul a fost
+respins și păstrat numai local pentru diagnostic; automatizarea care l-ar fi
+activat nu face parte din pipeline. Discrepanța de pe pagina 5 rămâne marcată
+pentru al doilea reviewer. Prin urmare, pilotul demonstrează depășirea țintei
+de recall pentru această familie, dar nu încă poarta de 99,5% precizie și nu
+schimbă `recall_measured=false` pentru întregul corpus 2024.
+
+### Pilot exhaustiv Călărași 2024
+
+Al doilea pilot de familie mare clasifică toate cele 87 de pagini ale sursei:
+63 pagini bugetare și 24 de pagini de hotărâre, investiții, achiziții sau
+personal excluse explicit din numitor. Etalonul source-only înghețat conține
+7.748 de celule numerice. Contextul instituție/formular/subdocument și secțiune
+face parte din identitatea faptului, astfel încât repetițiile legitime între
+școli nu mai sunt confundate cu duplicatele reale.
+
+| Candidat Călărași | Celule corecte | Celule emise | Recall | Precizie | Recall pagini bugetare | Cost API conversie cumulat |
+|---|---:|---:|---:|---:|---:|---:|
+| Mapper înaintea pilotului | 5.641 | — | 72,81% | — | — | 0 USD |
+| Mappere deterministe noi | 6.230 | 7.472 | 80,41% | 83,38% | 95,24% | 0 USD |
+| + recuperare LLM acceptată | 6.238 | 7.480 | 80,51% | 83,40% | 95,24% | 0,7294 USD |
+| + orientare continuă, ierarhii și fingerprinturi auditate | 6.981 | 7.640 | **90,10%** | **91,37%** | **100%** | 0 USD/rulare |
+
+Îmbunătățirea deterministă recuperează tabelele inițiale cu două coloane,
+antete anuale cu 11 coloane, continuări fără cod, secțiuni, instituții școlare
+numerotate, orientarea coerentă a blocurilor landscape, rânduri și coloane
+transpuse de Docling, contexte instituție/subdocument și valori OCR colapsate
+vertical. Fingerprinturile source-specific sunt fail-closed: corecția paginii
+70 se activează numai când toate cele patru rânduri brute auditate coincid.
+Citirea LLM folosește schema
+coloanelor inferată pe pagină și o îmbinare conservatoare după cod, context și
+denumire normalizată. Pe paginile deja productive, rândurile fără identitate
+sigură nu sunt anexate.
+
+Prima citire LLM a expus o deplasare a totalului anual după trimestre și ar fi
+coborât precizia la 70,56%; candidatul a fost respins. După corectarea ordinii,
+citirea de pagină a adăugat opt celule corecte pe pagina 27. O reparare
+aritmetică separată a adăugat nouă predicții nevalidate pe pagina 60 și a fost,
+de asemenea, respinsă. Bundle-ul public este reluarea din cache fără acea
+reparare. După completarea mapperelor deterministe, o reluare cu directorul
+`llm_extract` scos din circuit a produs același scor final; candidatul public nu
+mai depinde de un câștig LLM. Rularea de publicare a făcut zero apeluri noi,
+iar 0,7294 USD rămâne costul istoric al celor 77 de apeluri experimentale.
+Costul source-only al adnotării a fost aproximativ 7,264 USD, separat
+de costul conversiei; împreună cu cele 0,7294 USD de experimente ale
+converterului, pilotul Călărași a costat aproximativ 7,9934 USD din bugetul de
+evaluare, în timp ce rularea publică rămâne sub plafonul de 3 USD/fișier.
+
+Rezultatul trece porțile de 90% recall și 98% page recall, dar nu încă poarta
+de 99,5% precizie. Toate cele 87 de pagini sunt înghețate source-only, însă
+discrepanțele rămase nu sunt marcate formal ca revizuite a doua oară: auditul
+continuă să ceară un reviewer uman distinct. Prin urmare, 90,10% este un scor
+diagnostic exhaustiv al pilotului, nu o declarație că toate porțile release-ului
+au fost închise. Următorul câștig trebuie să reducă falsele pozitive și să
+rezolve coada de revizie, nu să escaladeze transcrierea integrală mai scumpă.
 
 ## Porți pentru ținta de 90%
 

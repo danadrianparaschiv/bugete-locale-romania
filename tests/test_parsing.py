@@ -129,6 +129,7 @@ class TestUSFormatOCR:
         assert parse_ro_number("G9.720.000", ocr=True) == Decimal("69720000")
         assert parse_ro_number("1O5.000", ocr=True) == Decimal("105000")
         assert parse_ro_number("69,600.000", ocr=True) == Decimal("69600000")
+        assert parse_ro_number("-23.69p,oo", ocr=True) == Decimal("-23690.00")
 
     @pytest.mark.parametrize(
         "raw, expected",

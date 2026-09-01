@@ -53,6 +53,36 @@ class AdaptiveOrient:
         self.streak = 0
         self.count = 0
         self.zero_scores: list[float] = []
+        self.last_nonzero_rotation: int | None = None
+        self.upright_since_rotation = 0
+
+    def _remember(self, result: dict) -> dict:
+        """Prefer the established page-block orientation only on close scores."""
+        result = dict(result)
+        rotation = int(result["rotation"])
+        scores = result.get("scores") or {}
+        if not rotation and self.last_nonzero_rotation is not None:
+            upright = float(scores.get("0", 0.0))
+            prior = float(scores.get(str(self.last_nonzero_rotation), 0.0))
+            if upright and prior >= upright * 1.15:
+                rotation = self.last_nonzero_rotation
+                result["rotation"] = rotation
+                result["continuity_override"] = True
+        elif rotation and self.last_nonzero_rotation not in (None, rotation):
+            winner = float(scores.get(str(rotation), 0.0))
+            prior = float(scores.get(str(self.last_nonzero_rotation), 0.0))
+            if winner and prior >= winner * 0.85:
+                rotation = self.last_nonzero_rotation
+                result["rotation"] = rotation
+                result["continuity_override"] = True
+        if rotation:
+            self.last_nonzero_rotation = rotation
+            self.upright_since_rotation = 0
+        else:
+            self.upright_since_rotation += 1
+            if self.upright_since_rotation >= 3:
+                self.last_nonzero_rotation = None
+        return result
 
     def detect(self, image) -> dict:
         import numpy as np
@@ -64,12 +94,12 @@ class AdaptiveOrient:
             typical = sorted(self.zero_scores)[len(self.zero_scores) // 2]
             if score >= 0.5 * typical:
                 self.zero_scores.append(score)
-                return {
+                return self._remember({
                     "rotation": 0,
                     "sample_text": text[:3000],
                     "scores": {"0": round(score, 1)},
                     "quick": True,
-                }
+                })
             log.info("quick orient score dropped (%.0f < %.0f/2) — full check", score, typical)
 
         r = detect(image)
@@ -78,7 +108,7 @@ class AdaptiveOrient:
             self.zero_scores.append(float(r["scores"]["0"]))
         else:
             self.streak = 0
-        return r
+        return self._remember(r)
 
 
 def detect(image) -> dict:

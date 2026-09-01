@@ -14,14 +14,15 @@
   "entries_below_70": 13,
   "full_chart_blocks": 11,
   "generated_on": "2026-08-27",
-  "lines": 66341,
-  "llm_cost_usd": 2.213,
+  "lines": 66328,
+  "llm_cost_usd": 2.9424,
   "llm_current_run_cost_usd": 0.0,
   "median_strict_line_rate": 81.6,
   "municipal_pages": 40,
   "native_excel_sources": 3,
-  "numeric_cells": 225660,
+  "numeric_cells": 228786,
   "pages_expected": 4174,
+  "pdf_pages_expected": 4170,
   "pdf_sources": 38,
   "plan_comparison_eligible": 27,
   "quality_campaign": {
@@ -35,14 +36,15 @@
     "pilot_strict_numeric_cell_gain": 1515,
     "remaining_experiment_budget_usd": 17.787
   },
-  "schema_version": 1,
-  "strict_lines": 48601,
-  "strict_numeric_cells": 173706,
+  "schema_version": 2,
+  "strict_lines": 48813,
+  "strict_numeric_cells": 177158,
   "trusted_plan_analyses": 40,
   "unavailable_entries": 1,
   "unavailable_municipalities": [
     "Drobeta-Turnu Severin"
   ],
   "verified_sources": 41,
+  "workbook_sheets_expected": 4,
   "year": 2024
 }

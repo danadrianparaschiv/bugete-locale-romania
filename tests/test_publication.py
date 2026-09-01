@@ -256,3 +256,19 @@ def test_pdf_text_starting_with_equals_is_exported_as_literal_text(tmp_path):
     assert wb["BL Date"]["C2"].value == "===== SECTIUNEA TOTAL ====="
     assert wb["BL Date"]["C2"].data_type == "s"
     wb.close()
+
+
+def test_control_characters_are_removed_at_excel_boundary(tmp_path):
+    result = _result()
+    result.documents[0].lines.insert(0, BudgetLine(
+        code=None,
+        name="Gala\x01 Firmelor Călărășene\x03",
+        kind="heading",
+        page=1,
+    ))
+    workbook = tmp_path / "safe.xlsx"
+    export_workbook(result, workbook)
+
+    wb = load_workbook(workbook, data_only=False, read_only=True)
+    assert wb["BL Date"]["C2"].value == "Gala Firmelor Călărășene"
+    wb.close()

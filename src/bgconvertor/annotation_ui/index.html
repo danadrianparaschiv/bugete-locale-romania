@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Etalon bugetar - annotare independentă</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">bgconvertor / Option E</p>
+      <h1>Etalon bugetar independent</h1>
+    </div>
+    <div class="progress-card" aria-live="polite">
+      <span id="progress-label">Se încarcă inventarul...</span>
+      <div class="progress-track"><span id="progress-bar"></span></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <label class="search-label" for="document-search">Municipalitate</label>
+      <input id="document-search" type="search" placeholder="Caută..." autocomplete="off">
+      <div class="filter-row">
+        <button class="filter active" data-filter="all">Toate</button>
+        <button class="filter" data-filter="full">Sub 70%</button>
+        <button class="filter" data-filter="unfinished">De revizuit</button>
+      </div>
+      <nav id="document-list" aria-label="Documente 2024"></nav>
+    </aside>
+
+    <main class="workspace">
+      <section class="document-header">
+        <div>
+          <p id="document-meta" class="eyebrow">-</p>
+          <h2 id="document-title">Selectează un document</h2>
+        </div>
+        <div class="document-controls">
+          <label for="benchmark-scope">Scope benchmark</label>
+          <select id="benchmark-scope">
+            <option value="inventory">Inventar pagini</option>
+            <option value="full">Fișier exhaustiv</option>
+            <option value="sample">Eșantion de familie</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="page-toolbar">
+        <button id="previous-page" class="quiet">← Anterior</button>
+        <label for="page-number">Unitate sursă</label>
+        <input id="page-number" type="number" min="1" value="1">
+        <span id="page-total">/ -</span>
+        <button id="next-page" class="quiet">Următor →</button>
+        <button id="next-unreviewed" class="quiet accent">Următoarea nerevizuită</button>
+        <span id="save-state" class="save-state">-</span>
+      </section>
+
+      <div class="split">
+        <section class="source-panel panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Citirea 1 - sursa oficială</p>
+              <h3 id="source-title">Previzualizare</h3>
+            </div>
+            <div class="zoom-controls">
+              <button id="zoom-out" class="quiet" aria-label="Micșorează">−</button>
+              <span id="zoom-label">100%</span>
+              <button id="zoom-in" class="quiet" aria-label="Mărește">+</button>
+            </div>
+          </div>
+          <div id="source-view" class="source-view">
+            <p class="empty">Alege un document.</p>
+          </div>
+          <div id="sheet-pagination" class="sheet-pagination hidden">
+            <button id="sheet-previous" class="quiet">Rândurile anterioare</button>
+            <span id="sheet-range"></span>
+            <button id="sheet-next" class="quiet">Rândurile următoare</button>
+          </div>
+        </section>
+
+        <section class="editor-panel panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Adevăr de referință</p>
+              <h3>Clasificare și transcriere</h3>
+            </div>
+            <span id="review-badge" class="badge">nerevizuit</span>
+          </div>
+
+          <div id="error-box" class="error-box hidden" role="alert"></div>
+
+          <div class="form-grid classification-grid">
+            <label>Tipul unității
+              <select id="page-kind">
+                <option value="unreviewed">Nerevizuită</option>
+                <option value="budget_table">Tabel bugetar</option>
+                <option value="other_table">Alt tabel / anexă</option>
+                <option value="not_relevant">Fără date bugetare</option>
+                <option value="uncertain">Nesigur</option>
+              </select>
+            </label>
+            <label>Unitatea tipărită
+              <select id="source-unit">
+                <option value="unknown">De confirmat</option>
+                <option value="mii_lei">mii lei</option>
+                <option value="lei">lei</option>
+              </select>
+            </label>
+            <label>Notația numerelor
+              <select id="number-notation">
+                <option value="romanian">Română: 1.234,56</option>
+                <option value="canonical">Excel: 1234.56</option>
+              </select>
+            </label>
+            <label>Alias annotator
+              <input id="reviewer" type="text" placeholder="ex. dan-p">
+            </label>
+          </div>
+
+          <div id="machine-suggestion" class="machine-suggestion hidden"></div>
+
+          <details class="context-card">
+            <summary>Context implicit pentru rânduri repetate</summary>
+            <div class="form-grid">
+              <label>Instituție<input id="default-institution" type="text"></label>
+              <label>Formular<input id="default-form" type="text"></label>
+              <label>Subdocument<input id="default-subdocument" type="text"></label>
+              <label>Secțiune<input id="default-section" type="text" placeholder="TOTAL / FUNCTIONARE / DEZVOLTARE"></label>
+            </div>
+          </details>
+
+          <div id="truth-editor">
+            <div class="editor-actions">
+              <label class="grow">Coloane numerice
+                <input id="numeric-columns" type="text" placeholder="total_2024, trim1, trim2, trim3, trim4">
+              </label>
+              <button id="apply-columns" class="quiet">Aplică</button>
+              <button id="paste-tsv" class="quiet">Lipește tabel TSV</button>
+              <button id="add-row" class="quiet accent">+ Rând</button>
+            </div>
+            <div class="table-wrap">
+              <table id="truth-table">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <label class="check-row">
+              <input id="no-numeric-cells" type="checkbox">
+              Pagina este bugetară, dar nu tipărește celule numerice
+            </label>
+            <label class="check-row">
+              <input id="exhaustive" type="checkbox">
+              Am inventariat fiecare celulă numerică bugetară din această unitate
+            </label>
+          </div>
+
+          <label class="note-label">Notă de audit
+            <textarea id="review-note" rows="2" placeholder="Zone ilizibile, ștampile, reguli de scope..."></textarea>
+          </label>
+
+          <div class="primary-actions">
+            <button id="save-draft" class="secondary">Salvează</button>
+            <button id="freeze-truth" class="primary">Îngheață adevărul</button>
+            <button id="unfreeze-truth" class="danger hidden">Deblochează pentru corecție</button>
+          </div>
+
+          <section id="comparison-panel" class="comparison hidden">
+            <p class="eyebrow">Citirea 2 - comparație deblocată</p>
+            <h3>Rezultatul converterului</h3>
+            <div id="comparison-metrics" class="metric-row"></div>
+            <details open><summary>Celule lipsă</summary><div id="comparison-misses"></div></details>
+            <details><summary>Celule suplimentare</summary><div id="comparison-extras"></div></details>
+            <div class="second-review">
+              <label>Alias reviewer 2<input id="second-reviewer" type="text" placeholder="alt contributor"></label>
+              <button id="complete-second-review" class="secondary">Confirmă revizia a doua</button>
+              <span id="second-review-status"></span>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="paste-dialog">
+    <form method="dialog">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">Import rapid</p><h3>Lipește date separate prin tab</h3></div>
+        <button value="cancel" class="quiet">Închide</button>
+      </div>
+      <p>Primul rând trebuie să conțină antetele. Identități acceptate: raw_code, functional_code, economic_code, name, institution, form, subdocument, section, fact_kind. Restul devin coloane numerice.</p>
+      <textarea id="tsv-input" rows="14" placeholder="raw_code&#9;name&#9;total_2024&#9;trim1&#10;000102&#9;TOTAL VENITURI&#9;100.000,00&#9;25.000,00"></textarea>
+      <div id="paste-error" class="error-box hidden"></div>
+      <div class="dialog-actions">
+        <button value="cancel" class="secondary">Renunță</button>
+        <button id="import-tsv" value="default" class="primary">Importă</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -84,6 +84,20 @@ Distribuția istorică raportată pe 2026 (înaintea auditului de bundle):
 
 Lecții concrete:
 
+- **Un fallback LLM trebuie evaluat la nivel de celulă, nu după numărul de
+  rânduri.** În pilotul Călărași, o ordine greșită a coloanelor dinamice a
+  deplasat totalul anual după trimestre, iar potrivirea numai după cod a dublat
+  rândurile fără cod. Etalonul exhaustiv a făcut regresia vizibilă imediat:
+  recall-ul creștea marginal, dar precizia cobora la 70,56%. Ordinea semantică
+  este acum total anual → trimestre → prognoze, iar îmbinarea folosește cod,
+  context și denumire normalizată și refuză rândurile fără identitate sigură pe
+  pagini deja productive.
+- **Acceptarea trebuie să fie selectivă și reproductibilă.** Citirea corectată
+  a recuperat opt celule validate pe pagina 27; o reparație aritmetică a adăugat
+  nouă predicții nevalidate pe pagina 60. Bundle-ul public a fost reconstruit
+  din același cache cu reparațiile țintite dezactivate, păstrând doar câștigul
+  măsurat și fără cost suplimentar.
+
 - **Grădina zoologică a furnizorilor e nesfârșită**: formate numerice
   românești și americane, marcaje „X" în zeci de variante OCR, coduri
   combinate capitol+economic, tabele transpuse, matrice de buget
@@ -231,9 +245,9 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
   versionate.
 <!-- BEGIN GENERATED:2024_LESSONS_METRICS -->
 - **Achiziția completă nu înseamnă automat calitate uniformă.** Conversia
-  deterministă a tuturor celor 41 de intrări disponibile a produs 66.341 de
+  deterministă a tuturor celor 41 de intrări disponibile a produs 66.328 de
   linii, iar recuperarea P2 selectivă a adăugat 1.515 celule strict
-  verificate pentru 2,213 USD. Mediana ratei stricte observate este 81,6% și 13
+  verificate pentru 2,9424 USD. Mediana ratei stricte observate este 81,6% și 13
   intrări rămân sub 70%. Schema 3 separă anexele și investițiile, iar procentul
   rămâne consistență pe ieșirea extrasă, nu recall complet; numărul absolut de
   celule și fixture-urile exhaustive trebuie citite împreună cu el.
@@ -282,8 +296,8 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
 <!-- BEGIN GENERATED:2024_LESSONS_FOOTER -->
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
 actualizare: 28 august 2026, după campania de calitate a ediției 2024:
-41/42 intrări convertite, 40 de pagini municipale de analiză, 66.341 de linii,
-2,213 USD cost API real și o singură sursă indisponibilă declarată. Auditul public trece
+41/42 intrări convertite, 40 de pagini municipale de analiză, 66.328 de linii,
+2,9424 USD cost API real și o singură sursă indisponibilă declarată. Auditul public trece
 pentru toate cele 110 conversii existente din 2024–2026, fără neconcordanțe de
 bundle; rezultatele detaliate și limitele metricilor sunt în
 [`data/2024/README.md`](../data/2024/README.md).*

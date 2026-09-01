@@ -73,7 +73,7 @@ def collect_metrics() -> dict:
 
     coverage = analytics["coverage"]["2024"]
     metrics = {
-        "schema_version": 1,
+        "schema_version": 2,
         "year": 2024,
         "generated_on": verification["generated_on"],
         "entries": len(entries),
@@ -90,6 +90,14 @@ def collect_metrics() -> dict:
         "pages_expected": sum(
             int(quality.get("scope", {}).get("pages_expected") or 0)
             for quality in qualities
+        ),
+        "pdf_pages_expected": sum(
+            int(city.entry["conversion"]["quality"].get("scope", {}).get("pages_expected") or 0)
+            for city in converted if city.source_format == "pdf"
+        ),
+        "workbook_sheets_expected": sum(
+            int(city.entry["conversion"]["quality"].get("scope", {}).get("pages_expected") or 0)
+            for city in converted if city.source_format in {"xls", "xlsx"}
         ),
         "lines": sum(int(quality["lines"]) for quality in qualities),
         "strict_lines": sum(
@@ -144,8 +152,9 @@ intrare fără document publicabil.
 | Intrări în manifest | {metrics['entries']} |
 | Surse oficiale verificate și convertite | {metrics['verified_sources']} |
 | PDF / Excel nativ | {metrics['pdf_sources']} / {metrics['native_excel_sources']} |
-| Scope-uri de pagină procesate complet | {metrics['complete_scopes']}/{metrics['converted_entries']} |
-| Pagini PDF din scope-urile manifestului | {_integer(metrics['pages_expected'])} |
+| Scope-uri sursă procesate complet | {metrics['complete_scopes']}/{metrics['converted_entries']} |
+| Unități sursă inventariabile | {_integer(metrics['pages_expected'])} |
+| Pagini PDF / foi Excel native | {_integer(metrics['pdf_pages_expected'])} / {_integer(metrics['workbook_sheets_expected'])} |
 | Linii extrase / strict verificate | {_integer(metrics['lines'])} / {_integer(metrics['strict_lines'])} |
 | Celule numerice / strict verificate | {_integer(metrics['numeric_cells'])} / {_integer(metrics['strict_numeric_cells'])} |
 | Mediana `observed_strict_line_rate` | {_decimal(metrics['median_strict_line_rate'])}% |

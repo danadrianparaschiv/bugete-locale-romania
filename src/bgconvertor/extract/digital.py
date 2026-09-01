@@ -28,9 +28,9 @@ ROW_TOL = 1.6  # y tolerance for clustering words into a visual row
 MIN_LINE_GAP = 4.0  # vertical rules closer than this are one border
 
 HEADER_ROLES = [
-    (re.compile(r"\bcod\b"), "code"),
+    (re.compile(r"\bcod(?:ul|\s*ind(?:icator)?)?\b"), "code"),
     (re.compile(r"denumirea|denumire"), "name"),
-    (re.compile(r"\brand\b"), "rowno"),
+    (re.compile(r"\brand\b|\bnr\.?\b|\bcrt\b"), "rowno"),
     (re.compile(r"trim\.?\s*(i|1|l)$|trim\.?\s*(i|1|l)\b(?!i|v|l)"), "trim1"),
     (re.compile(r"trim\.?\s*(ii|11)\b(?!i)"), "trim2"),
     (re.compile(r"trim\.?\s*(iii|ill|lll)"), "trim3"),
@@ -38,7 +38,9 @@ HEADER_ROLES = [
     (re.compile(r"credite|din care"), "credite_stinse"),
     (re.compile(r"\btotal\b"), "total"),
 ]
-HEADER_ANCHOR = re.compile(r"\bcod\b")  # the row that anchors the header band
+HEADER_ANCHOR = re.compile(
+    r"\bcod(?:ul|\s*ind(?:icator)?)?\b"
+)  # the row that anchors the header band
 
 
 def _fold(s: str) -> str:
@@ -49,7 +51,10 @@ def _fold(s: str) -> str:
 def extract_page(plumber_page, budget_year: int | None = None) -> dict:
     boundaries = _column_boundaries(plumber_page)
     words = plumber_page.extract_words(keep_blank_chars=False)
-    columns, header_top, header_bottom = _header_columns(words, boundaries)
+    columns, header_top, header_bottom = _header_columns(
+        words, boundaries, budget_year=budget_year
+    )
+    comparative = any(role.startswith("executie_") for role in columns.values())
     if "name" not in columns.values() or "code" not in columns.values():
         raise ValueError(
             "no recognizable grid header (need Cod + Denumire columns) — "
@@ -112,14 +117,14 @@ def extract_page(plumber_page, budget_year: int | None = None) -> dict:
                 and lines[-1]["raw_code"] is None and lines[-1]["name"]):
             # Craiova-style inverse wrap: the NAME row (with values) prints
             # above, the code row below is otherwise empty — reunite them
-            code, func_code = _normalize(raw_code)
+            code, func_code = _normalize(raw_code, comparative=comparative)
             prev = lines[-1]
             prev["raw_code"], prev["code"], prev["func_code"] = raw_code, code, func_code
             if rand is not None:
                 prev["row_no"] = rand
             continue
 
-        code, func_code = _normalize(raw_code)
+        code, func_code = _normalize(raw_code, comparative=comparative)
         line = {
             "raw_code": raw_code,
             "code": code,
@@ -157,7 +162,11 @@ def _column_boundaries(page) -> list[float]:
     return deduped
 
 
-def _header_columns(words, xs: list[float]) -> tuple[dict[int, str], float, float]:
+def _header_columns(
+    words,
+    xs: list[float],
+    budget_year: int | None = None,
+) -> tuple[dict[int, str], float, float]:
     """Column roles from the header band; returns (roles, band_top, band_bottom)."""
     anchor_tops = [
         w["top"] for w in words
@@ -179,7 +188,7 @@ def _header_columns(words, xs: list[float]) -> tuple[dict[int, str], float, floa
         ))
         if not cell:
             continue
-        dynamic_role = role_for_header(cell)
+        dynamic_role = role_for_header(cell, budget_year=budget_year)
         if dynamic_role and dynamic_role not in columns.values():
             columns[i] = dynamic_role
             continue
@@ -187,6 +196,17 @@ def _header_columns(words, xs: list[float]) -> tuple[dict[int, str], float, floa
             if pattern.search(cell) and role not in columns.values():
                 columns[i] = role
                 break
+    if any(role.startswith("executie_") for role in columns.values()):
+        # Compact comparative tables have a one-line header plus a printed
+        # 0/1/2/3/4/5 index. The generic 65-point band would swallow the first
+        # multi-line data row, so end the header immediately after that index.
+        index_words = [
+            word for word in words
+            if anchor <= word["top"] <= anchor + 30
+            and re.fullmatch(r"[0-9]", word["text"].strip())
+        ]
+        if index_words:
+            band_bottom = max(word["bottom"] for word in index_words) + 1
     return columns, band_top, band_bottom
 
 
@@ -233,13 +253,18 @@ def _parse_values(cells) -> tuple[dict, list]:
     issues: list[dict] = []
     dynamic_roles = sorted(
         role for role in cells
-        if re.fullmatch(r"(?:total|buget)_\d{4}|est\d{4}", role)
+        if re.fullmatch(r"(?:total|buget|executie)_\d{4}|est\d{4}", role)
     )
     for role in (*NUMERIC_ROLES, *dynamic_roles):
         group = cells.get(role, [])
         raw = "".join(w["text"] for w in group)
         if not raw:
             continue
+        # Some copier text layers retain the thousands separator and cents
+        # but lose only the decimal comma: ``14.508 80``. Joining words turns
+        # that into ``14.50880``; restore the only valid Romanian placement.
+        if re.fullmatch(r"-?\d{1,3}(?:\.\d{3})+\d{2}", raw):
+            raw = f"{raw[:-2]},{raw[-2:]}"
         try:
             parsed = parse_ro_number(raw)
         except NumberParseError:
@@ -251,7 +276,15 @@ def _parse_values(cells) -> tuple[dict, list]:
     return values, issues
 
 
-def _normalize(raw_code: str | None) -> tuple[str | None, str | None]:
+def _normalize(
+    raw_code: str | None,
+    *,
+    comparative: bool = False,
+) -> tuple[str | None, str | None]:
+    if comparative:
+        from ..layouts.comparative import classification_codes
+
+        return classification_codes(raw_code)
     from ..parsing import split_combined_code
 
     return split_combined_code(raw_code, aggressive=True)

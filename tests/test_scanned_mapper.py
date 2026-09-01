@@ -329,3 +329,120 @@ def test_cluj_consolidated_summary_maps_all_seven_value_columns():
         "transferuri": "7",
         "total_general": "120",
     }
+
+
+def test_comparative_budget_maps_historical_budget_execution_and_current_bvc():
+    grid = [
+        ["COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["0", "1", "2", "3", "4"],
+        ["", "VENITURI TOTAL", "544.387,00", "280.562,92", "435.336,00"],
+        ["", "Veniturile sectiunii de functionare", "181.526,71", "167.646,09", "185.182,55"],
+        ["00.01.02", "TOTAL VENITURI", "100,00", "90,00", "110,00"],
+    ]
+
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+
+    assert payload["layout"] == "scan_comparative_budget"
+    assert len(payload["lines"]) == 3
+    assert payload["lines"][0]["section"] == "TOTAL"
+    assert payload["lines"][1]["section"] == "FUNCTIONARE"
+    assert payload["lines"][2]["values"] == {
+        "buget_2023": "100.00",
+        "executie_2023": "90.00",
+        "total_2024": "110.00",
+    }
+
+
+def test_comparative_budget_preserves_functional_and_economic_classification():
+    grid = [
+        ["COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["65.02", "INVATAMANT", "100", "90", "110"],
+        ["65.02/20", "Cheltuieli materiale", "25", "20", "30"],
+        ["65.02.03.01", "Invatamant prescolar", "10", "9", "11"],
+    ]
+
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+
+    assert payload["lines"][0]["code"] == "65.02"
+    assert payload["lines"][0]["func_code"] is None
+    assert payload["lines"][1]["code"] == "20"
+    assert payload["lines"][1]["func_code"] == "65.02"
+    assert payload["lines"][2]["code"] == "65.02.03.01"
+    assert payload["lines"][2]["func_code"] is None
+
+
+def test_comparative_budget_propagates_columns_across_continuation_grid():
+    first = map_payload({"tables_raw": [[
+        ["COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["00.01.02", "TOTAL VENITURI", "100", "90", "110"],
+    ]]}, budget_year=2024)
+    continuation = map_payload({"tables_raw": [[
+        ["04.02", "Impozit pe venit", "25", "20", "30"],
+    ]]}, budget_year=2024, context=first["mapping_context"])
+
+    assert continuation["layout"] == "scan_comparative_budget"
+    assert continuation["lines"][0]["values"] == {
+        "buget_2023": "25",
+        "executie_2023": "20",
+        "total_2024": "30",
+    }
+
+
+def test_comparative_budget_splits_fully_observed_collapsed_rows():
+    grid = [
+        ["NR.", "COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["6", "61.02/85 65.02", "Plati recuperate INVATAMANT",
+         "0,00 55.575,83", "0,00 30.208,89", "0,00 40.564,32"],
+    ]
+
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+
+    assert [line["raw_code"] for line in payload["lines"]] == ["61.02/85", "65.02"]
+    assert payload["lines"][0]["values"]["buget_2023"] == "0.00"
+    assert payload["lines"][1]["values"] == {
+        "buget_2023": "55575.83",
+        "executie_2023": "30208.89",
+        "total_2024": "40564.32",
+    }
+    assert payload["lines"][1]["row_no"] == 6
+
+
+def test_comparative_budget_reunites_anonymous_values_with_two_collapsed_codes():
+    grid = [
+        ["NR.", "COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["", "", "", "0,07", "0,07", "0,00"],
+        ["", "65.02/59.01 65.02/59.11", "Burse BL Alte transferuri BL",
+         "0,00", "0,00", "0,00"],
+    ]
+
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+
+    assert [line["raw_code"] for line in payload["lines"]] == [
+        "65.02/59.01", "65.02/59.11",
+    ]
+    assert payload["lines"][0]["values"]["buget_2023"] == "0.07"
+    assert payload["lines"][1]["values"]["buget_2023"] == "0.00"
+
+
+def test_comparative_budget_repairs_native_missing_decimal_comma():
+    grid = [
+        ["NR.", "COD IND.", "DENUMIRE INDICATORI", "BVC 2023", "EXEC.2023", "BVC 2024"],
+        ["10", "74.02", "PROTECTIA MEDIULUI", "14.508 80", "1.737 51", "17.424 15"],
+    ]
+
+    payload = map_payload({"tables_raw": [grid]}, budget_year=2024)
+
+    assert payload["lines"][0]["values"] == {
+        "buget_2023": "14508.80",
+        "executie_2023": "1737.51",
+        "total_2024": "17424.15",
+    }
+
+
+def test_investment_work_continuations_are_not_budget_facts():
+    payload = map_payload({"tables_raw": [[
+        ["NR. CRT.", "DENUMIREA LUCIURILOR", "Valoare propunere", "Valoare totala lei"],
+        ["9", "Trotuare strada 1 Decembrie", "6.000", "6.000"],
+    ]]}, budget_year=2024)
+
+    assert payload["layout"] == "investment_list"

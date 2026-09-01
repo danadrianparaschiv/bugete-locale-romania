@@ -79,6 +79,11 @@ uv run bgconvertor report <pdf>
 uv run bgconvertor inspect <pdf> <pagina>
 uv run bgconvertor eval
 
+# inventar independent pentru măsurarea recall-ului complet
+uv run bgconvertor annotate init 2024
+uv run bgconvertor annotate serve 2024
+uv run bgconvertor annotate audit 2024
+
 # un set de date normalizat pentru toate fișierele convertite
 uv run bgconvertor corpus export corpus.csv
 uv run bgconvertor corpus report
@@ -151,7 +156,8 @@ rândurile/celulele omise și nu trebuie citit ca recall al conversiei. Ținta d
 produs este ≥90% `validated_cell_recall` pentru fiecare familie suportată,
 după construirea unor etaloane exhaustive. Definițiile, porțile și auditul
 baseline sunt în [docs/quality.md](docs/quality.md); limitările de utilizare,
-în [DISCLAIMER.md](DISCLAIMER.md).
+în [DISCLAIMER.md](DISCLAIMER.md). Fluxul offline de inventariere și ground
+truth este descris în [docs/adnotare.md](docs/adnotare.md).
 
 Poarta P1 acoperă acum toate cele zece familii numerice reprezentate în suita
 golden: 1.398/1.398 celule regăsite și corecte în scope-urile exhaustive.
@@ -186,9 +192,9 @@ administrative publice; atribuirea este păstrată și în [NOTICE](NOTICE).
 
 <!-- BEGIN GENERATED:2024_ROOT_METRICS -->
 Ediția 2024 este procesată cap-coadă pentru toate cele 41 de intrări cu sursă
-oficială disponibilă: 66.341 de linii extrase, mediană strictă observată de
+oficială disponibilă: 66.328 de linii extrase, mediană strictă observată de
 81,6%, 40 de pagini municipale de analiză, 27 de municipiu-ani eligibili
-pentru comparația planului și 2,213 USD cost API real pentru cele trei
+pentru comparația planului și 2,9424 USD cost API real pentru cele trei
 recuperări P2 acceptate. Drobeta-Turnu Severin este
 singura lipsă declarată. Aceste cifre măsoară ieșirea și consistența ei, nu
 recall exhaustiv; tabelul auditat și limitele sunt în README-ul ediției.

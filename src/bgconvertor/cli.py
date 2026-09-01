@@ -25,6 +25,12 @@ from .runstore import RunStore
 app = typer.Typer(no_args_is_help=True, pretty_exceptions_show_locals=False)
 nom_app = typer.Typer(no_args_is_help=True)
 app.add_typer(nom_app, name="nomenclator", help="Gestionează registrul de coduri din Ordinul 1954/2005")
+annotate_app = typer.Typer(no_args_is_help=True)
+app.add_typer(
+    annotate_app,
+    name="annotate",
+    help="Inventar local și ground truth independent pentru măsurarea recall-ului",
+)
 
 console = Console()
 _state: dict = {}
@@ -60,6 +66,160 @@ def main(
 
 def _config() -> RunConfig:
     return _state["config"]
+
+
+def _annotation_workspace(year: int, workspace: Path | None) -> Path:
+    from .annotation import default_workspace
+
+    return workspace or default_workspace(_config(), year)
+
+
+@annotate_app.command("init")
+def annotate_init(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    data_root: Path = typer.Option(Path("data"), "--data-root", exists=True, file_okay=False),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+    refresh: bool = typer.Option(False, "--refresh", help="Actualizează sugestiile fără a pierde review-urile"),
+):
+    """Construiește inventarul offline din manifest, surse și cache-ul converterului."""
+    from .annotation import initialize_workspace, workspace_summary
+
+    target = _annotation_workspace(year, workspace)
+    result = initialize_workspace(
+        year=year,
+        data_root=data_root.resolve(),
+        workspace_path=target,
+        config=_config(),
+        refresh=refresh,
+    )
+    summary = workspace_summary(target)
+    full = sum(doc.benchmark_scope == "full" for doc in result.documents)
+    console.print(
+        f"[bold green]✓ inventar {year}[/bold green] · "
+        f"{len(result.documents)} surse · {summary['source_units']} unități · "
+        f"{full} fișiere exhaustive prioritare"
+    )
+    console.print(f"[dim]workspace local ignorat de Git: {target}[/dim]")
+
+
+@annotate_app.command("status")
+def annotate_status(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+):
+    """Afișează progresul inventarului și al transcrierilor înghețate."""
+    from .annotation import workspace_summary
+
+    target = _annotation_workspace(year, workspace)
+    summary = workspace_summary(target)
+    table = Table(title=f"annotare independentă {year}")
+    table.add_column("municipiu")
+    table.add_column("scope")
+    table.add_column("strict observat", justify="right")
+    table.add_column("clasificate", justify="right")
+    table.add_column("înghețate", justify="right")
+    for document in summary["documents"]:
+        table.add_row(
+            document["municipality"],
+            document["benchmark_scope"],
+            "-" if document["observed_strict_line_rate"] is None else f"{document['observed_strict_line_rate']}%",
+            f"{document['classified']}/{document['source_units']}",
+            str(document["frozen"]),
+        )
+    console.print(table)
+
+
+@annotate_app.command("serve")
+def annotate_serve(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+    port: int = typer.Option(8765, min=0, max=65535),
+    open_browser: bool = typer.Option(True, "--open/--no-open"),
+):
+    """Pornește interfața locală; nu expune sursele sau drafturile în rețea."""
+    from .annotation_server import serve
+
+    target = _annotation_workspace(year, workspace)
+    console.print("[bold]Interfața de annotare ascultă numai pe 127.0.0.1[/bold]")
+    try:
+        serve(target, port=port, open_browser=open_browser)
+    except KeyboardInterrupt:
+        console.print("\n[dim]server oprit; toate review-urile salvate rămân în workspace[/dim]")
+
+
+@annotate_app.command("audit")
+def annotate_audit(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+    json_out: Path | None = typer.Option(None, "--json-out", dir_okay=False),
+):
+    """Verifică exhaustivitatea, incertitudinile și review-urile lipsă."""
+    from .annotation import audit_workspace
+
+    target = _annotation_workspace(year, workspace)
+    report = audit_workspace(target)
+    if json_out:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    console.print(
+        f"{report['totals'].get('source_units', 0)} unități · "
+        f"{len(report['problems'])} probleme · "
+        f"inventar complet: {report['complete_page_inventory']} · "
+        f"recall măsurabil: {report['recall_measurement_ready']}"
+    )
+    if report["problems"]:
+        for problem in report["problems"][:20]:
+            console.print(f"[yellow]{problem}[/yellow]")
+        if len(report["problems"]) > 20:
+            console.print(f"[dim]... încă {len(report['problems']) - 20} probleme[/dim]")
+        raise typer.Exit(1)
+
+
+@annotate_app.command("score")
+def annotate_score(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+):
+    """Calculează recall/precizie numai pentru unitățile exhaustive înghețate."""
+    from .annotation import score_workspace
+
+    target = _annotation_workspace(year, workspace)
+    report = score_workspace(target)
+    def pct(value: float | None) -> str:
+        return "nemăsurat" if value is None else f"{value}%"
+
+    recall_label = (
+        "recall celule"
+        if report["recall_measured"]
+        else "diagnostic parțial celule"
+    )
+    console.print(
+        f"[bold]{recall_label}: {pct(report['recall_pct'])}[/bold] · "
+        f"precizie: {pct(report['precision_pct'])} · "
+        f"recall pagini bugetare: {pct(report['budget_page_recall_pct'])} · "
+        f"scope complet: {report['annotation_scope_complete']}"
+    )
+    console.print(f"[dim]raport: {target / 'score.json'}[/dim]")
+
+
+@annotate_app.command("export")
+def annotate_export(
+    year: int = typer.Argument(..., min=2000, max=2100),
+    out: Path = typer.Option(..., "--out", file_okay=False),
+    workspace: Path | None = typer.Option(None, "--workspace", file_okay=False),
+    allow_incomplete: bool = typer.Option(False, "--allow-incomplete"),
+):
+    """Exportă numai adevărul structurat; niciodată PDF-uri, randări sau sugestii."""
+    from .annotation import export_ground_truth
+
+    target = _annotation_workspace(year, workspace)
+    manifest = export_ground_truth(
+        target, out, require_complete=not allow_incomplete
+    )
+    console.print(
+        f"[bold green]✓ benchmark exportat[/bold green] · "
+        f"{len(manifest['documents'])} documente · {out}"
+    )
 
 
 @app.command()
@@ -427,6 +587,28 @@ def _run_extraction(
                 ),
             )
 
+        from .extract import coordinate_annual
+
+        coordinate_pages = [
+            page for page in scanned_pages
+            if coordinate_annual.is_candidate(store.get("ocr", page) or {})
+        ]
+        if coordinate_pages:
+            _stage_banner(
+                "OCR coordonate Buzău/InfoSoft",
+                f"{len(coordinate_pages)} pagini · candidat determinist cache-uit",
+            )
+            run_stage(
+                store,
+                "coordinate_ocr",
+                coordinate_pages,
+                lambda page: coordinate_annual.extract_page(
+                    pdf,
+                    page,
+                    budget_year=budget_year,
+                ),
+            )
+
         _stage_banner("Mapare tabele", "structura OCR -> linii bugetare (rapid)")
         first_page = min(scanned_pages)
         previous = store.get("extract", first_page - 1) if first_page > 1 else None
@@ -470,6 +652,9 @@ def _run_extraction(
                         context=mapping_state["context"],
                     ),
                 ))
+            coordinate = store.get("coordinate_ocr", page)
+            if coordinate is not None:
+                candidates.append(("coordinate_ocr", coordinate))
             payload = scanned.choose_best_payload(candidates)
             _advance_mapping(page, payload)
             return payload
@@ -1208,6 +1393,11 @@ def convert(
             raise typer.Exit(1) from None
     else:
         export_mod.export(result, out_path)
+
+    # This must happen only after a successful export/publication.  Targeted
+    # repairs live in the assembled ConversionResult, not in page-stage cache,
+    # and the independent recall scorer must evaluate the exact emitted result.
+    store.put_final_candidate(result)
 
     stats = result.stats()
     console.print(f"\n[bold green]✓ scris {out_path}[/bold green]")

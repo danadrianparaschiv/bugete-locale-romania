@@ -51,6 +51,11 @@ _FUNCTIONAL_HEADER_RE = re.compile(
     re.IGNORECASE,
 )
 _HEADER_CODE_RE = re.compile(r"\b[0-9SOGB]{4,8}\b", re.IGNORECASE)
+_CONTINUATION_DETAIL_RE = re.compile(
+    r"^[-=• ]*(?:cheltuieli|bunuri si servicii|asistenta sociala|"
+    r"sume aferente|salari\w*|dobanzi|rambursare|plata\b|titlul\b)",
+    re.IGNORECASE,
+)
 
 
 def _norm_title(title: str) -> str:
@@ -248,6 +253,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
     section: str | None = None
     region = "heading"  # heading | revenue | expense
     cap_context: str | None = None  # current functional capitol (e.g. "65.02")
+    hierarchy_carry: tuple[str | None, str | None] = (None, None)
 
     for page in pages:
         payload = _pick_payload(store, page)
@@ -303,6 +309,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 )
                 documents.append(doc)
                 section, region, cap_context = None, "heading", None
+                hierarchy_carry = (None, None)
         if doc is None:
             if not payload.get("lines"):
                 continue  # prose pages (HCL) before any budget document
@@ -335,8 +342,29 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             cap_context = header_context
             region = "expense"
 
+        at_page_start = True
         for source_raw in payload["lines"]:
             raw = dict(source_raw)
+            name = raw.get("name") or ""
+            if (
+                at_page_start
+                and not raw.get("institution")
+                and not raw.get("subdocument")
+                and _CONTINUATION_DETAIL_RE.match(name)
+            ):
+                carried_institution, carried_subdocument = hierarchy_carry
+                if carried_institution:
+                    raw["institution"] = carried_institution
+                if carried_subdocument:
+                    raw["subdocument"] = carried_subdocument
+            elif name.strip():
+                at_page_start = False
+            if raw.get("institution") or raw.get("subdocument"):
+                hierarchy_carry = (
+                    raw.get("institution"), raw.get("subdocument")
+                )
+            elif re.fullmatch(r"\d{2}[./ ]0{2}", raw.get("raw_code") or ""):
+                hierarchy_carry = (None, None)
             if raw.get("section"):
                 canon = SECTION_CANON.get(raw["section"], raw["section"])
                 if canon != section:
@@ -609,6 +637,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
 
     for d in documents:
         _derive_rows_from_formulas(d)
+        _repair_repeated_summary_cells(d)
         if registry is not None:
             _fix_misread_codes(d, registry)
         log.info(
@@ -616,6 +645,60 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             d.title[:40], d.budget, d.pages[0], d.pages[-1], len(d.lines),
         )
     return documents
+
+
+def _summary_identity(line: BudgetLine) -> str | None:
+    folded = re.sub(r"[^a-z0-9]+", " ", line.name.lower())
+    tokens = set(folded.split())
+    if {"total", "cheltuieli"} <= tokens:
+        return "total_cheltuieli"
+    if {"total", "venituri"} <= tokens:
+        return "total_venituri"
+    return None
+
+
+def _repair_repeated_summary_cells(doc: BudgetDocument) -> None:
+    """Recover a damaged repeated total from an independently printed copy.
+
+    Acceptance requires the same summary identity on another page and two
+    already-read columns with identical values. This is deliberately narrower
+    than fuzzy duplicate matching: one coincidental total can never authorize
+    a cell replacement.
+    """
+    grouped: dict[str, list[BudgetLine]] = {}
+    for line in doc.lines:
+        identity = _summary_identity(line)
+        if identity:
+            grouped.setdefault(identity, []).append(line)
+    for lines in grouped.values():
+        for target in lines:
+            broken_columns = {
+                issue.column
+                for issue in target.issues
+                if issue.check == "V7_hygiene" and issue.column
+            }
+            for column in sorted(broken_columns):
+                candidates = []
+                for candidate in lines:
+                    if candidate.page == target.page or column not in candidate.values:
+                        continue
+                    shared = set(target.values) & set(candidate.values) - {column}
+                    exact = sum(
+                        target.values[key] == candidate.values[key]
+                        for key in shared
+                    )
+                    if exact >= 2:
+                        candidates.append(candidate)
+                observed = {candidate.values[column] for candidate in candidates}
+                if len(observed) != 1:
+                    continue
+                target.set_value_with_source(
+                    column, observed.pop(), "cross_page_repeat"
+                )
+                target.issues = [
+                    issue for issue in target.issues
+                    if not (issue.check == "V7_hygiene" and issue.column == column)
+                ]
 
 
 def _derive_rows_from_formulas(doc) -> None:
@@ -815,6 +898,9 @@ def _to_line(
         row_no=raw.get("row_no"),
         page=page,
         section=section,
+        institution=raw.get("institution"),
+        form=raw.get("form"),
+        subdocument=raw.get("subdocument"),
         values=values,
         value_sources={
             column: (raw.get("value_sources") or {}).get(column, source)

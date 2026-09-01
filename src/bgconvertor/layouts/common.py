@@ -47,7 +47,10 @@ HEADER_PATTERNS = [
     (re.compile(r"prevederi anuale|buget ?2026"), "total_2026"),
     (re.compile(r"\btotal\b"), "total"),
     (re.compile(r"rand|nr\.?\s*crt"), "rowno"),
-    (re.compile(r"trim\.?\s*i\b"), "trim1"),
+    (re.compile(r"trim\.?\s*(?:iv|1v)\b"), "trim4"),
+    (re.compile(r"trim\.?\s*(?:iii|ill|1ll)\b"), "trim3"),
+    (re.compile(r"trim\.?\s*(?:ii|il|1l)\b"), "trim2"),
+    (re.compile(r"trim\.?\s*(?:i|1|l)\b"), "trim1"),
 ]
 # When a role is already taken, a second column matching it falls back here
 # (e.g. the "din care credite..." subcolumn whose header OCR loses).
@@ -96,6 +99,16 @@ def mk_line(raw_code, name, section, values, cell_issues, row_no,
 
 def parse_cell(text: str, role: str, values: dict, cell_issues: list) -> None:
     """OCR-lenient numeric parse into values/{issues} under the given role."""
+    # Ruled scans sometimes collapse the numeric cell with the adjacent
+    # printed X marker (``329 X`` / ``1.280x``).  The numeric token still
+    # belongs unambiguously to the current column; the X is evidence for the
+    # neighbouring cell, not part of the amount.
+    adjacent_x = re.fullmatch(
+        r"\s*(-?\d(?:[\d., ]*\d)?)\s*[xX]\s*",
+        text,
+    )
+    if adjacent_x:
+        text = adjacent_x.group(1)
     try:
         parsed = parse_ro_number(text, ocr=True)
     except NumberParseError:

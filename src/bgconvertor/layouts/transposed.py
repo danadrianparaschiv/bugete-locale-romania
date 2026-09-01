@@ -10,7 +10,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from decimal import Decimal
 
+from ..parsing import NumberParseError, parse_ro_number
 from .common import fold, mk_line, parse_cell
 
 PERIOD_LABELS = [
@@ -18,9 +20,11 @@ PERIOD_LABELS = [
     (re.compile(r"^trim\.?\s*(iii|ill|lll|11l)$"), lambda m: "trim3"),
     (re.compile(r"^trim\.?\s*(ii|11)$"), lambda m: "trim2"),
     (re.compile(r"^trim\.?\s*(i|1|l)$"), lambda m: "trim1"),
-    (re.compile(r"^total$"), lambda m: "total"),
+    (re.compile(r"^total(?:\s+an)?$"), lambda m: "total"),
     (re.compile(r"^din care credite"), lambda m: "credite_stinse"),
 ]
+NUMBER_TOKEN = re.compile(r"-?(?:\d{1,3}(?:[.,]\d{3})+|\d+)(?:[.,]\d{1,2})?")
+CODE_TOKEN = re.compile(r"(?<!\d)(?:\d{2}(?:[./]\d{2}){1,4}|\d{4,10})(?!\d)")
 
 BISTRITA_P2_FINGERPRINT = (
     "e3632ad556d91249ac898c019c217cd4aa897bf8c1a7d56bf78ad62a40715482"
@@ -162,9 +166,10 @@ BISTRITA_P2_ROWS = (
 
 def _period_key(label: str, budget_year: int | None = None) -> str | None:
     t = fold(label).strip()
-    year_match = re.fullmatch(r"((?:19|20)\d{2})", t)
+    year_matches = re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", t)
+    year_match = year_matches[-1] if year_matches else None
     if year_match:
-        year = int(year_match.group(1))
+        year = int(year_match)
         current = budget_year or 2026
         # Compact economic codes such as 2001/2002 occupy the same physical
         # column on ordinary (non-transposed) tables. Only years in this
@@ -175,6 +180,108 @@ def _period_key(label: str, budget_year: int | None = None) -> str | None:
         if m:
             return keyfn(m)
     return None
+
+
+def _value_tokens(raw: str) -> list[str]:
+    values = []
+    for match in NUMBER_TOKEN.finditer(raw):
+        try:
+            parsed = parse_ro_number(match.group(0), ocr=True)
+        except NumberParseError:
+            return []
+        if parsed in (None, "X"):
+            continue
+        values.append(str(Decimal(parsed)))
+    return values
+
+
+def _printed_codes(raw: str) -> list[str]:
+    return [match.group(0) for match in CODE_TOKEN.finditer(raw)]
+
+
+def _build_lines(
+    n_cols: int,
+    code_row: list[str],
+    name_rows: list[list[str]],
+    period_rows: dict[str, list[str]],
+) -> list[dict]:
+    lines: list[dict] = []
+    for j in range(1, n_cols):
+        raw_code = code_row[j].strip() if j < len(code_row) else ""
+        name = " ".join(r[j].strip() for r in name_rows if j < len(r) and r[j].strip())
+        codes = _printed_codes(raw_code)
+        tokens_by_role = {
+            key: _value_tokens(cells[j] if j < len(cells) else "")
+            for key, cells in period_rows.items()
+        }
+        if (
+            len(codes) >= 2
+            and all(not values or len(values) == len(codes) for values in tokens_by_role.values())
+            and any(len(values) == len(codes) for values in tokens_by_role.values())
+        ):
+            for logical_index, code in enumerate(codes):
+                values = {
+                    key: items[logical_index]
+                    for key, items in tokens_by_role.items()
+                    if items
+                }
+                lines.append(mk_line(code, name, None, values, [], None))
+            continue
+        values: dict = {}
+        cell_issues: list = []
+        for key, cells in period_rows.items():
+            text = cells[j] if j < len(cells) else ""
+            if text:
+                parse_cell(text, key, values, cell_issues)
+        if not raw_code and not name and not values:
+            continue
+        lines.append(mk_line(raw_code or None, name, None, values, cell_issues, None))
+    return lines
+
+
+def _continuation_contract(
+    grid: list[list[str]], budget_year: int | None
+) -> tuple[list[str], list[list[str]], dict[str, list[str]]] | None:
+    """Infer a headerless rotated annual table from its stable row geometry."""
+    n_rows = len(grid)
+    n_cols = max(len(row) for row in grid)
+    if not 9 <= n_rows <= 12 or n_cols < 15:
+        return None
+    rows = [
+        [row[index].strip() if index < len(row) else "" for index in range(n_cols)]
+        for row in grid
+    ]
+    code_hits = sum(bool(_printed_codes(rows[1][index])) for index in range(n_cols))
+    name_hits = sum(
+        bool(rows[0][index]) and any(character.isalpha() for character in rows[0][index])
+        for index in range(n_cols)
+    )
+    if code_hits < n_cols / 3 or name_hits < n_cols / 3:
+        return None
+    middle = []
+    for index in range(2, n_rows - 3):
+        numeric = sum(bool(_value_tokens(rows[index][column])) for column in range(n_cols))
+        if numeric >= max(3, n_cols // 5):
+            middle.append(index)
+    if len(middle) < 5:
+        return None
+    total, trim1, trim2, trim3, trim4 = middle[:5]
+    year = budget_year or 2026
+    period_rows = {
+        f"total_{year}": rows[total],
+        "trim1": rows[trim1],
+        "trim2": rows[trim2],
+        "trim3": rows[trim3],
+        "trim4": rows[trim4],
+        f"est{year + 1}": rows[-3],
+        f"est{year + 2}": rows[-2],
+        f"est{year + 3}": rows[-1],
+    }
+    # Put identities in the same horizontal slots as the period rows; the
+    # first physical column is a real data row on continuation pages.
+    return ["", *rows[1]], [["", *rows[0]]], {
+        role: ["", *values] for role, values in period_rows.items()
+    }
 
 
 def _fingerprint(grid: list[list[str]]) -> str:
@@ -207,33 +314,52 @@ def try_map(
         return _bistrita_p2()
 
     n_cols = max(len(r) for r in grid)
+    continuation = _continuation_contract(grid, budget_year)
+    if continuation is not None:
+        code_row, name_rows, period_rows = continuation
+        return _build_lines(n_cols + 1, code_row, name_rows, period_rows)
     period_rows: dict[str, list[str]] = {}
+    year_indexes: set[int] = set()
     code_row: list[str] | None = None
+    code_index: int | None = None
     name_rows: list[list[str]] = []
-    for row in grid:
+    total_index: int | None = None
+    normalized_rows: list[list[str]] = []
+    for row_index, row in enumerate(grid):
         cells = [row[i].strip() if i < len(row) else "" for i in range(n_cols)]
+        normalized_rows.append(cells)
         head = fold(cells[0])
         key = _period_key(cells[0], budget_year=budget_year)
         if key:
             period_rows.setdefault(key, cells)
+            if key.startswith("est"):
+                year_indexes.add(row_index)
+            if key == "total":
+                total_index = row_index
         elif head == "cod":
             code_row = cells
-        else:
-            name_rows.append(cells)
+            code_index = row_index
+    # Some rotated scans keep row order perfectly but OCR their quarter
+    # labels as ``TrimV``, ``Timl`` or ``Tril ... restante``.  The four rows
+    # immediately preceding TOTAL are still unambiguous in the official
+    # table contract: IV, III, II, I.
+    if total_index is not None and not {
+        "trim1", "trim2", "trim3", "trim4"
+    } <= period_rows.keys():
+        quarter_candidates = [
+            index for index in range(total_index)
+            if index not in year_indexes
+        ][-4:]
+        if len(quarter_candidates) == 4:
+            for index, role in zip(
+                quarter_candidates,
+                ("trim4", "trim3", "trim2", "trim1"),
+                strict=True,
+            ):
+                period_rows[role] = normalized_rows[index]
+    if code_index is not None:
+        name_rows = normalized_rows[code_index + 1:]
     if code_row is None or len(period_rows) < 4:
         return None
 
-    lines: list[dict] = []
-    for j in range(1, n_cols):
-        raw_code = code_row[j].strip() if j < len(code_row) else ""
-        name = " ".join(r[j].strip() for r in name_rows if j < len(r) and r[j].strip())
-        values: dict = {}
-        cell_issues: list = []
-        for key, cells in period_rows.items():
-            text = cells[j] if j < len(cells) else ""
-            if text:
-                parse_cell(text, key, values, cell_issues)
-        if not raw_code and not name and not values:
-            continue
-        lines.append(mk_line(raw_code or None, name, None, values, cell_issues, None))
-    return lines
+    return _build_lines(n_cols, code_row, name_rows, period_rows)

@@ -14,6 +14,7 @@ import re
 import unicodedata
 from copy import deepcopy
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 
 from pydantic import BaseModel, Field
 
@@ -157,7 +158,14 @@ def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> 
     # Fixed semantic columns retain their historical order. Dynamic annual
     # and forecast columns follow chronologically, so a 2025 document asks
     # the provider for buget_2025, est2026..est2028 rather than 2026 labels.
-    static_order = [column for column in COLUMN_ORDER if role_year(column) is None]
+    # Printed annual tables put the current-year total before the quarters.
+    # Treating dynamic annual columns as an afterthought used to ask the LLM
+    # for trim1..trim4,total_YYYY and shifted every returned value one place.
+    quarterly = {"trim1", "trim2", "trim3", "trim4"}
+    static_order = [
+        column for column in COLUMN_ORDER
+        if role_year(column) is None and column not in quarterly
+    ]
     ordered = [column for column in static_order if column in observed]
     annual = sorted(
         (column for column in observed if column.startswith(("total_", "buget_"))),
@@ -167,7 +175,9 @@ def fallback_columns(payload: dict, corpus_columns: list[str] | None = None) -> 
         (column for column in observed if column.startswith("est") and role_year(column)),
         key=lambda column: role_year(column) or 0,
     )
-    ordered.extend(column for column in annual + forecasts if column not in ordered)
+    ordered.extend(column for column in annual if column not in ordered)
+    ordered.extend(column for column in COLUMN_ORDER if column in quarterly and column in observed)
+    ordered.extend(column for column in forecasts if column not in ordered)
     ordered.extend(sorted(observed - set(ordered)))
     default = f"buget_{budget_year}" if budget_year else "buget_2026"
     return ordered[:12] or [default]
@@ -401,13 +411,16 @@ def merge_page_payloads(deterministic: dict | None, llm_payloads: list[dict]) ->
 
     by_exact: dict[tuple[str, str], list[dict]] = {}
     by_code: dict[str, list[dict]] = {}
+    by_name: dict[str, list[dict]] = {}
     for line in base["lines"]:
         code = _normalized_code(line)
-        if not code:
-            continue
         section = _fold(line.get("section") or "")
-        by_exact.setdefault((code, section), []).append(line)
-        by_code.setdefault(code, []).append(line)
+        if code:
+            by_exact.setdefault((code, section), []).append(line)
+            by_code.setdefault(code, []).append(line)
+        name = _identity_name(line.get("name") or "")
+        if name:
+            by_name.setdefault(name, []).append(line)
 
     matched_counts: dict[int, int] = {}
     for payload in llm_payloads:
@@ -417,6 +430,21 @@ def merge_page_payloads(deterministic: dict | None, llm_payloads: list[dict]) ->
             candidates = by_exact.get((code, section), []) if code else []
             if not candidates and code and len(by_code.get(code, [])) == 1:
                 candidates = by_code[code]
+            recovered_name = _identity_name(recovered.get("name") or "")
+            if not candidates and recovered_name:
+                candidates = by_name.get(recovered_name, [])
+            if not candidates and len(recovered_name) >= 12:
+                fuzzy = [
+                    (SequenceMatcher(None, recovered_name, name).ratio(), lines)
+                    for name, lines in by_name.items()
+                ]
+                best_ratio = max((ratio for ratio, _lines in fuzzy), default=0.0)
+                best = [
+                    lines for ratio, lines in fuzzy
+                    if ratio == best_ratio and ratio >= 0.94
+                ]
+                if len(best) == 1:
+                    candidates = best[0]
             target = None
             for candidate in candidates:
                 used = matched_counts.get(id(candidate), 0)
@@ -425,6 +453,12 @@ def merge_page_payloads(deterministic: dict | None, llm_payloads: list[dict]) ->
                     matched_counts[id(candidate)] = 1
                     break
             if target is None:
+                # Full-page recovery may populate a catastrophic empty page.
+                # On an already productive page, however, an unidentifiable
+                # no-code row is much more likely to duplicate OCR text than
+                # to be a safe new fact.  New coded rows remain admissible.
+                if base["lines"] and (not code or code in by_code):
+                    continue
                 appended = deepcopy(recovered)
                 source = appended.get("source") or "llm"
                 appended.setdefault(
@@ -489,6 +523,11 @@ def _fold(value: str) -> str:
         r"\s+", " ",
         "".join(char for char in normalized if not unicodedata.combining(char)).lower(),
     ).strip()
+
+
+def _identity_name(value: str) -> str:
+    """Normalize OCR/LLM spelling noise without erasing word identity."""
+    return re.sub(r"[^a-z0-9]+", " ", _fold(value)).strip()
 
 
 def needs_fallback(payload: dict | None) -> bool:

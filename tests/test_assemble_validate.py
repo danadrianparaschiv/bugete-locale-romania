@@ -84,6 +84,26 @@ def test_assemble_documents_sections_regions(tmp_path):
     assert doc.lines[-1].section == "TOTAL"
 
 
+def test_assemble_carries_leading_detail_hierarchy_across_page_break(tmp_path):
+    store = _mk_store(tmp_path)
+    parent = _line("68.00.04", "Caminul de batrani", total_2024="100")
+    parent["subdocument"] = "Caminul de batrani"
+    child = _line(None, "cheltuieli de personal", total_2024="80")
+    child["subdocument"] = "Caminul de batrani"
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "lines": [parent, child],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "lines": [_line(None, "cheltuieli de capital", total_2024="20")],
+    })
+
+    document = assemble(store, [1, 2])[0]
+
+    assert document.lines[-1].subdocument == "Caminul de batrani"
+
+
 def test_assemble_stitches_a_row_split_across_pages(tmp_path):
     store = _mk_store(tmp_path)
     store.put("extract", 1, {
@@ -222,6 +242,40 @@ def test_printed_section_heading_scopes_repeated_summary_rows(tmp_path, registry
         issue for issue in result.all_issues()
         if issue.check == "V7_hygiene" and "duplicate" in issue.message
     ]
+
+
+def test_repeated_summary_repairs_one_cell_only_after_two_columns_agree(tmp_path):
+    store = _mk_store(tmp_path)
+    first = _line(
+        None,
+        "CHELTUIELI TOTAL, din care:",
+        buget_2023="568077",
+        executie_2023="275990.59",
+        total_2024="463579",
+    )
+    second = _line(
+        None,
+        "TOTAL CHELTUIELI footer OCR",
+        executie_2023="275990.59",
+        total_2024="463579",
+    )
+    second["cell_issues"] = [{"column": "buget_2023", "raw": "568.0,7.00"}]
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "layout": "scan_comparative_budget",
+        "lines": [first],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "layout": "digital_detail",
+        "lines": [second],
+    })
+
+    line = assemble(store, [1, 2])[-1].lines[-1]
+
+    assert line.values["buget_2023"] == 568077
+    assert line.value_sources["buget_2023"] == "cross_page_repeat"
+    assert not [issue for issue in line.issues if issue.column == "buget_2023"]
 
 
 def test_mid_page_header_context_starts_at_detail_total(tmp_path, registry):
@@ -536,6 +590,37 @@ def test_cluj_individual_forms_scope_legitimate_and_real_duplicates(tmp_path, re
     assert len(duplicates) == 1
     assert duplicates[0].page == 145
     assert duplicates[0].message == "duplicate of p144 with different values"
+
+
+def test_line_context_scopes_legitimate_repeated_codes(registry):
+    from decimal import Decimal
+
+    from bgconvertor.model import BudgetDocument, BudgetLine
+
+    document = BudgetDocument(
+        title="Buget multi-instituție",
+        budget="local",
+        suffix="02",
+        pages=[1],
+        lines=[
+            BudgetLine(
+                raw_code="65.00.20", code="20", func_code="65.02",
+                name="Bunuri", kind="expense_economic", page=1,
+                institution=institution,
+                values={"total_2024": Decimal(value)},
+            )
+            for institution, value in (("Școala A", "100"), ("Școala B", "60"))
+        ],
+    )
+    result = ConversionResult(pdf="doc.pdf", documents=[document])
+
+    validate(result, registry)
+
+    duplicates = [
+        issue for issue in result.all_issues()
+        if issue.check == "V7_hygiene" and "duplicate" in issue.message
+    ]
+    assert duplicates == []
 
 
 def test_collapsed_annual_grid_survives_assembly_and_validation(tmp_path, registry):

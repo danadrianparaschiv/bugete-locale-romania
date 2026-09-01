@@ -527,8 +527,15 @@ def consolidated_payload(
     }
 
 
-def convert_workbook(path: Path, budget_year: int, registry) -> ConversionResult:
-    """Convert an official native workbook through shared assembly/validation."""
+def workbook_payloads(
+    path: Path, budget_year: int, registry
+) -> dict[int, dict[str, Any]]:
+    """Map each worksheet to the shared page-payload contract.
+
+    Keeping this stage public lets the offline annotation inventory display and
+    score native Excel sheets with the same source-unit boundary used by the
+    converter.  Reading is deterministic and never mutates the official file.
+    """
     payloads: dict[int, dict[str, Any]] = {}
     for page, (sheet_name, grid) in enumerate(read_sheets(path), 1):
         payload = _standard_payload(sheet_name, grid, budget_year)
@@ -546,6 +553,12 @@ def convert_workbook(path: Path, budget_year: int, registry) -> ConversionResult
                 "output_unit": "mii lei",
             }
         payloads[page] = payload
+    return payloads
+
+
+def convert_workbook(path: Path, budget_year: int, registry) -> ConversionResult:
+    """Convert an official native workbook through shared assembly/validation."""
+    payloads = workbook_payloads(path, budget_year, registry)
 
     pages = list(payloads)
     documents = assemble(_PayloadStore(payloads), pages, registry)

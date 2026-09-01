@@ -11,9 +11,11 @@ from . import (
     annual_total,
     collapsed,
     collapsed_detail,
+    comparative,
     expense_chapter,
     formular11,
     general_summary,
+    initial_summary,
     institution,
     investment,
     matrix,
@@ -24,6 +26,8 @@ from . import (
 )
 
 MAPPERS = [
+    comparative.try_map,
+    initial_summary.try_map,
     annual_total.try_map,
     institution.try_map,
     collapsed.try_map,
@@ -56,8 +60,11 @@ def map_grid_with_context(
 ) -> tuple[list[dict], dict | None]:
     if not grid or not grid[0]:
         return [], context
+    grid = table.normalize_orientation(grid)
     for mapper in MAPPERS:
-        if mapper is annual_total.try_map:
+        if mapper in (comparative.try_map, initial_summary.try_map):
+            lines = mapper(grid, budget_year=budget_year, context=context)
+        elif mapper is annual_total.try_map:
             lines = mapper(grid, budget_year=budget_year, context=context)
         elif mapper is transposed.try_map:
             lines = mapper(grid, budget_year=budget_year)
@@ -68,10 +75,21 @@ def map_grid_with_context(
         else:
             lines = mapper(grid)
         if lines is not None:
-            mapped_context = (
-                annual_total.mapping_context(grid, budget_year, context=context)
-                if mapper is annual_total.try_map
-                else table.mapping_context(grid, budget_year=budget_year)
-            )
+            if mapper is comparative.try_map:
+                mapped_context = comparative.mapping_context(
+                    grid, budget_year, context=context
+                )
+            elif mapper is initial_summary.try_map:
+                mapped_context = initial_summary.mapping_context(
+                    grid, budget_year, context=context
+                )
+            elif mapper is annual_total.try_map:
+                mapped_context = annual_total.mapping_context(
+                    grid, budget_year, context=context
+                )
+            else:
+                mapped_context = table.mapping_context(
+                    grid, budget_year=budget_year
+                )
             return lines, mapped_context or context
     return [], context

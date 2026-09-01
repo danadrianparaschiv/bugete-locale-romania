@@ -155,7 +155,7 @@ def test_2024_all_available_sources_publish_complete_budgeted_scopes():
         city.name for city in converted
         if float(city.entry["conversion"].get("llm_lifetime_cost_usd") or 0) > 0
     }
-    assert recovered == {"Brăila", "Deva", "Zalău"}
+    assert recovered == {"Brăila", "Călărași", "Deva", "Zalău"}
     assert sum(float(city.entry["conversion"]["llm_cost_usd"]) for city in converted) \
         <= lifetime_spend
 

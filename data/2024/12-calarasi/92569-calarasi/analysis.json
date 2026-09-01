@@ -4,32 +4,62 @@
     "schema_version": 3,
     "metric": "observed_strict_line_rate",
     "recall_measured": false,
-    "lines": 1066,
-    "lines_strictly_verified": 454,
-    "pct_lines_strictly_verified": 42.6,
-    "numeric_cells": 4571,
-    "numeric_cells_strictly_verified": 2460,
-    "pct_numeric_cells_strictly_verified": 53.8,
-    "annex_lines": 300,
-    "annex_numeric_cells": 428,
+    "lines": 1053,
+    "lines_strictly_verified": 666,
+    "pct_lines_strictly_verified": 63.2,
+    "numeric_cells": 7697,
+    "numeric_cells_strictly_verified": 5912,
+    "pct_numeric_cells_strictly_verified": 76.8,
+    "annex_lines": 98,
+    "annex_numeric_cells": 181,
     "scope": {
       "pages_expected": 87,
       "pages_selected": 87,
       "pages_processed": 87,
       "complete_pdf": true
     },
-    "pct_clean": 42.6,
-    "errors": 678,
-    "warnings": 755,
+    "pct_clean": 63.2,
+    "errors": 305,
+    "warnings": 331,
     "info": 10,
     "documents": 2
   },
   "llm_models": [],
   "totals_mii_lei": {
     "venituri": 223517.0,
-    "cheltuieli": null
+    "cheltuieli": 228649.0
   },
   "top_capitole": [
+    {
+      "code": "68.02",
+      "name": "ASIGURARI SI ASISTENTA SOCIALA",
+      "total": 49996.0
+    },
+    {
+      "code": "84.02",
+      "name": "TRANSPORTURI",
+      "total": 44597.0
+    },
+    {
+      "code": "74.02",
+      "name": "PROTECTIA MEDIULUI",
+      "total": 21947.0
+    },
+    {
+      "code": "65.02",
+      "name": "INVATAMANT DE STAT (20 institutii)",
+      "total": 16100.0
+    },
+    {
+      "code": "55.02",
+      "name": "TRANZACTII PRIVIND DATORIA PUBLICA SI IMPRUMUTURI",
+      "total": 12800.0
+    },
+    {
+      "code": "54.02",
+      "name": "ALTE SERVICII PUBLICE GENERALE",
+      "total": 4530.0
+    },
     {
       "code": "66.02",
       "name": "SANATATE",
@@ -40,7 +70,7 @@
   "note": "Figuri numai din linii fără erori, avertismente sau note de validare; mii lei. Rata observată nu măsoară rândurile lipsă. Vezi DISCLAIMER.md.",
   "publication": {
     "schema_version": 1,
-    "bundle_id": "df144de43330a1230a5c60aa",
+    "bundle_id": "4a3dc3fe4888a6f2d5fd1922",
     "source_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4",
     "source_format": "pdf",
     "source_pdf_sha256": "c0b43bdb87f8dba5ae765ef840e30fc7b685e86a8ee43d5f90bad381a63e09c4"

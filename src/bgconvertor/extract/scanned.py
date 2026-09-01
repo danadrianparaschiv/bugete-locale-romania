@@ -16,6 +16,7 @@ from pathlib import Path
 
 from ..layouts import map_grid, map_grid_with_context
 from ..layouts.common import fold, is_code_cell, split_header
+from ..layouts.table import normalize_orientation
 from ..years import infer_budget_year, remap_lines
 
 log = logging.getLogger("bgc.extract.scanned")
@@ -342,6 +343,7 @@ def map_payload(
     mapping_context = context if ocr_payload.get("tables_raw") else None
     source_value_cells = 0
     for grid in ocr_payload.get("tables_raw", []):
+        grid = normalize_orientation(grid)
         mapped, mapped_context = map_grid_with_context(
             grid, context=mapping_context, budget_year=budget_year
         )
@@ -407,13 +409,21 @@ def map_payload(
     )
     if prose_lines:
         source_value_cells = mapped_value_cells
+    layout = (
+        "official_prose_summary"
+        if prose_lines else _guess_layout(lines, cls_text, mapping_context)
+    )
+    if (
+        mapping_context
+        and layout in {"investment_list", "allocations_annex", "annex_other"}
+    ):
+        mapping_context["budget_table"] = False
+        mapping_context["institution"] = None
+        mapping_context["subdocument"] = None
     return {
         "lines": lines,
         "text": text,
-        "layout": (
-            "official_prose_summary"
-            if prose_lines else _guess_layout(lines, cls_text, mapping_context)
-        ),
+        "layout": layout,
         "rotation_applied": ocr_payload.get("rotation_applied", 0),
         "confidence_grade": ocr_payload.get("confidence_grade"),
         "n_tables": len(ocr_payload.get("tables_raw", [])),
@@ -504,6 +514,8 @@ INVEST_HINT = re.compile(
     r"surse de finantare|denumire.{0,20}obiectiv|neetichetat|nr\.? si data|"
     r"pret unitar|nr\.?\s*buc|capitol bugetar|studiu de fezabilitate|"
     r"cheltuieli efectuate|achizitie directa|procedura de achizitie|cod cpv|"
+    r"lista de investitii|dotari independente|cheltuieli de proiectare|"
+    r"denumirea lucrarilor|denumirea luciurilor|\blucrari noi\b|"
     r"n[aeo]mi\w*.{0,20}(?:obiect|ebiact|osiect).{0,30}(?:invest|imvest|invet|irvoet)"
 )
 COMMITMENT_CREDIT_HINT = re.compile(r"credite de angajament")
@@ -545,6 +557,8 @@ def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> 
         return "investment_list"
     if context and context.get("family") == "annual_total":
         return "scan_annual_total"
+    if context and context.get("family") == "comparative_budget":
+        return "scan_comparative_budget"
     # investment objective pages tag rows verde/maro/mixt/neutru
     tags = sum(1 for ln in lines if INVEST_TAG.match(fold(ln.get("name") or "")))
     if tags >= 3:
@@ -583,6 +597,8 @@ def _guess_layout(lines: list[dict], text: str, context: dict | None = None) -> 
         if numbered >= len(lines) / 2 and revenue_like >= code_count * 0.8:
             return "scan_revenue_detail"
         return "scan_simple_table"
+    if context and context.get("budget_table"):
+        return "scan_table_other"
     # a table with data but essentially no indicator codes is an annex
     # (procurement lists, per-institution allocations, personnel tables) —
     # kept for side sheets, out of nomenclator scope. Codes present in the

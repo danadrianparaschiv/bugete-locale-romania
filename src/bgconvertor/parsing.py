@@ -64,8 +64,9 @@ def parse_ro_number(raw: str | None, ocr: bool = False) -> ParsedCell:
         # A single glyph in an otherwise well-formed numeric cell is often a
         # digit lookalike. This runs only in columns already known to be
         # numeric, and only when the substitution yields numeric punctuation.
-        lookalikes = str.maketrans({"O": "0", "o": "0", "I": "1", "l": "1",
-                                    "S": "5", "s": "5", "G": "6", "B": "8"})
+        lookalikes = str.maketrans({"O": "0", "o": "0", "P": "0", "p": "0",
+                                    "I": "1", "l": "1", "S": "5", "s": "5",
+                                    "G": "6", "B": "8"})
         repaired = s.translate(lookalikes)
         # Romanian OCR frequently reads the final zero in a decimal suffix
         # as C (``617,OC`` / ``0.C0``).  Restrict this repair to a one- or

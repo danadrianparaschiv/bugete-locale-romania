@@ -87,12 +87,10 @@ class RunConfig(BaseSettings):
 
     # Bumped whenever extraction-mapping code changes semantics; invalidates
     # the cheap mapping stage without touching cached OCR.
-    # v48 makes candidate selection lossless (an empty adaptive pass cannot
-    # defeat a productive baseline), recognizes compressed four-quarter
-    # grids, scopes scanned functional/section headers deterministically, and
-    # keeps commitment-credit budget grids out of investment-annex routing.
+    # v56 preserves Buzău's printed TOTAL/functionare repetitions with
+    # explicit section context and repairs a damaged duplicate code safely.
     # Only the cheap mapping/extraction stage is invalidated; OCR stays cached.
-    extract_version: str = "48"
+    extract_version: str = "56"
 
     # Which config fields each stage's cache key depends on. A field change
     # invalidates only the stages that list it.
@@ -109,6 +107,7 @@ class RunConfig(BaseSettings):
             "docling_cell_matching", "adaptive_ocr", "structural_score_threshold",
             "max_deskew_degrees",
         ],
+        "coordinate_ocr": ["extract_version"],
         "classify": ["render_scale", "llm.classify_model", "llm.prompt_version", "llm.mode"],
         # extract derives from ocr output, so it inherits ocr's fields too
         "extract": [

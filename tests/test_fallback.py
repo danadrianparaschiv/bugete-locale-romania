@@ -66,6 +66,19 @@ def test_annual_total_fallback_uses_document_year():
     }) == ["total_2027"]
 
 
+def test_dynamic_annual_total_precedes_quarters_and_forecasts():
+    payload = {
+        "layout": "scan_simple_table",
+        "budget_year": 2024,
+        "lines": [{"values": {
+            "trim1": "3", "total_2024": "10", "est2025": "11",
+        }}],
+    }
+    assert fallback_columns(payload) == [
+        "total_2024", "trim1", "est2025",
+    ]
+
+
 def test_page_local_mapping_context_wins_and_global_columns_are_ignored():
     payload = {
         "budget_year": 2025,
@@ -90,6 +103,22 @@ def test_catastrophic_zero_line_table_is_fallback_eligible():
         "n_numeric_cells": 0,
         "lines": [],
     })
+
+
+def test_productive_comparative_page_is_not_replaced_by_full_page_fallback():
+    payload = {
+        "layout": "scan_comparative_budget",
+        "n_tables": 1,
+        "n_numeric_cells": 130,
+        "lines": [
+            {"code": "61.02", "values": {"total_2024": "100"}},
+            {"code": "61.02/10", "values": {"total_2024": "90"}},
+            {"code": "61.02/20", "values": {"total_2024": "10"}},
+        ],
+        "mapping_stats": {"cell_issues": 2},
+    }
+
+    assert not needs_fallback(payload)
 
 
 def test_dense_table_is_split_into_bounded_vertical_bands():
@@ -223,3 +252,52 @@ def test_llm_recovery_merges_missing_cells_without_overwriting_deterministic_val
         "llm_only_rows": 1,
         "conflicts_ignored": 1,
     }
+
+
+def test_llm_recovery_matches_no_code_rows_by_normalized_name():
+    deterministic = {
+        "layout": "scan_simple_table",
+        "lines": [{
+            "name": "Gala Firmelor Călărăşene",
+            "values": {"total_2024": "20"},
+            "cell_issues": [{"column": "trim1", "raw": "2O"}],
+        }],
+    }
+    llm = {
+        "layout": "llm_fallback",
+        "lines": [{
+            "name": "Gala Firmelor Calarasene",
+            "values": {"total_2024": "999", "trim1": "20"},
+            "source": "llm:cheap",
+        }],
+    }
+
+    merged = merge_page_payloads(deterministic, [llm])
+
+    assert len(merged["lines"]) == 1
+    assert merged["lines"][0]["values"] == {"total_2024": "20", "trim1": "20"}
+    assert merged["llm_merge"] == {
+        "filled_cells": 1,
+        "llm_only_rows": 0,
+        "conflicts_ignored": 1,
+    }
+
+
+def test_llm_recovery_rejects_unidentified_no_code_row_on_productive_page():
+    deterministic = {
+        "layout": "scan_simple_table",
+        "lines": [{"name": "Cheltuieli de personal", "values": {"total_2024": "10"}}],
+    }
+    llm = {
+        "layout": "llm_fallback",
+        "lines": [{
+            "name": "Text OCR fără corespondent sigur",
+            "values": {"total_2024": "99"},
+            "source": "llm:cheap",
+        }],
+    }
+
+    merged = merge_page_payloads(deterministic, [llm])
+
+    assert len(merged["lines"]) == 1
+    assert merged["llm_merge"]["llm_only_rows"] == 0

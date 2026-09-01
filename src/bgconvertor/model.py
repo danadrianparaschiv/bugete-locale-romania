@@ -32,6 +32,12 @@ class BudgetLine(BaseModel):
     row_no: int | None = None
     page: int
     section: str | None = None  # TOTAL | FUNCTIONARE | DEZVOLTARE
+    # Some printed pages contain several institutions/forms inside one table.
+    # Keeping context at line level prevents legitimate repeated codes from
+    # becoming duplicates and lets source-cell scoring remain one-to-one.
+    institution: str | None = None
+    form: str | None = None
+    subdocument: str | None = None
     values: dict[str, Decimal] = Field(default_factory=dict)
     # Cell-level provenance is needed when paid recovery fills only gaps in a
     # deterministic row. Missing entries inherit ``source`` for old bundles.
