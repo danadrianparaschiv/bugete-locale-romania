@@ -20,6 +20,12 @@ ROMAN_TOTAL = re.compile(
     r"^\s*((?:I|II))\.?\s+(?=(?:venituri|cheltuieli)\b)(.*)$",
     re.IGNORECASE,
 )
+DETAIL_ROW = re.compile(
+    r"^[-=• ]*(?:cheltuieli|bunuri si servicii|asistenta sociala|"
+    r"sume aferente|salari\w*|dobanzi)",
+    re.IGNORECASE,
+)
+UNNUMBERED_GROUP = re.compile(r"^(?:S\.?P\.?\b|D\.?A\.?S\.?\b)", re.IGNORECASE)
 
 
 def _header(grid: list[list[str]]) -> tuple[int, int, str | None] | None:
@@ -90,7 +96,8 @@ def _map(
     role = f"total_{year}"
     lines = []
     subdocument = (context or {}).get("subdocument")
-    for row in grid[first_data:]:
+    data_rows = grid[first_data:]
+    for index, row in enumerate(data_rows):
         name_cell = row[0].strip() if row else ""
         value_cell = row[1].strip() if len(row) > 1 else ""
         if not name_cell and not value_cell:
@@ -104,6 +111,12 @@ def _map(
         line = mk_line(raw_code, name, section, values, issues, None)
         if raw_code:
             subdocument = name or subdocument
+        elif (
+            UNNUMBERED_GROUP.match(name)
+            and index + 1 < len(data_rows)
+            and DETAIL_ROW.match(data_rows[index + 1][0].strip())
+        ):
+            subdocument = name
         elif subdocument:
             line["subdocument"] = subdocument
         lines.append(line)

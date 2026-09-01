@@ -287,28 +287,28 @@
         "strict_lines": 672,
         "strict_numeric_cells": 2410
       },
-      "bundle_id": "942309d9bd8e6bd73329f771",
+      "bundle_id": "4a3dc3fe4888a6f2d5fd1922",
       "change": {
-        "line_rate_points": 9.0,
-        "lines": -242,
-        "numeric_cell_rate_points": 18.4,
-        "numeric_cells": 3336,
-        "strict_lines": -36,
-        "strict_numeric_cells": 3300
+        "line_rate_points": 10.1,
+        "lines": -213,
+        "numeric_cell_rate_points": 19.4,
+        "numeric_cells": 3496,
+        "strict_lines": -6,
+        "strict_numeric_cells": 3502
       },
       "county_code": "12",
       "final": {
         "annex_lines": 98,
         "annex_numeric_cells": 181,
-        "errors": 320,
-        "line_rate_pct": 62.1,
-        "lines": 1024,
-        "numeric_cell_rate_pct": 75.8,
-        "numeric_cells": 7537,
+        "errors": 305,
+        "line_rate_pct": 63.2,
+        "lines": 1053,
+        "numeric_cell_rate_pct": 76.8,
+        "numeric_cells": 7697,
         "quality_schema_version": 3,
-        "strict_lines": 636,
-        "strict_numeric_cells": 5710,
-        "warnings": 338
+        "strict_lines": 666,
+        "strict_numeric_cells": 5912,
+        "warnings": 331
       },
       "issue_family": "scanned_structure_and_numeric_ocr",
       "municipality": "Călărași",

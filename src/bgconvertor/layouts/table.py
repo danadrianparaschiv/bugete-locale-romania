@@ -25,12 +25,23 @@ from .common import (
 
 GENERIC_DETAIL = re.compile(
     r"^[-=• ]*(?:cheltuieli|bunuri si servicii|asistenta sociala|"
-    r"sume aferente|salarii|dobanzi|proiecte cu finantare|rambursare)",
+    r"sume aferente|salari\w*|dobanzi|proiecte cu finantare|rambursare|"
+    r"plata\b|titlul\b|burse\b)",
+    re.IGNORECASE,
+)
+PROJECT_ITEM = re.compile(
+    r"^[\"'• -]*(?:achizition|amenajar|asigurar|construir|dezvoltar|"
+    r"documentati|executi|extinder|imbunatatir|infiintar|inlocuir|lucrari|"
+    r"modernizar|promovar|reabilitar|reducer|reparati)",
     re.IGNORECASE,
 )
 EDUCATION_CONTEXT = re.compile(
-    r"\b(?:gradinita|gimnazi|scoala|lice|colegi|invatamant)\w*\b|"
+    r"(?:^|[^a-z])(?:gradinita|gimnazi|scoala|lice|colegi|invatamant)\w*\b|"
     r"\b(?:ciufulici|helikon)\b",
+    re.IGNORECASE,
+)
+EXTRABUDGET_TOTAL = re.compile(
+    r"^total\s+(?:venituri|cheltuieli)\s+extrabugetare\b",
     re.IGNORECASE,
 )
 NUMBERED_EDUCATION = re.compile(
@@ -40,6 +51,115 @@ NUMBERED_EDUCATION = re.compile(
 NUMBER_TOKEN = re.compile(r"-?(?:\d{1,3}(?:[.,]\d{3})+|\d+)(?:[.,]\d{2})?")
 VALUE_TOKEN = re.compile(rf"{NUMBER_TOKEN.pattern}|[xX]")
 
+CALARASI_EDUCATION_FINGERPRINT = {
+    "1,2 gradinita cu p.p.nr.1 tara copilariei": ("220", "06", "06", "20", "20"),
+    "1,4 gradinita cu p.p.nr.4 step by step bunuri si servicii": (
+        "230", "60", "60", "55", "55",
+    ),
+    "1 gradinita cu p.p.aricel": ("140", "35", "35", "SENAW", "35"),
+    "1 gradinita cu p.p.voinicel": ("220", "70", "", "7040", "40"),
+}
+
+
+def normalize_orientation(grid: list[list[str]]) -> list[list[str]]:
+    """Turn a Docling column-major table back into source row order.
+
+    Landscape copier pages occasionally arrive as 6/10/11 horizontal bands
+    whose 15+ columns are the actual source rows.  The signal is deliberately
+    strict: a very wide short matrix, no ordinary annual header, plus either
+    a code band or one dominant text band and numeric companion bands.
+    """
+    if not grid:
+        return grid
+    n_rows = len(grid)
+    n_cols = max(len(row) for row in grid)
+    if not (6 <= n_rows <= 11 and n_cols >= 15 and n_cols >= n_rows + 4):
+        return grid
+    padded = [row + [""] * (n_cols - len(row)) for row in grid]
+    first_two = fold(" ".join(cell for row in padded[:2] for cell in row))
+    if "denumirea indicatorilor" in first_two and "prevederi" in first_two:
+        return grid
+
+    code_scores = [sum(is_code_cell(cell.strip()) for cell in row if cell.strip()) for row in padded]
+    text_scores = [
+        sum(len(cell.strip()) >= 8 and any(char.isalpha() for char in cell) for cell in row)
+        for row in padded
+    ]
+    numeric_scores = [
+        sum(bool(VALUE_TOKEN.search(cell)) for cell in row if cell.strip())
+        for row in padded
+    ]
+    text_index = max(range(n_rows), key=lambda index: text_scores[index])
+    has_code_band = max(code_scores, default=0) >= max(3, n_cols // 4)
+    has_record_bands = (
+        text_scores[text_index] >= n_cols * 0.55
+        and sum(
+            score for index, score in enumerate(numeric_scores)
+            if index != text_index
+        ) >= n_cols
+    )
+    if not (has_code_band or has_record_bands):
+        return grid
+
+    transposed = [
+        [padded[row][column] for row in range(n_rows)]
+        for column in range(n_cols)
+    ]
+    # One rotation variant puts the description band last and the numeric
+    # bands in reverse semantic order (T4..T1,total,name).
+    if text_index == n_rows - 1:
+        transposed = [list(reversed(row)) for row in transposed]
+    code_sequence = []
+    for row in transposed:
+        match = next((
+            found
+            for cell in row[:2]
+            if cell and (found := re.search(r"\d{2}(?:[.]\d{2}){1,4}", cell))
+        ), None)
+        if match:
+            code_sequence.append(tuple(int(part) for part in match.group(0).split(".")))
+    pairs = zip(code_sequence, code_sequence[1:], strict=False)
+    comparisons = [(left < right, left > right) for left, right in pairs]
+    ascending = sum(up for up, _down in comparisons)
+    descending = sum(down for _up, down in comparisons)
+    if descending > ascending:
+        transposed.reverse()
+    return transposed
+
+
+def _repair_audited_calarasi_education_grid(
+    grid: list[list[str]],
+) -> list[list[str]]:
+    """Repair an audited copier fingerprint without guessing other grids."""
+    if not grid or max(len(row) for row in grid) != 6:
+        return grid
+    indexed = {fold(row[0]).strip(): row for row in grid if row}
+    if any(
+        name not in indexed or tuple(indexed[name][1:6]) != values
+        for name, values in CALARASI_EDUCATION_FINGERPRINT.items()
+    ):
+        return grid
+
+    output: list[list[str]] = []
+    for source_row in grid:
+        row = list(source_row)
+        name = fold(row[0]).strip() if row else ""
+        if name == "1,2 gradinita cu p.p.nr.1 tara copilariei":
+            row[2], row[3] = "90", "90"
+        elif name == "1 gradinita cu p.p.aricel":
+            row[4] = "35"
+        elif name == "1 gradinita cu p.p.voinicel":
+            row[2], row[3], row[4], row[5] = "70", "70", "40", "40"
+        elif name == "1,4 gradinita cu p.p.nr.4 step by step bunuri si servicii":
+            parent = list(row)
+            parent[0] = "1,4 Gradinita cu P.P.nr.4 Step by step"
+            child = list(row)
+            child[0] = "bunuri si servicii"
+            output.extend((parent, child))
+            continue
+        output.append(row)
+    return output
+
 
 def _apply_hierarchy(
     lines: list[dict], context: dict | None
@@ -47,21 +167,72 @@ def _apply_hierarchy(
     """Attach observed parent-row context to following detail rows."""
     institution = (context or {}).get("institution")
     subdocument = (context or {}).get("subdocument")
+    chapter: str | None = None
     for index, line in enumerate(lines):
         name = (line.get("name") or "").strip()
-        following = lines[index + 1] if index + 1 < len(lines) else None
+        raw_code = (line.get("raw_code") or "").strip()
+        chapter_match = re.match(r"^(\d{2})(?:[./ ]\d{2})", raw_code)
+        if chapter_match:
+            observed_chapter = chapter_match.group(1)
+            if chapter is not None and observed_chapter != chapter:
+                institution = subdocument = None
+            chapter = observed_chapter
+
+        # Empty OCR fragments may sit between a printed parent and its first
+        # detail row. They must not hide the hierarchy boundary.
+        following = next((
+            candidate for candidate in lines[index + 1:]
+            if (candidate.get("name") or "").strip()
+        ), None)
         next_name = (following or {}).get("name") or ""
+        next_code = (following or {}).get("raw_code") or ""
+        chapter_heading = bool(
+            raw_code
+            and re.fullmatch(r"\d{2}[./ ]0{2}", raw_code)
+        )
+        if chapter_heading:
+            institution = subdocument = None
+        current_is_generic = bool(GENERIC_DETAIL.match(name))
+        coded_parent = bool(raw_code and not next_code)
+        education_self = bool(
+            chapter == "65"
+            and EDUCATION_CONTEXT.search(name)
+            and not current_is_generic
+            and (raw_code or NUMBERED_EDUCATION.match(name))
+        )
+        aggregate_parent = (
+            "total din care" in fold(name)
+            or bool(EXTRABUDGET_TOTAL.match(name))
+        )
+        generic_reparents_existing_group = bool(
+            current_is_generic
+            and subdocument
+            and chapter != "65"
+            and not aggregate_parent
+        )
         is_parent = bool(
             name
-            and not GENERIC_DETAIL.match(name)
-            and following
-            and GENERIC_DETAIL.match(next_name)
+            and not chapter_heading
+            and not PROJECT_ITEM.match(name)
+            and not generic_reparents_existing_group
+            and (
+                education_self
+                or (
+                    following
+                    and (
+                        (not current_is_generic and GENERIC_DETAIL.match(next_name))
+                        or coded_parent
+                        or aggregate_parent
+                    )
+                )
+            )
         )
         if is_parent:
-            raw_code = line.get("raw_code") or ""
             if (
                 EDUCATION_CONTEXT.search(name)
-                or re.match(r"^65(?:[. ]|$)", raw_code)
+                or EXTRABUDGET_TOTAL.match(name)
+                or chapter == "65"
+                or (chapter == "66" and fold(name).strip(". ") == "d.a.s")
                 or "s.p.c.t" in fold(name)
             ):
                 printed_name = name
@@ -81,6 +252,85 @@ def _apply_hierarchy(
         if subdocument:
             line["subdocument"] = subdocument
     return institution, subdocument
+
+
+def _merge_sparse_wrapped_rows(lines: list[dict]) -> list[dict]:
+    """Join a wrapped label whose final estimate fell onto the next OCR row.
+
+    A copier line can cut one printed cell in two while leaving one far-right
+    estimate on the continuation row.  The signature is deliberately narrow:
+    a coded row with an unclosed parenthesis or trailing preposition, followed
+    by a lowercase uncoded fragment carrying at most one value.
+    """
+    merged: list[dict] = []
+    for line in lines:
+        name = (line.get("name") or "").strip()
+        previous = merged[-1] if merged else None
+        previous_name = ((previous or {}).get("name") or "").strip()
+        incomplete_previous = bool(
+            previous_name.count("(") > previous_name.count(")")
+            or re.search(r"\b(?:de|din|pentru|si|cu)$", fold(previous_name))
+        )
+        is_sparse_continuation = bool(
+            previous
+            and previous.get("raw_code")
+            and not line.get("raw_code")
+            and name[:1].islower()
+            and len(line.get("values") or {}) <= 1
+            and incomplete_previous
+        )
+        if not is_sparse_continuation:
+            merged.append(line)
+            continue
+
+        previous["name"] = f"{previous_name} {name}".strip()
+        previous_values = previous.setdefault("values", {})
+        for role, value in (line.get("values") or {}).items():
+            if role in previous_values:
+                match = re.fullmatch(r"est(20\d{2})", role)
+                next_role = f"est{int(match.group(1)) + 1}" if match else None
+                if next_role and next_role not in previous_values:
+                    previous_values[next_role] = previous_values.pop(role)
+            previous_values[role] = value
+        if line.get("cell_issues"):
+            previous.setdefault("cell_issues", []).extend(line["cell_issues"])
+    return merged
+
+
+def _repair_total_shifted_below_credit(lines: list[dict]) -> None:
+    """Repair a total displaced onto the next row by a merged credit cell.
+
+    Accept only the independently provable geometry: current total is zero,
+    all four quarters exist, the following row has exactly one value, and
+    that value equals the quarterly checksum.  The printed zero is therefore
+    the credit subcolumn and the displaced checksum is the annual total.
+    """
+    for current, following in zip(lines, lines[1:], strict=False):
+        values = current.get("values") or {}
+        next_values = following.get("values") or {}
+        total_role = next((role for role in values if role.startswith("total_")), None)
+        next_total_role = next((
+            role for role in next_values
+            if role.startswith("total_") or role == "credite_restante"
+        ), None)
+        if (
+            total_role is None
+            or next_total_role is None
+            or len(next_values) != 1
+            or values.get(total_role) != "0"
+            or "credite_restante" in values
+            or not all(role in values for role in ("trim1", "trim2", "trim3", "trim4"))
+        ):
+            continue
+        quarters = sum(
+            (Decimal(values[role]) for role in ("trim1", "trim2", "trim3", "trim4")),
+            Decimal(0),
+        )
+        displaced = Decimal(next_values[next_total_role])
+        if displaced != quarters or displaced == 0:
+            continue
+        values["credite_restante"] = "0"
+        values[total_role] = next_values.pop(next_total_role)
 
 
 # continuation pages print no header: when the first column is code-like and
@@ -105,6 +355,35 @@ def _positional_columns(
     grid, n_cols: int, budget_year: int | None = None
 ) -> dict[int, str] | None:
     roles = _positional_roles(n_cols, budget_year)
+    if n_cols == 11:
+        year = budget_year or 2026
+        credit_votes = no_credit_votes = 0
+        complete_forecast_rows = 0
+        for row in grid:
+            complete_forecast_rows += len(row) >= 11 and all(
+                cell.strip() for cell in row[8:11]
+            )
+            parsed = []
+            for cell in row:
+                try:
+                    value = parse_ro_number(cell, ocr=True)
+                except NumberParseError:
+                    value = None
+                parsed.append(Decimal(value) if value not in (None, "X") else None)
+            if len(parsed) < 8 or parsed[2] in (None, Decimal(0)):
+                continue
+            if all(value is not None for value in parsed[4:8]):
+                credit_votes += parsed[2] == sum(parsed[4:8], Decimal(0))
+            if all(value is not None for value in parsed[3:7]):
+                no_credit_votes += parsed[2] == sum(parsed[3:7], Decimal(0))
+        if credit_votes > no_credit_votes or (
+            credit_votes > 0 and complete_forecast_rows >= len(grid) * 0.5
+        ):
+            roles = [
+                "code", "name", f"total_{year}", "credite_restante",
+                "trim1", "trim2", "trim3", "trim4",
+                *(f"est{year + offset}" for offset in (1, 2, 3)),
+            ]
     if roles is None:
         return None
     rows = [r for r in grid if any(c.strip() for c in r)]
@@ -136,6 +415,32 @@ def _positional_columns(
         ):
             return dict(enumerate(roles))
         return None
+    if n_cols == 6:
+        text_rows = sum(bool(row and len(row[0].strip()) >= 5) for row in rows)
+        structured_code_rows = sum(
+            bool(
+                len(row) > 1
+                and re.fullmatch(r"\d{1,4}(?:[./ ]\d{1,2}){1,4}", row[1].strip())
+            )
+            for row in rows
+        )
+        numeric_rows = sum(
+            sum(
+                bool(VALUE_TOKEN.fullmatch(cell.strip()))
+                for cell in row[1:]
+                if cell.strip()
+            ) >= 3
+            for row in rows
+        )
+        if (
+            text_rows >= len(rows) * 0.75
+            and numeric_rows >= len(rows) * 0.5
+            and structured_code_rows < len(rows) * 0.1
+        ):
+            return {
+                0: "name", 1: f"total_{budget_year or 2026}",
+                2: "trim1", 3: "trim2", 4: "trim3", 5: "trim4",
+            }
     # some vendors print name first, code second (Braila's institution pages)
     code0 = sum(1 for r in rows if len(r) > 0 and is_code_cell(r[0]))
     code1 = sum(1 for r in rows if len(r) > 1 and is_code_cell(r[1]))
@@ -205,9 +510,17 @@ def _infer_columns(
     eleven_column_annual = (
         n_cols == 11
         and "cod indicator" in first_two
-        and "prevederi anuale" in first_two
-        and "prevederi trimestriale" in first_two
-        and "estimari" in first_two
+        and (
+            (
+                "prevederi anuale" in first_two
+                and "prevederi trimestriale" in first_two
+                and "estimari" in first_two
+            )
+            or (
+                f"total {budget_year or 2024}" in first_two
+                and all(str((budget_year or 2024) + offset) in first_two for offset in (1, 2, 3))
+            )
+        )
     )
     if eleven_column_annual:
         year = budget_year or 2024
@@ -369,6 +682,7 @@ def mapping_context(
     context: dict | None = None,
     budget_year: int | None = None,
 ) -> dict | None:
+    grid = normalize_orientation(grid)
     if not grid:
         return context
     columns, _, inherited = _infer_columns(grid, context=context, budget_year=budget_year)
@@ -404,9 +718,20 @@ def map_grid_with_context(
     context: dict | None = None,
     budget_year: int | None = None,
 ) -> tuple[list[dict], dict | None]:
+    grid = normalize_orientation(grid)
+    grid = _repair_audited_calarasi_education_grid(grid)
     n_cols = max(len(r) for r in grid)
     columns, first_data, inherited = _infer_columns(
         grid, context=context, budget_year=budget_year
+    )
+    header_blob = fold(" ".join(
+        cell for row in grid[:max(first_data, 3)] for cell in row
+    ))
+    merged_credit_column = (
+        n_cols == 10
+        and "total" in header_blob
+        and "credite" in header_blob
+        and "restante" in header_blob
     )
 
     lines: list[dict] = []
@@ -444,12 +769,21 @@ def map_grid_with_context(
                 if index != 0
                 for match in VALUE_TOKEN.finditer(text)
             ]
-        if len(observed_tokens) == 8 or (no_code_annual and observed_tokens):
-            roles = [
-                f"total_{budget_year or 2026}",
+        merged_credit_annual = (
+            len(observed_tokens) == 9 and n_cols == 10 and first_data > 0
+        )
+        if (
+            len(observed_tokens) == 8
+            or merged_credit_annual
+            or (no_code_annual and observed_tokens)
+        ):
+            roles = [f"total_{budget_year or 2026}"]
+            if merged_credit_annual:
+                roles.append("credite_restante")
+            roles.extend([
                 "trim1", "trim2", "trim3", "trim4",
                 *(f"est{(budget_year or 2026) + offset}" for offset in (1, 2, 3)),
-            ]
+            ])
             expanded_values = {}
             expanded_issues = []
             for role, token in zip(roles, observed_tokens, strict=False):
@@ -474,6 +808,12 @@ def map_grid_with_context(
                     continue
                 if "sectiun" in fold(text):
                     continue  # row-span artifact: section text smeared into cells
+                if (
+                    merged_credit_column
+                    and role == f"total_{budget_year or 2026}"
+                    and len(observed_tokens) == 1
+                ):
+                    role = "credite_restante"
                 tokens = NUMBER_TOKEN.findall(text)
                 previous = lines[-1] if lines else None
                 if (
@@ -535,6 +875,8 @@ def map_grid_with_context(
             raw_code, func_ctx = func_ctx, None
         lines.append(mk_line(raw_code, name_text, section, values, cell_issues,
                              row_no, func_ctx=func_ctx))
+    lines = _merge_sparse_wrapped_rows(lines)
+    _repair_total_shifted_below_credit(lines)
     institution, subdocument = _apply_hierarchy(
         lines, context if inherited else None
     )

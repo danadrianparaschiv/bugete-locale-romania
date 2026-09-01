@@ -84,6 +84,26 @@ def test_assemble_documents_sections_regions(tmp_path):
     assert doc.lines[-1].section == "TOTAL"
 
 
+def test_assemble_carries_leading_detail_hierarchy_across_page_break(tmp_path):
+    store = _mk_store(tmp_path)
+    parent = _line("68.00.04", "Caminul de batrani", total_2024="100")
+    parent["subdocument"] = "Caminul de batrani"
+    child = _line(None, "cheltuieli de personal", total_2024="80")
+    child["subdocument"] = "Caminul de batrani"
+    store.put("extract", 1, {
+        "text": "BUGETUL LOCAL DETALIAT LA CHELTUIELI",
+        "lines": [parent, child],
+    })
+    store.put("extract", 2, {
+        "text": None,
+        "lines": [_line(None, "cheltuieli de capital", total_2024="20")],
+    })
+
+    document = assemble(store, [1, 2])[0]
+
+    assert document.lines[-1].subdocument == "Caminul de batrani"
+
+
 def test_assemble_stitches_a_row_split_across_pages(tmp_path):
     store = _mk_store(tmp_path)
     store.put("extract", 1, {

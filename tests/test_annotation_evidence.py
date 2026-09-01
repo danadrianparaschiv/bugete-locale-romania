@@ -444,6 +444,26 @@ def test_row_contexts_expands_ranges_and_rejects_overlaps():
         importer._row_contexts(payload, pages)
 
 
+def test_row_contexts_can_explicitly_clear_a_machine_draft_context():
+    pages = {1: {"reading": {"rows": [{"section": "Context greșit"}]}}}
+    contexts = importer._row_contexts({
+        "row_contexts": [{"page": 1, "rows": "1", "clear": ["institution"]}],
+    }, pages)
+    evidence = {(1, 1, "total_2024", "10"): "review vizual"}
+    draft = {"columns": ["total_2024"], "reading": {"rows": [{
+        "name": "Rând",
+        "section": "Context greșit",
+        "cells": [{"column": "total_2024", "value": "10"}],
+    }]}}
+
+    review = importer._review_payload(
+        1, draft, evidence, revision=0, reviewer="reviewer-a",
+        row_contexts=contexts,
+    )
+
+    assert review["rows"][0]["institution"] is None
+
+
 def test_vision_inventory_mode_does_not_require_transcription_columns():
     parser = vision_draft.build_parser()
 

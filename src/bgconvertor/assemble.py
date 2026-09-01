@@ -51,6 +51,11 @@ _FUNCTIONAL_HEADER_RE = re.compile(
     re.IGNORECASE,
 )
 _HEADER_CODE_RE = re.compile(r"\b[0-9SOGB]{4,8}\b", re.IGNORECASE)
+_CONTINUATION_DETAIL_RE = re.compile(
+    r"^[-=• ]*(?:cheltuieli|bunuri si servicii|asistenta sociala|"
+    r"sume aferente|salari\w*|dobanzi|rambursare|plata\b|titlul\b)",
+    re.IGNORECASE,
+)
 
 
 def _norm_title(title: str) -> str:
@@ -248,6 +253,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
     section: str | None = None
     region = "heading"  # heading | revenue | expense
     cap_context: str | None = None  # current functional capitol (e.g. "65.02")
+    hierarchy_carry: tuple[str | None, str | None] = (None, None)
 
     for page in pages:
         payload = _pick_payload(store, page)
@@ -303,6 +309,7 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
                 )
                 documents.append(doc)
                 section, region, cap_context = None, "heading", None
+                hierarchy_carry = (None, None)
         if doc is None:
             if not payload.get("lines"):
                 continue  # prose pages (HCL) before any budget document
@@ -335,8 +342,29 @@ def assemble(store: RunStore, pages: list[int], registry=None) -> list[BudgetDoc
             cap_context = header_context
             region = "expense"
 
+        at_page_start = True
         for source_raw in payload["lines"]:
             raw = dict(source_raw)
+            name = raw.get("name") or ""
+            if (
+                at_page_start
+                and not raw.get("institution")
+                and not raw.get("subdocument")
+                and _CONTINUATION_DETAIL_RE.match(name)
+            ):
+                carried_institution, carried_subdocument = hierarchy_carry
+                if carried_institution:
+                    raw["institution"] = carried_institution
+                if carried_subdocument:
+                    raw["subdocument"] = carried_subdocument
+            elif name.strip():
+                at_page_start = False
+            if raw.get("institution") or raw.get("subdocument"):
+                hierarchy_carry = (
+                    raw.get("institution"), raw.get("subdocument")
+                )
+            elif re.fullmatch(r"\d{2}[./ ]0{2}", raw.get("raw_code") or ""):
+                hierarchy_carry = (None, None)
             if raw.get("section"):
                 canon = SECTION_CANON.get(raw["section"], raw["section"])
                 if canon != section:

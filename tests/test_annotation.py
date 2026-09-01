@@ -460,6 +460,11 @@ def test_uncoded_annotation_rows_match_common_budget_abbreviations():
         "Drepturile asistenților personali cu handicap grav TVA",
         "drepturile asist. pers. cu hand.grav - BL",
     )
+    assert ann._text_match("Străzi-PMC", "Strazi - PMC")
+    assert ann._text_match(
+        "Întreținere spații verzi-PMC",
+        "Intretinere gradini publice, parcuri, zone verzi - P.M.C.",
+    )
 
 
 def test_annotation_http_policy_requires_loopback_host_and_token():
@@ -510,6 +515,54 @@ def test_prediction_facts_exclude_annex_and_preserve_classification():
     assert facts[0].institution == "Școala B"
     assert facts[0].form == "Formular 11"
     assert facts[0].subdocument == "Secțiune proprie"
+
+
+def test_detected_prediction_pages_include_structural_x_only_budget_table(
+    tmp_path, monkeypatch
+):
+    source = tmp_path / "fixture.pdf"
+    source.write_bytes(b"fixture")
+    config = RunConfig(runs_dir=tmp_path / "runs")
+    monkeypatch.setattr(ann, "store_key", lambda _source: "fixture")
+    extract = config.runs_dir / "fixture/extract/p0002.json"
+    extract.parent.mkdir(parents=True)
+    extract.write_text(json.dumps({
+        "payload": {
+            "lines": [{"name": "Rând", "values": {}, "x_markers": ["total_2024"]}],
+            "mapping_context": {"budget_table": True},
+        }
+    }))
+
+    pages = ann._detected_prediction_pages(
+        config,
+        source,
+        2,
+        [ann.PredictionFact(
+            document="Buget", budget="local", page=1, kind="revenue",
+            name="Venit", column="total_2024", value_mii_lei="1", source="ocr",
+        )],
+    )
+
+    assert pages == {1, 2}
+
+
+def test_deterministic_budget_detection_is_not_hidden_by_llm_payload(
+    tmp_path, monkeypatch
+):
+    source = tmp_path / "fixture.pdf"
+    source.write_bytes(b"fixture")
+    config = RunConfig(runs_dir=tmp_path / "runs")
+    monkeypatch.setattr(ann, "store_key", lambda _source: "fixture")
+    root = config.runs_dir / "fixture"
+    for stage, payload in (
+        ("extract", {"mapping_context": {"budget_table": True}}),
+        ("llm_extract", {"layout": "llm_fallback", "lines": []}),
+    ):
+        target = root / stage / "p0001.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps({"payload": payload}))
+
+    assert ann._detected_prediction_pages(config, source, 1, []) == {1}
 
 
 def test_fact_matching_uses_line_level_form_and_subdocument():

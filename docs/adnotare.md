@@ -131,13 +131,18 @@ tipărite în sursă, sunt de asemenea excluse din precizia extracției.
 ```text
 validated_cell_recall = celule așteptate regăsite exact / toate celulele așteptate
 cell_precision        = celule așteptate regăsite exact / toate celulele emise
-budget_page_recall    = pagini bugetare cu fapte emise / toate paginile bugetare
-budget_page_precision = pagini bugetare cu fapte emise / toate paginile cu fapte emise
+budget_page_recall    = pagini bugetare detectate structural / toate paginile bugetare
+budget_page_precision = pagini bugetare corecte / toate paginile detectate ca bugetare
 ```
 
 O valoare greșită este simultan o celulă așteptată lipsă și o celulă emisă
 suplimentar. Matching-ul este unu-la-unu, astfel încât un duplicat nu poate
 satisface aceeași celulă de două ori.
+
+Pentru PDF, detecția structurală folosește decizia persistată
+`mapping_context.budget_table`, nu existența unei valori numerice. Astfel, o
+pagină bugetară legitimă ce conține numai marcaje `X` sau sume intenționat
+necompletate nu este raportată fals ca pagină ratată.
 
 ```bash
 uv run bgconvertor annotate status 2024
@@ -189,6 +194,10 @@ de ergonomie deoarece are rata observată cea mai mică și numai 28 de pagini.
 
 Piloții exhaustivi Giurgiu și Călărași sunt înghețați. Călărași clasifică toate
 cele 87 de pagini și inventariază 7.748 de celule pe 63 de pagini bugetare;
+Baza curentă regăsește 6.981 de celule (90,10%), emite 7.640 (91,37%
+precizie) și detectează toate cele 63 de pagini bugetare. Scorul depășește
+poarta de recall, dar nu poarta de 99,5% precizie; discrepanțele rămase cer
+un al doilea reviewer uman distinct înaintea unei declarații de release gate.
 Buzău are toate cele 46 de pagini bugetare și 8.236 de celule numerice înghețate
 prin consens source-only. Diferențele față de converter rămân în coada separată
 de revizie a doua; un scor diagnostic nu ocolește această poartă. Contextul

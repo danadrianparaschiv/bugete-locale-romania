@@ -224,7 +224,7 @@ def _deleted_rows(payload: dict, pages: dict[int, dict]) -> set[tuple[int, int]]
 def _row_contexts(
     payload: dict,
     pages: dict[int, dict],
-) -> dict[tuple[int, int], dict[str, str]]:
+) -> dict[tuple[int, int], dict[str, str | None]]:
     """Load source-reviewed hierarchy without guessing it from row labels."""
     allowed = {"institution", "form", "subdocument", "section"}
     contexts = {}
@@ -237,6 +237,10 @@ def _row_contexts(
             for key, value in item.items()
             if key in allowed and str(value).strip()
         }
+        clear = item.get("clear") or []
+        if not isinstance(clear, list) or any(key not in allowed for key in clear):
+            raise ValueError("clear trebuie să enumere numai câmpuri semantice")
+        context.update({key: None for key in clear})
         if not context:
             raise ValueError("contextul de rând trebuie să conțină un câmp semantic")
         for row in parse_pages(str(item["rows"]), len(pages[page]["reading"]["rows"])):
@@ -391,7 +395,7 @@ def _review_payload(
     row_overrides: dict[tuple[int, int], dict[str, str]] | None = None,
     additions: set[CellKey] | None = None,
     deleted_rows: set[tuple[int, int]] | None = None,
-    row_contexts: dict[tuple[int, int], dict[str, str]] | None = None,
+    row_contexts: dict[tuple[int, int], dict[str, str | None]] | None = None,
 ) -> dict:
     rows = []
     counts = Counter()

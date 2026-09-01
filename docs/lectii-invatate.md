@@ -245,7 +245,7 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
   versionate.
 <!-- BEGIN GENERATED:2024_LESSONS_METRICS -->
 - **Achiziția completă nu înseamnă automat calitate uniformă.** Conversia
-  deterministă a tuturor celor 41 de intrări disponibile a produs 66.299 de
+  deterministă a tuturor celor 41 de intrări disponibile a produs 66.328 de
   linii, iar recuperarea P2 selectivă a adăugat 1.515 celule strict
   verificate pentru 2,9424 USD. Mediana ratei stricte observate este 81,6% și 13
   intrări rămân sub 70%. Schema 3 separă anexele și investițiile, iar procentul
@@ -296,7 +296,7 @@ inclusiv versiunea documentului și pagina de înregistrare, este în
 <!-- BEGIN GENERATED:2024_LESSONS_FOOTER -->
 *Document viu — se actualizează pe măsură ce corpusul crește. Ultima
 actualizare: 28 august 2026, după campania de calitate a ediției 2024:
-41/42 intrări convertite, 40 de pagini municipale de analiză, 66.299 de linii,
+41/42 intrări convertite, 40 de pagini municipale de analiză, 66.328 de linii,
 2,9424 USD cost API real și o singură sursă indisponibilă declarată. Auditul public trece
 pentru toate cele 110 conversii existente din 2024–2026, fără neconcordanțe de
 bundle; rezultatele detaliate și limitele metricilor sunt în

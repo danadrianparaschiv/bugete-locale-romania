@@ -16,6 +16,7 @@ from pathlib import Path
 
 from ..layouts import map_grid, map_grid_with_context
 from ..layouts.common import fold, is_code_cell, split_header
+from ..layouts.table import normalize_orientation
 from ..years import infer_budget_year, remap_lines
 
 log = logging.getLogger("bgc.extract.scanned")
@@ -342,6 +343,7 @@ def map_payload(
     mapping_context = context if ocr_payload.get("tables_raw") else None
     source_value_cells = 0
     for grid in ocr_payload.get("tables_raw", []):
+        grid = normalize_orientation(grid)
         mapped, mapped_context = map_grid_with_context(
             grid, context=mapping_context, budget_year=budget_year
         )

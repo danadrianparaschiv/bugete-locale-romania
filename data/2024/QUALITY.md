@@ -26,7 +26,7 @@ celule numerice strict verificate.
 | Bistrița | `continuation_sections_and_candidate_selection` | 36,2% | 90,3% | 4.813 | +2830 | determinist | 0,0000 |
 | Brăila | `dense_scanned_tables_and_merged_rows` | 65,8% | 66,2% | 11.224 | +185 | P2 acceptat | 0,8311 |
 | Buzău | `scanned_structure_and_numeric_ocr` | 58,3% | 54,4% | 1.889 | -73 | determinist | 0,0000 |
-| Călărași | `scanned_structure_and_numeric_ocr` | 53,1% | 62,1% | 5.710 | +3300 | determinist | 0,0000 |
+| Călărași | `scanned_structure_and_numeric_ocr` | 53,1% | 63,2% | 5.912 | +3502 | determinist | 0,0000 |
 | Deva | `low_contrast_scan_and_merged_cells` | 47,9% | 52,6% | 14.459 | +4996 | P2 acceptat | 0,9009 |
 | Zalău | `collapsed_remainder_column_and_decimal_glyphs` | 40,3% | 57,5% | 2.121 | +857 | P2 acceptat | 0,4810 |
 | Sibiu | `recovered_rows_expand_observed_denominator` | 57,6% | 48,0% | 2.263 | +125 | determinist | 0,0000 |

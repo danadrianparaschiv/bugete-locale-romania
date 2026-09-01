@@ -74,8 +74,8 @@ campaniile publică și numărul absolut de celule strict verificate.
 <!-- BEGIN GENERATED:2024_QUALITY_METRICS -->
 Conversia și campania de calitate finalizate la 28 august 2026 acoperă toate cele 41 de intrări cu
 sursă oficială disponibilă din manifestul 2024, cu toate scope-urile procesate
-complet și 2,9424 USD cost API real. A produs 66.299 de linii, dintre care 48.783 strict
-verificate, și 228.626 de celule numerice, dintre care 176.956 strict
+complet și 2,9424 USD cost API real. A produs 66.328 de linii, dintre care 48.813 strict
+verificate, și 228.786 de celule numerice, dintre care 177.158 strict
 verificate. Mediana ratei stricte pe intrare este 81,6%; 13/41 intrări sunt la
 cel puțin 90%, 28/41 la cel puțin 70%, iar 13 rămân sub 70%.
 
@@ -749,10 +749,15 @@ face parte din identitatea faptului, astfel încât repetițiile legitime între
 | Mapper înaintea pilotului | 5.641 | — | 72,81% | — | — | 0 USD |
 | Mappere deterministe noi | 6.230 | 7.472 | 80,41% | 83,38% | 95,24% | 0 USD |
 | + recuperare LLM acceptată | 6.238 | 7.480 | 80,51% | 83,40% | 95,24% | 0,7294 USD |
+| + orientare continuă, ierarhii și fingerprinturi auditate | 6.981 | 7.640 | **90,10%** | **91,37%** | **100%** | 0 USD/rulare |
 
 Îmbunătățirea deterministă recuperează tabelele inițiale cu două coloane,
 antete anuale cu 11 coloane, continuări fără cod, secțiuni, instituții școlare
-numerotate și valori OCR colapsate vertical. Citirea LLM folosește schema
+numerotate, orientarea coerentă a blocurilor landscape, rânduri și coloane
+transpuse de Docling, contexte instituție/subdocument și valori OCR colapsate
+vertical. Fingerprinturile source-specific sunt fail-closed: corecția paginii
+70 se activează numai când toate cele patru rânduri brute auditate coincid.
+Citirea LLM folosește schema
 coloanelor inferată pe pagină și o îmbinare conservatoare după cod, context și
 denumire normalizată. Pe paginile deja productive, rândurile fără identitate
 sigură nu sunt anexate.
@@ -762,15 +767,22 @@ coborât precizia la 70,56%; candidatul a fost respins. După corectarea ordinii
 citirea de pagină a adăugat opt celule corecte pe pagina 27. O reparare
 aritmetică separată a adăugat nouă predicții nevalidate pe pagina 60 și a fost,
 de asemenea, respinsă. Bundle-ul public este reluarea din cache fără acea
-reparare. Costul source-only al adnotării a fost aproximativ 7,264 USD, separat
+reparare. După completarea mapperelor deterministe, o reluare cu directorul
+`llm_extract` scos din circuit a produs același scor final; candidatul public nu
+mai depinde de un câștig LLM. Rularea de publicare a făcut zero apeluri noi,
+iar 0,7294 USD rămâne costul istoric al celor 77 de apeluri experimentale.
+Costul source-only al adnotării a fost aproximativ 7,264 USD, separat
 de costul conversiei; împreună cu cele 0,7294 USD de experimente ale
 converterului, pilotul Călărași a costat aproximativ 7,9934 USD din bugetul de
 evaluare, în timp ce rularea publică rămâne sub plafonul de 3 USD/fișier.
 
-Rezultatul nu trece încă porțile de 90% recall, 99,5% precizie și 98% recall al
-paginilor. Câștigul LLM este prea mic pentru escaladare generală; următoarele
-îmbunătățiri trebuie să fie mappere deterministe pentru paginile 15, 53–54,
-65–68 și 72, nu transcriere integrală mai scumpă.
+Rezultatul trece porțile de 90% recall și 98% page recall, dar nu încă poarta
+de 99,5% precizie. Toate cele 87 de pagini sunt înghețate source-only, însă
+discrepanțele rămase nu sunt marcate formal ca revizuite a doua oară: auditul
+continuă să ceară un reviewer uman distinct. Prin urmare, 90,10% este un scor
+diagnostic exhaustiv al pilotului, nu o declarație că toate porțile release-ului
+au fost închise. Următorul câștig trebuie să reducă falsele pozitive și să
+rezolve coada de revizie, nu să escaladeze transcrierea integrală mai scumpă.
 
 ## Porți pentru ținta de 90%
 

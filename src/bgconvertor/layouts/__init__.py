@@ -60,6 +60,7 @@ def map_grid_with_context(
 ) -> tuple[list[dict], dict | None]:
     if not grid or not grid[0]:
         return [], context
+    grid = table.normalize_orientation(grid)
     for mapper in MAPPERS:
         if mapper in (comparative.try_map, initial_summary.try_map):
             lines = mapper(grid, budget_year=budget_year, context=context)
