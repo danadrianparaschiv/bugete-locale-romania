@@ -2145,19 +2145,19 @@
         "status": "converted",
         "workbook": "budget_file.xlsx",
         "analysis": "analysis.json",
-        "at": "2026-08-28T01:31:05+03:00",
+        "at": "2026-09-01T13:26:19+03:00",
         "tool_version": "0.1.0",
         "quality": {
           "schema_version": 3,
           "metric": "observed_strict_line_rate",
           "recall_measured": false,
           "documents": 12,
-          "lines": 1310,
-          "lines_strictly_verified": 629,
-          "pct_lines_strictly_verified": 48.0,
-          "numeric_cells": 4078,
-          "numeric_cells_strictly_verified": 2263,
-          "pct_numeric_cells_strictly_verified": 55.5,
+          "lines": 2037,
+          "lines_strictly_verified": 1727,
+          "pct_lines_strictly_verified": 84.8,
+          "numeric_cells": 10113,
+          "numeric_cells_strictly_verified": 8442,
+          "pct_numeric_cells_strictly_verified": 83.5,
           "annex_lines": 0,
           "annex_numeric_cells": 0,
           "scope": {
@@ -2166,31 +2166,31 @@
             "pages_processed": 98,
             "complete_pdf": true
           },
-          "errors": 2171,
-          "warnings": 431,
-          "info": 0
+          "errors": 552,
+          "warnings": 142,
+          "info": 25
         },
         "artifacts": {
           "schema_version": 1,
-          "bundle_id": "060386443d6f8fe3ce751079",
+          "bundle_id": "7414dafc041da1dbe673460c",
           "source_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
           "source_format": "pdf",
           "source_pdf_sha256": "17774b48aa362166bea054073f31488fbb0159af28c69ba304550a08e8b070df",
           "workbook": {
             "path": "budget_file.xlsx",
-            "sha256": "d4992f05579f5e9e01c1921d912b9eb2b96f4515ea1cf312697792c36972f061",
-            "bytes": 307713
+            "sha256": "bd6fd5aa401bc286006818576bdbd0eb54f3bdf98ead73f5e84f5166ba6fcc42",
+            "bytes": 222826
           },
           "analysis": {
             "path": "analysis.json",
-            "sha256": "9fc2c645c7a740f6a792967d93df23de7417700ffef6b201b24fff62a163fb5a",
-            "bytes": 2300
+            "sha256": "60727c3f50522728c81d6400ce53714bd401dc50468bd5aae062db525acb34a9",
+            "bytes": 2259
           }
         },
-        "lines": 1310,
-        "pct_clean": 48.0,
-        "errors": 2171,
-        "warnings": 431,
+        "lines": 2037,
+        "pct_clean": 84.8,
+        "errors": 552,
+        "warnings": 142,
         "llm_cost_usd": 0.0,
         "llm_cost_scope": "current_run_incremental",
         "llm_lifetime_cost_usd": 0.0

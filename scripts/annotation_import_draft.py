@@ -45,6 +45,7 @@ def _canonical_column(raw: str) -> str:
     compact = re.sub(r"[^a-z0-9]", "", raw.lower())
     aliases = {
         "total2024": "total_2024",
+        "program2024": "total_2024",
         "dincarecreditebugetaredestinatestingeriiplatilorrestante": (
             "credite_restante"
         ),

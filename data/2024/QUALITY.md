@@ -9,7 +9,7 @@ celule numerice strict verificate.
 | Indicator | Rezultat |
 |---|---:|
 | Ținte inițiale sub 70% | 10 |
-| Ținte inițiale rămase sub 70% | 8 |
+| Ținte inițiale rămase sub 70% | 7 |
 | Piloți P2 acceptați | 3/3 |
 | Celule strict verificate adăugate de P2 | +1.515 |
 | Apeluri API facturabile | 438 |
@@ -29,7 +29,7 @@ celule numerice strict verificate.
 | Călărași | `scanned_structure_and_numeric_ocr` | 53,1% | 63,2% | 5.912 | +3502 | determinist | 0,0000 |
 | Deva | `low_contrast_scan_and_merged_cells` | 47,9% | 52,6% | 14.459 | +4996 | P2 acceptat | 0,9009 |
 | Zalău | `collapsed_remainder_column_and_decimal_glyphs` | 40,3% | 57,5% | 2.121 | +857 | P2 acceptat | 0,4810 |
-| Sibiu | `recovered_rows_expand_observed_denominator` | 57,6% | 48,0% | 2.263 | +125 | determinist | 0,0000 |
+| Sibiu | `recovered_rows_expand_observed_denominator` | 57,6% | 84,8% | 8.442 | +6304 | determinist | 0,0000 |
 | Vaslui | `scanned_structure_and_numeric_ocr` | 50,4% | 61,1% | 1.905 | -1063 | determinist | 0,0000 |
 
 **Notă.** Baseline-ul folosește schema 2, iar rezultatul schema 3. Pentru intrările cu

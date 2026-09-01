@@ -192,12 +192,15 @@ automat scope `full`: Giurgiu, Călărași, Sibiu, Deva, Buzău, Zalău, Târgu 
 Focșani, Vaslui, Galați, Alba Iulia, Brăila și Ploiești. Giurgiu este pilotul
 de ergonomie deoarece are rata observată cea mai mică și numai 28 de pagini.
 
-Piloții exhaustivi Giurgiu și Călărași sunt înghețați. Călărași clasifică toate
-cele 87 de pagini și inventariază 7.748 de celule pe 63 de pagini bugetare;
-Baza curentă regăsește 6.981 de celule (90,10%), emite 7.640 (91,37%
-precizie) și detectează toate cele 63 de pagini bugetare. Scorul depășește
-poarta de recall, dar nu poarta de 99,5% precizie; discrepanțele rămase cer
-un al doilea reviewer uman distinct înaintea unei declarații de release gate.
+Piloții exhaustivi Giurgiu, Călărași și Sibiu sunt înghețați. Călărași
+clasifică toate cele 87 de pagini și inventariază 7.748 de celule pe 63 de
+pagini bugetare; baza curentă regăsește 6.981 de celule (90,10%), emite 7.640
+(91,37% precizie) și detectează toate cele 63 de pagini bugetare. Sibiu
+inventariază 10.531 de celule pe toate cele 98 de pagini bugetare; mapperul
+determinist regăsește 9.751 (92,59%), emite 10.113 (96,42% precizie) și
+detectează 98/98 pagini. Ambele depășesc poarta de recall, dar nu poarta de
+99,5% precizie; discrepanțele rămase cer un al doilea reviewer uman distinct
+înaintea unei declarații de release gate.
 Buzău are toate cele 46 de pagini bugetare și 8.236 de celule numerice înghețate
 prin consens source-only. Diferențele față de converter rămân în coada separată
 de revizie a doua; un scor diagnostic nu ocolește această poartă. Contextul

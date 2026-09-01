@@ -118,10 +118,10 @@ intrare fără document publicabil.
 | Scope-uri sursă procesate complet | 41/41 |
 | Unități sursă inventariabile | 4.174 |
 | Pagini PDF / foi Excel native | 4.170 / 4 |
-| Linii extrase / strict verificate | 66.328 / 48.813 |
-| Celule numerice / strict verificate | 228.786 / 177.158 |
-| Mediana `observed_strict_line_rate` | 81,6% |
-| Intrări cu rată strictă ≥90% / ≥70% | 13 / 28 |
+| Linii extrase / strict verificate | 67.055 / 49.911 |
+| Celule numerice / strict verificate | 234.821 / 183.337 |
+| Mediana `observed_strict_line_rate` | 82,1% |
+| Intrări cu rată strictă ≥90% / ≥70% | 13 / 29 |
 | Pagini municipale cu analiză publică | 40 |
 | Municipiu-ani eligibili pentru comparația planului | 27 |
 | Pilot P2: fișiere / apeluri API facturabile | 3 / 438 |

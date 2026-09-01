@@ -33,6 +33,23 @@ def _fact(page: int, row: int, value: str) -> consensus.Fact:
     )
 
 
+def test_vision_draft_bands_cover_source_once_and_avoid_dark_target_row():
+    from PIL import Image, ImageDraw
+
+    image = Image.new("L", (200, 200), "white")
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((10, 98, 190, 102), fill="black")
+
+    bands = vision_draft._split_image_bands(image, 2)
+
+    assert len(bands) == 2
+    assert bands[0][0] == 0
+    assert bands[0][1] == bands[1][0]
+    assert bands[1][1] == 1
+    assert bands[0][2].height + bands[1][2].height == image.height
+    assert not 0.49 <= bands[0][1] <= 0.515
+
+
 def test_component_consensus_confirms_sum_without_mutating_source_counters():
     functionare = Counter({"60": 1})
     dezvoltare = Counter({"40": 1})
